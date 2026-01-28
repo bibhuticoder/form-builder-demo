@@ -20,10 +20,10 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCan
   })()
 
   return (
-    <div className="flex justify-center py-2 bg-gray-100 dark:bg-gray-800 shrink-0">
+    <div className="flex justify-center bg-gray-100 dark:bg-gray-800 shrink-0">
       <div className="flex items-center gap-4">
         {/* Breakpoint Size Buttons */}
-        <Card className="p-2 flex items-center gap-2">
+        <Card className="flex items-center gap-2 !p-2">
           {SCREEN_SIZES.map((size) => (
             <Button key={size.id} variant={activeDevice === size.id ? "primary" : "secondary"} className={`p-1 text-xs rounded-sm flex items-center justify-center`} onClick={() => onCanvasWidthChange(size.width)} title={size.title}>
               {size.label}

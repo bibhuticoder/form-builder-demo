@@ -94,9 +94,9 @@ const DraggableElementCard: React.FC<{ item: ElementItem }> = ({ item }) => {
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <Card className="p-2 border border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary transition-colors" aria-label={item.label}>
-        <div className="flex flex-col items-center justify-center gap-2 p-3 group cursor-grab select-none">
+        <div className="flex flex-col items-center justify-center gap-1 p-2 group cursor-grab select-none">
           <item.icon className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors" />
-          <span className="text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-primary text-center transition-colors">{item.label}</span>
+          <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-primary text-center transition-colors leading-tight">{item.label}</span>
         </div>
       </Card>
     </div>
@@ -119,7 +119,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
     <>
       {!isCollapsed ? (
         <>
-          <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-2 border-b border-gray-200 dark:border-gray-700">
             <IconInput
               icon={<MagnifyingGlassIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />}
               value={searchQuery}
@@ -131,12 +131,12 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
           </div>
 
           <div className="flex-1 overflow-y-auto p-2">
-            <div className="space-y-6 p-2">
+            <div className="space-y-3 p-2">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, idx) => (
                   <div key={idx}>
                     <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-1">{group.title}</h3>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-1.5">
                       {group.items.map((item, index) => (
                         <DraggableElementCard key={item.type + index} item={item} />
                       ))}

@@ -78,7 +78,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
   }, [isResizing])
 
   return (
-    <div className="flex-1 pt-4 flex flex-col gap-4">
+    <div className="flex-1 pt-2 flex flex-col gap-2">
       {/* Canvas Toolbar */}
       <CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} />
 

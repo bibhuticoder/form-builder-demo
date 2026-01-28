@@ -15,7 +15,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
   // If a field is selected, show the property editor
   if (selectedFieldId && onClearSelection) {
     return (
-      <aside className="w-[350px] flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl">
+      <aside className="w-[280px] flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl">
         <PropertyEditor selectedFieldId={selectedFieldId} onBack={onClearSelection} />
       </aside>
     );
@@ -23,8 +23,8 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
 
   // Otherwise, show the element palette
   return (
-    <aside className={`${isCollapsed ? "w-[60px]" : "w-[350px]"} flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl transition-all duration-300 ease-in-out relative`}>
-      <div className={`p-4 flex items-center ${isCollapsed ? "justify-center" : "justify-between px-3"} bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700`}>
+    <aside className={`${isCollapsed ? "w-[50px]" : "w-[280px]"} flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl transition-all duration-300 ease-in-out relative`}>
+      <div className={`p-2 flex items-center ${isCollapsed ? "justify-center" : "justify-between px-2"} bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700`}>
         {!isCollapsed && <span className="font-semibold text-gray-900 dark:text-white">Form Elements</span>}
 
         <Button variant="secondary" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}>

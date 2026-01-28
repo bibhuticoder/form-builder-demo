@@ -58,9 +58,9 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{label}</label>
+        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{label}</label>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {/* Top */}
@@ -69,19 +69,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
             type="button"
             onClick={() => handleCopyValue(values.top)}
             title="Copy to all sides"
-            className="h-8 w-8 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
           <div className="relative flex-1">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
               T
             </div>
             <input
               type={allowAuto ? "text" : "number"}
               value={values.top || ""}
               onChange={(e) => handleInputChange("Top", e.target.value)}
-              className="w-full h-8 px-3 pl-6 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
               placeholder="0"
             />
           </div>
@@ -93,19 +93,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
             type="button"
             onClick={() => handleCopyValue(values.right)}
             title="Copy to all sides"
-            className="h-8 w-8 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
           <div className="relative flex-1">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
               R
             </div>
             <input
               type={allowAuto ? "text" : "number"}
               value={values.right || ""}
               onChange={(e) => handleInputChange("Right", e.target.value)}
-              className="w-full h-8 px-3 pl-6 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
               placeholder="0"
             />
           </div>
@@ -117,19 +117,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
             type="button"
             onClick={() => handleCopyValue(values.bottom)}
             title="Copy to all sides"
-            className="h-8 w-8 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
           <div className="relative flex-1">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
               B
             </div>
             <input
               type={allowAuto ? "text" : "number"}
               value={values.bottom || ""}
               onChange={(e) => handleInputChange("Bottom", e.target.value)}
-              className="w-full h-8 px-3 pl-6 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
               placeholder="0"
             />
           </div>
@@ -141,19 +141,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
             type="button"
             onClick={() => handleCopyValue(values.left)}
             title="Copy to all sides"
-            className="h-8 w-8 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
           <div className="relative flex-1">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
               L
             </div>
             <input
               type={allowAuto ? "text" : "number"}
               value={values.left || ""}
               onChange={(e) => handleInputChange("Left", e.target.value)}
-              className="w-full h-8 px-3 pl-6 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
               placeholder="0"
             />
           </div>

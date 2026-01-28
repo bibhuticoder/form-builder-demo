@@ -33,30 +33,30 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
   const showOptions = ["checkbox", "radio", "dropdown"].includes(field.type);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       {/* Label / Content Field */}
       {showLabel && (
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">
             {["heading", "paragraph"].includes(field.type) ? "Content" : "Label"}
           </label>
           <input
             type="text"
             value={field.label || ""}
             onChange={(e) => handleUpdate("label", e.target.value)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       )}
 
       {/* Heading Level */}
       {field.type === "heading" && (
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Heading Level</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Heading Level</label>
           <select
             value={(field as HeadingField).headingLevel || "h2"}
             onChange={(e) => handleUpdate("headingLevel", e.target.value)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="h1">H1 (XXL)</option>
             <option value="h2">H2 (XL)</option>
@@ -70,22 +70,22 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
 
       {/* Field Name (Internal) - Only show for input fields */}
       {showFieldName && (
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Field Name (Internal)</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Field Name (Internal)</label>
           <div className="flex gap-2">
             <input
               type="text"
               value={(field as any).name || ""}
               onChange={(e) => handleUpdate("name", e.target.value)}
               disabled={!(field as any).isNameCustomized}
-              className="flex-1 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <Button
               variant="secondary"
               onClick={() => handleUpdate("isNameCustomized", !(field as any).isNameCustomized)}
-              className={`shrink-0 ${(field as any).isNameCustomized ? "border-blue-500 text-blue-600 dark:text-blue-400" : ""}`}
+              className={`shrink-0 h-7 w-7 p-0 flex items-center justify-center ${(field as any).isNameCustomized ? "border-blue-500 text-blue-600 dark:text-blue-400" : ""}`}
             >
-              <PencilIcon className="h-4 w-4" />
+              <PencilIcon className="h-3 w-3" />
             </Button>
           </div>
         </div>
@@ -94,12 +94,12 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
       {/* Button Action */}
       {field.type === "button" && (
         <div className="space-y-4 pt-2 pb-2 border-y border-gray-200 dark:border-gray-700 my-2">
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Action</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Action</label>
             <select
               value={(field as ButtonField).action || "submit"}
               onChange={(e) => handleUpdate("action", e.target.value)}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="submit">Submit Form</option>
               <option value="url">Open URL</option>
@@ -111,35 +111,35 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
 
       {/* Placeholder */}
       {showPlaceholder && (
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Placeholder</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Placeholder</label>
           <input
             type="text"
             value={(field as InputField | EmailField | PhoneField | UrlField | TextAreaField | NumberField).placeholder || ""}
             onChange={(e) => handleUpdate("placeholder", e.target.value)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       )}
 
       {/* Textarea Rows */}
       {field.type === "textarea" && (
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Rows</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Rows</label>
           <input
             type="number"
             min={1}
             value={(field as TextAreaField).rows || 4}
             onChange={(e) => handleUpdate("rows", parseInt(e.target.value) || 1)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       )}
 
       {/* Required Toggle */}
       {showRequired && (
-        <div className="flex items-center justify-between py-3 px-3 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
-          <label className="cursor-pointer text-sm font-medium text-gray-900 dark:text-white" htmlFor="required-toggle">
+        <div className="flex items-center justify-between py-2 px-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
+          <label className="cursor-pointer text-xs font-medium text-gray-900 dark:text-white" htmlFor="required-toggle">
             Required
           </label>
           <button
@@ -164,7 +164,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
       {showOptions && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Options</label>
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Options</label>
             <Button
               variant="secondary"
               onClick={() => {
@@ -231,24 +231,24 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
       {/* Image/Video URL */}
       {["image", "video"].includes(field.type) && (
         <div className="space-y-4 border-y border-gray-200 dark:border-gray-700 py-3 my-2">
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Source URL</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Source URL</label>
             <input
               type="text"
               value={(field as ImageField | VideoField).url || ""}
               onChange={(e) => handleUpdate("url", e.target.value)}
               placeholder={field.type === "video" ? "https://youtube.com/..." : "https://example.com/image.jpg"}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Alt Text</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Alt Text</label>
             <input
               type="text"
               value={(field as ImageField | VideoField).altText || ""}
               onChange={(e) => handleUpdate("altText", e.target.value)}
               placeholder="Descriptive text for accessibility"
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -256,12 +256,12 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
 
       {/* Checkbox Selection Mode */}
       {field.type === "checkbox" && (
-        <div className="space-y-2 pt-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Selection Mode</label>
+        <div className="space-y-1 pt-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Selection Mode</label>
           <select
             value={(field as CheckboxField).selectionMode || "multi"}
             onChange={(e) => handleUpdate("selectionMode", e.target.value)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="multi">Multi Select (Checkboxes)</option>
             <option value="single">Single Select (Radio-style)</option>
@@ -273,14 +273,14 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
       {showHelpText && (
         <>
           <div className="border-t border-gray-200 dark:border-gray-700 my-4" />
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Help Text</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Help Text</label>
             <input
               type="text"
               value={(field as any).helpText || ""}
               onChange={(e) => handleUpdate("helpText", e.target.value)}
               placeholder="Small text below input"
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </>

@@ -34,12 +34,12 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
       <div className="space-y-4">
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Layout</h4>
         
-        <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Width</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Width</label>
           <select
             value={getStyleValue("width", "full")}
             onChange={(e) => handleStyleUpdate("width", e.target.value)}
-            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="full">Full Width (100%)</option>
             <option value="three-quarters">Three Quarters (75%)</option>
@@ -204,21 +204,21 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
           </div>
 
           {/* Font Size and Weight */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Size</label>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Size</label>
               <div className="flex">
                 <input
                   type="number"
                   value={getStyleValue(`${activeTypographyTab}FontSize`)}
                   onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSize`, e.target.value)}
-                  className="flex-1 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0"
+                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0"
                   placeholder="14"
                 />
                 <select
                   value={getStyleValue(`${activeTypographyTab}FontSizeUnit`, "px")}
                   onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSizeUnit`, e.target.value)}
-                  className="w-16 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-r-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-12 px-1 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-r-md text-[10px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="px">px</option>
                   <option value="rem">rem</option>
@@ -227,12 +227,12 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Weight</label>
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Weight</label>
               <select
                 value={getStyleValue(`${activeTypographyTab}FontWeight`, "normal")}
                 onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontWeight`, e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="light">Light</option>
                 <option value="normal">Normal</option>
@@ -245,12 +245,12 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
 
           {/* Text Alignment (for input only) */}
           {activeTypographyTab === "input" && (
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Text Alignment</label>
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Text Alignment</label>
               <select
                 value={getStyleValue("textAlign", "left")}
                 onChange={(e) => handleStyleUpdate("textAlign", e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="left">Left</option>
                 <option value="center">Center</option>

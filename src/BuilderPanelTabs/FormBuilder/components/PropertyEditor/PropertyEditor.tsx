@@ -27,7 +27,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-2 flex items-center justify-between bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <Button variant="secondary" onClick={onBack} className="gap-2">
           <ArrowLeftIcon className="w-4 h-4" />
           Back
@@ -36,8 +36,8 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
       </div>
 
       {/* Tabs */}
-      <div className="px-4 pt-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="w-full grid grid-cols-3 mb-4 bg-gray-100 dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700 rounded-md">
+      <div className="px-2 pt-2 border-b border-gray-200 dark:border-gray-700">
+        <div className="w-full grid grid-cols-3 mb-2 bg-gray-100 dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700 rounded-md">
           <button
             onClick={() => setActiveTab("content")}
             className={`text-xs py-2 px-3 rounded transition-colors ${
@@ -73,7 +73,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
 
       {/* Tab Content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-4 space-y-6">
+        <div className="p-2 space-y-3">
           {activeTab === "content" && <ContentTab field={selectedField} />}
           {activeTab === "style" && <StyleTab field={selectedField} />}
           {activeTab === "logic" && (
