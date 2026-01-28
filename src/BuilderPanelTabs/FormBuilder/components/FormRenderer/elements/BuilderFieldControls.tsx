@@ -1,11 +1,11 @@
 /**
  * Wrapper component that provides hover controls (delete, move) for form fields in the builder.
  */
-import { ReactNode, useState, CSSProperties } from "react";
+import { ReactNode, useState } from "react";
 import { TrashIcon, EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
 
-import { BaseField } from "../../../types";
+import { BaseField } from "../../../../../types";
 
 interface BuilderFieldWrapperProps {
   field: BaseField & { name?: string };
@@ -34,55 +34,6 @@ export default function BuilderFieldControls({
 }: Readonly<BuilderFieldWrapperProps>) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const wrapperStyle: CSSProperties = {
-    position: "relative",
-    padding: "8px",
-    border: `2px dotted ${isHovered ? "#5434FF" : "transparent"}`,
-    borderRadius: "4px",
-    transition: "border-color 0.2s ease",
-  };
-
-  const actionBarStyle: CSSProperties = {
-    position: "absolute",
-    top: "-24px",
-    right: "0",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    backgroundColor: "#5533ff",
-    color: "white",
-    padding: "4px 8px",
-    borderRadius: "4px 4px 0 0",
-    opacity: isHovered ? 1 : 0,
-    transition: "opacity 0.2s ease",
-    zIndex: 10,
-    fontSize: "12px",
-    fontWeight: 500,
-    letterSpacing: "0.05em",
-  };
-
-
-  const iconContainerStyle: CSSProperties = {
-    display: "flex",
-    gap: "4px",
-    borderLeft: "1px solid rgba(255, 255, 255, 0.2)",
-    paddingLeft: "8px",
-  };
-
-  const iconButtonStyle: CSSProperties = {
-    width: "16px",
-    height: "16px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "none",
-    background: "none",
-    padding: "0",
-    color: "white",
-    transition: "color 0.2s ease",
-  };
-
   const getFieldName = (fieldName: string) => {
     if (fieldName.split("_").length > 1) {
       return fieldName.split("_").join(" ").toUpperCase();
@@ -90,45 +41,74 @@ export default function BuilderFieldControls({
     return fieldName.toUpperCase();
   };
 
+  // Map width values to CSS classes
+  const getWidthClass = () => {
+    const width = field.style?.width || "full";
+    switch (width) {
+      case "full":
+        return "w-full";
+      case "three-quarters":
+        return "w-3/4";
+      case "half":
+        return "w-1/2";
+      case "third":
+        return "w-1/3";
+      case "quarter":
+        return "w-1/4";
+      default:
+        return "w-full";
+    }
+  };
+
   return (
     <div
       role="button"
-      className={`field-wrapper field-type-${field.type} ${selected ? 'bg-purple-100 border' : ''}`}
-      style={wrapperStyle}
+      className={`
+        field-wrapper relative p-2 rounded transition-colors duration-200 border-2 border-dotted
+        ${getWidthClass()}
+        ${isHovered ? 'border-primary' : 'border-transparent'}
+        ${selected ? 'bg-primary/5 border-primary border-solid' : ''}
+        border-type-${field.type}
+      `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelect?.(field.id)}
       tabIndex={0}
     >
       {/* Action Bar */}
-      <div style={actionBarStyle}>
+      <div 
+        className={`
+          absolute -top-6 right-0 flex items-center gap-2 bg-primary text-white px-2 py-1 
+          rounded-t opacity-0 transition-opacity duration-200 z-10 text-xs font-medium tracking-wider
+          ${isHovered || selected ? 'opacity-100' : ''}
+        `}
+      >
         <span className="text-white text-xs">{getFieldName(field.name || field.type)}</span>
-        <div style={iconContainerStyle}>
+        
+        <div className="flex gap-1 pl-2 ml-2 border-l border-white/20">
           {onDelete && (
             <button
-              onClick={() => onDelete(field.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(field.id);
+              }}
               title="Delete"
-              style={iconButtonStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#fecaca")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "white")}
+              className="w-4 h-4 cursor-pointer flex items-center justify-center text-white hover:text-red-200 transition-colors"
             >
               <TrashIcon width={16} height={16} />
             </button>
           )}
-          {/* Drag handle button - spreads dnd-kit attributes and listeners */}
+          
+          {/* Drag handle button */}
           <button
             type="button"
             title="Move"
             {...dragHandleProps?.attributes}
             {...dragHandleProps?.listeners}
-            style={{
-              ...iconButtonStyle,
-              cursor: dragHandleProps ? "grab" : "default",
-              opacity: dragHandleProps ? 1 : 0.4,
-            }}
-            onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.opacity = dragHandleProps ? "0.8" : "0.4")}
-            onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.opacity = dragHandleProps ? "1" : "0.4")}
-            aria-disabled={!dragHandleProps}
+            className={`
+              w-4 h-4 flex items-center justify-center text-white transition-opacity
+              ${dragHandleProps ? 'cursor-grab hover:opacity-80' : 'cursor-default opacity-40'}
+            `}
           >
             <EllipsisVerticalIcon width={16} height={16} />
           </button>

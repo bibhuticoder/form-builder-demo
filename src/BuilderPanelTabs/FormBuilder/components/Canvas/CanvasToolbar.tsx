@@ -25,7 +25,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCan
         {/* Breakpoint Size Buttons */}
         <Card className="p-2 flex items-center gap-2">
           {SCREEN_SIZES.map((size) => (
-            <Button key={size.id} style={{ fontSize: "0.75rem" }} variant={activeDevice === size.id ? "primary" : "secondary"} className={`p-1 text-xs rounded-sm flex items-center justify-center`} onClick={() => onCanvasWidthChange(size.width)} title={size.title}>
+            <Button key={size.id} variant={activeDevice === size.id ? "primary" : "secondary"} className={`p-1 text-xs rounded-sm flex items-center justify-center`} onClick={() => onCanvasWidthChange(size.width)} title={size.title}>
               {size.label}
             </Button>
           ))}

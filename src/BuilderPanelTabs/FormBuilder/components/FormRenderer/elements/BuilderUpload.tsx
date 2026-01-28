@@ -4,7 +4,7 @@
  * Supports labels, help text, accepted file types, max file size, and validation.
  */
 
-import { UploadField } from "../../../types";
+import { UploadField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderUploadProps {
@@ -31,7 +31,7 @@ export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
           required={field.required}
           disabled={field.disabled}
           accept={field.acceptedFileTypes?.join(",")}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
         />
         {field.helpText && (
           <p className="text-xs text-gray-500">

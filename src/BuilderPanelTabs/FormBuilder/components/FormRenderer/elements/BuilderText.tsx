@@ -4,8 +4,9 @@
  * Supports labels, placeholders, help text, and validation.
  */
 
-import { TextField } from "../../../types";
+import { TextField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderTextProps {
   field: TextField;
@@ -19,6 +20,7 @@ export default function BuilderText({ field }: Readonly<BuilderTextProps>) {
           <label
             htmlFor={field.id}
             className="block text-sm font-medium text-gray-700"
+            style={getLabelStyles(field.style)}
           >
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -31,10 +33,14 @@ export default function BuilderText({ field }: Readonly<BuilderTextProps>) {
           placeholder={field.placeholder}
           required={field.required}
           disabled={field.disabled}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 transition-all duration-200"
+          style={getInputStyles(field.style)}
         />
         {field.helpText && (
-          <p className="text-xs text-gray-500">
+          <p 
+            className="text-xs text-gray-500"
+            style={getHelpTextStyles(field.style)}
+          >
             {field.helpText}
           </p>
         )}

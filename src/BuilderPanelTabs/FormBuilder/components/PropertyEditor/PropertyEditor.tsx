@@ -1,0 +1,94 @@
+import React from "react";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Button } from "../../../../components";
+import { useFormBuilder } from "../../context";
+import { ContentTab } from "./tabs/ContentTab";
+import { StyleTab } from "./tabs/StyleTab";
+
+interface PropertyEditorProps {
+  selectedFieldId: string;
+  onBack: () => void;
+}
+
+export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId, onBack }) => {
+  const { jsonContent } = useFormBuilder();
+  const [activeTab, setActiveTab] = React.useState("content");
+
+  const selectedField = jsonContent.fields.find((f) => f.id === selectedFieldId);
+
+  if (!selectedField) {
+    return (
+      <div className="flex items-center justify-center h-full p-4 text-gray-500 dark:text-gray-400">
+        <p className="text-sm">Field not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="p-4 flex items-center justify-between bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <Button variant="secondary" onClick={onBack} className="gap-2">
+          <ArrowLeftIcon className="w-4 h-4" />
+          Back
+        </Button>
+        <span className="font-semibold text-gray-900 dark:text-white text-sm">Edit Field</span>
+      </div>
+
+      {/* Tabs */}
+      <div className="px-4 pt-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="w-full grid grid-cols-3 mb-4 bg-gray-100 dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700 rounded-md">
+          <button
+            onClick={() => setActiveTab("content")}
+            className={`text-xs py-2 px-3 rounded transition-colors ${
+              activeTab === "content"
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            }`}
+          >
+            Content
+          </button>
+          <button
+            onClick={() => setActiveTab("style")}
+            className={`text-xs py-2 px-3 rounded transition-colors ${
+              activeTab === "style"
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            }`}
+          >
+            Style
+          </button>
+          <button
+            onClick={() => setActiveTab("logic")}
+            className={`text-xs py-2 px-3 rounded transition-colors ${
+              activeTab === "logic"
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            }`}
+          >
+            Logic
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4 space-y-6">
+          {activeTab === "content" && <ContentTab field={selectedField} />}
+          {activeTab === "style" && <StyleTab field={selectedField} />}
+          {activeTab === "logic" && (
+            <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Conditional Logic</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Add rules to show/hide fields, disqualify leads, or redirect users based on their inputs.
+              </p>
+              <Button className="w-full" variant="primary">
+                Add New Condition
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

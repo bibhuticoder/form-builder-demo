@@ -18,7 +18,7 @@ export const IconSelect: React.FC<IconSelectProps> = ({ icon, options, className
           rounded-lg 
           bg-white dark:bg-gray-700 
           text-gray-900 dark:text-white 
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+          focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
           transition-colors duration-200
           ${className}
         `}

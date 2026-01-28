@@ -4,7 +4,7 @@
  * Supports labels, placeholders, help text, min/max dates, and validation.
  */
 
-import { DateField } from "../../../types";
+import { DateField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderDateProps {
@@ -32,7 +32,7 @@ export default function BuilderDate({ field }: Readonly<BuilderDateProps>) {
           disabled={field.disabled}
           min={field.min}
           max={field.max}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900"
         />
         {field.helpText && (
           <p className="text-xs text-gray-500">

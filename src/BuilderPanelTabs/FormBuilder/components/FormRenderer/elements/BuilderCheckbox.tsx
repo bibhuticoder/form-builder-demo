@@ -4,7 +4,7 @@
  * Supports single or multi-selection modes, labels, help text, and validation.
  */
 
-import { CheckboxField } from "../../../types";
+import { CheckboxField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderCheckboxProps {
@@ -35,7 +35,7 @@ export default function BuilderCheckbox({
                   field.required && field.selectionMode === "single"
                 }
                 disabled={field.disabled}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
               />
               <label
                 htmlFor={`${field.id}_${option.value}`}

@@ -17,6 +17,7 @@ interface FormBuilderContextType {
   // Field operations
   addField: (field: Field, afterId?: string) => void;
   updateField: (fieldId: string, updates: Partial<Field>) => void;
+  updateFieldStyleBatch: (fieldId: string, styleUpdates: Record<string, any>) => void;
   deleteField: (fieldId: string) => void;
   reorderFields: (oldIndex: number, newIndex: number) => void;
   
@@ -116,6 +117,17 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     }));
   }, []);
 
+  const updateFieldStyleBatch = useCallback((fieldId: string, styleUpdates: Record<string, any>) => {
+    setJsonContentState((old) => ({
+      ...old,
+      fields: old.fields.map((field) =>
+        field.id === fieldId
+          ? ({ ...field, style: { ...field.style, ...styleUpdates } } as Field)
+          : field
+      ),
+    }));
+  }, []);
+
   const deleteField = useCallback((fieldId: string) => {
     setJsonContentState((old) => ({
       ...old,
@@ -155,6 +167,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       updateCanvasWidth,
       addField,
       updateField,
+      updateFieldStyleBatch,
       deleteField,
       reorderFields,
       saveForm,
@@ -169,6 +182,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       updateCanvasWidth,
       addField,
       updateField,
+      updateFieldStyleBatch,
       deleteField,
       reorderFields,
       saveForm,

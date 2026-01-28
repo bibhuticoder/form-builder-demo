@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid"
 import { validateFormDefinition, type FormDefinition, type ValidationError } from "../../foundation"
-import { Button } from "../../components"
+
 
 export interface JsonEditorProps {
   value: FormDefinition
@@ -73,7 +73,7 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({ value, onChange, onSave 
 
       {/* Editor Textarea */}
       <div className="flex-1 relative overflow-auto" style={{ maxHeight: "600px" }}>
-        <textarea value={JSON.stringify(localValue, null, 2)} onChange={(e) => handleChange(JSON.parse(e.target.value))} className="w-full h-full min-h-[400px] p-4 font-mono text-xs text-slate-900 dark:text-gray-900 bg-neutral-50 dark:bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5533ff] dark:focus:ring-purple-500 resize-none border-none dark:border-gray-300" placeholder="Paste your JSON here..." rows={30} spellCheck={false} />
+        <textarea value={JSON.stringify(localValue, null, 2)} onChange={(e) => handleChange(JSON.parse(e.target.value))} className="w-full h-full min-h-[400px] p-4 font-mono text-xs text-slate-900 dark:text-gray-900 bg-neutral-50 dark:bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary resize-none border-none dark:border-gray-300" placeholder="Paste your JSON here..." rows={30} spellCheck={false} />
       </div>
 
       {/* Validation Errors at Bottom */}
@@ -87,7 +87,7 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({ value, onChange, onSave 
             {validationErrors.map((error, index) => (
               <li key={index} className="text-xs">
                 <div className="flex items-start gap-2">
-                  <span className="font-mono text-purple-700 dark:text-purple-400 font-semibold">{error.path}:</span>
+                  <span className="font-mono text-primary dark:text-primary font-semibold">{error.path}:</span>
                   <span className="text-red-700 dark:text-red-400">{error.message}</span>
                 </div>
               </li>

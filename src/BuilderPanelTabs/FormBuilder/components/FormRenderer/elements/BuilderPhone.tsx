@@ -4,7 +4,7 @@
  * Supports labels, placeholders, help text, and phone validation.
  */
 
-import { PhoneField } from "../../../types";
+import { PhoneField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderPhoneProps {
@@ -31,7 +31,7 @@ export default function BuilderPhone({ field }: Readonly<BuilderPhoneProps>) {
           placeholder={field.placeholder}
           required={field.required}
           disabled={field.disabled}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900"
         />
         {field.helpText && (
           <p className="text-xs text-gray-500">

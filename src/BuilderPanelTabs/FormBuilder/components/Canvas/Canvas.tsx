@@ -8,7 +8,6 @@ import { EmptyState } from "./EmptyState";
 import FormRenderer from "../FormRenderer/FormRenderer";
 import { CANVAS_DROPPABLE_ID } from "../../../../types/dnd";
 import { useFormBuilder } from "../../context";
-import "./Canvas.css";
 
 export interface CanvasProps {
   /** ID of the element currently being dragged over (for drop indicators) */
@@ -21,7 +20,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
   const { jsonContent, updateCanvasWidth } = useFormBuilder();
   const [canvasWidth, setCanvasWidth] = useState(768);
   const [isResizing, setIsResizing] = useState(false);
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement | null>(null);
   
   // Make canvas a droppable target for palette fields
   const { setNodeRef, isOver } = useDroppable({ id: CANVAS_DROPPABLE_ID });
@@ -90,13 +89,14 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
             canvasRef.current = node
             setNodeRef(node)
           }}
-          className="shadow-2xl rounded-lg transition-width duration-150 border border-gray-200 dark:border-gray-600 relative bg-white"
+          className={`shadow-2xl rounded-lg transition-width duration-150 border border-gray-200 dark:border-gray-600 relative bg-white ${
+            isOver ? "ring-2 ring-dashed ring-primary" : ""
+          }`}
           style={{
             width: canvasWidth,
             minWidth: `${MIN_CANVAS_WIDTH}px`,
             maxWidth: `${MAX_CANVAS_WIDTH}px`,
             minHeight: "600px",
-            outline: isOver ? "2px dashed #3b82f6" : "none",
           }}
         >
           {isEmpty ? (
@@ -121,8 +121,11 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
           )}
 
           {/* Resize Handle */}
-          <div onMouseDown={handleMouseDown} className="resize-handle">
-            <EllipsisVerticalIcon className="resize-handle-icon text-gray-600 dark:text-gray-400" />
+          <div 
+            onMouseDown={handleMouseDown} 
+            className="absolute top-0 -right-3 h-full w-6 cursor-ew-resize flex items-center justify-center z-10 group hover:bg-primary/10"
+          >
+            <EllipsisVerticalIcon className="w-5 h-16 rounded-2xl text-white bg-primary opacity-50 transition-opacity duration-200 ease-in-out group-hover:opacity-100" />
           </div>
         </div>
       </div>

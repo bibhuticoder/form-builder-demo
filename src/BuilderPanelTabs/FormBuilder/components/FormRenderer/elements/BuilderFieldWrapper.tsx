@@ -4,7 +4,8 @@
  * Useful for adding common styles or functionality
  */
 import { ReactNode} from "react";
-import { BaseField } from "../../../types";
+import { BaseField } from "../../../../../types";
+import { getContainerStyles } from "../../../utils/styleUtils";
 
 interface FieldWrapperProps {
   field: BaseField;
@@ -20,7 +21,8 @@ export default function BuilderFieldWrapper({
  
   return (
     <div 
-      className={`field-wrapper field-type-${field.type}`}
+      className={`field-wrapper field-type-${field.type} transition-all duration-200`}
+      style={getContainerStyles(field.style)}
     >
       {children}
     </div>

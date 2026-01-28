@@ -4,7 +4,7 @@
  * Supports labels, help text, options, and validation.
  */
 
-import { RadioField } from "../../../types";
+import { RadioField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderRadioProps {
@@ -31,7 +31,7 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
                 value={option.value}
                 required={field.required}
                 disabled={field.disabled}
-                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
               />
               <label
                 htmlFor={`${field.id}_${option.value}`}

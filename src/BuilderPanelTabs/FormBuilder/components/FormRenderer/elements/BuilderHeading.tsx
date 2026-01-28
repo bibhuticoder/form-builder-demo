@@ -6,8 +6,9 @@
 
 import { ElementType } from "react";
 
-import { HeadingField } from "../../../types";
+import { HeadingField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getInputStyles } from "../../../utils/styleUtils";
 
 
 interface BuilderHeadingProps {
@@ -21,7 +22,10 @@ export default function BuilderHeading({
 
   return (
     <BuilderFieldWrapper field={field}>
-      <Tag style={field.style}>
+      <Tag 
+        style={getInputStyles(field.style)}
+        className="transition-all duration-200"
+      >
         {field.label}
       </Tag>
     </BuilderFieldWrapper>
