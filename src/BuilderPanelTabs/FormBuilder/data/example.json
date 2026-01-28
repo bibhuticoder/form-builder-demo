@@ -1,0 +1,476 @@
+{
+  "formSettings": {
+    "name": "Contact Us Form",
+    "status": "published",
+    "settings": {
+      "width": 768,
+      "backgroundColor": "#FFFFFF",
+      "borderColor": "#E5E5E5",
+      "borderStyle": "solid",
+      "borderWidth": 1,
+      "borderRadius": 12,
+      "fontFamilyBody": "Inter",
+      "fontFamilyTitle": "Inter",
+      "paddingTop": 48,
+      "paddingRight": 48,
+      "paddingBottom": 48,
+      "paddingLeft": 48,
+      "backgroundImage": "",
+      "backgroundRepeat": "no-repeat",
+      "backgroundSize": "cover",
+      "backgroundPosition": "center"
+    }
+  },
+  "fields": [
+    {
+      "id": "heading_demo",
+      "type": "heading",
+      "label": "Welcome to our Form",
+      "headingLevel": "h1",
+      "style": {
+        "color": "#111827",
+        "textAlign": "center",
+        "fontSize": "32",
+        "fontWeight": "bold",
+        "marginBottom": 24
+      }
+    },
+    {
+      "id": "paragraph_demo",
+      "type": "paragraph",
+      "label": "Please fill out the information below completely.",
+      "style": {
+        "color": "#6B7280",
+        "textAlign": "center",
+        "fontSize": "16"
+      }
+    },
+    {
+      "id": "fname_demo",
+      "type": "text",
+      "label": "First Name",
+      "name": "first_name",
+      "placeholder": "Jane",
+      "required": true,
+      "helpText": "Your given name",
+      "style": {
+        "width": "half"
+      }
+    },
+    {
+      "id": "lname_demo",
+      "type": "text",
+      "label": "Last Name",
+      "name": "last_name",
+      "placeholder": "Doe",
+      "required": true,
+      "style": {
+        "width": "half"
+      }
+    },
+    {
+      "id": "email_demo",
+      "type": "email",
+      "label": "Email Address",
+      "name": "email",
+      "placeholder": "jane@company.com",
+      "required": true
+    },
+    {
+      "id": "phone_demo",
+      "type": "phone",
+      "label": "Phone Number",
+      "name": "phone",
+      "placeholder": "+1 (555) 000-0000",
+      "required": false
+    },
+    {
+      "id": "company_demo",
+      "type": "text",
+      "label": "Company Name",
+      "name": "company",
+      "placeholder": "Acme Corp",
+      "required": false
+    },
+    {
+      "id": "address_group_demo",
+      "type": "text",
+      "label": "Street Address",
+      "name": "address",
+      "required": false
+    },
+    {
+      "id": "city_demo",
+      "type": "text",
+      "label": "City",
+      "name": "city",
+      "style": {
+        "width": "third"
+      }
+    },
+    {
+      "id": "state_demo",
+      "type": "text",
+      "label": "State",
+      "name": "state",
+      "style": {
+        "width": "third"
+      }
+    },
+    {
+      "id": "zip_demo",
+      "type": "text",
+      "label": "Zip Code",
+      "name": "zip_code",
+      "style": {
+        "width": "third"
+      }
+    },
+    {
+      "id": "website_demo",
+      "type": "url",
+      "label": "Website URL",
+      "name": "website",
+      "placeholder": "https://",
+      "required": false
+    },
+    {
+      "id": "text_input_demo",
+      "type": "text",
+      "label": "Custom Subject",
+      "name": "custom_subject",
+      "placeholder": "Enter subject...",
+      "required": false
+    },
+    {
+      "id": "textarea_demo",
+      "type": "textarea",
+      "label": "Your Message",
+      "name": "message",
+      "placeholder": "Tell us more...",
+      "required": true,
+      "rows": 5,
+      "helpText": "Please be descriptive"
+    },
+    {
+      "id": "number_demo",
+      "type": "number",
+      "label": "Employee Count",
+      "name": "employee_count",
+      "placeholder": "100",
+      "required": false
+    },
+    {
+      "id": "dropdown_demo",
+      "type": "dropdown",
+      "label": "Select Department",
+      "name": "department",
+      "required": true,
+      "options": [
+        {
+          "label": "Sales",
+          "value": "sales"
+        },
+        {
+          "label": "Support",
+          "value": "support"
+        },
+        {
+          "label": "Engineering",
+          "value": "engineering"
+        }
+      ]
+    },
+    {
+      "id": "radio_demo",
+      "type": "radio",
+      "label": "Preferred Contact Method",
+      "name": "contact_preference",
+      "required": true,
+      "options": [
+        {
+          "label": "Email",
+          "value": "email"
+        },
+        {
+          "label": "Phone",
+          "value": "phone"
+        }
+      ]
+    },
+    {
+      "id": "checkbox_multi_demo",
+      "type": "checkbox",
+      "label": "Topics of Interest",
+      "name": "interests",
+      "selectionMode": "multi",
+      "options": [
+        {
+          "label": "Product Updates",
+          "value": "updates"
+        },
+        {
+          "label": "Newsletter",
+          "value": "newsletter"
+        }
+      ]
+    },
+    {
+      "id": "date_demo",
+      "type": "date",
+      "label": "Desired Start Date",
+      "name": "start_date",
+      "required": false
+    },
+    {
+      "id": "time_demo",
+      "type": "time",
+      "label": "Best Time to Call",
+      "name": "call_time",
+      "required": false
+    },
+    {
+      "id": "upload_demo",
+      "type": "upload",
+      "label": "Upload Proposal",
+      "name": "proposal_file",
+      "required": false,
+      "helpText": "PDF or DOCX only"
+    },
+    {
+      "id": "image_demo",
+      "type": "image",
+      "label": "Product Screenshot",
+      "url": "https://placehold.co/600x400",
+      "altText": "Dashboard preview"
+    },
+    {
+      "id": "video_demo",
+      "type": "video",
+      "label": "Demo Video",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "altText": "Product Walkthrough"
+    },
+    {
+      "id": "divider_demo",
+      "type": "divider"
+    },
+    {
+      "id": "captcha_demo",
+      "type": "captcha",
+      "label": "Security Verification"
+    },
+    {
+      "id": "submit_btn",
+      "type": "button",
+      "label": "Send Message",
+      "action": "submit",
+      "style": {
+        "backgroundColor": "#4F46E5",
+        "color": "#FFFFFF",
+        "width": "full",
+        "borderRadius": 8,
+        "fontWeight": "bold"
+      }
+    }
+  ],
+  "logic": {
+    "version": 1,
+    "rules": [
+      {
+        "id": "show_phone_if_contact_pref_phone",
+        "enabled": true,
+        "trigger": {
+          "event": "field.change",
+          "fieldId": "radio_demo"
+        },
+        "if": {
+          "operation": "and",
+          "args": [
+            {
+              "comparison": "eq",
+              "left": {
+                "var": "radio_demo"
+              },
+              "right": {
+                "str": "phone"
+              }
+            }
+          ]
+        },
+        "then": [
+          {
+            "effect": "field.visibility.set",
+            "targets": [
+              "phone_demo"
+            ],
+            "value": true
+          }
+        ],
+        "else": [
+          {
+            "effect": "field.visibility.set",
+            "targets": [
+              "phone_demo"
+            ],
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": "on_submit_sales_redirect",
+        "enabled": true,
+        "trigger": {
+          "event": "submission.success"
+        },
+        "if": {
+          "operation": "and",
+          "args": [
+            {
+              "comparison": "eq",
+              "left": {
+                "var": "dropdown_demo"
+              },
+              "right": {
+                "str": "sales"
+              }
+            }
+          ]
+        },
+        "then": [
+          {
+            "effect": "nav.redirect",
+            "url": "https://example.com/thank-you-sales"
+          }
+        ]
+      },
+      {
+        "id": "support_success_message",
+        "enabled": true,
+        "trigger": {
+          "event": "submission.success"
+        },
+        "if": {
+          "operation": "and",
+          "args": [
+            {
+              "comparison": "eq",
+              "left": {
+                "var": "dropdown_demo"
+              },
+              "right": {
+                "str": "support"
+              }
+            }
+          ]
+        },
+        "then": [
+          {
+            "effect": "ui.toast",
+            "variant": "success",
+            "title": "Thanks!",
+            "body": "Our support team will contact you shortly."
+          }
+        ]
+      },
+      {
+        "id": "nested_expression_example",
+        "enabled": true,
+        "trigger": {
+          "event": "field.change",
+          "fieldId": "radio_demo"
+        },
+        "if": {
+          "operation": "and",
+          "args": [
+            {
+              "comparison": "eq",
+              "left": {
+                "var": "radio_demo"
+              },
+              "right": {
+                "str": "phone"
+              }
+            },
+            {
+              "comparison": "exists",
+              "left": {
+                "var": "phone_demo"
+              }
+            },
+            {
+              "operation": "or",
+              "args": [
+                {
+                  "comparison": "eq",
+                  "left": {
+                    "var": "dropdown_demo"
+                  },
+                  "right": {
+                    "str": "sales"
+                  }
+                },
+                {
+                  "comparison": "eq",
+                  "left": {
+                    "var": "dropdown_demo"
+                  },
+                  "right": {
+                    "str": "support"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "then": [
+          {
+            "effect": "ui.toast",
+            "variant": "info",
+            "title": "Complex Condition Met",
+            "body": "This demonstrates nested AND/OR logic expressions."
+          }
+        ]
+      },
+      {
+        "id": "reject_free_email",
+        "enabled": true,
+        "trigger": {
+          "event": "submission.attempt"
+        },
+        "if": {
+          "operation": "or",
+          "args": [
+            {
+              "comparison": "contains",
+              "left": {
+                "var": "email_demo"
+              },
+              "right": {
+                "str": "@gmail.com"
+              }
+            },
+            {
+              "comparison": "contains",
+              "left": {
+                "var": "email_demo"
+              },
+              "right": {
+                "str": "@yahoo.com"
+              }
+            }
+          ]
+        },
+        "then": [
+          {
+            "effect": "submission.reject",
+            "error": {
+              "fieldId": "email_demo",
+              "message": "Please use a business email address."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
