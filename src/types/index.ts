@@ -12,6 +12,7 @@ export * from './styles';
 // Field definitions
 export * from './field-option';
 export * from './fields';
+export * from './field-capabilities';
 
 // Logic rules
 export * from './logic';

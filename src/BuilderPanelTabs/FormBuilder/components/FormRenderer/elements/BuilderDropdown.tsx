@@ -17,11 +17,11 @@ export default function BuilderDropdown({
 }: Readonly<BuilderDropdownProps>) {
   return (
     <BuilderFieldWrapper field={field}>
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {field.label && (
           <label
             htmlFor={field.id}
-            className="block text-sm font-medium text-gray-700"
+            className="block text-xs font-medium text-gray-700"
             style={getLabelStyles(field.style)}
           >
             {field.label}
@@ -32,8 +32,8 @@ export default function BuilderDropdown({
           id={field.id}
           name={field.name}
           required={field.required}
-          disabled={field.disabled}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 transition-all duration-200"
+          disabled
+          className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 transition-all duration-200 pointer-events-none outline-none"
           style={getInputStyles(field.style)}
         >
           {field.placeholder && (
@@ -47,7 +47,7 @@ export default function BuilderDropdown({
         </select>
         {field.helpText && (
           <p 
-            className="text-xs text-gray-500"
+            className="text-[10px] text-gray-500"
             style={getHelpTextStyles(field.style)}
           >
             {field.helpText}

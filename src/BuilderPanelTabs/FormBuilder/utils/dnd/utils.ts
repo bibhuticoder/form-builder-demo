@@ -23,9 +23,96 @@ const makeId = () => `${Date.now().toString(36)}-${Math.random().toString(36).sl
  * - Adds default options for CHECKBOX, RADIO, and DROPDOWN types
  * - Sets common defaults: required=false, placeholder based on label
  */
-export function createFieldFromType(fieldType: FieldType, label: string): Field {
-  const id = makeId();
-  const name = label.toLowerCase().replace(/\s+/g, "_");
+// Base styles that all fields get
+const BASE_STYLES = {
+  width: "full",
+  windowMarginBottom: 16,
+  windowPaddingTop: 0,
+  windowPaddingRight: 0,
+  windowPaddingBottom: 0,
+  windowPaddingLeft: 0,
+};
+
+// Styles for display-only fields (heading, paragraph, divider, image, video)
+const DISPLAY_FIELD_STYLES = {
+  ...BASE_STYLES,
+  inputFontSize: 14,
+  inputFontSizeUnit: "px",
+  inputFontWeight: "normal",
+  inputFontFamily: "default",
+  inputColor: "#111827",
+};
+
+// Full styles for input fields
+const INPUT_FIELD_STYLES = {
+  ...DISPLAY_FIELD_STYLES,
+  // Label Typography
+  labelFontSize: 14,
+  labelFontSizeUnit: "px",
+  labelFontWeight: "medium",
+  labelFontFamily: "default",
+  labelColor: "#374151",
+
+  // Help Text Typography
+  helpFontSize: 12,
+  helpFontSizeUnit: "px",
+  helpFontWeight: "normal",
+  helpFontFamily: "default",
+  helpColor: "#6b7280",
+
+  // Input Decoration
+  inputBackgroundColor: "#ffffff",
+  inputBorderColor: "#d1d5db",
+  inputBorderWidth: 1,
+  inputBorderRadius: 6,
+
+  // Spacing (Input)
+  inputPaddingTop: 8,
+  inputPaddingRight: 12,
+  inputPaddingBottom: 8,
+  inputPaddingLeft: 12,
+  inputMarginTop: 0,
+  inputMarginRight: 0,
+  inputMarginBottom: 0,
+  inputMarginLeft: 0,
+};
+
+// Helper to get appropriate default styles based on field type
+const getDefaultStylesForType = (fieldType: FieldType) => {
+  // Display-only fields
+  if ([
+    FieldType.HEADING,
+    FieldType.PARAGRAPH,
+    FieldType.DIVIDER,
+    FieldType.IMAGE,
+    FieldType.VIDEO,
+    FieldType.BUTTON,
+    FieldType.CAPTCHA,
+  ].includes(fieldType)) {
+    return DISPLAY_FIELD_STYLES;
+  }
+
+  // Input fields get full styles
+  return INPUT_FIELD_STYLES;
+};
+
+
+/**
+ * Generates a semantic ID for a field based on its type and existing fields
+ * Format: fieldtype_count (e.g., "heading_3" for the 3rd heading)
+ */
+const generateFieldId = (fieldType: FieldType, existingFields: Field[] = []): string => {
+  // Count how many fields of this type already exist
+  const count = existingFields.filter(f => f.type === fieldType).length + 1;
+  return `${fieldType}_${count}`;
+};
+
+export function createFieldFromType(
+  fieldType: FieldType,
+  label: string,
+  existingFields: Field[] = []
+): Field {
+  const id = generateFieldId(fieldType, existingFields);
   const placeholder = `Enter ${label.toLowerCase()}`;
 
   // Option-based fields need default choices
@@ -39,11 +126,22 @@ export function createFieldFromType(fieldType: FieldType, label: string): Field 
     return {
       id,
       type: fieldType,
-      name,
       label,
       required: false,
       placeholder,
       options,
+      style: { ...getDefaultStylesForType(fieldType) },
+    } as Field;
+  }
+
+  // Heading fields need a headingLevel property
+  if (fieldType === FieldType.HEADING) {
+    return {
+      id,
+      type: fieldType,
+      label,
+      headingLevel: "h2", // Default to h2
+      style: { ...getDefaultStylesForType(fieldType) },
     } as Field;
   }
 
@@ -51,9 +149,9 @@ export function createFieldFromType(fieldType: FieldType, label: string): Field 
   return {
     id,
     type: fieldType,
-    name,
     label,
     required: false,
     placeholder,
+    style: { ...getDefaultStylesForType(fieldType) },
   } as Field;
 }

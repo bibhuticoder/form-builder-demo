@@ -103,5 +103,15 @@ export const getHelpTextStyles = (style: Record<string, any> = {}): CSSPropertie
     };
 };
 
+export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProperties => {
+    return {
+        // Typography - Placeholder
+        fontFamily: style.placeholderFontFamily !== "default" ? style.placeholderFontFamily : undefined,
+        fontSize: style.placeholderFontSize ? `${style.placeholderFontSize}${style.placeholderFontSizeUnit || 'px'}` : undefined,
+        fontWeight: style.placeholderFontWeight,
+        color: style.placeholderColor,
+    };
+};
+
 // Returns a class name for the font family if appropriate, or assumes it's handled by style
 // The current implementation uses inline styles for fonts.

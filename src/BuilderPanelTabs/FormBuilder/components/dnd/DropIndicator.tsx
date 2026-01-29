@@ -11,6 +11,7 @@ const DROP_INDICATOR_STYLES = {
   backgroundColor: "#3b82f6",
   margin: "4px 0",
   borderRadius: "2px",
+  width: "100%",
 } as const;
 
 export const DropIndicator: React.FC = () => <div style={DROP_INDICATOR_STYLES} />;

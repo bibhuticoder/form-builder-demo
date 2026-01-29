@@ -21,27 +21,33 @@ import BuilderDropdown from "../components/FormRenderer/elements/BuilderDropdown
 import BuilderParagraph from "../components/FormRenderer/elements/BuilderParagraph";
 import { Field } from "../../../types";
 
-export const fieldRegistry: Record<Field["type"], React.FC<{ field: any }>> = {
-    heading: BuilderHeading,
-    paragraph: BuilderParagraph,
-    divider: BuilderDivider,
-    image: BuilderImage,
-    video: BuilderVideo,
+export interface FieldComponentProps {
+    field: Field;
+    isSelected?: boolean;
+    activeSubElement?: string | null;
+}
 
-    text: BuilderText,
-    email: BuilderEmail,
-    url: BuilderUrl,
-    phone: BuilderPhone,
-    number: BuilderNumber,
-    textarea: BuilderTextArea,
-    date: BuilderDate,
-    time: BuilderTime,
+export const fieldRegistry: Record<Field["type"], React.FC<FieldComponentProps>> = {
+    heading: BuilderHeading as React.FC<FieldComponentProps>,
+    paragraph: BuilderParagraph as React.FC<FieldComponentProps>,
+    divider: BuilderDivider as React.FC<FieldComponentProps>,
+    image: BuilderImage as React.FC<FieldComponentProps>,
+    video: BuilderVideo as React.FC<FieldComponentProps>,
 
-    dropdown: BuilderDropdown,
-    radio: BuilderRadio,
-    checkbox: BuilderCheckbox,
+    text: BuilderText as React.FC<FieldComponentProps>,
+    email: BuilderEmail as React.FC<FieldComponentProps>,
+    url: BuilderUrl as React.FC<FieldComponentProps>,
+    phone: BuilderPhone as React.FC<FieldComponentProps>,
+    number: BuilderNumber as React.FC<FieldComponentProps>,
+    textarea: BuilderTextArea as React.FC<FieldComponentProps>,
+    date: BuilderDate as React.FC<FieldComponentProps>,
+    time: BuilderTime as React.FC<FieldComponentProps>,
 
-    upload: BuilderUpload,
-    captcha: BuilderCaptcha,
-    button: BuilderButton
-}   
+    dropdown: BuilderDropdown as React.FC<FieldComponentProps>,
+    radio: BuilderRadio as React.FC<FieldComponentProps>,
+    checkbox: BuilderCheckbox as React.FC<FieldComponentProps>,
+
+    upload: BuilderUpload as React.FC<FieldComponentProps>,
+    captcha: BuilderCaptcha as React.FC<FieldComponentProps>,
+    button: BuilderButton as React.FC<FieldComponentProps>
+}

@@ -1,0 +1,132 @@
+/**
+ * Canvas Styles
+ * Dedicated styles for the form builder canvas to ensure proper visual hierarchy
+ * and consistent rendering of form elements
+ */
+
+/* ============================================================================
+   HEADING STYLES
+   ============================================================================ */
+
+/* H1 - Largest heading */
+.canvas-content h1 {
+  font-size: 2.25rem; /* 36px */
+  font-weight: 700;
+  line-height: 2.5rem;
+  margin-bottom: 0;
+  letter-spacing: -0.025em;
+}
+
+/* H2 - Second level heading */
+.canvas-content h2 {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 700;
+  line-height: 2.25rem;
+  margin-bottom: 0;
+  letter-spacing: -0.025em;
+}
+
+/* H3 - Third level heading */
+.canvas-content h3 {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  line-height: 2rem;
+  margin-bottom: 0;
+}
+
+/* H4 - Fourth level heading */
+.canvas-content h4 {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  line-height: 1.75rem;
+  margin-bottom: 0;
+}
+
+/* H5 - Fifth level heading */
+.canvas-content h5 {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  line-height: 1.75rem;
+  margin-bottom: 0;
+}
+
+/* H6 - Smallest heading */
+.canvas-content h6 {
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  line-height: 1.5rem;
+  margin-bottom: 0;
+}
+
+/* ============================================================================
+   PARAGRAPH STYLES
+   ============================================================================ */
+
+.canvas-content p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin-bottom: 0;
+}
+
+/* ============================================================================
+   FORM INPUT STYLES
+   ============================================================================ */
+
+.canvas-content input[type="text"],
+.canvas-content input[type="email"],
+.canvas-content input[type="url"],
+.canvas-content input[type="tel"],
+.canvas-content input[type="number"],
+.canvas-content input[type="date"],
+.canvas-content input[type="time"],
+.canvas-content select,
+.canvas-content textarea {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* ============================================================================
+   DIVIDER STYLES
+   ============================================================================ */
+
+.canvas-content hr {
+  margin: 1rem 0;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .canvas-content hr {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================================
+   BUTTON STYLES
+   ============================================================================ */
+
+.canvas-content button {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+/* ============================================================================
+   LABEL STYLES
+   ============================================================================ */
+
+.canvas-content label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* ============================================================================
+   IMAGE & VIDEO STYLES
+   ============================================================================ */
+
+.canvas-content img,
+.canvas-content video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

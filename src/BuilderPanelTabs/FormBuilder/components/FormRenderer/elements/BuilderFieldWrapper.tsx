@@ -12,16 +12,25 @@ interface FieldWrapperProps {
   children: ReactNode;
   onDelete?: (fieldId: string) => void;
   onMove?: (fieldId: string) => void;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
 export default function BuilderFieldWrapper({
   field,
   children,
+  isSelected,
+  activeSubElement,
 }: Readonly<FieldWrapperProps>) {
- 
+  
+  // Apply highlighting ring when window is selected
+  const highlightClass = isSelected && activeSubElement === 'window' 
+    ? 'ring-2 ring-primary ring-offset-2' 
+    : '';
+  
   return (
     <div 
-      className={`field-wrapper field-type-${field.type} transition-all duration-200`}
+      className={`field-wrapper field-type-${field.type} transition-all duration-200 ${highlightClass}`}
       style={getContainerStyles(field.style)}
     >
       {children}

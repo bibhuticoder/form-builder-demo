@@ -4,16 +4,20 @@
  * Supports embedded videos from various sources with optional alt text.
  */
 
-import { VideoField } from "../../../types";
+import { VideoField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderVideoProps {
   field: VideoField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
-export default function BuilderVideo({ field }: Readonly<BuilderVideoProps>) {
+export default function BuilderVideo({ field, isSelected, activeSubElement }: Readonly<BuilderVideoProps>) {
   // Convert YouTube watch URLs to embed URLs
-  const getEmbedUrl = (url: string) => {
+  const getEmbedUrl = (url: string | undefined) => {
+    if (!url) return "";
+    
     if (url.includes("youtube.com/watch")) {
       const videoId = url.split("v=")[1]?.split("&")[0];
       return `https://www.youtube.com/embed/${videoId}`;
@@ -28,7 +32,7 @@ export default function BuilderVideo({ field }: Readonly<BuilderVideoProps>) {
   const embedUrl = getEmbedUrl(field.url);
 
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
           <label className="block text-sm font-medium text-gray-700">
@@ -41,9 +45,11 @@ export default function BuilderVideo({ field }: Readonly<BuilderVideoProps>) {
             title={field.altText || field.label || "Video"}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 w-full h-full pointer-events-none"
             style={field.style}
           />
+          {/* Overlay to prevent iframe interaction in builder */}
+          <div className="absolute inset-0 cursor-pointer" />
         </div>
       </div>
     </BuilderFieldWrapper>

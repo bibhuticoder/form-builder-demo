@@ -1,5 +1,7 @@
 import { FormBuilderProvider } from "./context"
 import { BuilderShell } from "./components/BuilderShell"
+import { JsonEditorPanel } from "./components/JsonEditorPanel"
+
 import exampleData from "./data/example.json"
 import { FormDefinition } from "../../foundation"
 
@@ -9,7 +11,12 @@ const DEFAULT_JSON = JSON.parse(JSON.stringify(exampleData, null, 2)) as FormDef
 export default function FormBuilder() {
   return (
     <FormBuilderProvider initialContent={DEFAULT_JSON}>
-      <BuilderShell />
+      <div className="w-full">
+        <div className="h-[75vh]">
+          <BuilderShell />
+        </div>
+      </div>
+      <JsonEditorPanel />
     </FormBuilderProvider>
   )
 }

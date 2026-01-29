@@ -15,7 +15,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
   // If a field is selected, show the property editor
   if (selectedFieldId && onClearSelection) {
     return (
-      <aside className="w-[280px] flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl">
+      <aside className="sticky top-0 w-[280px] flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl">
         <PropertyEditor selectedFieldId={selectedFieldId} onBack={onClearSelection} />
       </aside>
     );
@@ -23,11 +23,11 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
 
   // Otherwise, show the element palette
   return (
-    <aside className={`${isCollapsed ? "w-[50px]" : "w-[280px]"} flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl transition-all duration-300 ease-in-out relative`}>
+    <aside className={`sticky top-0 ${isCollapsed ? "w-[50px]" : "w-[280px]"} flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl transition-all duration-300 ease-in-out relative`}>
       <div className={`p-2 flex items-center ${isCollapsed ? "justify-center" : "justify-between px-2"} bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700`}>
-        {!isCollapsed && <span className="font-semibold text-gray-900 dark:text-white">Form Elements</span>}
+        {!isCollapsed && <span className="font-semibold text-gray-900 dark:text-white text-sm">Form Elements</span>}
 
-        <Button variant="secondary" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}>
+        <Button variant="transparent" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"} className="focus:ring-0 border-none !p-1.5">
           {isCollapsed ? <ChevronRightIcon className="w-4 h-4 text-gray-700 dark:text-gray-300" /> : <ChevronLeftIcon className="w-4 h-4 text-gray-700 dark:text-gray-300" />}
         </Button>
       </div>

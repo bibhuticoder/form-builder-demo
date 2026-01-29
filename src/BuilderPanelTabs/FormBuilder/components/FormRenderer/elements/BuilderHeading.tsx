@@ -13,18 +13,22 @@ import { getInputStyles } from "../../../utils/styleUtils";
 
 interface BuilderHeadingProps {
   field: HeadingField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
 export default function BuilderHeading({
   field,
+  isSelected,
+  activeSubElement,
 }: Readonly<BuilderHeadingProps>) {
-  const Tag = (field.headingLevel || "div") as ElementType;
+  const Tag = (field.headingLevel || "h2") as ElementType;
 
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <Tag 
         style={getInputStyles(field.style)}
-        className="transition-all duration-200"
+        className="transition-all duration-200 text-gray-900 dark:text-white"
       >
         {field.label}
       </Tag>

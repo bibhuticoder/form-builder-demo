@@ -1,11 +1,18 @@
 import React from "react";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
+export interface SpacingValues {
+  top: string | number | undefined;
+  right: string | number | undefined;
+  bottom: string | number | undefined;
+  left: string | number | undefined;
+}
+
 interface SpacingControlProps {
   label: string;
-  values: { top: any; right: any; bottom: any; left: any };
-  onChange: (key: string, value: any) => void;
-  onBatchChange?: (updates: Record<string, any>) => void;
+  values: SpacingValues;
+  onChange: (key: string, value: string | number | undefined) => void;
+  onBatchChange?: (updates: Record<string, string | number | undefined>) => void;
   prefix?: string;
   suffix?: string;
   allowAuto?: boolean;
@@ -22,7 +29,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
   allowAuto = false,
   keyMapping,
 }) => {
-  const handleCopyValue = (value: any) => {
+  const handleCopyValue = (value: string | number | undefined) => {
     if (onBatchChange) {
       if (keyMapping) {
         onBatchChange({
@@ -52,7 +59,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
     }
   };
 
-  const handleInputChange = (side: string, value: any) => {
+  const handleInputChange = (side: string, value: string | number | undefined) => {
     const key = keyMapping ? keyMapping[side.toLowerCase() as keyof typeof keyMapping] : `${prefix}${side}${suffix}`;
     onChange(key, value);
   };
@@ -64,12 +71,12 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
       </div>
       <div className="grid grid-cols-2 gap-2">
         {/* Top */}
-        <div className="flex items-center relative group">
+        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.top)}
             title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
@@ -81,19 +88,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
               type={allowAuto ? "text" : "number"}
               value={values.top || ""}
               onChange={(e) => handleInputChange("Top", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Right */}
-        <div className="flex items-center relative group">
+        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.right)}
             title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
@@ -105,19 +112,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
               type={allowAuto ? "text" : "number"}
               value={values.right || ""}
               onChange={(e) => handleInputChange("Right", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="flex items-center relative group">
+        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.bottom)}
             title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
@@ -129,19 +136,19 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
               type={allowAuto ? "text" : "number"}
               value={values.bottom || ""}
               onChange={(e) => handleInputChange("Bottom", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Left */}
-        <div className="flex items-center relative group">
+        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.left)}
             title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 z-10 transition-colors"
+            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
           >
             <DocumentDuplicateIcon className="h-3 w-3" />
           </button>
@@ -153,7 +160,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
               type={allowAuto ? "text" : "number"}
               value={values.left || ""}
               onChange={(e) => handleInputChange("Left", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary text-center"
+              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
               placeholder="0"
             />
           </div>

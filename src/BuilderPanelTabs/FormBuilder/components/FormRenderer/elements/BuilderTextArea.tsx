@@ -7,6 +7,7 @@
 import { TextAreaField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { PlaceholderStyles } from "./PlaceholderStyles";
 
 interface BuilderTextAreaProps {
   field: TextAreaField;
@@ -17,11 +18,12 @@ export default function BuilderTextArea({
 }: Readonly<BuilderTextAreaProps>) {
   return (
     <BuilderFieldWrapper field={field}>
-      <div className="space-y-1">
+      <PlaceholderStyles fieldId={field.id} style={field.style} />
+      <div className="space-y-0.5">
         {field.label && (
           <label
             htmlFor={field.id}
-            className="block text-sm font-medium text-gray-700"
+            className="block text-xs font-medium text-gray-700"
             style={getLabelStyles(field.style)}
           >
             {field.label}
@@ -33,16 +35,16 @@ export default function BuilderTextArea({
           name={field.name}
           placeholder={field.placeholder}
           required={field.required}
-          disabled={field.disabled}
+          readOnly
           rows={field.rows || 3}
           cols={field.cols}
           maxLength={field.maxLength}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 resize-y transition-all duration-200"
+          className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 resize-y transition-all duration-200 pointer-events-none outline-none"
           style={getInputStyles(field.style)}
         />
         {field.helpText && (
           <p 
-            className="text-xs text-gray-500"
+            className="text-[10px] text-gray-500"
             style={getHelpTextStyles(field.style)}
           >
             {field.helpText}

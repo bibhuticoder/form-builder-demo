@@ -9,7 +9,7 @@ import { validateFormSettings, validateFields } from './form-settings.validators
 import { validateLogicRules } from './logic.validators';
 import { validateLogicFieldReferences } from './utility.validators';
 
-export const validateFormDefinition = (definition: any): ValidationResult => {
+export const validateFormDefinition = (definition: unknown): ValidationResult => {
   const builder = new ValidationResultBuilder();
 
   if (!definition || typeof definition !== 'object') {
@@ -17,18 +17,21 @@ export const validateFormDefinition = (definition: any): ValidationResult => {
     return builder.build();
   }
 
+  // Cast to Record for property access after type check
+  const def = definition as Record<string, unknown>;
+
   // Validate form settings
-  const settingsErrors = validateFormSettings(definition.formSettings);
+  const settingsErrors = validateFormSettings(def.formSettings);
   builder.addErrors(settingsErrors);
 
   // Validate fields
-  const fieldsErrors = validateFields(definition.fields);
+  const fieldsErrors = validateFields(def.fields);
   builder.addErrors(fieldsErrors);
 
   // Collect all field IDs for logic validation
   const validFieldIds = new Set<string>();
-  if (definition.fields && Array.isArray(definition.fields)) {
-    definition.fields.forEach((field: any) => {
+  if (def.fields && Array.isArray(def.fields)) {
+    (def.fields as Array<{ id?: string }>).forEach((field) => {
       if (field.id) {
         validFieldIds.add(field.id);
       }
@@ -36,12 +39,12 @@ export const validateFormDefinition = (definition: any): ValidationResult => {
   }
 
   // Validate logic rules (optional) with field ID validation
-  const logicErrors = validateLogicRules(definition.logic, validFieldIds);
+  const logicErrors = validateLogicRules(def.logic, validFieldIds);
   builder.addErrors(logicErrors);
 
   // Validate field references in logic rules
-  if (definition.fields && Array.isArray(definition.fields)) {
-    const refErrors = validateLogicFieldReferences(definition);
+  if (def.fields && Array.isArray(def.fields)) {
+    const refErrors = validateLogicFieldReferences(definition as any);
     builder.addErrors(refErrors);
   }
 

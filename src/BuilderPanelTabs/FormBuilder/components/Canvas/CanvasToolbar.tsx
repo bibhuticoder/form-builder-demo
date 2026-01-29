@@ -20,12 +20,12 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCan
   })()
 
   return (
-    <div className="flex justify-center bg-gray-100 dark:bg-gray-800 shrink-0">
+    <div className="flex justify-center shrink-0">
       <div className="flex items-center gap-4">
         {/* Breakpoint Size Buttons */}
-        <Card className="flex items-center gap-2 !p-2">
+        <Card className="flex items-center gap-2 !p-1.5 rounded">
           {SCREEN_SIZES.map((size) => (
-            <Button key={size.id} variant={activeDevice === size.id ? "primary" : "secondary"} className={`p-1 text-xs rounded-sm flex items-center justify-center`} onClick={() => onCanvasWidthChange(size.width)} title={size.title}>
+            <Button key={size.id} variant={activeDevice === size.id ? "primary" : "secondary"} className={`!p-1 !px-2 text-xs rounded-md flex items-center justify-center`} onClick={() => onCanvasWidthChange(size.width)} title={size.title}>
               {size.label}
             </Button>
           ))}
@@ -33,12 +33,12 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCan
 
         {/* Width Display */}
         <Card className="px-4 py-1">
-          <span className="text-sm font-medium text-gray-900 dark:text-white">{Math.round(canvasWidth)}px</span>
+          <span className="text-xs font-medium text-gray-900 dark:text-white">{Math.round(canvasWidth)}px</span>
         </Card>
 
         {/* Link Button */}
         <Button variant="secondary" title="Link Styles">
-          <LinkIcon className="h-6 w-6 text-gray-900 dark:text-white" />
+          <LinkIcon className="h-4 w-4 text-gray-900 dark:text-white" />
         </Button>
       </div>
     </div>

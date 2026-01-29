@@ -65,9 +65,9 @@ export function DndProvider({
   const handlePaletteFieldDrop = useCallback((overId: string, activeData: DragData) => {
     if (!activeData.fieldType) return;
 
-    const newField = createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType);
+    const newField = createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields);
     onFieldAdd(newField, overId);
-  }, [onFieldAdd]);
+  }, [onFieldAdd, fields]);
 
   /**
    * Handles reordering existing fields within the canvas
@@ -113,10 +113,10 @@ export function DndProvider({
   /** Creates a preview field instance when dragging from the palette */
   const activePalettePreview = useMemo(() => {
     if (activeDrag.data?.kind === "palette-field" && activeDrag.data.fieldType && activeDrag.data.label) {
-      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label);
+      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label, fields);
     }
     return null;
-  }, [activeDrag.data]);
+  }, [activeDrag.data, fields]);
 
   const previewField = activePalettePreview || activeCanvasField;
 

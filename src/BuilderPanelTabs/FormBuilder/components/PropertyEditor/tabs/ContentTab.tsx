@@ -1,8 +1,9 @@
 import React from "react";
-import { Field, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField } from "../../../../../types";
+import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField } from "../../../../../types";
 import { useFormBuilder } from "../../../context";
 import { Button } from "../../../../../components";
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { getFieldCapabilities } from "../../../../../types/field-capabilities";
 
 interface ContentTabProps {
   field: Field;
@@ -14,23 +15,23 @@ const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '_')
 export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
   const { updateField } = useFormBuilder();
 
-  const handleUpdate = (key: string, value: any) => {
-    let updates: any = { [key]: value };
+  const handleUpdate = (key: string, value: unknown) => {
+    const updates: Partial<Field> = { [key]: value } as Partial<Field>;
     
     // Auto-generate name from label if not customized
-    if (key === "label" && !(field as any).isNameCustomized) {
-      updates.name = slugify(value);
+    if (key === "label" && !(field as InputField & { isNameCustomized?: boolean }).isNameCustomized) {
+      (updates as Partial<InputField>).name = slugify(value as string);
     }
     
     updateField(field.id, updates);
   };
 
-  const showLabel = field.type !== "divider";
-  const showFieldName = ["text", "email", "phone", "url", "textarea", "number", "checkbox", "radio", "dropdown", "date", "time", "upload"].includes(field.type);
-  const showPlaceholder = ["text", "email", "phone", "url", "textarea", "number"].includes(field.type);
-  const showRequired = !["divider", "heading", "paragraph", "image", "video", "button", "captcha"].includes(field.type);
-  const showHelpText = !["divider", "heading", "paragraph", "image", "video", "button"].includes(field.type);
-  const showOptions = ["checkbox", "radio", "dropdown"].includes(field.type);
+  const capabilities = getFieldCapabilities(field.type);
+  const showLabel = capabilities.hasLabel;
+  const showPlaceholder = capabilities.hasPlaceholder;
+  const showRequired = capabilities.hasRequired;
+  const showHelpText = capabilities.hasHelpText;
+  const showOptions = capabilities.hasOptions;
 
   return (
     <div className="space-y-3">
@@ -42,7 +43,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
           </label>
           <input
             type="text"
-            value={field.label || ""}
+            value={(field as LabeledField).label || ""}
             onChange={(e) => handleUpdate("label", e.target.value)}
             className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -65,29 +66,6 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
             <option value="h5">H5 (Small)</option>
             <option value="h6">H6 (Tiny)</option>
           </select>
-        </div>
-      )}
-
-      {/* Field Name (Internal) - Only show for input fields */}
-      {showFieldName && (
-        <div className="space-y-1">
-          <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Field Name (Internal)</label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={(field as any).name || ""}
-              onChange={(e) => handleUpdate("name", e.target.value)}
-              disabled={!(field as any).isNameCustomized}
-              className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-            <Button
-              variant="secondary"
-              onClick={() => handleUpdate("isNameCustomized", !(field as any).isNameCustomized)}
-              className={`shrink-0 h-7 w-7 p-0 flex items-center justify-center ${(field as any).isNameCustomized ? "border-blue-500 text-blue-600 dark:text-blue-400" : ""}`}
-            >
-              <PencilIcon className="h-3 w-3" />
-            </Button>
-          </div>
         </div>
       )}
 
@@ -184,8 +162,8 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
           </div>
 
           <div className="space-y-2">
-            {((field as CheckboxField | RadioField | DropdownField).options || []).map((option: any, index: number) => (
-              <div key={option.id || index} className="flex gap-2 items-start">
+            {((field as CheckboxField | RadioField | DropdownField).options || []).map((option, index: number) => (
+              <div key={index} className="flex gap-2 items-start">
                 <div className="flex-1 space-y-1">
                   <div className="flex gap-2">
                     <input
@@ -202,7 +180,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
                     <Button
                       variant="secondary"
                       onClick={() => {
-                        const newOptions = (field as CheckboxField | RadioField | DropdownField).options?.filter((_: any, i: number) => i !== index);
+                        const newOptions = (field as CheckboxField | RadioField | DropdownField).options?.filter((_, i: number) => i !== index);
                         handleUpdate("options", newOptions);
                       }}
                       className="h-10 w-10 shrink-0"

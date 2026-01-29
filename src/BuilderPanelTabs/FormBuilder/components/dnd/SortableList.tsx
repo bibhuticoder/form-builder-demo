@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 interface SortableListProps {
   /** Array of items with unique IDs */
@@ -18,7 +18,7 @@ interface SortableListProps {
  */
 export function SortableList({ items, children }: SortableListProps) {
   return (
-    <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+    <SortableContext items={items.map((item) => item.id)} strategy={rectSortingStrategy}>
       {children}
     </SortableContext>
   );

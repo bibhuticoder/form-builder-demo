@@ -1,31 +1,43 @@
-import React, { useState } from "react";
-import { Field } from "../../../../../types";
+import React, { useState, useMemo } from "react";
+import { Field, getFieldCapabilities } from "../../../../../types";
 import { useFormBuilder } from "../../../context";
 import { SpacingControl } from "../components/SpacingControl";
-import { ColorPickerField } from "../components/ColorPickerField";
+import { ColorControl } from "../components/ColorControl";
 
 interface StyleTabProps {
   field: Field;
 }
 
 export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
-  const { updateField, updateFieldStyleBatch } = useFormBuilder();
-  const [activeSpacingTab, setActiveSpacingTab] = useState<"input" | "window">("input");
-  const [activeTypographyTab, setActiveTypographyTab] = useState<"input" | "label" | "placeholder" | "help">("input");
-  const [activeDecorationTab, setActiveDecorationTab] = useState<"input" | "window">("input");
+  const { updateField, updateFieldStyleBatch, setActiveSubElement } = useFormBuilder();
+  
+  // Get field capabilities
+  const capabilities = useMemo(() => getFieldCapabilities(field.type), [field.type]);
+  
+  // Set initial tabs based on capabilities
+  const [activeSpacingTab, setActiveSpacingTab] = useState<"input" | "window">(
+    capabilities.supportsInputStyles ? "input" : "window"
+  );
+  const [activeTypographyTab, setActiveTypographyTab] = useState<"input" | "label" | "placeholder" | "help">(
+    capabilities.supportsInputStyles ? "input" : 
+    capabilities.supportsLabelStyles ? "label" : "input"
+  );
+  const [activeDecorationTab, setActiveDecorationTab] = useState<"input" | "window">(
+    capabilities.supportsInputStyles ? "input" : "window"
+  );
 
-  const handleStyleUpdate = (key: string, value: any) => {
+  const handleStyleUpdate = (key: string, value: string | number | undefined) => {
     updateField(field.id, {
       style: { ...field.style, [key]: value },
     });
   };
 
-  const handleStyleBatchUpdate = (updates: Record<string, any>) => {
+  const handleStyleBatchUpdate = (updates: Record<string, string | number | undefined>) => {
     updateFieldStyleBatch(field.id, updates);
   };
 
-  const getStyleValue = (key: string, defaultValue: any = "") => {
-    return field.style?.[key] ?? defaultValue;
+  const getStyleValue = (key: string, defaultValue: string | number | undefined = "") => {
+    return (field.style as Record<string, string | number | undefined>)?.[key] ?? defaultValue;
   };
 
   return (
@@ -51,28 +63,37 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
 
         {/* Spacing Sub-tabs */}
         <div className="space-y-3">
-          <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
-            <button
-              onClick={() => setActiveSpacingTab("input")}
-              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                activeSpacingTab === "input"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              Input
-            </button>
-            <button
-              onClick={() => setActiveSpacingTab("window")}
-              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                activeSpacingTab === "window"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              Window
-            </button>
-          </div>
+          {/* Only show tabs if both input and window styles are supported */}
+          {capabilities.supportsInputStyles && capabilities.supportsWindowStyles && (
+            <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
+              <button
+                onClick={() => {
+                  setActiveSpacingTab("input");
+                  setActiveSubElement("input");
+                }}
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                  activeSpacingTab === "input"
+                    ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                }`}
+              >
+                Input
+              </button>
+              <button
+                onClick={() => {
+                  setActiveSpacingTab("window");
+                  setActiveSubElement("window");
+                }}
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                  activeSpacingTab === "window"
+                    ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                }`}
+              >
+                Window
+              </button>
+            </div>
+          )}
 
           {activeSpacingTab === "input" && (
             <div className="space-y-4">
@@ -141,58 +162,90 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Typography</h4>
         
         {/* Typography Sub-tabs */}
-        <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
-          <button
-            onClick={() => setActiveTypographyTab("input")}
-            className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-              activeTypographyTab === "input"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Input
-          </button>
-          <button
-            onClick={() => setActiveTypographyTab("label")}
-            className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-              activeTypographyTab === "label"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Label
-          </button>
-          <button
-            onClick={() => setActiveTypographyTab("placeholder")}
-            className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-              activeTypographyTab === "placeholder"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Placeholder
-          </button>
-          <button
-            onClick={() => setActiveTypographyTab("help")}
-            className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-              activeTypographyTab === "help"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Help
-          </button>
-        </div>
+        {/* Only show tabs if more than one typography option is available */}
+        {(() => {
+          const typographyOptionsCount = [
+            capabilities.supportsInputStyles,
+            capabilities.supportsLabelStyles,
+            capabilities.supportsPlaceholderStyles,
+            capabilities.supportsHelpStyles
+          ].filter(Boolean).length;
+          
+          return typographyOptionsCount > 1 ? (
+            <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
+              {capabilities.supportsInputStyles && (
+                <button
+                  onClick={() => {
+                    setActiveTypographyTab("input");
+                    setActiveSubElement("input");
+                  }}
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
+                    activeTypographyTab === "input"
+                      ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Input
+                </button>
+              )}
+              {capabilities.supportsLabelStyles && (
+                <button
+                  onClick={() => {
+                    setActiveTypographyTab("label");
+                    setActiveSubElement("label");
+                  }}
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
+                    activeTypographyTab === "label"
+                      ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Label
+                </button>
+              )}
+              {capabilities.supportsPlaceholderStyles && (
+                <button
+                  onClick={() => {
+                    setActiveTypographyTab("placeholder");
+                    setActiveSubElement("placeholder");
+                  }}
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
+                    activeTypographyTab === "placeholder"
+                      ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Placeholder
+                </button>
+              )}
+              {capabilities.supportsHelpStyles && (
+                <button
+                  onClick={() => {
+                    setActiveTypographyTab("help");
+                    setActiveSubElement("help");
+                  }}
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
+                    activeTypographyTab === "help"
+                      ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Help
+                </button>
+              )}
+            </div>
+          ) : null;
+        })()}
 
         {/* Typography Controls */}
         <div className="space-y-4">
           {/* Font Family */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Font Family</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Font Family</label>
             <select
               value={getStyleValue(`${activeTypographyTab}FontFamily`, "default")}
               onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontFamily`, e.target.value === "default" ? "" : e.target.value)}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="default">Default</option>
               <option value="inter">Inter</option>
@@ -204,15 +257,15 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
           </div>
 
           {/* Font Size and Weight */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1 w-full">
             <div className="space-y-1">
               <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Size</label>
               <div className="flex">
                 <input
                   type="number"
-                  value={getStyleValue(`${activeTypographyTab}FontSize`)}
+                  value={getStyleValue(`${activeTypographyTab}FontSize`, activeTypographyTab === "help" ? 12 : 14)}
                   onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSize`, e.target.value)}
-                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0"
+                  className="flex-1 px-2 py-1.5 w-[75px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0"
                   placeholder="14"
                 />
                 <select
@@ -260,9 +313,9 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
           )}
 
           {/* Color */}
-          <ColorPickerField
+          <ColorControl
             label={`${activeTypographyTab.charAt(0).toUpperCase() + activeTypographyTab.slice(1)} Color`}
-            color={getStyleValue(`${activeTypographyTab}Color`, activeTypographyTab === "label" ? "#A3A3A3" : activeTypographyTab === "placeholder" ? "#9ca3af" : activeTypographyTab === "help" ? "#64748b" : "#000000")}
+            value={String(getStyleValue(`${activeTypographyTab}Color`, activeTypographyTab === "label" ? "#A3A3A3" : activeTypographyTab === "placeholder" ? "#9ca3af" : activeTypographyTab === "help" ? "#64748b" : "#000000"))}
             onChange={(c) => handleStyleUpdate(`${activeTypographyTab}Color`, c)}
           />
         </div>
@@ -275,45 +328,54 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Decoration</h4>
         
         {/* Decoration Sub-tabs */}
-        <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
-          <button
-            onClick={() => setActiveDecorationTab("input")}
-            className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-              activeDecorationTab === "input"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Input
-          </button>
-          <button
-            onClick={() => setActiveDecorationTab("window")}
-            className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-              activeDecorationTab === "window"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Window
-          </button>
-        </div>
+        {/* Only show tabs if both input and window styles are supported */}
+        {capabilities.supportsInputStyles && capabilities.supportsWindowStyles && (
+          <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
+            <button
+              onClick={() => {
+                setActiveDecorationTab("input");
+                setActiveSubElement("input");
+              }}
+              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                activeDecorationTab === "input"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              Input
+            </button>
+            <button
+              onClick={() => {
+                setActiveDecorationTab("window");
+                setActiveSubElement("window");
+              }}
+              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                activeDecorationTab === "window"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              Window
+            </button>
+          </div>
+        )}
 
         {/* Decoration Controls */}
         <div className="space-y-4">
           {/* Background Color */}
-          <ColorPickerField
+          <ColorControl
             label="Background"
-            color={getStyleValue(`${activeDecorationTab}BackgroundColor`, activeDecorationTab === "input" ? "#ffffff" : "#f9fafb")}
+            value={String(getStyleValue(`${activeDecorationTab}BackgroundColor`, activeDecorationTab === "input" ? "#ffffff" : "#f9fafb"))}
             onChange={(c) => handleStyleUpdate(`${activeDecorationTab}BackgroundColor`, c)}
           />
 
           {/* Border Style */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Border Style</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Border Style</label>
             <select
               value={getStyleValue(`${activeDecorationTab}BorderStyle`, "solid")}
               onChange={(e) => handleStyleUpdate(`${activeDecorationTab}BorderStyle`, e.target.value)}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="none">None</option>
               <option value="solid">Solid</option>
@@ -324,51 +386,42 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
 
           {/* Border Width and Color */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Border Width</label>
+            <div className="space-y-1">
+              <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Border Width</label>
               <input
                 type="number"
-                value={getStyleValue(`${activeDecorationTab}BorderWidth`, "")}
+                value={getStyleValue(`${activeDecorationTab}BorderWidth`, 1)}
                 onChange={(e) => handleStyleUpdate(`${activeDecorationTab}BorderWidth`, e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="1"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Border Color</label>
-              <div className="flex gap-2 items-center">
-                <div
-                  className="w-10 h-10 rounded border-2 border-gray-300 dark:border-gray-600 cursor-pointer flex-shrink-0"
-                  style={{ backgroundColor: getStyleValue(`${activeDecorationTab}BorderColor`, "#e5e7eb") }}
-                  onClick={() => document.getElementById(`border-color-${activeDecorationTab}`)?.click()}
-                />
-                <input
-                  id={`border-color-${activeDecorationTab}`}
-                  type="color"
-                  value={getStyleValue(`${activeDecorationTab}BorderColor`, "#e5e7eb")}
-                  onChange={(e) => handleStyleUpdate(`${activeDecorationTab}BorderColor`, e.target.value)}
-                  className="opacity-0 absolute pointer-events-none"
-                />
-              </div>
+            <div className="space-y-1">
+              <ColorControl
+                label="Border Color"
+                value={String(getStyleValue(`${activeDecorationTab}BorderColor`, "#e5e7eb"))}
+                onChange={(c) => handleStyleUpdate(`${activeDecorationTab}BorderColor`, c)}
+              />
             </div>
           </div>
 
           {/* Border Radius */}
           <SpacingControl
             label="Border Radius"
-            values={{
-              top: getStyleValue(`${activeDecorationTab}BorderTopLeftRadius`),
-              right: getStyleValue(`${activeDecorationTab}BorderTopRightRadius`),
-              bottom: getStyleValue(`${activeDecorationTab}BorderBottomRightRadius`),
-              left: getStyleValue(`${activeDecorationTab}BorderBottomLeftRadius`),
-            }}
-            onChange={handleStyleUpdate}
-            onBatchChange={handleStyleBatchUpdate}
             keyMapping={{
               top: `${activeDecorationTab}BorderTopLeftRadius`,
               right: `${activeDecorationTab}BorderTopRightRadius`,
               bottom: `${activeDecorationTab}BorderBottomRightRadius`,
               left: `${activeDecorationTab}BorderBottomLeftRadius`,
+            }}
+            onChange={handleStyleUpdate}
+            onBatchChange={handleStyleBatchUpdate}
+            // Default border radius 4 for inputs/windows if not set
+            values={{
+              top: getStyleValue(`${activeDecorationTab}BorderTopLeftRadius`, 4),
+              right: getStyleValue(`${activeDecorationTab}BorderTopRightRadius`, 4),
+              bottom: getStyleValue(`${activeDecorationTab}BorderBottomRightRadius`, 4),
+              left: getStyleValue(`${activeDecorationTab}BorderBottomLeftRadius`, 4),
             }}
           />
         </div>

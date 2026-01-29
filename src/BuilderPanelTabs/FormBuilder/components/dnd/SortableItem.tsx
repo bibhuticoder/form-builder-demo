@@ -5,11 +5,9 @@
 
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import type { DragData } from "../../../../types/dnd";
 
-/** Opacity applied to items while being dragged */
-const DRAGGING_OPACITY = 0.6;
+
 
 export interface DragHandleProps {
   attributes: ReturnType<typeof useSortable>["attributes"];
@@ -20,13 +18,14 @@ interface SortableItemProps {
   id: string;
   dragData: DragData;
   children: (dragHandleProps: DragHandleProps) => React.ReactNode;
+  width?: string; // Width class to apply to wrapper
 }
 
 /**
  * Wraps a child component to make it sortable via drag-and-drop.
  * The child receives drag handle props to control which element triggers dragging.
  */
-export function SortableItem({ id, dragData, children }: SortableItemProps) {
+export function SortableItem({ id, dragData, children, width }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -36,15 +35,23 @@ export function SortableItem({ id, dragData, children }: SortableItemProps) {
     isDragging,
   } = useSortable({ id, data: dragData });
 
+  // Create transform without scaling to prevent scaleX/scaleY effects
+  const transformStyle = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : {};
+
   const style = {
-    transform: CSS.Transform.toString(transform),
+    ...transformStyle,
     transition,
-    opacity: isDragging ? DRAGGING_OPACITY : 1,
-    position: "relative" as const,
+    opacity: isDragging ? 0 : 1, // Hide completely when dragging
+    width: width || undefined, // Apply width if provided
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <div 
+      ref={setNodeRef} 
+      style={style}
+    >
       {children({ attributes, listeners })}
     </div>
   );

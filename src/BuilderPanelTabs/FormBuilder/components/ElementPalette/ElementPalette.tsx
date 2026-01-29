@@ -93,7 +93,7 @@ const DraggableElementCard: React.FC<{ item: ElementItem }> = ({ item }) => {
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Card className="p-2 border border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary transition-colors" aria-label={item.label}>
+      <Card className="!p-2 border border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary transition-colors shadow-none" aria-label={item.label}>
         <div className="flex flex-col items-center justify-center gap-1 p-2 group cursor-grab select-none">
           <item.icon className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors" />
           <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-primary text-center transition-colors leading-tight">{item.label}</span>
@@ -125,7 +125,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Fields..."
-              containerStyles="!bg-gray-50 dark:!bg-gray-900 !border !border-gray-300 dark:!border-gray-600 !min-h-[2.25rem] !rounded-md"
+              containerStyles="!bg-gray-50 dark:!bg-gray-900 !min-h-[2.25rem] !rounded-md"
               inputStyles="!text-sm !bg-transparent !text-gray-900 dark:!text-white placeholder:!text-gray-400 dark:placeholder:!text-gray-500"
             />
           </div>
@@ -134,8 +134,8 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
             <div className="space-y-3 p-2">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, idx) => (
-                  <div key={idx}>
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-1">{group.title}</h3>
+                  <div className="mb-8" key={idx}>
+                    <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 px-1">{group.title}</h3>
                     <div className="grid grid-cols-2 gap-1.5">
                       {group.items.map((item, index) => (
                         <DraggableElementCard key={item.type + index} item={item} />

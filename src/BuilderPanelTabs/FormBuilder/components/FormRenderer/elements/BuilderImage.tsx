@@ -4,16 +4,18 @@
  * Displays an image with optional alt text and styling.
  */
 
-import { ImageField } from "../../../types";
+import { ImageField } from "../../../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderImageProps {
   field: ImageField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
-export default function BuilderImage({ field }: Readonly<BuilderImageProps>) {
+export default function BuilderImage({ field, isSelected, activeSubElement }: Readonly<BuilderImageProps>) {
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">

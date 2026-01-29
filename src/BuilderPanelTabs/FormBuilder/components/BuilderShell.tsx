@@ -4,6 +4,7 @@ import { TopBar } from "./TopBar/TopBar";
 import { Canvas } from "./Canvas/Canvas";
 import { ConfigPanel } from "./ConfigPanel/ConfigPanel";
 import FieldRenderer from "./FormRenderer/FieldRenderer";
+import BuilderFieldControls from "./FormRenderer/elements/BuilderFieldControls";
 import { DndProvider } from "./dnd";
 import { useFormBuilder } from "../context";
 
@@ -20,15 +21,19 @@ export const BuilderShell: React.FC = () => {
       onFieldAdd={addField}
       onFieldReorder={reorderFields}
       fields={jsonContent.fields ?? []}
-      renderPreview={(field) => <FieldRenderer field={field} />}
+      renderPreview={(field) => (
+        <BuilderFieldControls field={field} forceHover={true}>
+          <FieldRenderer field={field} />
+        </BuilderFieldControls>
+      )}
     >
       {(dragOverId: string | null) => (
-        <div className="flex bg-gray-50 dark:bg-gray-900">
+        <div className="flex bg-gray-50 dark:bg-gray-900 h-full w-[80vw] overflow-auto">
           {/* Config Panel - Left Sidebar */}
           <ConfigPanel selectedFieldId={selectedFieldId} onClearSelection={handleClearSelection} />
 
           {/* Main Content Area */}
-          <main className="flex-1 flex flex-col min-w-0 bg-gray-100 dark:bg-gray-800 relative">
+          <main className="flex-1 flex flex-col min-w-0">
             {/* Top Navigation Bar */}
             <TopBar />
 

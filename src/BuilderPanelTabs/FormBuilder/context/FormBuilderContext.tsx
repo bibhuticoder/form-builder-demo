@@ -5,9 +5,11 @@ import { arrayMove } from "@dnd-kit/sortable";
 interface FormBuilderContextType {
   // State
   jsonContent: FormDefinition;
+  activeSubElement: string | null;
   
   // Core setters
   setJsonContent: (content: FormDefinition) => void;
+  setActiveSubElement: (subElement: string | null) => void;
   
   // Form-level operations
   updateFormName: (name: string) => void;
@@ -44,6 +46,7 @@ interface FormBuilderProviderProps {
 
 export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initialContent, children }) => {
   const [jsonContent, setJsonContentState] = useState<FormDefinition>(initialContent);
+  const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
 
   // Core setter
   const setJsonContent = useCallback((content: FormDefinition) => {
@@ -161,7 +164,9 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
   const value = useMemo(
     () => ({
       jsonContent,
+      activeSubElement,
       setJsonContent,
+      setActiveSubElement,
       updateFormName,
       updateFormSettings,
       updateCanvasWidth,
@@ -176,6 +181,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     }),
     [
       jsonContent,
+      activeSubElement,
       setJsonContent,
       updateFormName,
       updateFormSettings,

@@ -48,7 +48,7 @@ export const validateFormName = (name: string): ValidationError[] => {
   return errors;
 };
 
-export const validateFormSettings = (formSettings: any): ValidationError[] => {
+export const validateFormSettings = (formSettings: unknown): ValidationError[] => {
   const errors: ValidationError[] = [];
 
   if (!formSettings || typeof formSettings !== 'object') {
@@ -60,10 +60,12 @@ export const validateFormSettings = (formSettings: any): ValidationError[] => {
     return errors;
   }
 
-  errors.push(...validateFormName(formSettings.name));
-  errors.push(...validateFormStatus(formSettings.status));
+  const settings = formSettings as Record<string, unknown>;
 
-  if (!formSettings.settings || typeof formSettings.settings !== 'object') {
+  errors.push(...validateFormName(settings.name as string));
+  errors.push(...validateFormStatus(settings.status as string));
+
+  if (!settings.settings || typeof settings.settings !== 'object') {
     errors.push({
       path: 'formSettings.settings',
       message: 'Form settings.settings is required and must be an object',
@@ -74,7 +76,7 @@ export const validateFormSettings = (formSettings: any): ValidationError[] => {
   return errors;
 };
 
-export const validateFields = (fields: any): ValidationError[] => {
+export const validateFields = (fields: unknown): ValidationError[] => {
   const errors: ValidationError[] = [];
 
   if (!Array.isArray(fields)) {

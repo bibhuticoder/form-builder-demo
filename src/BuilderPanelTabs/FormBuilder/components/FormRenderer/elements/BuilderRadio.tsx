@@ -14,14 +14,14 @@ interface BuilderRadioProps {
 export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
   return (
     <BuilderFieldWrapper field={field}>
-      <div className="space-y-2">
+      <div className="space-y-1">
         {field.label && (
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-xs font-medium text-gray-700">
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
-        <div className="space-y-2">
+        <div className="space-y-1">
           {field.options.map((option) => (
             <div key={option.value} className="flex items-center">
               <input
@@ -30,12 +30,12 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
                 name={field.name}
                 value={option.value}
                 required={field.required}
-                disabled={field.disabled}
-                className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                disabled={true} // Always disabled in builder
+                className="appearance-none w-3.5 h-3.5 bg-white border border-gray-900 rounded-full checked:bg-primary checked:border-primary focus:ring-primary outline-none transition-colors"
               />
               <label
                 htmlFor={`${field.id}_${option.value}`}
-                className="ml-2 text-sm text-gray-700"
+                className="ml-2 text-xs text-gray-700"
               >
                 {option.label}
               </label>
@@ -43,7 +43,7 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
           ))}
         </div>
         {field.helpText && (
-          <p className="text-xs text-gray-500">
+          <p className="text-[10px] text-gray-500">
             {field.helpText}
           </p>
         )}
