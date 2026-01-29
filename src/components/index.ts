@@ -49,6 +49,10 @@ export type { TvModalProps } from './TvModal';
 export { SlidingPanel } from './SlidingPanel';
 export type { SlidingPanelProps } from './SlidingPanel';
 
+export { Dialog } from './Dialog';
+
+export { FormSettings } from '../BuilderPanelTabs/FormBuilder/components/FormSettings/FormSettings';
+
 export { DefaultDisclosureTransition } from './DefaultDisclosureTransition';
 export type { DefaultDisclosureTransitionProps } from './DefaultDisclosureTransition';
 

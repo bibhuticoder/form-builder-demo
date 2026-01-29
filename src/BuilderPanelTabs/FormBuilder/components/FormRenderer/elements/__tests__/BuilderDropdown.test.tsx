@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderDropdown from '../BuilderDropdown';
-import { FieldType } from '../../../../types/enums';
+import { FieldType } from '../../../../../../types';
 
 describe('BuilderDropdown', () => {
   it('renders select with options', () => {

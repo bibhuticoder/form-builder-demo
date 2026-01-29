@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderUpload from '../BuilderUpload';
-import { FieldType } from '../../../../types/enums';
+import { FieldType } from '../../../../../../types';
 
 describe('BuilderUpload', () => {
   it('renders file input with label and help text', () => {
