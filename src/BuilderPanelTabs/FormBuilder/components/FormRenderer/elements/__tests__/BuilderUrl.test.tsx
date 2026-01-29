@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderUrl from '../BuilderUrl';
-import { FieldType } from '../../../../types/enums';
+import { FieldType } from '../../../../../../types';
 
 describe('BuilderUrl', () => {
   it('renders url input with label and placeholder', () => {

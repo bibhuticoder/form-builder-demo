@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 import { arrayMove } from '@dnd-kit/sortable';
-import { createFieldFromType } from '../dnd/utils';
-import { FieldType } from '../../../types/enums';
-import { EmailField, Field } from '../../../types';
+import { EmailField, Field, FieldType } from '../../../../types';
+import { createFieldFromType } from '../../utils/dnd/utils';
+
 
 // Mock arrayMove is already provided by the actual library
 jest.unmock('@dnd-kit/sortable');
