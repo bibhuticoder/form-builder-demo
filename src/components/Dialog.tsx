@@ -1,4 +1,5 @@
-import React, { useState, ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -104,7 +105,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
     }
   };
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop overlay - semi-transparent background */}
       <div
@@ -177,6 +178,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
           )}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 };
