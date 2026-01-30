@@ -1,9 +1,10 @@
 import React from "react";
-import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField } from "../../../../../types";
+import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField, FieldType } from "../../../../../types";
 import { useFormBuilder } from "../../../context";
 import { Button } from "../../../../../components";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getFieldCapabilities } from "../../../../../types/field-capabilities";
+import { stripHtmlTags, reconstructHtmlWithLinks } from "../utils/htmlUtils";
 
 interface ContentTabProps {
   field: Field;
@@ -33,6 +34,11 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
   const showHelpText = capabilities.hasHelpText;
   const showOptions = capabilities.hasOptions;
 
+  // Check if field supports HTML links
+  const supportsLinks = field.type === FieldType.HEADING || field.type === FieldType.PARAGRAPH;
+  const fieldLabel = (field as LabeledField).label || "";
+  const hasLinks = supportsLinks && fieldLabel.includes('<a');
+
   return (
     <div className="space-y-3">
       {/* Label / Content Field */}
@@ -43,10 +49,15 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
           </label>
           <input
             type="text"
-            value={(field as LabeledField).label || ""}
-            onChange={(e) => handleUpdate("label", e.target.value)}
+            value={supportsLinks ? stripHtmlTags(fieldLabel) : fieldLabel}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              const finalValue = supportsLinks ? reconstructHtmlWithLinks(newValue, fieldLabel) : newValue;
+              handleUpdate("label", finalValue);
+            }}
             className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
+   
         </div>
       )}
 

@@ -28,6 +28,7 @@ import { IconInput, Card, FormSettings } from "../../../../components";
 import { useDraggable } from "@dnd-kit/core";
 import type { DragData } from "../../../../types/dnd";
 import { ElementPaletteBottomActionsBar } from "./ElementPaletteBottomActionsBar";
+import { LinkModal } from "../LinkModal";
 
 interface ElementItem {
   type: FieldType;
@@ -202,6 +203,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
           ))}
         </div>
       )}
+    
     </div>
   );
 };
