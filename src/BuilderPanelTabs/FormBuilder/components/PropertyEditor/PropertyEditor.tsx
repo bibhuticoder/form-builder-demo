@@ -4,6 +4,7 @@ import { Button } from "../../../../components";
 import { useFormBuilder } from "../../context";
 import { ContentTab } from "./tabs/ContentTab";
 import { StyleTab } from "./tabs/StyleTab";
+import { LogicTab } from "./tabs/LogicTab";
 
 interface PropertyEditorProps {
   selectedFieldId: string;
@@ -40,31 +41,28 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
         <div className="w-full grid grid-cols-3 mb-2 bg-gray-100 dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700 rounded-md">
           <button
             onClick={() => setActiveTab("content")}
-            className={`text-xs py-2 px-3 rounded transition-colors ${
-              activeTab === "content"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
+            className={`text-xs py-2 px-3 rounded transition-colors ${activeTab === "content"
+              ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
           >
             Content
           </button>
           <button
             onClick={() => setActiveTab("style")}
-            className={`text-xs py-2 px-3 rounded transition-colors ${
-              activeTab === "style"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
+            className={`text-xs py-2 px-3 rounded transition-colors ${activeTab === "style"
+              ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
           >
             Style
           </button>
           <button
             onClick={() => setActiveTab("logic")}
-            className={`text-xs py-2 px-3 rounded transition-colors ${
-              activeTab === "logic"
-                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
+            className={`text-xs py-2 px-3 rounded transition-colors ${activeTab === "logic"
+              ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
           >
             Logic
           </button>
@@ -76,17 +74,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
         <div className="p-2 space-y-3">
           {activeTab === "content" && <ContentTab field={selectedField} />}
           {activeTab === "style" && <StyleTab field={selectedField} />}
-          {activeTab === "logic" && (
-            <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Conditional Logic</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-                Add rules to show/hide fields, disqualify leads, or redirect users based on their inputs.
-              </p>
-              <Button className="w-full" variant="primary">
-                Add New Condition
-              </Button>
-            </div>
-          )}
+          {activeTab === "logic" && <LogicTab field={selectedField} />}
         </div>
       </div>
     </div>

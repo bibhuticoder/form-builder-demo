@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
-import { FormDefinition, Field, FormSettings } from "../types";
+import { FormDefinition, Field, FormSettings, LogicRule } from "../types";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface FormBuilderContextType {
@@ -22,6 +22,11 @@ interface FormBuilderContextType {
   updateFieldStyleBatch: (fieldId: string, styleUpdates: Record<string, any>) => void;
   deleteField: (fieldId: string) => void;
   reorderFields: (oldIndex: number, newIndex: number) => void;
+
+  // Logic operations
+  addLogicRule: (rule: LogicRule) => void;
+  updateLogicRule: (ruleId: string, updates: Partial<LogicRule>) => void;
+  deleteLogicRule: (ruleId: string) => void;
 
   // Actions
   saveForm: () => void;
@@ -145,6 +150,39 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     }));
   }, []);
 
+  // Logic Operations
+  const addLogicRule = useCallback((rule: LogicRule) => {
+    setJsonContentState((old) => ({
+      ...old,
+      logic: {
+        version: old.logic?.version || 1,
+        rules: [...(old.logic?.rules || []), rule],
+      },
+    }));
+  }, []);
+
+  const updateLogicRule = useCallback((ruleId: string, updates: Partial<LogicRule>) => {
+    setJsonContentState((old) => ({
+      ...old,
+      logic: {
+        ...(old.logic || { version: 1, rules: [] }),
+        rules: (old.logic?.rules || []).map((rule) =>
+          rule.id === ruleId ? { ...rule, ...updates } : rule
+        ),
+      },
+    }));
+  }, []);
+
+  const deleteLogicRule = useCallback((ruleId: string) => {
+    setJsonContentState((old) => ({
+      ...old,
+      logic: {
+        ...(old.logic || { version: 1, rules: [] }),
+        rules: (old.logic?.rules || []).filter((rule) => rule.id !== ruleId),
+      },
+    }));
+  }, []);
+
   // Actions
   const saveForm = useCallback(() => {
     console.log("Saving form...", jsonContent);
@@ -175,6 +213,9 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       updateFieldStyleBatch,
       deleteField,
       reorderFields,
+      addLogicRule,
+      updateLogicRule,
+      deleteLogicRule,
       saveForm,
       publishForm,
       previewForm,
@@ -191,6 +232,9 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       updateFieldStyleBatch,
       deleteField,
       reorderFields,
+      addLogicRule,
+      updateLogicRule,
+      deleteLogicRule,
       saveForm,
       publishForm,
       previewForm,
