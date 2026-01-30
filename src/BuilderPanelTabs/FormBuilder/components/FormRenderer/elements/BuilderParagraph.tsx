@@ -22,10 +22,10 @@ export default function BuilderParagraph({
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <p 
+      dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
         className="transition-all duration-200 text-gray-900 dark:text-white"
       >
-        {field.label}
       </p>
     </BuilderFieldWrapper>
   );

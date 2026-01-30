@@ -81,7 +81,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
   return (
     <div className="flex-1 pt-2 flex flex-col gap-2">
       {/* Canvas Toolbar */}
-      <CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} />
+      <CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} />
 
       {/* Canvas Content Area */}
       <div className="flex-1 overflow-auto flex justify-center h-full p-16 overflow-auto">

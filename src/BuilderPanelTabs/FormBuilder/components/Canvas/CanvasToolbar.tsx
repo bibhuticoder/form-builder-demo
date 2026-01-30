@@ -1,14 +1,15 @@
 import React from "react"
 import { Button, Card } from "../../../../components"
-import { LinkIcon } from "@heroicons/react/24/outline"
 import { SCREEN_SIZES, MAX_CANVAS_WIDTH } from "../../../../constants"
+import { AddLinkButton } from "./AddLinkButton"
 
 export interface CanvasToolbarProps {
   canvasWidth: number
   onCanvasWidthChange: (width: number) => void
+  selectedFieldId?: string | null
 }
 
-export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCanvasWidthChange }) => {
+export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCanvasWidthChange, selectedFieldId }) => {
   // Determine active breakpoint based on canvas width
   const activeDevice = (() => {
     if (canvasWidth < SCREEN_SIZES[1].width) return "xs"
@@ -37,9 +38,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ canvasWidth, onCan
         </Card>
 
         {/* Link Button */}
-        <Button variant="secondary" title="Link Styles">
-          <LinkIcon className="h-4 w-4 text-gray-900 dark:text-white" />
-        </Button>
+        <AddLinkButton selectedFieldId={selectedFieldId} />
       </div>
     </div>
   )
