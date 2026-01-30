@@ -77,10 +77,16 @@ export const FormSettingsTrigger: React.FC = () => {
   return (
     <>
       {/* Settings icon button - triggers dialog open */}
-      <Cog6ToothIcon
+      <button
+        type="button"
         onClick={handleOpenSettings}
-        className="w-5 h-5 text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
-      />
+        aria-label="Open form settings"
+        className="inline-flex items-center justify-center"
+      >
+        <Cog6ToothIcon
+          className="w-5 h-5 text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
+        />
+      </button>
 
       {/* Form settings dialog - manages styling configuration UI */}
       <FormSettings

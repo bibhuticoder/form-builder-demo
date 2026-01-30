@@ -15,9 +15,9 @@ jest.mock("../SpacingInputs", () => ({
   SpacingInputs: () => <div data-testid="spacing-inputs" />,
 }));
 
-// Mock ColorPicker
-jest.mock("../../../../../components/ColorPicker", () => ({
-  ColorPicker: () => <div data-testid="color-picker" />,
+// Mock ColorControl
+jest.mock("../../PropertyEditor/components/ColorControl", () => ({
+  ColorControl: () => <div data-testid="color-control" />,
 }));
 
 // Mock FormBuilderContext

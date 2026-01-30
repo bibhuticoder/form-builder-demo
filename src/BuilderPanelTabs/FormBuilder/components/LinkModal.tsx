@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "../../../components/Dialog";
 import { Button } from "../../../components/Button";
-import { ColorPicker } from "../../../components/ColorPicker";
+import { ColorControl } from "./PropertyEditor/components/ColorControl";
 
 interface LinkModalProps {
   isOpen: boolean;
@@ -64,20 +64,10 @@ export const LinkModal: React.FC<LinkModalProps> = ({
         />
       </div>
 
-      {/* Color Pickers */}
+      {/* Color Controls */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-            Link Color
-          </label>
-          <ColorPicker value={linkColor} onChange={setLinkColor} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-            Hover Color
-          </label>
-          <ColorPicker value={hoverColor} onChange={setHoverColor} />
-        </div>
+        <ColorControl label="Link Color" value={linkColor} onChange={setLinkColor} />
+        <ColorControl label="Hover Color" value={hoverColor} onChange={setHoverColor} />
       </div>
 
       {/* Preview */}

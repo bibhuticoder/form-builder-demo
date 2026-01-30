@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Dialog } from "../../../../components/Dialog";
+import { ColorControl } from "../PropertyEditor/components/ColorControl";
 import { SpacingInputs } from "./SpacingInputs";
-import { ColorPicker } from "../../../../components/ColorPicker";
 import type { FormSettings as FormSettingsType } from "../../../../types/form";
 import type { StyleSettings } from "../../../../types/styles";
 import { FormStatus } from "../../../../types/enums";
@@ -246,7 +246,7 @@ const FormStylingSection = React.memo(
       />
 
       {/* Background Color */}
-      <ColorPicker
+      <ColorControl
         label="Background Color"
         value={config.backgroundColor}
         onChange={(color) => onChange("backgroundColor", color)}
@@ -395,7 +395,7 @@ const FormStylingSection = React.memo(
       </div>
 
       {/* Border Color */}
-      <ColorPicker
+      <ColorControl
         label="Border Color"
         value={config.borderColor}
         onChange={(color) => onChange("borderColor", color)}
