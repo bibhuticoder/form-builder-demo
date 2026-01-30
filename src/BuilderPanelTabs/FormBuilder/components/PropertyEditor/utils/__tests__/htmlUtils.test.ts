@@ -5,7 +5,6 @@ import {
   stripHtmlTags,
   extractLinks,
   reconstructHtmlWithLinks,
-  LinkMetadata,
 } from "../htmlUtils";
 
 describe("HTML Utilities", () => {
