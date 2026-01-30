@@ -10,9 +10,9 @@ jest.mock("../../../../../components/Dialog", () => ({
     isOpen ? <div data-testid="dialog">{body}</div> : null,
 }));
 
-// Mock SpacingInputs
-jest.mock("../SpacingInputs", () => ({
-  SpacingInputs: () => <div data-testid="spacing-inputs" />,
+// Mock SpacingControl
+jest.mock("../../PropertyEditor/components/SpacingControl", () => ({
+  SpacingControl: () => <div data-testid="spacing-control" />,
 }));
 
 // Mock ColorControl

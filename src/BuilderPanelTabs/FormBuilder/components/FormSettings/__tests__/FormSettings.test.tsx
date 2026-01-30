@@ -20,9 +20,9 @@ jest.mock("../../../../../components/Dialog", () => ({
   ),
 }));
 
-// Mock SpacingInputs component
-jest.mock("../SpacingInputs", () => ({
-  SpacingInputs: ({ label, values, onChange }: any) => (
+// Mock SpacingControl component
+jest.mock("../../PropertyEditor/components/SpacingControl", () => ({
+  SpacingControl: ({ label, values, onChange }: any) => (
     <div data-testid={`spacing-${label.toLowerCase().replace(/\s/g, "-")}`}>
       <label>{label}</label>
       {Object.entries(values).map(([key, value]: [string, any]) => (
