@@ -20,9 +20,9 @@ jest.mock("../../../../../components/Dialog", () => ({
   ),
 }));
 
-// Mock SpacingInputs component
-jest.mock("../SpacingInputs", () => ({
-  SpacingInputs: ({ label, values, onChange }: any) => (
+// Mock SpacingControl component
+jest.mock("../../PropertyEditor/components/SpacingControl", () => ({
+  SpacingControl: ({ label, values, onChange }: any) => (
     <div data-testid={`spacing-${label.toLowerCase().replace(/\s/g, "-")}`}>
       <label>{label}</label>
       {Object.entries(values).map(([key, value]: [string, any]) => (
@@ -38,10 +38,10 @@ jest.mock("../SpacingInputs", () => ({
   ),
 }));
 
-// Mock ColorPicker component
-jest.mock("../../../../../components/ColorPicker", () => ({
-  ColorPicker: ({ label, value, onChange }: any) => (
-    <div data-testid={`color-picker-${label.toLowerCase().replace(/\s/g, "-")}`}>
+// Mock ColorControl component
+jest.mock("../../PropertyEditor/components/ColorControl", () => ({
+  ColorControl: ({ label, value, onChange }: any) => (
+    <div data-testid={`color-control-${label.toLowerCase().replace(/\s/g, "-")}`}>
       <label>{label}</label>
       <input
         data-testid={`color-input-${label.toLowerCase().replace(/\s/g, "-")}`}
@@ -311,7 +311,7 @@ describe("FormSettings Component", () => {
         />
       );
 
-      const maxWidthInput2 = screen.getByDisplayValue("768");
+      const maxWidthInput2 = screen.getByDisplayValue("900");
       fireEvent.change(maxWidthInput2, { target: { value: "800" } });
 
       // New callback should be used

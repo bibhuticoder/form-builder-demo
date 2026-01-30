@@ -1,4 +1,5 @@
-import React, { useState, ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -104,7 +105,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
     }
   };
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop overlay - semi-transparent background */}
       <div
@@ -119,7 +120,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
         <div
           className={`
             bg-white dark:bg-gray-800 rounded-lg shadow-lg
-            max-w-2xl w-full max-h-[90vh] overflow-y-auto
+            max-w-lg w-full max-h-[90vh] overflow-y-auto
             border border-gray-200 dark:border-gray-700
             ${className}
           `}
@@ -127,7 +128,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
           aria-modal="true"
         >
           {/* Header section */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between px-3 py-4 border-b border-gray-200 dark:border-gray-700">
             {/* Header content */}
             <div className="flex-1">
               {typeof header === "string" ? (
@@ -165,18 +166,19 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
           </div>
 
           {/* Body section - main content */}
-          <div className="p-6 text-gray-700 dark:text-gray-300">
+          <div className="px-3 py-4 text-gray-700 dark:text-gray-300">
             {body}
           </div>
 
           {/* Footer section - optional actions */}
           {footer && (
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+            <div className="px-3 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
               {footer}
             </div>
           )}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 };

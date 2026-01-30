@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { Dialog } from "../../../../components/Dialog";
-import { SpacingInputs } from "./SpacingInputs";
-import { ColorPicker } from "../../../../components/ColorPicker";
+import { ColorControl } from "../PropertyEditor/components/ColorControl";
+import { SpacingControl } from "../PropertyEditor/components/SpacingControl";
 import type { FormSettings as FormSettingsType } from "../../../../types/form";
 import type { StyleSettings } from "../../../../types/styles";
 import { FormStatus } from "../../../../types/enums";
+import { Button } from "../../../../components";
 
 /**
  * Form styling configuration interface
@@ -33,7 +34,7 @@ interface FormStyleConfig {
 
   // Background
   backgroundColor: string;
-  backgroundImageUrl: string; 
+  backgroundImageUrl: string;
   backgroundRepeat: "No Repeat" | "Repeat" | "Repeat X" | "Repeat Y";
   backgroundAttachment: "Scroll" | "Fixed";
   backgroundPosition: "Center" | "Top" | "Bottom" | "Left" | "Right";
@@ -113,311 +114,324 @@ const FormStylingSection = React.memo(
       (
         prefix: "margin" | "padding",
         key: "top" | "right" | "bottom" | "left",
-        value: number
+        value: number,
       ) => {
         onChange(
           `${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof FormSettingsConfig,
-          value
+          value,
         );
       },
-      [onChange]
+      [onChange],
     );
 
-  return (
-    <div className="space-y-6">
-      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-        Form Styling
-      </h3>
+    return (
+      <div className="space-y-4">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          Form Styling
+        </h3>
 
-      {/* Max Width and Height */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Max Width
-            <div className="flex gap-2 mt-2">
-              <input
-                type="number"
-                value={config.maxWidth}
-                onChange={(e) => onChange("maxWidth", Number(e.target.value))}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-              />
-              <select
-                value={config.maxWidthUnit}
-                onChange={(e) => onChange("maxWidthUnit", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                aria-label="Max width unit"
-              >
-                <option>%</option>
-                <option>px</option>
-              </select>
-            </div>
-          </label>
+        {/* Max Width and Height */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block space-y-1 text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <span className="font-semibold">Max Width</span>
+
+              <div className="flex gap-1">
+                <input
+                  type="number"
+                  value={config.maxWidth}
+                  onChange={(e) => onChange("maxWidth", Number(e.target.value))}
+                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <select
+                  value={config.maxWidthUnit}
+                  onChange={(e) => onChange("maxWidthUnit", e.target.value)}
+                  className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label="Max width unit"
+                >
+                  <option>%</option>
+                  <option>px</option>
+                </select>
+              </div>
+            </label>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1">
+              <span className="font-semibold">Max Height</span>
+              <div className="flex gap-1">
+                <input
+                  type="text"
+                  value={config.maxHeight}
+                  onChange={(e) => onChange("maxHeight", e.target.value)}
+                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <select
+                  value={config.maxHeightUnit}
+                  onChange={(e) => onChange("maxHeightUnit", e.target.value)}
+                  className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label="Max height unit"
+                >
+                  <option>px</option>
+                  <option>Auto</option>
+                </select>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Max Height
-            <div className="flex gap-2 mt-2">
-              <input
-                type="text"
-                value={config.maxHeight}
-                onChange={(e) => onChange("maxHeight", e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-              />
-              <select
-                value={config.maxHeightUnit}
-                onChange={(e) => onChange("maxHeightUnit", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                aria-label="Max height unit"
-              >
-                <option>px</option>
-                <option>Auto</option>
-              </select>
-            </div>
-          </label>
-        </div>
-      </div>
+        {/* Fonts */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="bodyFont"
+            >
+              Body Font
+            </label>
+            <select
+              id="bodyFont"
+              value={config.bodyFont}
+              onChange={(e) => onChange("bodyFont", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Default</option>
+              <option>Arial</option>
+              <option>Helvetica</option>
+              <option>Times New Roman</option>
+            </select>
+          </div>
 
-      {/* Fonts */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="bodyFont"
-          >
-            Body Font
-          </label>
-          <select
-            id="bodyFont"
-            value={config.bodyFont}
-            onChange={(e) => onChange("bodyFont", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Default</option>
-            <option>Arial</option>
-            <option>Helvetica</option>
-            <option>Times New Roman</option>
-          </select>
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="titleFont"
+            >
+              Title Font
+            </label>
+            <select
+              id="titleFont"
+              value={config.titleFont}
+              onChange={(e) => onChange("titleFont", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Default</option>
+              <option>Arial</option>
+              <option>Helvetica</option>
+              <option>Times New Roman</option>
+            </select>
+          </div>
         </div>
 
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="titleFont"
-          >
-            Title Font
-          </label>
-          <select
-            id="titleFont"
-            value={config.titleFont}
-            onChange={(e) => onChange("titleFont", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Default</option>
-            <option>Arial</option>
-            <option>Helvetica</option>
-            <option>Times New Roman</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Margin */}
-      <SpacingInputs
-        label="Form Margin"
-        values={{
-          top: config.marginTop,
-          right: config.marginRight,
-          bottom: config.marginBottom,
-          left: config.marginLeft,
-        }}
-        onChange={(key, value) => handleSpacingChange("margin", key, value)}
-      />
-
-      {/* Padding */}
-      <SpacingInputs
-        label="Form Padding"
-        values={{
-          top: config.paddingTop,
-          right: config.paddingRight,
-          bottom: config.paddingBottom,
-          left: config.paddingLeft,
-        }}
-        onChange={(key, value) => handleSpacingChange("padding", key, value)}
-      />
-
-      {/* Background Color */}
-      <ColorPicker
-        label="Background Color"
-        value={config.backgroundColor}
-        onChange={(color) => onChange("backgroundColor", color)}
-      />
-
-      {/* Background Image URL */}
-      <div>
-        <label
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          htmlFor="bgImageUrl"
-        >
-          Background Image URL
-        </label>
-        <input
-          id="bgImageUrl"
-          type="text"
-          value={config.backgroundImageUrl}
-          onChange={(e) => onChange("backgroundImageUrl", e.target.value)}
-          placeholder="https://example.com/image.jpg"
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
+        {/* Margin */}
+        <SpacingControl
+          label="Form Margin"
+          values={{
+            top: config.marginTop,
+            right: config.marginRight,
+            bottom: config.marginBottom,
+            left: config.marginLeft,
+          }}
+          onChange={(key, value) =>
+            handleSpacingChange(
+              "margin",
+              key as "top" | "right" | "bottom" | "left",
+              Number(value),
+            )
+          }
         />
-      </div>
 
-      {/* Background Controls */}
-      <div className="grid grid-cols-2 gap-4">
+        {/* Padding */}
+        <SpacingControl
+          label="Form Padding"
+          values={{
+            top: config.paddingTop,
+            right: config.paddingRight,
+            bottom: config.paddingBottom,
+            left: config.paddingLeft,
+          }}
+          onChange={(key, value) =>
+            handleSpacingChange(
+              "padding",
+              key as "top" | "right" | "bottom" | "left",
+              Number(value),
+            )
+          }
+        />
+
+        {/* Background Color */}
+        <ColorControl
+          label="Background Color"
+          value={config.backgroundColor}
+          onChange={(color) => onChange("backgroundColor", color)}
+        />
+
+        {/* Background Image URL */}
         <div>
           <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="bgRepeat"
+            className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+            htmlFor="bgImageUrl"
           >
-            Repeat
-          </label>
-          <select
-            id="bgRepeat"
-            value={config.backgroundRepeat}
-            onChange={(e) => onChange("backgroundRepeat", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>No Repeat</option>
-            <option>Repeat</option>
-            <option>Repeat X</option>
-            <option>Repeat Y</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="bgAttachment"
-          >
-            Attachment
-          </label>
-          <select
-            id="bgAttachment"
-            value={config.backgroundAttachment}
-            onChange={(e) => onChange("backgroundAttachment", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Scroll</option>
-            <option>Fixed</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Position and Size */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="bgPosition"
-          >
-            Position
-          </label>
-          <select
-            id="bgPosition"
-            value={config.backgroundPosition}
-            onChange={(e) => onChange("backgroundPosition", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Center</option>
-            <option>Top</option>
-            <option>Bottom</option>
-            <option>Left</option>
-            <option>Right</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="bgSize"
-          >
-            Size
-          </label>
-          <select
-            id="bgSize"
-            value={config.backgroundSize}
-            onChange={(e) => onChange("backgroundSize", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Auto</option>
-            <option>Cover</option>
-            <option>Contain</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Border Style and Size */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="borderStyle"
-          >
-            Border Style
-          </label>
-          <select
-            id="borderStyle"
-            value={config.borderStyle}
-            onChange={(e) => onChange("borderStyle", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
-          >
-            <option>Solid</option>
-            <option>Dashed</option>
-            <option>Dotted</option>
-            <option>Double</option>
-            <option>None</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            htmlFor="borderSize"
-          >
-            Border Size (px)
+            Background Image URL
           </label>
           <input
-            id="borderSize"
-            type="number"
-            value={config.borderSize}
-            onChange={(e) => onChange("borderSize", Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm mt-2"
+            id="bgImageUrl"
+            type="text"
+            value={config.backgroundImageUrl}
+            onChange={(e) => onChange("backgroundImageUrl", e.target.value)}
+            placeholder="https://example.com/image.jpg"
+            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
+
+        {/* Background Controls */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="bgRepeat"
+            >
+              Repeat
+            </label>
+            <select
+              id="bgRepeat"
+              value={config.backgroundRepeat}
+              onChange={(e) => onChange("backgroundRepeat", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>No Repeat</option>
+              <option>Repeat</option>
+              <option>Repeat X</option>
+              <option>Repeat Y</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="bgAttachment"
+            >
+              Attachment
+            </label>
+            <select
+              id="bgAttachment"
+              value={config.backgroundAttachment}
+              onChange={(e) => onChange("backgroundAttachment", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Scroll</option>
+              <option>Fixed</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Position and Size */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="bgPosition"
+            >
+              Position
+            </label>
+            <select
+              id="bgPosition"
+              value={config.backgroundPosition}
+              onChange={(e) => onChange("backgroundPosition", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Center</option>
+              <option>Top</option>
+              <option>Bottom</option>
+              <option>Left</option>
+              <option>Right</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="bgSize"
+            >
+              Size
+            </label>
+            <select
+              id="bgSize"
+              value={config.backgroundSize}
+              onChange={(e) => onChange("backgroundSize", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Auto</option>
+              <option>Cover</option>
+              <option>Contain</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Border Style and Size */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="borderStyle"
+            >
+              Border Style
+            </label>
+            <select
+              id="borderStyle"
+              value={config.borderStyle}
+              onChange={(e) => onChange("borderStyle", e.target.value)}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option>Solid</option>
+              <option>Dashed</option>
+              <option>Dotted</option>
+              <option>Double</option>
+              <option>None</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              className="block text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1"
+              htmlFor="borderSize"
+            >
+              Border Size (px)
+            </label>
+            <input
+              id="borderSize"
+              type="number"
+              value={config.borderSize}
+              onChange={(e) => onChange("borderSize", Number(e.target.value))}
+              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        </div>
+
+        {/* Border Color */}
+        <ColorControl
+          label="Border Color"
+          value={config.borderColor}
+          onChange={(color) => onChange("borderColor", color)}
+        />
+
+        {/* Border Radius */}
+        <SpacingControl
+          label="Border Radius"
+          values={{
+            top: config.borderRadiusTop,
+            right: config.borderRadiusRight,
+            bottom: config.borderRadiusBottom,
+            left: config.borderRadiusLeft,
+          }}
+          onChange={(key, value) => {
+            const radiusKey =
+              `borderRadius${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof FormSettingsConfig;
+            onChange(radiusKey, Number(value));
+          }}
+        />
       </div>
-
-      {/* Border Color */}
-      <ColorPicker
-        label="Border Color"
-        value={config.borderColor}
-        onChange={(color) => onChange("borderColor", color)}
-      />
-
-      {/* Border Radius */}
-      <SpacingInputs
-        label="Border Radius"
-        values={{
-          top: config.borderRadiusTop,
-          right: config.borderRadiusRight,
-          bottom: config.borderRadiusBottom,
-          left: config.borderRadiusLeft,
-        }}
-        onChange={(key, value) => {
-          const radiusKey =
-            `borderRadius${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof FormSettingsConfig;
-          onChange(radiusKey, value);
-        }}
-      />
-    </div>
-  );
+    );
   },
   // Custom equality check for memo optimization
   (prevProps, nextProps) => {
@@ -425,16 +439,17 @@ const FormStylingSection = React.memo(
       prevProps.config === nextProps.config &&
       prevProps.onChange === nextProps.onChange
     );
-  }
+  },
 );
 
 FormStylingSection.displayName = "FormStylingSection";
 
-
 /**
  * Convert internal FormSettingsConfig to FormSettings type
  */
-const convertToFormSettings = (config: FormSettingsConfig): FormSettingsType => {
+const convertToFormSettings = (
+  config: FormSettingsConfig,
+): FormSettingsType => {
   const settings: StyleSettings = {
     width: config.maxWidth,
     fontFamilyBody: config.bodyFont,
@@ -457,7 +472,9 @@ const convertToFormSettings = (config: FormSettingsConfig): FormSettingsType => 
   // Add optional background image properties if provided
   if (config.backgroundImageUrl) {
     settings.backgroundImage = config.backgroundImageUrl;
-    settings.backgroundRepeat = config.backgroundRepeat.toLowerCase().replace(' ', '-');
+    settings.backgroundRepeat = config.backgroundRepeat
+      .toLowerCase()
+      .replace(" ", "-");
     settings.backgroundSize = config.backgroundSize.toLowerCase();
     settings.backgroundPosition = config.backgroundPosition.toLowerCase();
   }
@@ -472,35 +489,56 @@ const convertToFormSettings = (config: FormSettingsConfig): FormSettingsType => 
 /**
  * Convert FormSettings type to internal FormSettingsConfig
  */
-const convertFromFormSettings = (formSettings?: Partial<FormSettingsType>): Partial<FormSettingsConfig> => {
+const convertFromFormSettings = (
+  formSettings?: Partial<FormSettingsType>,
+): Partial<FormSettingsConfig> => {
   if (!formSettings?.settings) return {};
 
   const settings = formSettings.settings;
-  
+
   return {
     maxWidth: settings.width || DEFAULT_CONFIG.maxWidth,
     bodyFont: settings.fontFamilyBody || DEFAULT_CONFIG.bodyFont,
     titleFont: settings.fontFamilyTitle || DEFAULT_CONFIG.titleFont,
-    backgroundColor: settings.backgroundColor as string || DEFAULT_CONFIG.backgroundColor,
-    borderColor: settings.borderColor as string || DEFAULT_CONFIG.borderColor,
-    borderStyle: (settings.borderStyle as string)?.charAt(0).toUpperCase() + (settings.borderStyle as string)?.slice(1) as any || DEFAULT_CONFIG.borderStyle,
+    backgroundColor:
+      (settings.backgroundColor as string) || DEFAULT_CONFIG.backgroundColor,
+    borderColor: (settings.borderColor as string) || DEFAULT_CONFIG.borderColor,
+    borderStyle:
+      (((settings.borderStyle as string)?.charAt(0).toUpperCase() +
+        (settings.borderStyle as string)?.slice(1)) as any) ||
+      DEFAULT_CONFIG.borderStyle,
     borderSize: (settings.borderWidth as number) || DEFAULT_CONFIG.borderSize,
-    borderRadiusTop: (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusTop,
-    borderRadiusBottom: (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusBottom,
-    borderRadiusRight: (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusRight,
-    borderRadiusLeft: (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusLeft,
+    borderRadiusTop:
+      (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusTop,
+    borderRadiusBottom:
+      (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusBottom,
+    borderRadiusRight:
+      (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusRight,
+    borderRadiusLeft:
+      (settings.borderRadius as number) || DEFAULT_CONFIG.borderRadiusLeft,
     paddingTop: (settings.paddingTop as number) || DEFAULT_CONFIG.paddingTop,
-    paddingRight: (settings.paddingRight as number) || DEFAULT_CONFIG.paddingRight,
-    paddingBottom: (settings.paddingBottom as number) || DEFAULT_CONFIG.paddingBottom,
+    paddingRight:
+      (settings.paddingRight as number) || DEFAULT_CONFIG.paddingRight,
+    paddingBottom:
+      (settings.paddingBottom as number) || DEFAULT_CONFIG.paddingBottom,
     paddingLeft: (settings.paddingLeft as number) || DEFAULT_CONFIG.paddingLeft,
     marginTop: (settings.marginTop as number) || DEFAULT_CONFIG.marginTop,
     marginRight: (settings.marginRight as number) || DEFAULT_CONFIG.marginRight,
-    marginBottom: (settings.marginBottom as number) || DEFAULT_CONFIG.marginBottom,
+    marginBottom:
+      (settings.marginBottom as number) || DEFAULT_CONFIG.marginBottom,
     marginLeft: (settings.marginLeft as number) || DEFAULT_CONFIG.marginLeft,
-    backgroundImageUrl: settings.backgroundImage as string || DEFAULT_CONFIG.backgroundImageUrl,
-    backgroundRepeat: settings.backgroundRepeat as any || DEFAULT_CONFIG.backgroundRepeat,
-    backgroundSize: (settings.backgroundSize as string)?.charAt(0).toUpperCase() + (settings.backgroundSize as string)?.slice(1) as any || DEFAULT_CONFIG.backgroundSize,
-    backgroundPosition: (settings.backgroundPosition as string)?.charAt(0).toUpperCase() + (settings.backgroundPosition as string)?.slice(1) as any || DEFAULT_CONFIG.backgroundPosition,
+    backgroundImageUrl:
+      (settings.backgroundImage as string) || DEFAULT_CONFIG.backgroundImageUrl,
+    backgroundRepeat:
+      (settings.backgroundRepeat as any) || DEFAULT_CONFIG.backgroundRepeat,
+    backgroundSize:
+      (((settings.backgroundSize as string)?.charAt(0).toUpperCase() +
+        (settings.backgroundSize as string)?.slice(1)) as any) ||
+      DEFAULT_CONFIG.backgroundSize,
+    backgroundPosition:
+      (((settings.backgroundPosition as string)?.charAt(0).toUpperCase() +
+        (settings.backgroundPosition as string)?.slice(1)) as any) ||
+      DEFAULT_CONFIG.backgroundPosition,
   };
 };
 
@@ -553,7 +591,7 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
         return updated;
       });
     },
-    [onChangeRealTime]
+    [onChangeRealTime],
   );
 
   /**
@@ -587,7 +625,7 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
       onClose={handleCancel}
       isCloseable={true}
       body={
-        <div className="space-y-6 max-h-[60vh] overflow-y-auto scrollbar-hide-hover pr-4">
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto scrollbar-hide-hover pr-2">
           {/* Survey Mode Toggle */}
           <div>
             <div className="flex items-start justify-between">
@@ -625,18 +663,21 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
       }
       footer={
         <div className="flex gap-3 justify-end">
-          <button
+          <Button
+            className="flex items-center gap-2 text-xs"
             onClick={handleCancel}
-            className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+            variant="secondary"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+
+          <Button
+            variant="primary"
             onClick={handleSave}
-            className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded transition-colors font-medium"
+            className="flex items-center gap-2 text-xs"
           >
             Save Changes
-          </button>
+          </Button>
         </div>
       }
     />

@@ -31,10 +31,10 @@ jest.mock("../../../../components/Button", () => ({
   ),
 }));
 
-// Mock ColorPicker component
-jest.mock("../../../../components/ColorPicker", () => ({
-  ColorPicker: ({ value, onChange, label }: any) => (
-    <div data-testid={`color-picker-${label?.toLowerCase().replace(/\s/g, "-")}`}>
+// Mock ColorControl component
+jest.mock("../PropertyEditor/components/ColorControl", () => ({
+  ColorControl: ({ value, onChange, label }: any) => (
+    <div data-testid={`color-control-${label?.toLowerCase().replace(/\s/g, "-")}`}>
       <input
         type="color"
         value={value}

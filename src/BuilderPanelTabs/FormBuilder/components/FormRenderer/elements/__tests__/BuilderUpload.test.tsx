@@ -6,7 +6,7 @@ import BuilderUpload from '../BuilderUpload';
 import { FieldType } from '../../../../../../types';
 
 describe('BuilderUpload', () => {
-  it('renders file input with label and help text', () => {
+  it('renders file upload dropzone with label and help text', () => {
     render(
       <BuilderUpload
         field={{
@@ -20,6 +20,7 @@ describe('BuilderUpload', () => {
       />
     );
     expect(screen.getByText('Upload Proposal')).toBeTruthy();
+    expect(screen.getByText('Click to upload file')).toBeTruthy();
     expect(screen.getByText('PDF or DOCX only')).toBeTruthy();
   });
 });
