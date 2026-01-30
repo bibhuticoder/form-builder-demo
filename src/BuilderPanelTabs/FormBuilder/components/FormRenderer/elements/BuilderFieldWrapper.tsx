@@ -3,8 +3,8 @@
  * Wraps individual field components in the form builder
  * Useful for adding common styles or functionality
  */
-import { ReactNode} from "react";
-import { BaseField } from "../../../../../types";
+import { ReactNode } from "react";
+import { BaseField } from "../../../types";
 import { getContainerStyles } from "../../../utils/styleUtils";
 
 interface FieldWrapperProps {
@@ -22,14 +22,14 @@ export default function BuilderFieldWrapper({
   isSelected,
   activeSubElement,
 }: Readonly<FieldWrapperProps>) {
-  
+
   // Apply highlighting ring when window is selected
-  const highlightClass = isSelected && activeSubElement === 'window' 
-    ? 'ring-2 ring-primary ring-offset-2' 
+  const highlightClass = isSelected && activeSubElement === 'window'
+    ? 'ring-2 ring-primary ring-offset-2'
     : '';
-  
+
   return (
-    <div 
+    <div
       className={`field-wrapper field-type-${field.type} transition-all duration-200 ${highlightClass}`}
       style={getContainerStyles(field.style)}
     >

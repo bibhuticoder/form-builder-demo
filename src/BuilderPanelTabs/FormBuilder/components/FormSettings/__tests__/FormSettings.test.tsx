@@ -2,8 +2,8 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FormSettings } from "../FormSettings";
-import type { FormSettings as FormSettingsType } from "../../../../../types/form";
-import { FormStatus } from "../../../../../types/enums";
+import type { FormSettings as FormSettingsType } from "../../../types/form";
+import { FormStatus } from "../../../types/enums";
 
 // Mock Dialog component
 jest.mock("../../../../../components/Dialog", () => ({
@@ -123,7 +123,7 @@ describe("FormSettings Component", () => {
       );
 
       const maxWidthInput = screen.getByDisplayValue("768");
-      
+
       fireEvent.change(maxWidthInput, { target: { value: "800" } });
       expect(mockOnChangeRealTime).toHaveBeenCalled();
 
@@ -183,7 +183,7 @@ describe("FormSettings Component", () => {
   describe("Save Action", () => {
     it("should call onSave when Save button is clicked", async () => {
       render(<FormSettings {...defaultProps} />);
-      
+
       const buttons = screen.getAllByRole("button");
       const saveButton = buttons.find((btn) => btn.textContent?.includes("Save"));
 
@@ -221,7 +221,7 @@ describe("FormSettings Component", () => {
   describe("Cancel Action", () => {
     it("should call onCancel when Cancel button is clicked", async () => {
       render(<FormSettings {...defaultProps} />);
-      
+
       const buttons = screen.getAllByRole("button");
       const cancelButton = buttons.find((btn) => btn.textContent?.includes("Cancel"));
 
@@ -264,9 +264,9 @@ describe("FormSettings Component", () => {
   describe("Input Validation", () => {
     it("should handle numeric inputs for width", async () => {
       render(<FormSettings {...defaultProps} />);
-      
+
       const maxWidthInput = screen.getByDisplayValue("768");
-      
+
       fireEvent.change(maxWidthInput, { target: { value: "2000" } });
       expect(defaultProps.onChangeRealTime).toHaveBeenCalled();
 
@@ -276,9 +276,9 @@ describe("FormSettings Component", () => {
 
     it("should handle border size input", async () => {
       render(<FormSettings {...defaultProps} />);
-      
+
       const borderSizeInput = screen.getByDisplayValue("1");
-      
+
       fireEvent.change(borderSizeInput, { target: { value: "5" } });
       expect(defaultProps.onChangeRealTime).toHaveBeenCalled();
     });
@@ -287,7 +287,7 @@ describe("FormSettings Component", () => {
   describe("Dropdown Selections", () => {
     it("should have font selection dropdowns", () => {
       render(<FormSettings {...defaultProps} />);
-      
+
       const selects = screen.getAllByRole("combobox");
       expect(selects.length).toBeGreaterThan(0);
     });

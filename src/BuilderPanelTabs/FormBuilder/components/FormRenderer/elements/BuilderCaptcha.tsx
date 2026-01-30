@@ -3,7 +3,7 @@
 * A React component that renders a CAPTCHA field within a form builder. 
 */
 
-import { CaptchaField } from "../../../../../types";
+import { CaptchaField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderCaptchaProps {

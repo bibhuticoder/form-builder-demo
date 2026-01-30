@@ -4,8 +4,9 @@
  * Supports labels, placeholders, help text, options, and validation.
  */
 
-import { DropdownField } from "../../../../../types";
+import { DropdownField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
 import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderDropdownProps {
@@ -15,6 +16,7 @@ interface BuilderDropdownProps {
 export default function BuilderDropdown({
   field,
 }: Readonly<BuilderDropdownProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <div className="space-y-0.5">
@@ -46,9 +48,9 @@ export default function BuilderDropdown({
           ))}
         </select>
         {field.helpText && (
-          <p 
-            className="text-[10px] text-gray-500"
-            style={getHelpTextStyles(field.style)}
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
             {field.helpText}
           </p>

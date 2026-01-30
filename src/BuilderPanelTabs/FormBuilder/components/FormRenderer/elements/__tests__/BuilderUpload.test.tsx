@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderUpload from '../BuilderUpload';
-import { FieldType } from '../../../../../../types';
+import { FieldType } from '../../../../types';
 
 describe('BuilderUpload', () => {
   it('renders file upload dropzone with label and help text', () => {

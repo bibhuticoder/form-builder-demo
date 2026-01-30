@@ -19,7 +19,7 @@ import {
   HeadingField,
   HeadingLevel,
   DividerField,
-} from '../../types';
+} from '../../BuilderPanelTabs/FormBuilder/types';
 
 // ============================================================================
 // TEST HELPERS

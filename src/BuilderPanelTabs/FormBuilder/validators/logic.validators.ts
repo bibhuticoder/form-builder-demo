@@ -110,7 +110,7 @@ export const validateLogicCondition = (
   // Right operand is optional for unary operators like exists/isEmpty
   const unaryOperators = [LogicComparison.EXISTS, LogicComparison.IS_EMPTY];
   const requiresRight = !unaryOperators.includes(condition.comparison);
-  
+
   if (requiresRight && (!condition.right || typeof condition.right !== 'object')) {
     errors.push({
       path: `${basePath}.right`,
@@ -157,7 +157,7 @@ export const validateLogicExpression = (
   } else {
     expression.args.forEach((arg: any, index: number) => {
       const argPath = `${basePath}.args[${index}]`;
-      
+
       // Check if this is a nested expression or a condition
       if (arg.operation) {
         // Nested expression

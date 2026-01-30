@@ -3,8 +3,8 @@
  */
 import { render, screen } from '@testing-library/react';
 import FormRenderer from '../FormRenderer';
-import { FieldType, HeadingLevel, ButtonAction, FormStatus } from '../../../../../types';
-import { FormDefinition } from '../../../../../types';
+import { FieldType, HeadingLevel, ButtonAction, FormStatus } from '../../../types';
+import { FormDefinition } from '../../../types';
 
 describe('FormRenderer', () => {
   const mockFormData: FormDefinition = {
@@ -461,7 +461,7 @@ describe('FormRenderer', () => {
 
   it('should use field.id as key for each rendered field', () => {
     render(<FormRenderer formData={mockFormData} />);
-    
+
     // Verify that fields are rendered
     expect(screen.getByText('Contact Us')).toBeTruthy();
     expect(screen.getByText('Full Name')).toBeTruthy();

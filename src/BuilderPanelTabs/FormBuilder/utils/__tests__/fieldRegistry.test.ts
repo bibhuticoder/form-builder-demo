@@ -22,7 +22,7 @@ import BuilderTime from '../../components/FormRenderer/elements/BuilderTime';
 import BuilderUpload from '../../components/FormRenderer/elements/BuilderUpload';
 import BuilderUrl from '../../components/FormRenderer/elements/BuilderUrl';
 import BuilderVideo from '../../components/FormRenderer/elements/BuilderVideo';
-import { FieldType } from '../../../../types';
+import { FieldType } from '../../types';
 
 describe('fieldRegistry', () => {
   it('should have all field types registered', () => {

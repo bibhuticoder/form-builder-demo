@@ -1,28 +1,28 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
-import { FormDefinition, Field, FormSettings } from "../../../types";
+import { FormDefinition, Field, FormSettings } from "../types";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface FormBuilderContextType {
   // State
   jsonContent: FormDefinition;
   activeSubElement: string | null;
-  
+
   // Core setters
   setJsonContent: (content: FormDefinition) => void;
   setActiveSubElement: (subElement: string | null) => void;
-  
+
   // Form-level operations
   updateFormName: (name: string) => void;
   updateFormSettings: (settings: Partial<FormSettings>) => void;
   updateCanvasWidth: (width: number) => void;
-  
+
   // Field operations
   addField: (field: Field, afterId?: string) => void;
   updateField: (fieldId: string, updates: Partial<Field>) => void;
   updateFieldStyleBatch: (fieldId: string, styleUpdates: Record<string, any>) => void;
   deleteField: (fieldId: string) => void;
   reorderFields: (oldIndex: number, newIndex: number) => void;
-  
+
   // Actions
   saveForm: () => void;
   publishForm: () => void;
@@ -91,7 +91,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
   const addField = useCallback((field: Field, afterId?: string) => {
     setJsonContentState((old) => {
       const fields = old.fields ?? [];
-      
+
       if (!afterId) {
         // Add to end if no afterId specified
         return {

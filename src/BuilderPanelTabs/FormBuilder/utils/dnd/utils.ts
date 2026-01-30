@@ -2,8 +2,8 @@
  * Utility functions for drag-and-drop field creation
  */
 
-import { FieldType } from "../../../../types/enums";
-import { Field } from "../../../../types";
+import { FieldType } from "../../types/enums";
+import { Field } from "../../types";
 
 /**
  * Generates a unique ID combining timestamp and random string

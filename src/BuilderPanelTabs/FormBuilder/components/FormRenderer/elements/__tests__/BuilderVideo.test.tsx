@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderVideo from '../BuilderVideo';
-import { FieldType } from '../../../../../../types';
+import { FieldType } from '../../../../types';
 
 describe('BuilderVideo', () => {
   it('renders video iframe with title', () => {

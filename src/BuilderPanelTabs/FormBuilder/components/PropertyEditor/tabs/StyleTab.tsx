@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Field, getFieldCapabilities } from "../../../../../types";
+import { Field, getFieldCapabilities } from "../../../types";
 import { useFormBuilder } from "../../../context";
 import { SpacingControl } from "../components/SpacingControl";
 import { ColorControl } from "../components/ColorControl";
@@ -10,17 +10,17 @@ interface StyleTabProps {
 
 export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
   const { updateField, updateFieldStyleBatch, setActiveSubElement } = useFormBuilder();
-  
+
   // Get field capabilities
   const capabilities = useMemo(() => getFieldCapabilities(field.type), [field.type]);
-  
+
   // Set initial tabs based on capabilities
   const [activeSpacingTab, setActiveSpacingTab] = useState<"input" | "window">(
     capabilities.supportsInputStyles ? "input" : "window"
   );
   const [activeTypographyTab, setActiveTypographyTab] = useState<"input" | "label" | "placeholder" | "help">(
-    capabilities.supportsInputStyles ? "input" : 
-    capabilities.supportsLabelStyles ? "label" : "input"
+    capabilities.supportsInputStyles ? "input" :
+      capabilities.supportsLabelStyles ? "label" : "input"
   );
   const [activeDecorationTab, setActiveDecorationTab] = useState<"input" | "window">(
     capabilities.supportsInputStyles ? "input" : "window"
@@ -45,7 +45,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
       {/* Layout Section */}
       <div className="space-y-4">
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Layout</h4>
-        
+
         <div className="space-y-1">
           <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Width</label>
           <select
@@ -71,11 +71,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                   setActiveSpacingTab("input");
                   setActiveSubElement("input");
                 }}
-                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                  activeSpacingTab === "input"
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${activeSpacingTab === "input"
                     ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                }`}
+                  }`}
               >
                 Input
               </button>
@@ -84,11 +83,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                   setActiveSpacingTab("window");
                   setActiveSubElement("window");
                 }}
-                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                  activeSpacingTab === "window"
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${activeSpacingTab === "window"
                     ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                }`}
+                  }`}
               >
                 Window
               </button>
@@ -160,7 +158,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
       {/* Typography Section */}
       <div className="space-y-4">
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Typography</h4>
-        
+
         {/* Typography Sub-tabs */}
         {/* Only show tabs if more than one typography option is available */}
         {(() => {
@@ -170,7 +168,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
             capabilities.supportsPlaceholderStyles,
             capabilities.supportsHelpStyles
           ].filter(Boolean).length;
-          
+
           return typographyOptionsCount > 1 ? (
             <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded">
               {capabilities.supportsInputStyles && (
@@ -179,11 +177,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                     setActiveTypographyTab("input");
                     setActiveSubElement("input");
                   }}
-                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-                    activeTypographyTab === "input"
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${activeTypographyTab === "input"
                       ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                    }`}
                 >
                   Input
                 </button>
@@ -194,11 +191,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                     setActiveTypographyTab("label");
                     setActiveSubElement("label");
                   }}
-                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-                    activeTypographyTab === "label"
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${activeTypographyTab === "label"
                       ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                    }`}
                 >
                   Label
                 </button>
@@ -209,11 +205,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                     setActiveTypographyTab("placeholder");
                     setActiveSubElement("placeholder");
                   }}
-                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-                    activeTypographyTab === "placeholder"
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${activeTypographyTab === "placeholder"
                       ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                    }`}
                 >
                   Placeholder
                 </button>
@@ -224,11 +219,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                     setActiveTypographyTab("help");
                     setActiveSubElement("help");
                   }}
-                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${
-                    activeTypographyTab === "help"
+                  className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded transition-colors ${activeTypographyTab === "help"
                       ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                    }`}
                 >
                   Help
                 </button>
@@ -326,7 +320,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
       {/* Decoration Section */}
       <div className="space-y-4">
         <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Decoration</h4>
-        
+
         {/* Decoration Sub-tabs */}
         {/* Only show tabs if both input and window styles are supported */}
         {capabilities.supportsInputStyles && capabilities.supportsWindowStyles && (
@@ -336,11 +330,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                 setActiveDecorationTab("input");
                 setActiveSubElement("input");
               }}
-              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                activeDecorationTab === "input"
+              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${activeDecorationTab === "input"
                   ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
+                }`}
             >
               Input
             </button>
@@ -349,11 +342,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
                 setActiveDecorationTab("window");
                 setActiveSubElement("window");
               }}
-              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                activeDecorationTab === "window"
+              className={`flex-1 px-3 py-1.5 text-xs font-medium rounded transition-colors ${activeDecorationTab === "window"
                   ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
+                }`}
             >
               Window
             </button>

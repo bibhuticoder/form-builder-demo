@@ -19,7 +19,7 @@ import {
   LogicRule,
   FormDefinition,
   FormStatus,
-} from '../../types';
+} from '../../BuilderPanelTabs/FormBuilder/types';
 
 // ============================================================================
 // TEST HELPERS

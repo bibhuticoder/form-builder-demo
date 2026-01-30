@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { arrayMove } from '@dnd-kit/sortable';
-import { EmailField, Field, FieldType } from '../../../../types';
+import { EmailField, Field, FieldType } from '../../types';
 import { createFieldFromType } from '../../utils/dnd/utils';
 
 

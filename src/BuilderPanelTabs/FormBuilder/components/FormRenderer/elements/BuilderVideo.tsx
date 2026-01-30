@@ -4,7 +4,7 @@
  * Supports embedded videos from various sources with optional alt text.
  */
 
-import { VideoField } from "../../../../../types";
+import { VideoField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderVideoProps {
@@ -17,7 +17,7 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
   // Convert YouTube watch URLs to embed URLs
   const getEmbedUrl = (url: string | undefined) => {
     if (!url) return "";
-    
+
     if (url.includes("youtube.com/watch")) {
       const videoId = url.split("v=")[1]?.split("&")[0];
       return `https://www.youtube.com/embed/${videoId}`;

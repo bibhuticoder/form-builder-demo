@@ -6,7 +6,7 @@
 
 import { ElementType } from "react";
 
-import { HeadingField } from "../../../../../types";
+import { HeadingField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles } from "../../../utils/styleUtils";
 
@@ -26,8 +26,8 @@ export default function BuilderHeading({
 
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
-      <Tag 
-      dangerouslySetInnerHTML={{ __html: field.label }}
+      <Tag
+        dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
         className="transition-all duration-200 text-gray-900 dark:text-white"
       >

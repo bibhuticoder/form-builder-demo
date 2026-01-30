@@ -3,7 +3,7 @@ import { BuilderShell } from "./components/BuilderShell"
 import { JsonEditorPanel } from "./components/JsonEditorPanel"
 
 import exampleData from "./data/example.json"
-import { FormDefinition } from "../../foundation"
+import { FormDefinition } from "./foundation"
 
 // Convert example.json to formatted string
 const DEFAULT_JSON = JSON.parse(JSON.stringify(exampleData, null, 2)) as FormDefinition

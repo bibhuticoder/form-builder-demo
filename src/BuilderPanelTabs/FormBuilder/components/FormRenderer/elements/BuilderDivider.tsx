@@ -4,7 +4,7 @@
  * Provides visual separation between form sections.
  */
 
-import { DividerField } from "../../../../../types";
+import { DividerField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderDividerProps {

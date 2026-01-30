@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import FormBuilderButton from '../BuilderButton';
-import { ButtonAction, FieldType } from '../../../../../../types/enums';
+import { ButtonAction, FieldType } from '../../../../types/enums';
 
 describe('FormBuilderButton', () => {
   it('renders the submit button with label', () => {

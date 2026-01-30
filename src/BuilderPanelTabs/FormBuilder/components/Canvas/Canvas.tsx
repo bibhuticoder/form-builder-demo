@@ -3,10 +3,10 @@ import { useDroppable } from "@dnd-kit/core";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 
 import { CanvasToolbar } from "./CanvasToolbar";
-import { MIN_CANVAS_WIDTH, MAX_CANVAS_WIDTH } from "../../../../constants";
+import { MIN_CANVAS_WIDTH, MAX_CANVAS_WIDTH } from "../../constants";
 import { EmptyState } from "./EmptyState";
 import FormRenderer from "../FormRenderer/FormRenderer";
-import { CANVAS_DROPPABLE_ID } from "../../../../types/dnd";
+import { CANVAS_DROPPABLE_ID } from "../../types/dnd";
 import { useFormBuilder } from "../../context";
 import "./canvas.css";
 

@@ -2,7 +2,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { useFormBuilder } from "../../context";
 import { FormSettings } from "./FormSettings";
 import { useState, useRef } from "react";
-import type { FormSettings as FormSettingsType } from "../../../../types/form";
+import type { FormSettings as FormSettingsType } from "../../types/form";
 
 /**
  * FormSettingsTrigger

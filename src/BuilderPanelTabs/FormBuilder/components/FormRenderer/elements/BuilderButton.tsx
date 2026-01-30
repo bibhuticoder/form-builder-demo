@@ -2,7 +2,7 @@
  * A button field component for the form builder.
  * Renders a button with the specified label and style.
  */
-import { ButtonField } from "../../../../../types";
+import { ButtonField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderButtonProps {

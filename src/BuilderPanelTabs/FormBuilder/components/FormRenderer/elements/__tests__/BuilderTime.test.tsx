@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import BuilderTime from '../BuilderTime';
-import { FieldType } from '../../../../../../types';
+import { FieldType } from '../../../../types';
 
 describe('BuilderTime', () => {
   it('renders time input with label', () => {

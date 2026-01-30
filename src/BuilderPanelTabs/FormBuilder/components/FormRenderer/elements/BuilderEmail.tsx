@@ -4,7 +4,7 @@
  * Supports labels, placeholders, help text, and email validation.
  */
 
-import { EmailField } from "../../../../../types";
+import { EmailField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 import { PlaceholderStyles } from "./PlaceholderStyles";
@@ -39,8 +39,8 @@ export default function BuilderEmail({ field }: Readonly<BuilderEmailProps>) {
           style={getInputStyles(field.style)}
         />
         {field.helpText && (
-          <p 
-            className="text-[10px] text-gray-500"
+          <p
+            className="text-[9px] text-gray-500"
             style={getHelpTextStyles(field.style)}
           >
             {field.helpText}

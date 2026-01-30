@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { arrayMove } from '@dnd-kit/sortable';
-import { FieldType } from '../../../../types';
+import { FieldType } from '../../types';
 import { createFieldFromType } from '../../utils/dnd/utils';
 
 // Mock arrayMove if not available

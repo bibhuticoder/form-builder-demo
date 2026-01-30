@@ -6,8 +6,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AddLinkButton } from "../AddLinkButton";
 import { FormBuilderProvider } from "../../../context/FormBuilderContext";
-import { FieldType } from "../../../../../types/enums";
-import type { FormDefinition } from "../../../../../types/form";
+import { FieldType } from "../../../types/enums";
+import type { FormDefinition } from "../../../types/form";
 
 // Mock LinkModal component
 jest.mock("../../LinkModal", () => ({
@@ -53,9 +53,10 @@ const mockFormDefinition: FormDefinition = {
       width: 768,
       backgroundColor: "#ffffff",
       padding: 10,
-      margin:10,
+      margin: 10,
       fontFamilyBody: "Arial",
-fontFamilyTitle: "Arial",   },
+      fontFamilyTitle: "Arial",
+    },
   },
   fields: [
     {

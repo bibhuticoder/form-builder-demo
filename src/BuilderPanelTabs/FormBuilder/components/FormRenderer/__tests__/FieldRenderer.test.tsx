@@ -3,8 +3,8 @@
  */
 import { render, screen } from '@testing-library/react';
 import FieldRenderer from '../FieldRenderer';
-import { FieldType, HeadingLevel, ButtonAction } from '../../../../../types';
-import { Field } from '../../../../../types';
+import { FieldType, HeadingLevel, ButtonAction } from '../../../types';
+import { Field } from '../../../types';
 
 describe('FieldRenderer', () => {
   it('should render text field component', () => {
@@ -318,7 +318,7 @@ describe('FieldRenderer', () => {
   });
 
   it('should pass field prop to child component correctly', () => {
-    const field : Field = {
+    const field: Field = {
       id: 'test_field',
       type: FieldType.TEXT,
       label: 'Test Label',

@@ -4,8 +4,9 @@
  * Supports labels, placeholders, help text, rows, and validation.
  */
 
-import { TextAreaField } from "../../../../../types";
+import { TextAreaField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
 import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 import { PlaceholderStyles } from "./PlaceholderStyles";
 
@@ -16,6 +17,7 @@ interface BuilderTextAreaProps {
 export default function BuilderTextArea({
   field,
 }: Readonly<BuilderTextAreaProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
@@ -43,9 +45,9 @@ export default function BuilderTextArea({
           style={getInputStyles(field.style)}
         />
         {field.helpText && (
-          <p 
-            className="text-[10px] text-gray-500"
-            style={getHelpTextStyles(field.style)}
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
             {field.helpText}
           </p>

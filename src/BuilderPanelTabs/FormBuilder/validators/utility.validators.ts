@@ -66,13 +66,13 @@ export const isValidPhone = (phone: string): boolean => {
    */
   const phoneRegex = /^(\+?\d{1,3}[\s.-]?)?((\(\d{2,4}\))|\d{2,4})[\s.-]?\d{2,4}[\s.-]?\d{2,4}([\s.-]?\d{1,4})?$/;
   const digitsOnly = phone.replace(/\D/g, '');
-  
+
   // Validate digit count (10-15 digits is standard for most international numbers)
   // Note: This may be too restrictive for some countries with shorter or longer numbers
   if (digitsOnly.length < 10 || digitsOnly.length > 15) {
     return false;
   }
-  
+
   return phoneRegex.test(phone);
 };
 

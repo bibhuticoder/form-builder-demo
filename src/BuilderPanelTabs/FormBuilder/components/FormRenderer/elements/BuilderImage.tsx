@@ -4,7 +4,7 @@
  * Displays an image with optional alt text and styling.
  */
 
-import { ImageField } from "../../../../../types";
+import { ImageField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderImageProps {

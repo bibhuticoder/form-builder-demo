@@ -3,7 +3,7 @@ import { LinkIcon } from "@heroicons/react/24/outline"
 import { LinkModal } from "../LinkModal"
 import { useFormBuilder } from "../../context"
 import { Button } from "../../../../components"
-import { FieldType } from "../../../../types"
+import { FieldType } from "../../types"
 
 export interface AddLinkButtonProps {
   selectedFieldId?: string | null
@@ -30,7 +30,7 @@ export const AddLinkButton: React.FC<AddLinkButtonProps> = ({ selectedFieldId })
       }
 
       const text = selection?.toString().trim()
-      
+
       if (text && text.length > 0) {
         setSelectedText(text)
       }
@@ -69,15 +69,15 @@ export const AddLinkButton: React.FC<AddLinkButtonProps> = ({ selectedFieldId })
   // Check if selected field supports links (heading/paragraph only)
   const selectedField = jsonContent.fields.find(f => f.id === selectedFieldId)
   const supportsLinks = selectedField && (
-    selectedField.type === FieldType.HEADING || 
+    selectedField.type === FieldType.HEADING ||
     selectedField.type === FieldType.PARAGRAPH
   )
   const isDisabled = !selectedText || !supportsLinks
 
   return (
     <>
-      <Button 
-        variant="secondary" 
+      <Button
+        variant="secondary"
         title="Add Link"
         onClick={handleLinkClick}
         disabled={isDisabled}

@@ -4,13 +4,14 @@
 
 import React from "react";
 
-import { FormDefinition } from "../../../../types";
+import { FormDefinition } from "../../types";
 import FieldRenderer from "./FieldRenderer";
 import BuilderFieldControls from "./elements/BuilderFieldControls";
-import type { DragData } from "../../../../types/dnd";
-import { CANVAS_DROPPABLE_ID } from "../../../../types/dnd";
+import type { DragData } from "../../types/dnd";
+import { CANVAS_DROPPABLE_ID } from "../../types/dnd";
 import { useFormBuilder } from "../../context";
 import { SortableList, SortableItem, DropIndicator } from "../dnd";
+import { DEF_CANVAS_WIDTH } from "../../constants";
 
 interface FormRendererProps {
   formData: FormDefinition;
@@ -32,35 +33,41 @@ export default function FormRenderer({
     deleteField(fieldId);
   };
 
-  // Helper to get width style from field
-  const getWidthStyle = (field: typeof fields[0]): string => {
+  const getWidthClass = (field: typeof fields[0]): string => {
     const width = field.style?.width || "full";
+    const canvasWidth = formSettings.settings?.width || DEF_CANVAS_WIDTH;
+    const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH;
+
+    if (isSmallScreen) {
+      return "col-span-12";
+    }
+
     switch (width) {
       case "full":
-        return "100%";
+        return "col-span-12";
       case "three-quarters":
-        return "75%";
+        return "col-span-9";
       case "half":
-        return "50%";
+        return "col-span-6";
       case "third":
-        return "33.333%";
+        return "col-span-4";
       case "quarter":
-        return "25%";
+        return "col-span-3";
       default:
-        return "100%";
+        return "col-span-12";
     }
   };
 
   return (
     <div style={formSettings.settings}>
       <SortableList items={fields}>
-        <div className="flex flex-row flex-wrap gap-1">
+        <div className="grid grid-cols-12 gap-1">
           {fields.map((field) => (
             <React.Fragment key={field.id}>
               <SortableItem
                 id={field.id}
                 dragData={{ kind: "canvas-field", fieldId: field.id } as DragData}
-                width={getWidthStyle(field)}
+                className={getWidthClass(field)}
               >
                 {(dragHandleProps) => (
                   <BuilderFieldControls
@@ -75,11 +82,11 @@ export default function FormRenderer({
                 )}
               </SortableItem>
               {/* Show drop indicator when hovering over this field */}
-              {dragOverId === field.id && <DropIndicator />}
+              {dragOverId === field.id && <DropIndicator width={getWidthClass(field)} />}
             </React.Fragment>
           ))}
           {/* Show drop indicator at bottom when hovering over empty canvas */}
-          {dragOverId === CANVAS_DROPPABLE_ID && fields.length > 0 && <DropIndicator />}
+          {dragOverId === CANVAS_DROPPABLE_ID && fields.length > 0 && <DropIndicator width={`col-span-12`} />}
         </div>
       </SortableList>
     </div>

@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, Card } from "../../../../components"
-import { SCREEN_SIZES, MAX_CANVAS_WIDTH } from "../../../../constants"
+import { SCREEN_SIZES, MAX_CANVAS_WIDTH } from "../../constants"
 import { AddLinkButton } from "./AddLinkButton"
 
 export interface CanvasToolbarProps {

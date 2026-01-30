@@ -12,14 +12,40 @@ export type StyleSettings = {
   width: number;
   // CSS Properties
   backgroundColor?: string;
+  backgroundImage?: string;
+  backgroundRepeat?: string;
+  backgroundPosition?: string;
+  backgroundSize?: string;
   color?: string;
+
+  // Padding
   padding?: string | number;
+  paddingTop?: string | number;
+  paddingRight?: string | number;
+  paddingBottom?: string | number;
+  paddingLeft?: string | number;
+
+  // Margin
   margin?: string | number;
+  marginTop?: string | number;
+  marginRight?: string | number;
+  marginBottom?: string | number;
+  marginLeft?: string | number;
+
   fontSize?: string | number;
   fontWeight?: string | number;
+
+  // Border
+  borderStyle?: string;
   borderRadius?: string | number;
   borderWidth?: string | number;
   borderColor?: string;
+
+  // Help Text
+  helpFontSize?: string | number;
+  helpFontSizeUnit?: string;
+  helpColor?: string;
+
   textAlign?: 'left' | 'center' | 'right' | 'justify';
 }
 

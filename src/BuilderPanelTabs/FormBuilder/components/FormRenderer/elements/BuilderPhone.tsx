@@ -4,8 +4,9 @@
  * Supports labels, placeholders, help text, and phone validation.
  */
 
-import { PhoneField } from "../../../../../types";
+import { PhoneField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
 import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 import { PlaceholderStyles } from "./PlaceholderStyles";
 
@@ -14,6 +15,7 @@ interface BuilderPhoneProps {
 }
 
 export default function BuilderPhone({ field }: Readonly<BuilderPhoneProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
@@ -39,9 +41,9 @@ export default function BuilderPhone({ field }: Readonly<BuilderPhoneProps>) {
           style={getInputStyles(field.style)}
         />
         {field.helpText && (
-          <p 
-            className="text-[10px] text-gray-500"
-            style={getHelpTextStyles(field.style)}
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
             {field.helpText}
           </p>

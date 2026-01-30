@@ -4,14 +4,17 @@
  * Supports labels, help text, options, and validation.
  */
 
-import { RadioField } from "../../../../../types";
+import { RadioField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
+import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderRadioProps {
   field: RadioField;
 }
 
 export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <div className="space-y-1">
@@ -43,7 +46,10 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
           ))}
         </div>
         {field.helpText && (
-          <p className="text-[10px] text-gray-500">
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+          >
             {field.helpText}
           </p>
         )}

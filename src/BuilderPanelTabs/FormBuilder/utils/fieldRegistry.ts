@@ -19,7 +19,7 @@ import BuilderCheckbox from "../components/FormRenderer/elements/BuilderCheckbox
 import BuilderTextArea from "../components/FormRenderer/elements/BuilderTextArea";
 import BuilderDropdown from "../components/FormRenderer/elements/BuilderDropdown";
 import BuilderParagraph from "../components/FormRenderer/elements/BuilderParagraph";
-import { Field } from "../../../types";
+import { Field } from "../types";
 
 export interface FieldComponentProps {
     field: Field;

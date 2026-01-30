@@ -4,14 +4,17 @@
  * Supports labels, placeholders, help text, and validation.
  */
 
-import { TimeField } from "../../../../../types";
+import { TimeField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
+import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderTimeProps {
   field: TimeField;
 }
 
 export default function BuilderTime({ field }: Readonly<BuilderTimeProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <div className="space-y-0.5">
@@ -33,7 +36,10 @@ export default function BuilderTime({ field }: Readonly<BuilderTimeProps>) {
           className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 pointer-events-none outline-none"
         />
         {field.helpText && (
-          <p className="text-[10px] text-gray-500">
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+          >
             {field.helpText}
           </p>
         )}

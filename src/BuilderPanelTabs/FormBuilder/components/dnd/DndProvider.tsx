@@ -5,8 +5,8 @@
 
 import React, { useState, useCallback, useMemo } from "react";
 import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent, type DragOverEvent } from "@dnd-kit/core";
-import type { DragData } from "../../../../types/dnd";
-import type { Field } from "../../../../types";
+import type { DragData } from "../../types/dnd";
+import type { Field } from "../../types";
 import { createFieldFromType } from "../../utils/dnd/utils";
 
 /** Width of the drag preview overlay */
@@ -32,12 +32,12 @@ interface DndProviderProps {
  * business logic (adding/reordering fields) to parent callbacks.
  * Uses render prop pattern to provide dragOverId to children.
  */
-export function DndProvider({ 
-  children, 
-  onFieldAdd, 
-  onFieldReorder, 
+export function DndProvider({
+  children,
+  onFieldAdd,
+  onFieldReorder,
   fields,
-  renderPreview 
+  renderPreview
 }: DndProviderProps) {
   const [activeDrag, setActiveDrag] = useState<{ id?: string; data?: DragData }>({});
   const [overId, setOverId] = useState<string | null>(null);
@@ -121,10 +121,10 @@ export function DndProvider({
   const previewField = activePalettePreview || activeCanvasField;
 
   return (
-    <DndContext 
-      onDragStart={handleDragStart} 
-      onDragOver={handleDragOver} 
-      onDragEnd={handleDragEnd} 
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
       {/* Render children with dragOverId */}

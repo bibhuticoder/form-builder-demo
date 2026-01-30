@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid"
-import { validateFormDefinition, type FormDefinition, type ValidationError } from "../../foundation"
+import { validateFormDefinition, type FormDefinition, type ValidationError } from "./foundation"
 
 
 export interface JsonEditorProps {

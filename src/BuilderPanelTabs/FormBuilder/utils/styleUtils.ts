@@ -93,13 +93,22 @@ export const getLabelStyles = (style: Record<string, any> = {}): CSSProperties =
     };
 };
 
-export const getHelpTextStyles = (style: Record<string, any> = {}): CSSProperties => {
+import { DEFAULT_CONFIG } from "../constants";
+
+export const getHelpTextStyles = (style: Record<string, any> = {}, globalSettings?: Record<string, any>): CSSProperties => {
+    // Default to global settings if provided, otherwise fallback to constants
+    const defaultFontSize = globalSettings?.helpFontSize !== undefined ? globalSettings.helpFontSize : DEFAULT_CONFIG.helpFontSize;
+    const defaultFontSizeUnit = globalSettings?.helpFontSizeUnit || DEFAULT_CONFIG.helpFontSizeUnit;
+    const defaultColor = globalSettings?.helpColor || DEFAULT_CONFIG.helpColor;
+
     return {
         // Typography - Help Text
         fontFamily: style.helpFontFamily !== "default" ? style.helpFontFamily : undefined,
-        fontSize: style.helpFontSize ? `${style.helpFontSize}${style.helpFontSizeUnit || 'px'}` : undefined,
+        fontSize: style.helpFontSize
+            ? `${style.helpFontSize}${style.helpFontSizeUnit || 'px'}`
+            : `${defaultFontSize}${defaultFontSizeUnit}`,
         fontWeight: style.helpFontWeight,
-        color: style.helpColor,
+        color: style.helpColor || defaultColor,
     };
 };
 

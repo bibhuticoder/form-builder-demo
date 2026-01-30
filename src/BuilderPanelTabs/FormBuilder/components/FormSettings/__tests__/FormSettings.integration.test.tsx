@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FormSettingsTrigger } from "../FormSettingsTrigger";
-import type { FormSettings as FormSettingsType } from "../../../../../types/form";
-import { FormStatus } from "../../../../../types/enums";
+import type { FormSettings as FormSettingsType } from "../../../types/form";
+import { FormStatus } from "../../../types/enums";
 
 // Mock Dialog
 jest.mock("../../../../../components/Dialog", () => ({
@@ -113,7 +113,7 @@ describe("FormSettingsTrigger - Integration Tests", () => {
     it("should restore settings from backup when cancel is clicked", () => {
       const original = mockContextValue.jsonContent.formSettings;
       const backup = structuredClone(original);
-      
+
       // Backup should be independent
       expect(backup).toEqual(original);
       expect(backup).not.toBe(original);
@@ -164,12 +164,12 @@ describe("FormSettingsTrigger - Integration Tests", () => {
     it("should create independent backup (structuredClone)", () => {
       const original = mockContextValue.jsonContent.formSettings;
       const backup = structuredClone(original);
-      
+
       // Modify backup
       if (backup.settings) {
         backup.settings.width = 999;
       }
-      
+
       // Original unchanged
       expect(original.settings.width).toBe(768);
     });

@@ -4,8 +4,10 @@
  * Supports single or multi-selection modes, labels, help text, and validation.
  */
 
-import { CheckboxField } from "../../../../../types";
+import { CheckboxField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
+import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderCheckboxProps {
   field: CheckboxField;
@@ -14,6 +16,7 @@ interface BuilderCheckboxProps {
 export default function BuilderCheckbox({
   field,
 }: Readonly<BuilderCheckboxProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <div className="space-y-1">
@@ -47,7 +50,10 @@ export default function BuilderCheckbox({
           ))}
         </div>
         {field.helpText && (
-          <p className="text-[10px] text-gray-500">
+          <p
+            className="text-[9px] text-gray-500"
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+          >
             {field.helpText}
           </p>
         )}

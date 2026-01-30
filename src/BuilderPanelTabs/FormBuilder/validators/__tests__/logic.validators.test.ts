@@ -19,7 +19,7 @@ import {
   LogicOperation,
   LogicEffect,
   LogicRule,
-} from '../../types';
+} from '../../BuilderPanelTabs/FormBuilder/types';
 
 // ============================================================================
 // TEST HELPERS

@@ -4,7 +4,7 @@
  * Displays text content with custom styling.
  */
 
-import { ParagraphField } from "../../../../../types";
+import { ParagraphField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles } from "../../../utils/styleUtils";
 
@@ -21,8 +21,8 @@ export default function BuilderParagraph({
 }: Readonly<BuilderParagraphProps>) {
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
-      <p 
-      dangerouslySetInnerHTML={{ __html: field.label }}
+      <p
+        dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
         className="transition-all duration-200 text-gray-900 dark:text-white"
       >

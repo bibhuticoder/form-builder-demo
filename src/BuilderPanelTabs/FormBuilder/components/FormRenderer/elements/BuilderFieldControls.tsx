@@ -5,7 +5,7 @@ import { ReactNode, useState } from "react";
 import { TrashIcon, QueueListIcon } from "@heroicons/react/24/outline";
 import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
 
-import { BaseField } from "../../../../../types";
+import { BaseField } from "../../../types";
 
 interface BuilderFieldWrapperProps {
   field: BaseField & { name?: string };
@@ -48,8 +48,8 @@ export default function BuilderFieldControls({
     <div
       role="button"
       className={`
-        field-wrapper relative p-1 rounded transition-colors duration-200 border-2 border-transparent
-        ${showHoverState || selected ? 'border-primary border-dotted' : ''}
+        field-wrapper relative p-1 rounded transition-colors duration-200 border border-transparent
+        ${showHoverState || selected ? '!border-primary !border-dotted' : ''}
         ${selected ? 'bg-primary/5' : ''}
         border-type-${field.type}
       `}
@@ -60,7 +60,7 @@ export default function BuilderFieldControls({
       tabIndex={0}
     >
       {/* Action Bar */}
-      <div 
+      <div
         className={`
           absolute -top-5 right-0 flex items-center gap-1.5 bg-primary text-white px-1.5 py-0.5 
           rounded-t opacity-0 transition-opacity duration-200 z-10 text-[10px] font-medium tracking-wider
@@ -68,7 +68,7 @@ export default function BuilderFieldControls({
         `}
       >
         <span className="text-white text-[10px]">{getFieldName(field.name || field.type)}</span>
-        
+
         <div className="flex gap-1 pl-1.5 ml-1.5 border-l border-white/20">
           {onDelete && (
             <button
@@ -82,7 +82,7 @@ export default function BuilderFieldControls({
               <TrashIcon width={14} height={14} />
             </button>
           )}
-          
+
           {/* Drag handle button */}
           <button
             type="button"

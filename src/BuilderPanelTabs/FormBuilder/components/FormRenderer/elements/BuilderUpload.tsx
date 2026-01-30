@@ -5,16 +5,19 @@
  */
 
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
-import { UploadField } from "../../../../../types";
+import { UploadField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
+import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderUploadProps {
   field: UploadField;
 }
 
 export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
+  const { jsonContent } = useFormBuilder();
   const labelId = `${field.id}-label`;
-  
+
   const fileTypes = field.acceptedFileTypes
     ?.map((type) => {
       if (type.includes("/")) {
@@ -87,7 +90,10 @@ export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
               Click to upload file
             </span>
             {(helperText || field.helpText) && (
-              <span className="text-sm text-slate-400">
+              <span
+                className="text-xs text-slate-400"
+                style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+              >
                 {helperText || field.helpText}
               </span>
             )}

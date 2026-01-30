@@ -2,9 +2,9 @@ import React, { useState, useCallback } from "react";
 import { Dialog } from "../../../../components/Dialog";
 import { ColorControl } from "../PropertyEditor/components/ColorControl";
 import { SpacingControl } from "../PropertyEditor/components/SpacingControl";
-import type { FormSettings as FormSettingsType } from "../../../../types/form";
-import type { StyleSettings } from "../../../../types/styles";
-import { FormStatus } from "../../../../types/enums";
+import type { FormSettings as FormSettingsType } from "../../types/form";
+import type { StyleSettings } from "../../types/styles";
+import { FormStatus } from "../../types/enums";
 import { Button } from "../../../../components";
 
 /**
@@ -48,6 +48,11 @@ interface FormStyleConfig {
   borderRadiusBottom: number;
   borderRadiusRight: number;
   borderRadiusLeft: number;
+
+  // Help Text
+  helpFontSize: number;
+  helpFontSizeUnit: "px";
+  helpColor: string;
 }
 
 interface FormSettingsConfig extends FormStyleConfig {
@@ -63,36 +68,8 @@ interface FormSettingsProps {
 }
 
 // Default configuration
-const DEFAULT_CONFIG: FormSettingsConfig = {
-  surveyMode: false,
-  maxWidth: 768,
-  maxWidthUnit: "px",
-  maxHeight: "Auto",
-  maxHeightUnit: "Auto",
-  bodyFont: "Inter",
-  titleFont: "Inter",
-  marginTop: 0,
-  marginBottom: 0,
-  marginRight: 0,
-  marginLeft: 0,
-  paddingTop: 48,
-  paddingBottom: 48,
-  paddingRight: 48,
-  paddingLeft: 48,
-  backgroundColor: "#FFFFFF",
-  backgroundImageUrl: "",
-  backgroundRepeat: "No Repeat",
-  backgroundAttachment: "Scroll",
-  backgroundPosition: "Center",
-  backgroundSize: "Cover",
-  borderStyle: "Solid",
-  borderSize: 1,
-  borderColor: "#E5E5E5",
-  borderRadiusTop: 12,
-  borderRadiusBottom: 12,
-  borderRadiusRight: 12,
-  borderRadiusLeft: 12,
-};
+import { DEFAULT_CONFIG } from "../../constants";
+
 
 /**
  * Form Styling Section - Contains all styling related settings
@@ -221,6 +198,30 @@ const FormStylingSection = React.memo(
               <option>Times New Roman</option>
             </select>
           </div>
+        </div>
+
+        {/* Help Text Styling */}
+        <div>
+          <label className="block text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1">
+            <span className="font-semibold">Help Text Font Size</span>
+            <div className="flex gap-1">
+              <input
+                type="number"
+                value={config.helpFontSize}
+                onChange={(e) => onChange("helpFontSize", Number(e.target.value))}
+                className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <select
+                value={config.helpFontSizeUnit}
+                onChange={(e) => onChange("helpFontSizeUnit", e.target.value)}
+                className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                aria-label="Help font size unit"
+                disabled
+              >
+                <option>px</option>
+              </select>
+            </div>
+          </label>
         </div>
 
         {/* Margin */}
@@ -467,6 +468,11 @@ const convertToFormSettings = (
     marginRight: config.marginRight,
     marginBottom: config.marginBottom,
     marginLeft: config.marginLeft,
+
+    // Help Text
+    helpFontSize: config.helpFontSize,
+    helpFontSizeUnit: config.helpFontSizeUnit,
+    helpColor: config.helpColor,
   };
 
   // Add optional background image properties if provided
@@ -539,6 +545,11 @@ const convertFromFormSettings = (
       (((settings.backgroundPosition as string)?.charAt(0).toUpperCase() +
         (settings.backgroundPosition as string)?.slice(1)) as any) ||
       DEFAULT_CONFIG.backgroundPosition,
+
+    // Help Text
+    helpFontSize: (settings.helpFontSize as number) || DEFAULT_CONFIG.helpFontSize,
+    helpFontSizeUnit: (settings.helpFontSizeUnit as "px") || DEFAULT_CONFIG.helpFontSizeUnit,
+    helpColor: (settings.helpColor as string) || DEFAULT_CONFIG.helpColor,
   };
 };
 
@@ -640,16 +651,14 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
               </div>
               <button
                 onClick={() => handleChange("surveyMode", !config.surveyMode)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  config.surveyMode
-                    ? "bg-primary"
-                    : "bg-gray-300 dark:bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${config.surveyMode
+                  ? "bg-primary"
+                  : "bg-gray-300 dark:bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    config.surveyMode ? "translate-x-6" : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${config.surveyMode ? "translate-x-6" : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>

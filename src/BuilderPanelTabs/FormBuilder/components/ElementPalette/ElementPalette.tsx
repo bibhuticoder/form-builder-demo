@@ -23,10 +23,10 @@ import {
   ArrowUturnRightIcon,
   ArrowUturnLeftIcon,
 } from "@heroicons/react/24/outline";
-import { FieldType } from "../../../../types/enums";
+import { FieldType } from "../../types/enums";
 import { IconInput, Card, FormSettings } from "../../../../components";
 import { useDraggable } from "@dnd-kit/core";
-import type { DragData } from "../../../../types/dnd";
+import type { DragData } from "../../types/dnd";
 import { ElementPaletteBottomActionsBar } from "./ElementPaletteBottomActionsBar";
 import { LinkModal } from "../LinkModal";
 
@@ -203,7 +203,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
           ))}
         </div>
       )}
-    
+
     </div>
   );
 };

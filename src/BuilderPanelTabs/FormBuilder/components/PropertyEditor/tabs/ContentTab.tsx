@@ -1,9 +1,9 @@
 import React from "react";
-import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField, FieldType } from "../../../../../types";
+import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, RadioField, DropdownField, ButtonField, HeadingField, ImageField, VideoField, FieldType } from "../../../types";
 import { useFormBuilder } from "../../../context";
 import { Button } from "../../../../../components";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { getFieldCapabilities } from "../../../../../types/field-capabilities";
+import { getFieldCapabilities } from "../../../types/field-capabilities";
 import { stripHtmlTags, reconstructHtmlWithLinks } from "../utils/htmlUtils";
 
 interface ContentTabProps {
@@ -18,12 +18,12 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
 
   const handleUpdate = (key: string, value: unknown) => {
     const updates: Partial<Field> = { [key]: value } as Partial<Field>;
-    
+
     // Auto-generate name from label if not customized
     if (key === "label" && !(field as InputField & { isNameCustomized?: boolean }).isNameCustomized) {
       (updates as Partial<InputField>).name = slugify(value as string);
     }
-    
+
     updateField(field.id, updates);
   };
 
@@ -57,7 +57,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
             }}
             className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
-   
+
         </div>
       )}
 
@@ -136,14 +136,12 @@ export const ContentTab: React.FC<ContentTabProps> = ({ field }) => {
             role="switch"
             aria-checked={(field as any).required || false}
             onClick={() => handleUpdate("required", !(field as any).required)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-              (field as any).required ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
-            }`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${(field as any).required ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
+              }`}
           >
             <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                (field as any).required ? "translate-x-6" : "translate-x-1"
-              }`}
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${(field as any).required ? "translate-x-6" : "translate-x-1"
+                }`}
             />
           </button>
         </div>
