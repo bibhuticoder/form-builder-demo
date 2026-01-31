@@ -144,7 +144,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Fields..."
               containerStyles="!bg-gray-50 dark:!bg-gray-900 !min-h-[2.25rem] !rounded-md"
-              inputStyles="!text-sm !bg-transparent !text-gray-900 dark:!text-white placeholder:!text-gray-400 dark:placeholder:!text-gray-500"
+              inputStyles="!text-sm !bg-transparent !text-gray-900 dark:!text-white placeholder:!text-gray-400 dark:placeholder:!text-gray-500 focus:!ring-1"
             />
           </div>
 

@@ -133,7 +133,8 @@ export interface ButtonField extends LabeledField {
   type: typeof FieldType.BUTTON;
   label: string;
   action?: ButtonAction;
-  targetUrl?: string;
+  targetUrl?: string; // For OPEN_URL
+  scrollToElement?: string; // For SCROLL_TO_ELEMENT (element ID)
 }
 
 // Union type for all field types

@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, ButtonField, HeadingField, FieldType } from "../../../../../types";
+import { Field, LabeledField, InputField, EmailField, PhoneField, UrlField, TextAreaField, NumberField, CheckboxField, ButtonField, HeadingField, FieldType, ButtonAction } from "../../../../../types";
 import { stripHtmlTags, reconstructHtmlWithLinks } from "../../../utils/htmlUtils";
 
 interface ContentSectionProps {
@@ -62,15 +62,45 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                     <div className="space-y-1">
                         <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Action</label>
                         <select
-                            value={(field as ButtonField).action || "submit"}
+                            value={(field as ButtonField).action || ButtonAction.SUBMIT}
                             onChange={(e) => handleUpdate("action", e.target.value)}
                             className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         >
-                            <option value="submit">Submit Form</option>
-                            <option value="url">Open URL</option>
-                            <option value="scroll">Scroll to Element</option>
+                            <option value={ButtonAction.SUBMIT}>Submit Form</option>
+                            <option value={ButtonAction.RESET}>Reset Form</option>
+                            <option value={ButtonAction.OPEN_URL}>Open URL</option>
+                            <option value={ButtonAction.SCROLL_TO_ELEMENT}>Scroll to Element</option>
                         </select>
                     </div>
+
+                    {/* Target URL Input */}
+                    {(field as ButtonField).action === ButtonAction.OPEN_URL && (
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Target URL</label>
+                            <input
+                                type="url"
+                                placeholder="https://example.com"
+                                value={(field as ButtonField).targetUrl || ""}
+                                onChange={(e) => handleUpdate("targetUrl", e.target.value)}
+                                className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                    )}
+
+                    {/* Scroll Target Input */}
+                    {(field as ButtonField).action === ButtonAction.SCROLL_TO_ELEMENT && (
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Element ID</label>
+                            <input
+                                type="text"
+                                placeholder="e.g. heading_1"
+                                value={(field as ButtonField).scrollToElement || ""}
+                                onChange={(e) => handleUpdate("scrollToElement", e.target.value)}
+                                className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                            <p className="text-[10px] text-gray-500">Enter the ID of the element to scroll to.</p>
+                        </div>
+                    )}
                 </div>
             )}
 

@@ -29,7 +29,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="p-2 flex items-center justify-between bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <Button variant="secondary" onClick={onBack} className="gap-2 text-xs">
+        <Button variant="transparent" onClick={onBack} className="gap-2 text-xs">
           <ArrowLeftIcon className="w-4 h-4" />
           Back
         </Button>

@@ -22,7 +22,7 @@ export default function BuilderCheckbox({
 }: Readonly<BuilderCheckboxProps>) {
   const { jsonContent } = useFormBuilder();
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-1">
         {field.label && (
           <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}>

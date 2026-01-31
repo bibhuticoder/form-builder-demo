@@ -17,7 +17,7 @@ export default function BuilderButton({
   activeSubElement,
 }: Readonly<BuilderButtonProps>) {
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <button
         style={field.style}
         type="button"

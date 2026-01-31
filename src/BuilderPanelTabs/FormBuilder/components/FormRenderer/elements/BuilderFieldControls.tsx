@@ -58,7 +58,10 @@ export default function BuilderFieldControls({
       style={{ width: '100%' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => onSelect?.(field.id)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect?.(field.id);
+      }}
       tabIndex={0}
     >
       {/* Action Bar */}

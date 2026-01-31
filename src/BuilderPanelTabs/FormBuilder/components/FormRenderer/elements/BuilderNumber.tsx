@@ -20,7 +20,7 @@ interface BuilderNumberProps {
 export default function BuilderNumber({ field, isSelected, activeSubElement }: Readonly<BuilderNumberProps>) {
   const { jsonContent } = useFormBuilder();
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
       <div className="space-y-0.5">
         {field.label && (

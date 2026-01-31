@@ -21,17 +21,18 @@ import { FormSettingsTrigger } from "../FormSettings/FormSettingsTrigger";
 
 interface BottomActionBarProps {
   isCollapsed: boolean;
+  parent: "element-palette" | "property-editor";
 }
 
-export const BottomActionBar: React.FC<BottomActionBarProps> = ({ isCollapsed }) => {
+export const BottomActionBar: React.FC<BottomActionBarProps> = ({ isCollapsed, parent }) => {
   return (
     <div className="sticky bottom-0 z-10 p-2 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-      <div className={`flex flex-${isCollapsed ? "col gap-4" : "row"} justify-between items-center`}>
+      <div className={`flex flex-${isCollapsed && parent === "element-palette" ? "col gap-4" : "row"} justify-between items-center`}>
         {/* Left section: Form settings/styling configuration trigger */}
         <FormSettingsTrigger />
 
         {/* Right section: Undo/Redo history controls */}
-        <div className={`flex flex-${isCollapsed ? "col gap-4" : "row gap-4"} justify-between`}>
+        <div className={`flex flex-${isCollapsed && parent === "element-palette" ? "col gap-4" : "row gap-4"} justify-between`}>
           {/* Undo button - reverts last action */}
           <ArrowUturnLeftIcon className="w-4 h-4 text-gray-400  dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors" />
 

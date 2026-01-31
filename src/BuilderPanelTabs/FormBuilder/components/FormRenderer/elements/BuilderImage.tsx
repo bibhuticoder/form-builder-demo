@@ -6,6 +6,7 @@
 
 import { ImageField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getLabelStyles } from "../../../utils/styleUtils";
 
 interface BuilderImageProps {
   field: ImageField;
@@ -18,7 +19,10 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
-          <label className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}>
+          <label
+            className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
+            style={getLabelStyles(field.style)}
+          >
             {field.label}
           </label>
         )}

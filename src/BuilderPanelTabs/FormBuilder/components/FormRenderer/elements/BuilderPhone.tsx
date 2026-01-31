@@ -19,7 +19,7 @@ interface BuilderPhoneProps {
 export default function BuilderPhone({ field, isSelected, activeSubElement }: Readonly<BuilderPhoneProps>) {
   const { jsonContent } = useFormBuilder();
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
       <div className="space-y-0.5">
         {field.label && (

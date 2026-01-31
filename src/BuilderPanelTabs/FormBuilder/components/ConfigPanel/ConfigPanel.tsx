@@ -18,7 +18,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
     return (
       <aside className="sticky top-0 w-[280px] flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0 z-20 shadow-xl">
         <PropertyEditor selectedFieldId={selectedFieldId} onBack={onClearSelection} />
-        <BottomActionBar isCollapsed={isCollapsed} />
+        <BottomActionBar isCollapsed={isCollapsed} parent="property-editor" />
       </aside>
     );
   }
@@ -36,7 +36,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ selectedFieldId, onCle
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <ElementPalette isCollapsed={isCollapsed} />
-        <BottomActionBar isCollapsed={isCollapsed} />
+        <BottomActionBar isCollapsed={isCollapsed} parent="element-palette" />
       </div>
     </aside>
   );

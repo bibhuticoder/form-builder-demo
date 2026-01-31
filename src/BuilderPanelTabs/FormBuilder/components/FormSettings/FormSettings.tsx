@@ -48,11 +48,6 @@ interface FormStyleConfig {
   borderRadiusBottom: number;
   borderRadiusRight: number;
   borderRadiusLeft: number;
-
-  // Help Text
-  helpFontSize: number;
-  helpFontSizeUnit: "px";
-  helpColor: string;
 }
 
 interface FormSettingsConfig extends FormStyleConfig {
@@ -444,11 +439,6 @@ const convertToFormSettings = (
     marginRight: config.marginRight,
     marginBottom: config.marginBottom,
     marginLeft: config.marginLeft,
-
-    // Help Text
-    helpFontSize: config.helpFontSize,
-    helpFontSizeUnit: config.helpFontSizeUnit,
-    helpColor: config.helpColor,
   };
 
   // Add optional background image properties if provided
@@ -520,12 +510,7 @@ const convertFromFormSettings = (
     backgroundPosition:
       (((settings.backgroundPosition as string)?.charAt(0).toUpperCase() +
         (settings.backgroundPosition as string)?.slice(1)) as any) ||
-      DEFAULT_CONFIG.backgroundPosition,
-
-    // Help Text
-    helpFontSize: (settings.helpFontSize as number) || DEFAULT_CONFIG.helpFontSize,
-    helpFontSizeUnit: (settings.helpFontSizeUnit as "px") || DEFAULT_CONFIG.helpFontSizeUnit,
-    helpColor: (settings.helpColor as string) || DEFAULT_CONFIG.helpColor,
+      DEFAULT_CONFIG.backgroundPosition
   };
 };
 

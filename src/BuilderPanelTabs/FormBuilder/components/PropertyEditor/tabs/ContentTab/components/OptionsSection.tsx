@@ -35,7 +35,7 @@ export const OptionsSection: React.FC<OptionsSectionProps> = ({ field, capabilit
             <div className="flex items-center justify-between">
                 <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Options</label>
                 <Button
-                    variant="secondary"
+                    variant="transparent"
                     onClick={() => {
                         const newOption = {
                             id: `opt_${Date.now()}`,
@@ -56,7 +56,7 @@ export const OptionsSection: React.FC<OptionsSectionProps> = ({ field, capabilit
                 {((field as CheckboxField | RadioField | DropdownField).options || []).map((option, index: number) => (
                     <div key={index} className="flex gap-2 items-start">
                         <div className="flex-1 space-y-1">
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 items-center">
                                 <input
                                     type="text"
                                     value={option.label}
@@ -66,15 +66,15 @@ export const OptionsSection: React.FC<OptionsSectionProps> = ({ field, capabilit
                                         handleUpdate("options", newOptions);
                                     }}
                                     placeholder="Label"
-                                    className="flex-1 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                    className="flex-1 px-3 py-2 bg-white text-xs dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
                                 <Button
-                                    variant="secondary"
+                                    variant="transparent"
                                     onClick={() => {
                                         const newOptions = (field as CheckboxField | RadioField | DropdownField).options?.filter((_, i: number) => i !== index);
                                         handleUpdate("options", newOptions);
                                     }}
-                                    className="h-10 w-10 shrink-0"
+                                    className="hover:text-red-500 p-1"
                                 >
                                     <TrashIcon className="w-4 h-4" />
                                 </Button>
@@ -88,7 +88,7 @@ export const OptionsSection: React.FC<OptionsSectionProps> = ({ field, capabilit
                                     handleUpdate("options", newOptions);
                                 }}
                                 placeholder="Value"
-                                className="w-full px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-mono text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="w-full px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-mono text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary"
                             />
                         </div>
                     </div>

@@ -20,7 +20,7 @@ export default function BuilderEmail({ field, isSelected, activeSubElement }: Re
   const { jsonContent } = useFormBuilder();
 
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
       <div className="space-y-0.5">
         {field.label && (

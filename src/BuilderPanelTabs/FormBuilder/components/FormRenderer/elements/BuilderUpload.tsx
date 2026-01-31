@@ -47,7 +47,7 @@ export default function BuilderUpload({ field, isSelected, activeSubElement }: R
       : undefined;
 
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
           <label
@@ -64,7 +64,7 @@ export default function BuilderUpload({ field, isSelected, activeSubElement }: R
           id={field.id}
           name={field.name}
           required={field.required}
-          disabled={field.disabled}
+          disabled={true}
           accept={field.acceptedFileTypes?.join(",")}
           className="sr-only"
           aria-labelledby={labelId}

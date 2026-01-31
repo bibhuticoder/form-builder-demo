@@ -14,7 +14,7 @@ export interface CanvasProps {
   /** ID of the element currently being dragged over (for drop indicators) */
   dragOverId?: string | null;
   selectedFieldId?: string | null;
-  onSelectField?: (id: string) => void;
+  onSelectField?: (id: string | null) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onSelectField }) => {
@@ -41,7 +41,10 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
       <CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} />
 
       {/* Canvas Content Area */}
-      <div className="flex-1 overflow-auto flex justify-center h-full p-16 overflow-auto">
+      <div
+        className="flex-1 overflow-auto flex justify-center h-full p-16 overflow-auto"
+        onClick={() => onSelectField?.(null)}
+      >
         <div
           ref={(node) => {
             canvasRef.current = node

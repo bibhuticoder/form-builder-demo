@@ -22,7 +22,7 @@ export default function BuilderDivider({
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <hr
         style={field.style}
-        className="border-t border-gray-300 dark:border-gray-600 my-6"
+        className="border-t border-gray-300 dark:border-gray-600"
       />
     </BuilderFieldWrapper>
   );

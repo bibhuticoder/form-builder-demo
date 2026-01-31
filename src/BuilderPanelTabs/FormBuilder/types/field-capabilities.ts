@@ -66,7 +66,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
     [FieldType.IMAGE]: {
         supportsInputStyles: false,
         supportsWindowStyles: true,
-        supportsLabelStyles: false,
+        supportsLabelStyles: true,
         supportsPlaceholderStyles: false,
         supportsHelpStyles: false,
         hasLabel: true,

@@ -18,7 +18,7 @@ interface BuilderTimeProps {
 export default function BuilderTime({ field, isSelected, activeSubElement }: Readonly<BuilderTimeProps>) {
   const { jsonContent } = useFormBuilder();
   return (
-    <BuilderFieldWrapper field={field}>
+    <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-0.5">
         {field.label && (
           <label

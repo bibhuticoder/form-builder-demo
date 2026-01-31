@@ -25,7 +25,7 @@ export default function BuilderFieldWrapper({
 
   // Apply highlighting ring when window is selected
   const highlightClass = isSelected && activeSubElement === 'window'
-    ? 'ring-2 ring-primary ring-offset-2'
+    ? 'ring-1 ring-primary ring-offset-1'
     : '';
 
   return (

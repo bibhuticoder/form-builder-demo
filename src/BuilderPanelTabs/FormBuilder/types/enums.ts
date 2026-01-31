@@ -105,5 +105,7 @@ export enum ToastVariant {
 export enum ButtonAction {
   SUBMIT = 'submit',
   RESET = 'reset',
+  OPEN_URL = 'open_url',
+  SCROLL_TO_ELEMENT = 'scroll_to_element',
   CUSTOM = 'custom',
 }

@@ -26,7 +26,7 @@ const makeId = () => `${Date.now().toString(36)}-${Math.random().toString(36).sl
 // Base styles that all fields get
 const BASE_STYLES = {
   width: "full",
-  windowMarginBottom: 16,
+  windowMarginBottom: 0,
   windowPaddingTop: 0,
   windowPaddingRight: 0,
   windowPaddingBottom: 0,
@@ -39,6 +39,16 @@ const DISPLAY_FIELD_STYLES = {
   inputFontSize: 14,
   inputFontSizeUnit: "px",
   inputFontWeight: "normal",
+  inputFontFamily: "default",
+  inputColor: "#111827",
+};
+
+// Styles specifically for Headings (h1-h6) to allow their natural size to take precedence
+// unless explicitly overridden by the user.
+const HEADING_FIELD_STYLES = {
+  ...BASE_STYLES,
+  // We explicitly DO NOT set inputFontSize here so that the h1-h6 tags control the size
+  inputFontWeight: "bold", // Headings are usually bold
   inputFontFamily: "default",
   inputColor: "#111827",
 };
@@ -80,8 +90,12 @@ const INPUT_FIELD_STYLES = {
 // Helper to get appropriate default styles based on field type
 const getDefaultStylesForType = (fieldType: FieldType) => {
   // Display-only fields
+
+  if (fieldType === FieldType.HEADING) {
+    return HEADING_FIELD_STYLES;
+  }
+
   if ([
-    FieldType.HEADING,
     FieldType.PARAGRAPH,
     FieldType.DIVIDER,
     FieldType.IMAGE,
