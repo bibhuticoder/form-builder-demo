@@ -59,7 +59,7 @@ export default function FormRenderer({
   };
 
   return (
-    <div style={formSettings.settings}>
+    <div>
       <SortableList items={fields}>
         <div className="grid grid-cols-12 gap-1">
           {fields.map((field) => (

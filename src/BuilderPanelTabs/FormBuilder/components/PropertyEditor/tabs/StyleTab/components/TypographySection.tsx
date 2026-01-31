@@ -106,7 +106,7 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                     <select
                         value={getStyleValue(`${activeTypographyTab}FontFamily`, "default")}
                         onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontFamily`, e.target.value === "default" ? "" : e.target.value)}
-                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                         <option value="default">Default</option>
                         <option value="inter">Inter</option>
@@ -126,13 +126,13 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                                 type="number"
                                 value={getStyleValue(`${activeTypographyTab}FontSize`, activeTypographyTab === "help" ? 12 : 14)}
                                 onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSize`, e.target.value)}
-                                className="flex-1 px-2 py-1.5 w-[75px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary border-r-0"
+                                className="shadow flex-1 px-2 py-1.5 w-[75px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary border-r-0"
                                 placeholder="14"
                             />
                             <select
                                 value={getStyleValue(`${activeTypographyTab}FontSizeUnit`, "px")}
                                 onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSizeUnit`, e.target.value)}
-                                className="w-12 px-1 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-r-md text-[10px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="shadow w-12 px-1 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-r-md text-[10px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                             >
                                 <option value="px">px</option>
                                 <option value="rem">rem</option>
@@ -146,7 +146,7 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                         <select
                             value={getStyleValue(`${activeTypographyTab}FontWeight`, "normal")}
                             onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontWeight`, e.target.value)}
-                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="light">Light</option>
                             <option value="normal">Normal</option>
@@ -164,7 +164,7 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                         <select
                             value={getStyleValue("textAlign", "left")}
                             onChange={(e) => handleStyleUpdate("textAlign", e.target.value)}
-                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="left">Left</option>
                             <option value="center">Center</option>

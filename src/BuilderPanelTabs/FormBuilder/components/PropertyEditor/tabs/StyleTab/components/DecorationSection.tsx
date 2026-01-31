@@ -74,7 +74,7 @@ export const DecorationSection: React.FC<DecorationSectionProps> = ({
                     <select
                         value={getStyleValue(`${activeDecorationTab}BorderStyle`, "solid")}
                         onChange={(e) => handleStyleUpdate(`${activeDecorationTab}BorderStyle`, e.target.value)}
-                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                         <option value="none">None</option>
                         <option value="solid">Solid</option>
@@ -91,7 +91,7 @@ export const DecorationSection: React.FC<DecorationSectionProps> = ({
                             type="number"
                             value={getStyleValue(`${activeDecorationTab}BorderWidth`, 1)}
                             onChange={(e) => handleStyleUpdate(`${activeDecorationTab}BorderWidth`, e.target.value)}
-                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                             placeholder="1"
                         />
                     </div>

@@ -14,7 +14,7 @@ export const ColorPickerField: React.FC<ColorPickerFieldProps> = ({ label, color
       </label>
       <div className="flex gap-2 items-center">
         <div
-          className="w-8 h-8 rounded border-2 border-gray-300 dark:border-gray-600 cursor-pointer flex-shrink-0"
+          className="w-[30px] h-[30px] rounded border-2 border-gray-300 dark:border-gray-600 cursor-pointer flex-shrink-0"
           style={{ backgroundColor: color }}
           onClick={() => document.getElementById(`color-${label}`)?.click()}
         />
@@ -29,7 +29,7 @@ export const ColorPickerField: React.FC<ColorPickerFieldProps> = ({ label, color
           type="text"
           value={color}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-mono text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+          className="shadow flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-mono text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="#000000"
         />
       </div>

@@ -49,6 +49,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
           }}
           className={`rounded-lg relative bg-transparent`}
           style={{
+            ...jsonContent.formSettings.settings,
             width: canvasWidth,
             minWidth: `${MIN_CANVAS_WIDTH}px`,
             maxWidth: `${MAX_CANVAS_WIDTH}px`,

@@ -11,20 +11,22 @@ import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderRadioProps {
   field: RadioField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
-export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
+export default function BuilderRadio({ field, isSelected, activeSubElement }: Readonly<BuilderRadioProps>) {
   const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field}>
       <div className="space-y-1">
         {field.label && (
-          <label className="block text-xs font-medium text-gray-700">
+          <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
-        <div className="space-y-1">
+        <div className={`space-y-1 ${isSelected && ['input', 'options'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1 rounded p-1' : ''}`}>
           {field.options.map((option) => (
             <div key={option.value} className="flex items-center">
               <input
@@ -34,7 +36,7 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
                 value={option.value}
                 required={field.required}
                 disabled={true} // Always disabled in builder
-                className="appearance-none w-3.5 h-3.5 bg-white border border-gray-900 rounded-full checked:bg-primary checked:border-primary focus:ring-primary outline-none transition-colors"
+                className="appearance-none w-3.5 h-3.5 bg-white border border-gray-900 rounded-full checked:bg-primary checked:border-primary outline-none transition-colors"
               />
               <label
                 htmlFor={`${field.id}_${option.value}`}
@@ -47,7 +49,7 @@ export default function BuilderRadio({ field }: Readonly<BuilderRadioProps>) {
         </div>
         {field.helpText && (
           <p
-            className="text-[9px] text-gray-500"
+            className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
             style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
             {field.helpText}

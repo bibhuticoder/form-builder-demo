@@ -32,7 +32,7 @@ export const LayoutSection: React.FC<LayoutSectionProps> = ({
                 <select
                     value={getStyleValue("width", "full")}
                     onChange={(e) => handleStyleUpdate("width", e.target.value)}
-                    className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                     <option value="full">Full Width (100%)</option>
                     <option value="three-quarters">Three Quarters (75%)</option>

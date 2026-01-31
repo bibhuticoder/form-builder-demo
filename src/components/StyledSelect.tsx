@@ -16,6 +16,7 @@ export const StyledSelect: React.FC<StyledSelectProps> = ({ options, className =
         focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
         transition-colors duration-200
         ${className}
+        shadow
       `}
       {...props}
     >

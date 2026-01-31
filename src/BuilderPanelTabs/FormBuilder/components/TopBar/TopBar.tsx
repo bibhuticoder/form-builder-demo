@@ -50,7 +50,7 @@ export const TopBar: React.FC = () => {
       <header className="p-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-3 shadow-sm z-10 shrink-0">
         {/* Left Section */}
         <div className="flex items-center gap-2">
-          <input value={formName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormName(e.target.value)} className="border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:border-primary dark:focus:border-primary focus:outline-none font-semibold w-[200px] px-2 h-7 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 rounded-md transition-colors" placeholder="Form Name" />
+          <input value={formName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormName(e.target.value)} className="shadow border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:border-primary dark:focus:border-primary focus:outline-none font-semibold w-[200px] px-2 h-7 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 rounded-md transition-colors" placeholder="Form Name" />
         </div>
 
         {/* Right Section */}

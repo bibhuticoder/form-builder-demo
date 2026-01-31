@@ -73,7 +73,7 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({ value, onChange, onSave 
 
       {/* Editor Textarea */}
       <div className="flex-1 relative overflow-auto" style={{ maxHeight: "600px" }}>
-        <textarea value={JSON.stringify(localValue, null, 2)} onChange={(e) => handleChange(JSON.parse(e.target.value))} className="w-full h-full min-h-[400px] p-4 font-mono text-xs text-slate-900 dark:text-gray-900 bg-neutral-50 dark:bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary resize-none border-none dark:border-gray-300" placeholder="Paste your JSON here..." rows={30} spellCheck={false} />
+        <textarea value={JSON.stringify(localValue, null, 2)} onChange={(e) => handleChange(JSON.parse(e.target.value))} className="shadow w-full h-full min-h-[400px] p-4 font-mono text-xs text-slate-900 dark:text-gray-900 bg-neutral-50 dark:bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary resize-none border-none dark:border-gray-300" placeholder="Paste your JSON here..." rows={30} spellCheck={false} />
       </div>
 
       {/* Validation Errors at Bottom */}

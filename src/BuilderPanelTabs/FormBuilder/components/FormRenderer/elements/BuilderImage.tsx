@@ -18,7 +18,7 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}>
             {field.label}
           </label>
         )}
@@ -26,7 +26,7 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
           src={field.url}
           alt={field.altText || field.label || "Image"}
           style={field.style}
-          className="w-full h-auto rounded-lg"
+          className={`w-full h-auto rounded-lg ${isSelected && ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
         />
       </div>
     </BuilderFieldWrapper>

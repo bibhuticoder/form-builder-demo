@@ -71,7 +71,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
       </div>
       <div className="grid grid-cols-2 gap-2">
         {/* Top */}
-        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
+        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.top)}
@@ -95,7 +95,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
         </div>
 
         {/* Right */}
-        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
+        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.right)}
@@ -119,7 +119,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
         </div>
 
         {/* Bottom */}
-        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
+        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.bottom)}
@@ -143,7 +143,7 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
         </div>
 
         {/* Left */}
-        <div className="flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
+        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
           <button
             type="button"
             onClick={() => handleCopyValue(values.left)}

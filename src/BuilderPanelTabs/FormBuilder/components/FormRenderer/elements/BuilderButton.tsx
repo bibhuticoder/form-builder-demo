@@ -7,17 +7,21 @@ import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderButtonProps {
   field: ButtonField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
 export default function BuilderButton({
   field,
+  isSelected,
+  activeSubElement,
 }: Readonly<BuilderButtonProps>) {
   return (
     <BuilderFieldWrapper field={field}>
       <button
         style={field.style}
         type="button"
-        className="w-full px-4 py-2 bg-primary text-white rounded-md font-medium text-sm hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        className={`w-full px-4 py-2 bg-primary text-white rounded-md font-medium text-sm transition-colors focus:outline-none ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
       >
         {field.label}
       </button>

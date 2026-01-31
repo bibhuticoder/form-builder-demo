@@ -256,7 +256,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                     <div className="flex items-center gap-2">
                                         <span>Execute if</span>
                                         <select
-                                            className="text-xs border-none bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary rounded px-2 py-0.5 font-bold uppercase cursor-pointer focus:ring-2 focus:ring-primary"
+                                            className="shadow text-xs border-none bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary rounded px-2 py-0.5 font-bold uppercase cursor-pointer focus:ring-2 focus:ring-primary"
                                             value={matchType}
                                             onChange={(e) => setMatchType(e.target.value as 'AND' | 'OR')}
                                         >
@@ -277,7 +277,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="col-span-4 space-y-1">
                                             {index === 0 && <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Field</label>}
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={conditionRow.field}
                                                 onChange={(e) => updateConditionRow(conditionRow.id, { field: e.target.value })}
                                             >
@@ -291,7 +291,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="col-span-3 space-y-1">
                                             {index === 0 && <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Condition</label>}
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={conditionRow.condition}
                                                 onChange={(e) => updateConditionRow(conditionRow.id, { condition: e.target.value })}
                                             >
@@ -308,7 +308,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                             {!['is_empty', 'is_not_empty', 'on_submit'].includes(conditionRow.condition) ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                                                    className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                                                     placeholder="Value..."
                                                     value={conditionRow.value}
                                                     onChange={(e) => updateConditionRow(conditionRow.id, { value: e.target.value })}
@@ -350,7 +350,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="space-y-1">
                                             <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Action</label>
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={ruleAction.action}
                                                 onChange={(e) => setRuleAction({ ...ruleAction, action: e.target.value })}
                                             >
@@ -362,7 +362,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="space-y-1">
                                             <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Target Field</label>
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={ruleAction.targetField}
                                                 onChange={(e) => setRuleAction({ ...ruleAction, targetField: e.target.value })}
                                             >
@@ -380,7 +380,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Redirect URL</label>
                                         <input
                                             type="url"
-                                            className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                                            className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                                             placeholder="https://example.com/thank-you"
                                             value={ruleAction.action}
                                             onChange={(e) => setRuleAction({ ...ruleAction, action: e.target.value })}
@@ -392,7 +392,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Message</label>
                                         <textarea
-                                            className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                                            className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                                             placeholder="Success message..."
                                             rows={3}
                                             value={ruleAction.action}

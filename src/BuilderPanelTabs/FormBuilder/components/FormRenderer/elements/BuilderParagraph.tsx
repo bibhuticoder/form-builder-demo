@@ -24,7 +24,7 @@ export default function BuilderParagraph({
       <p
         dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
-        className="transition-all duration-200 text-gray-900 dark:text-white"
+        className={`transition-all duration-200 text-gray-900 dark:text-white ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
       >
       </p>
     </BuilderFieldWrapper>

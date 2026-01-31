@@ -35,11 +35,11 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
         {field.label && (
-          <label className="block text-sm font-medium text-gray-700">
+          <label className={`block text-sm font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}>
             {field.label}
           </label>
         )}
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100">
+        <div className={`relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 ${isSelected && ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}>
           <iframe
             src={embedUrl}
             title={field.altText || field.label || "Video"}

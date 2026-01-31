@@ -4,8 +4,7 @@
 import { ReactNode, useState } from "react";
 import { TrashIcon, QueueListIcon } from "@heroicons/react/24/outline";
 import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
-
-import { BaseField } from "../../../types";
+import { BaseField, LabeledField } from "../../../types";
 
 interface BuilderFieldWrapperProps {
   field: BaseField & { name?: string };
@@ -37,11 +36,14 @@ export default function BuilderFieldControls({
   const [isHovered, setIsHovered] = useState(false);
   const showHoverState = isHovered || forceHover;
 
-  const getFieldName = (fieldName: string) => {
-    if (fieldName.split("_").length > 1) {
-      return fieldName.split("_").join(" ").toUpperCase();
+  const getFieldName = (field: BaseField) => {
+    let value = (field as LabeledField).label || field.type;
+
+    if (field.type === "paragraph") {
+      value = "Paragraph";
     }
-    return fieldName.toUpperCase();
+
+    return value.toUpperCase();
   };
 
   return (
@@ -67,7 +69,7 @@ export default function BuilderFieldControls({
           ${showHoverState || selected ? 'opacity-100' : ''}
         `}
       >
-        <span className="text-white text-[10px]">{getFieldName(field.name || field.type)}</span>
+        <span className="text-white text-[10px]">{getFieldName(field)}</span>
 
         <div className="flex gap-1 pl-1.5 ml-1.5 border-l border-white/20">
           {onDelete && (

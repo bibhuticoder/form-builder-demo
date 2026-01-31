@@ -12,9 +12,11 @@ import { getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderUploadProps {
   field: UploadField;
+  isSelected?: boolean;
+  activeSubElement?: string | null;
 }
 
-export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
+export default function BuilderUpload({ field, isSelected, activeSubElement }: Readonly<BuilderUploadProps>) {
   const { jsonContent } = useFormBuilder();
   const labelId = `${field.id}-label`;
 
@@ -51,7 +53,7 @@ export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
           <label
             id={labelId}
             htmlFor={field.id}
-            className="block text-lg font-semibold text-slate-700"
+            className={`block text-lg font-semibold text-slate-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
           >
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -73,7 +75,8 @@ export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
             "grid min-h-[150px] grid-cols-[auto,1fr,auto] items-center gap-6 rounded-xl border-2 border-dashed border-slate-200 bg-white px-6 py-8 transition-colors " +
             (field.disabled
               ? "cursor-not-allowed text-slate-300"
-              : "cursor-pointer text-slate-500 hover:border-slate-300")
+              : "cursor-pointer text-slate-500") +
+            (isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? ' ring-1 ring-primary ring-offset-1' : '')
           }
         >
           <div className="w-full flex justify-center">
@@ -91,7 +94,7 @@ export default function BuilderUpload({ field }: Readonly<BuilderUploadProps>) {
             </span>
             {(helperText || field.helpText) && (
               <span
-                className="text-xs text-slate-400"
+                className={`text-xs text-slate-400 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
                 style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
               >
                 {helperText || field.helpText}

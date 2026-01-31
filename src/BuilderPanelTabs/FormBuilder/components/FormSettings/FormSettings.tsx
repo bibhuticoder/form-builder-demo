@@ -118,12 +118,12 @@ const FormStylingSection = React.memo(
                   type="number"
                   value={config.maxWidth}
                   onChange={(e) => onChange("maxWidth", Number(e.target.value))}
-                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="shadow flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <select
                   value={config.maxWidthUnit}
                   onChange={(e) => onChange("maxWidthUnit", e.target.value)}
-                  className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="shadow px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Max width unit"
                 >
                   <option>%</option>
@@ -141,12 +141,12 @@ const FormStylingSection = React.memo(
                   type="text"
                   value={config.maxHeight}
                   onChange={(e) => onChange("maxHeight", e.target.value)}
-                  className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="flex-1 shadow px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <select
                   value={config.maxHeightUnit}
                   onChange={(e) => onChange("maxHeightUnit", e.target.value)}
-                  className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="shadow px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Max height unit"
                 >
                   <option>px</option>
@@ -170,7 +170,7 @@ const FormStylingSection = React.memo(
               id="bodyFont"
               value={config.bodyFont}
               onChange={(e) => onChange("bodyFont", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Default</option>
               <option>Arial</option>
@@ -190,7 +190,7 @@ const FormStylingSection = React.memo(
               id="titleFont"
               value={config.titleFont}
               onChange={(e) => onChange("titleFont", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Default</option>
               <option>Arial</option>
@@ -257,7 +257,7 @@ const FormStylingSection = React.memo(
             value={config.backgroundImageUrl}
             onChange={(e) => onChange("backgroundImageUrl", e.target.value)}
             placeholder="https://example.com/image.jpg"
-            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -274,7 +274,7 @@ const FormStylingSection = React.memo(
               id="bgRepeat"
               value={config.backgroundRepeat}
               onChange={(e) => onChange("backgroundRepeat", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>No Repeat</option>
               <option>Repeat</option>
@@ -294,7 +294,7 @@ const FormStylingSection = React.memo(
               id="bgAttachment"
               value={config.backgroundAttachment}
               onChange={(e) => onChange("backgroundAttachment", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Scroll</option>
               <option>Fixed</option>
@@ -315,7 +315,7 @@ const FormStylingSection = React.memo(
               id="bgPosition"
               value={config.backgroundPosition}
               onChange={(e) => onChange("backgroundPosition", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Center</option>
               <option>Top</option>
@@ -336,7 +336,7 @@ const FormStylingSection = React.memo(
               id="bgSize"
               value={config.backgroundSize}
               onChange={(e) => onChange("backgroundSize", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Auto</option>
               <option>Cover</option>
@@ -358,7 +358,7 @@ const FormStylingSection = React.memo(
               id="borderStyle"
               value={config.borderStyle}
               onChange={(e) => onChange("borderStyle", e.target.value)}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Solid</option>
               <option>Dashed</option>
@@ -380,7 +380,7 @@ const FormStylingSection = React.memo(
               type="number"
               value={config.borderSize}
               onChange={(e) => onChange("borderSize", Number(e.target.value))}
-              className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -611,8 +611,9 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
       subtitle="Configure general settings for your form."
       onClose={handleCancel}
       isCloseable={true}
+      className="max-w-[500px]"
       body={
-        <div className="space-y-4 max-h-[60vh] overflow-y-auto scrollbar-hide-hover pr-2">
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto scrollbar-hide-hover px-4">
           {/* Survey Mode Toggle */}
           <div>
             <div className="flex items-start justify-between">

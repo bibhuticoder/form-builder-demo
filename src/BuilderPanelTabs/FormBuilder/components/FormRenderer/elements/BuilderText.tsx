@@ -25,7 +25,7 @@ export default function BuilderText({ field, isSelected, activeSubElement }: Rea
         {field.label && (
           <label
             htmlFor={field.id}
-            className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-2 ring-primary ring-offset-2 rounded px-1' : ''
+            className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''
               }`}
             style={getLabelStyles(field.style)}
           >
@@ -40,13 +40,13 @@ export default function BuilderText({ field, isSelected, activeSubElement }: Rea
           placeholder={field.placeholder}
           required={field.required}
           readOnly
-          className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent bg-white text-gray-900 transition-all duration-200 pointer-events-none outline-none ${isSelected && activeSubElement === 'input' ? 'ring-2 ring-primary ring-offset-2' : ''
+          className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 transition-all duration-200 pointer-events-none outline-none ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''
             }`}
           style={getInputStyles(field.style)}
         />
         {field.helpText && (
           <p
-            className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-2 ring-primary ring-offset-2 rounded px-1' : ''
+            className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''
               }`}
             style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
