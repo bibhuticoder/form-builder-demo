@@ -19,16 +19,13 @@ import {
   PhotoIcon,
   VideoCameraIcon,
   MinusIcon,
-  ShieldCheckIcon,
-  ArrowUturnRightIcon,
-  ArrowUturnLeftIcon,
+  ShieldCheckIcon
 } from "@heroicons/react/24/outline";
 import { FieldType } from "../../types/enums";
-import { IconInput, Card, FormSettings } from "../../../../components";
+import { IconInput, Card } from "../../../../components";
 import { useDraggable } from "@dnd-kit/core";
 import type { DragData } from "../../types/dnd";
 import { ElementPaletteBottomActionsBar } from "./ElementPaletteBottomActionsBar";
-import { LinkModal } from "../LinkModal";
 
 interface ElementItem {
   type: FieldType;
@@ -118,8 +115,6 @@ const DraggableElementCard: React.FC<{ item: ElementItem }> = ({ item }) => {
   );
 };
 
-
-
 interface ElementPaletteProps {
   isCollapsed: boolean;
 }
@@ -153,7 +148,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 scrollbar-hide-hover">
+          <div className="flex-1 overflow-y-auto p-2 scrollbar-hide-hover pb-40">
             <div className="space-y-3 p-2">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, idx) => (

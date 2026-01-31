@@ -44,7 +44,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                     <select
                         value={(field as HeadingField).headingLevel || "h2"}
                         onChange={(e) => handleUpdate("headingLevel", e.target.value)}
-                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                         <option value="h1">H1 (XXL)</option>
                         <option value="h2">H2 (XL)</option>
@@ -64,7 +64,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                         <select
                             value={(field as ButtonField).action || "submit"}
                             onChange={(e) => handleUpdate("action", e.target.value)}
-                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="submit">Submit Form</option>
                             <option value="url">Open URL</option>
@@ -108,7 +108,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                     <select
                         value={(field as CheckboxField).selectionMode || "multi"}
                         onChange={(e) => handleUpdate("selectionMode", e.target.value)}
-                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                         <option value="multi">Multi Select (Checkboxes)</option>
                         <option value="single">Single Select (Radio-style)</option>

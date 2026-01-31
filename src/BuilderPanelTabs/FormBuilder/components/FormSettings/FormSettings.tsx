@@ -200,30 +200,6 @@ const FormStylingSection = React.memo(
           </div>
         </div>
 
-        {/* Help Text Styling */}
-        <div>
-          <label className="block text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wider space-y-1">
-            <span className="font-semibold">Help Text Font Size</span>
-            <div className="flex gap-1">
-              <input
-                type="number"
-                value={config.helpFontSize}
-                onChange={(e) => onChange("helpFontSize", Number(e.target.value))}
-                className="flex-1 px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <select
-                value={config.helpFontSizeUnit}
-                onChange={(e) => onChange("helpFontSizeUnit", e.target.value)}
-                className="px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                aria-label="Help font size unit"
-                disabled
-              >
-                <option>px</option>
-              </select>
-            </div>
-          </label>
-        </div>
-
         {/* Margin */}
         <SpacingControl
           label="Form Margin"

@@ -128,17 +128,17 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
           aria-modal="true"
         >
           {/* Header section */}
-          <div className="flex items-center justify-between px-3 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
             {/* Header content */}
             <div className="flex-1">
               {typeof header === "string" ? (
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-md font-semibold text-gray-900 dark:text-white">
                   {header}
                 </h2>
               ) : (
                 header
               )}
-              
+
               {/* Optional subtitle */}
               {subtitle && (
                 <div className="mt-1">

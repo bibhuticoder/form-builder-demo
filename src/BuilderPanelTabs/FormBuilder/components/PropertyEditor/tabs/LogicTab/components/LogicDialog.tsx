@@ -256,7 +256,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                     <div className="flex items-center gap-2">
                                         <span>Execute if</span>
                                         <select
-                                            className="text-xs border-none bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded px-2 py-0.5 font-bold uppercase cursor-pointer focus:ring-2 focus:ring-blue-500"
+                                            className="text-xs border-none bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary rounded px-2 py-0.5 font-bold uppercase cursor-pointer focus:ring-2 focus:ring-primary"
                                             value={matchType}
                                             onChange={(e) => setMatchType(e.target.value as 'AND' | 'OR')}
                                         >
@@ -277,7 +277,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="col-span-4 space-y-1">
                                             {index === 0 && <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Field</label>}
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={conditionRow.field}
                                                 onChange={(e) => updateConditionRow(conditionRow.id, { field: e.target.value })}
                                             >
@@ -291,7 +291,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                         <div className="col-span-3 space-y-1">
                                             {index === 0 && <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Condition</label>}
                                             <select
-                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                 value={conditionRow.condition}
                                                 onChange={(e) => updateConditionRow(conditionRow.id, { condition: e.target.value })}
                                             >
@@ -308,7 +308,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                             {!['is_empty', 'is_not_empty', 'on_submit'].includes(conditionRow.condition) ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                                                    className="w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                                                     placeholder="Value..."
                                                     value={conditionRow.value}
                                                     onChange={(e) => updateConditionRow(conditionRow.id, { value: e.target.value })}
@@ -339,9 +339,9 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
 
                             </div>
 
-                            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-lg border border-blue-100 dark:border-blue-900/20 space-y-3">
+                            <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg border border-primary/20 dark:border-primary/20 space-y-3">
                                 <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
-                                    <span className="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">THEN</span>
+                                    <span className="bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">THEN</span>
                                     <span>Perform action:</span>
                                 </div>
 
@@ -415,16 +415,16 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
             footer={
                 <div className="flex justify-between w-full">
                     {logicStep === 'configure' ? (
-                        <Button variant="transparent" onClick={() => setLogicStep('select')}>
+                        <Button className="text-xs" variant="transparent" onClick={() => setLogicStep('select')}>
                             <ChevronLeftIcon className="w-4 h-4 mr-1" /> Back
                         </Button>
                     ) : <div></div>}
                     <div className="flex gap-2">
-                        <Button variant="transparent" onClick={onClose}>
+                        <Button className="text-xs" variant="transparent" onClick={onClose}>
                             Cancel
                         </Button>
                         {logicStep === 'configure' && (
-                            <Button variant="primary" onClick={handleSave} disabled={!conditions[0]?.field}>
+                            <Button className="text-xs" variant="primary" onClick={handleSave} disabled={!conditions[0]?.field}>
                                 {initialRule ? 'Update Rule' : 'Add Rule'}
                             </Button>
                         )}

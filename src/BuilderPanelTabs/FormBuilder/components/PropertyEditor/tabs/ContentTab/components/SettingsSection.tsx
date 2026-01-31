@@ -24,7 +24,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({ field, capabil
                         role="switch"
                         aria-checked={(field as any).required || false}
                         onClick={() => handleUpdate("required", !(field as any).required)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${(field as any).required ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${(field as any).required ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
                             }`}
                     >
                         <span
@@ -46,7 +46,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({ field, capabil
                             value={(field as any).helpText || ""}
                             onChange={(e) => handleUpdate("helpText", e.target.value)}
                             placeholder="Small text below input"
-                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                     </div>
                 </>

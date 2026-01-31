@@ -126,7 +126,7 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                                 type="number"
                                 value={getStyleValue(`${activeTypographyTab}FontSize`, activeTypographyTab === "help" ? 12 : 14)}
                                 onChange={(e) => handleStyleUpdate(`${activeTypographyTab}FontSize`, e.target.value)}
-                                className="flex-1 px-2 py-1.5 w-[75px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0"
+                                className="flex-1 px-2 py-1.5 w-[75px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary border-r-0"
                                 placeholder="14"
                             />
                             <select

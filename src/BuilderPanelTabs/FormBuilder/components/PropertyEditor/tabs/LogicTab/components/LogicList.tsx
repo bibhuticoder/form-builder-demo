@@ -30,14 +30,14 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
 
         let textSpy = (
             <span className="text-xs">
-                If <span className="font-semibold text-blue-600 dark:text-blue-400">"{fieldName}"</span> <span className="text-purple-600 dark:text-purple-400 font-medium">{readableOp}</span> {value && <span className="font-semibold text-orange-600 dark:text-orange-400">"{value}"</span>}
+                If <span className="font-semibold text-primary dark:text-primary">"{fieldName}"</span> <span className="text-purple-600 dark:text-purple-400 font-medium">{readableOp}</span> {value && <span className="font-semibold text-orange-600 dark:text-orange-400">"{value}"</span>}
             </span>
         );
 
         if (rule.trigger.event === LogicEvent.SUBMISSION_ATTEMPT) {
             textSpy = (
                 <span className="text-xs">
-                    On <span className="font-semibold text-blue-600 dark:text-blue-400">Submit</span>
+                    On <span className="font-semibold text-primary dark:text-primary">Submit</span>
                 </span>
             );
         }
@@ -61,7 +61,7 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
                 const Icon = typeInfo.icon;
 
                 return (
-                    <div key={rule.id} className="select-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-2 text-xs shadow-sm flex justify-between items-center group hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+                    <div key={rule.id} className="select-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-2 text-xs shadow-sm flex justify-between items-center group hover:border-primary dark:hover:border-primary transition-colors">
                         <div className="flex flex-col gap-2 w-full">
 
                             {/* Type and action buttons */}
@@ -72,7 +72,7 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
                                 </span>
 
                                 <div className="flex gap-1 transition-opacity shrink-0">
-                                    <button onClick={() => onEdit(rule)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    <button onClick={() => onEdit(rule)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
                                         <PencilIcon className="w-3.5 h-3.5" />
                                     </button>
                                     <button onClick={() => onDelete(rule.id)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
