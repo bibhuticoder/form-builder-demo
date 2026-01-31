@@ -2,7 +2,7 @@ import { FormBuilderProvider } from "./context"
 import { BuilderShell } from "./components/BuilderShell"
 import { JsonEditorPanel } from "./components/JsonEditorPanel"
 
-import exampleData from "./data/example.json"
+import exampleData from "./data/empty-canvas.json"
 import { FormDefinition } from "./foundation"
 
 // Convert example.json to formatted string

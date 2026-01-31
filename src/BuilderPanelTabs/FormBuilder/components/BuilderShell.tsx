@@ -28,7 +28,7 @@ export const BuilderShell: React.FC = () => {
       )}
     >
       {(dragOverId: string | null) => (
-        <div className="flex bg-gray-50 dark:bg-gray-900 h-full w-[80vw] overflow-auto">
+        <div className="flex bg-gray-50 dark:bg-gray-900 border h-full w-[80vw] overflow-auto">
           {/* Config Panel - Left Sidebar */}
           <ConfigPanel selectedFieldId={selectedFieldId} onClearSelection={handleClearSelection} />
 

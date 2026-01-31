@@ -84,7 +84,7 @@ export const FormSettingsTrigger: React.FC = () => {
         className="inline-flex items-center justify-center"
       >
         <Cog6ToothIcon
-          className="w-5 h-5 text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="w-4 h-4 duration-500 text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
         />
       </button>
 

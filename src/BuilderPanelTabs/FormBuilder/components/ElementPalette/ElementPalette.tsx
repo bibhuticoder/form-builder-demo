@@ -25,7 +25,7 @@ import { FieldType } from "../../types/enums";
 import { IconInput, Card } from "../../../../components";
 import { useDraggable } from "@dnd-kit/core";
 import type { DragData } from "../../types/dnd";
-import { ElementPaletteBottomActionsBar } from "./ElementPaletteBottomActionsBar";
+// import { ElementPaletteBottomActionsBar } from "../ConfigPanel/ElementPaletteBottomActionsBar";
 
 interface ElementItem {
   type: FieldType;
@@ -148,11 +148,11 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 scrollbar-hide-hover pb-40">
-            <div className="space-y-3 p-2">
+          <div className="flex-1 overflow-y-auto p-2 scrollbar-hide-hover">
+            <div className="space-y-8 p-2 pb-20">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, idx) => (
-                  <div className="mb-8" key={idx}>
+                  <div key={idx}>
                     <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 px-1">{group.title}</h3>
                     <div className="grid grid-cols-2 gap-1.5">
                       {group.items.map((item, index) => (
@@ -170,10 +170,13 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
                   <p className="text-sm">No elements found</p>
                 </div>
               )}
+
+              {/*  To compensate for space hidden by BottomActionBar  */}
+              <div className="h-16"></div>
             </div>
           </div>
 
-          <ElementPaletteBottomActionsBar />
+          {/* <ElementPaletteBottomActionsBar /> */}
         </>
       ) : (
         <div className="flex-1 overflow-y-auto flex flex-col items-center gap-4 py-4 scrollbar-hide-hover">
