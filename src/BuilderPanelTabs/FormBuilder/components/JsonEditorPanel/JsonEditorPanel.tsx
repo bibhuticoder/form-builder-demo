@@ -16,7 +16,7 @@ export const JsonEditorPanel: React.FC = () => {
           <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-2">
               <CodeBracketIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              <span className="text-sm font-semibold text-gray-900 dark:text-white">JSON Editor</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white">RAW JSON</span>
             </div>
             <button
               onClick={() => setIsExpanded(false)}
