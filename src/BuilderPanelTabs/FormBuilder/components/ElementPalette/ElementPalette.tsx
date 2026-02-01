@@ -90,16 +90,30 @@ const ELEMENT_GROUPS: ElementGroup[] = [
  * Draggable card component for palette elements
  * Wraps field type cards with dnd-kit draggable functionality
  */
-const DraggableElementCard: React.FC<{ item: ElementItem }> = ({ item }) => {
+const DraggableElementCard: React.FC<{ item: ElementItem; isMinimized?: boolean }> = ({ item, isMinimized }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `palette-${item.type}-${item.label}`,
-    // Attach metadata for drop handler to create the correct field type
     data: {
       kind: "palette-field",
       fieldType: item.type,
       label: item.label,
     } as DragData,
   });
+
+  if (isMinimized) {
+    return (
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        style={{ opacity: isDragging ? 0.5 : 1 }}
+        className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-grab active:cursor-grabbing transition-colors duration-200 group flex justify-center"
+        title={item.label}
+      >
+        <item.icon className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
+      </div>
+    );
+  }
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -132,10 +146,10 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
   })).filter((group) => group.items.length > 0);
 
   return (
-    <div className="flex flex-col max-h-[calc(100vh-120px)]">
+    <div className="flex-1 flex flex-col min-h-0 bg-transparent">
       {!isCollapsed ? (
         <>
-          <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-2 border-b border-gray-200 dark:border-gray-700 shrink-0">
             <IconInput
               icon={
                 <MagnifyingGlassIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -149,7 +163,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
           </div>
 
           <div className="flex-1 overflow-y-auto p-2 scrollbar-hide-hover">
-            <div className="space-y-8 p-2 pb-20">
+            <div className="space-y-8 p-2 pb-4">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, idx) => (
                   <div key={idx}>
@@ -170,13 +184,8 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
                   <p className="text-sm">No elements found</p>
                 </div>
               )}
-
-              {/*  To compensate for space hidden by BottomActionBar  */}
-              <div className="h-16"></div>
             </div>
           </div>
-
-          {/* <ElementPaletteBottomActionsBar /> */}
         </>
       ) : (
         <div className="flex-1 overflow-y-auto flex flex-col items-center gap-4 py-4 scrollbar-hide-hover">
@@ -189,19 +198,16 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({
               </div>
 
               {group.items.map((item, index) => (
-                <div
+                <DraggableElementCard
                   key={item.type + index}
-                  className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 group flex justify-center"
-                  title={item.label}
-                >
-                  <item.icon className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
-                </div>
+                  item={item}
+                  isMinimized={true}
+                />
               ))}
             </div>
           ))}
         </div>
       )}
-
     </div>
   );
 };
