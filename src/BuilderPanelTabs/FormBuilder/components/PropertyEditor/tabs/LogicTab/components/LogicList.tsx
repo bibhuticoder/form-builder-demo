@@ -72,10 +72,10 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
                                 </span>
 
                                 <div className="flex gap-1 transition-opacity shrink-0">
-                                    <button onClick={() => onEdit(rule)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+                                    <button onClick={() => onEdit(rule)} data-testid={`edit-rule-${rule.id}`} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
                                         <PencilIcon className="w-3.5 h-3.5" />
                                     </button>
-                                    <button onClick={() => onDelete(rule.id)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                                    <button onClick={() => onDelete(rule.id)} data-testid={`delete-rule-${rule.id}`} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
                                         <TrashIcon className="w-3.5 h-3.5" />
                                     </button>
                                 </div>

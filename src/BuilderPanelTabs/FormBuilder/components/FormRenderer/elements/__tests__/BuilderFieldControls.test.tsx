@@ -5,6 +5,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import BuilderFieldControls from '../BuilderFieldControls';
 import { FieldType } from '../../../../types';
 import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
+import { MockFormBuilderProvider } from './MockFormBuilderProvider';
 
 describe('BuilderFieldControls', () => {
   const mockField = {
@@ -14,7 +15,7 @@ describe('BuilderFieldControls', () => {
     name: 'test_field',
     required: false,
   };
-  
+
   const mockOnDelete = jest.fn();
   const mockDragHandleProps = {
     attributes: {
@@ -34,12 +35,14 @@ describe('BuilderFieldControls', () => {
 
   it('should render delete button', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     expect(screen.getByTitle('Delete')).toBeInTheDocument();
@@ -47,12 +50,14 @@ describe('BuilderFieldControls', () => {
 
   it('should call onDelete when delete button is clicked', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     const deleteButton = screen.getByTitle('Delete');
@@ -64,11 +69,13 @@ describe('BuilderFieldControls', () => {
 
   it('should not render delete button when showDelete is false', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     expect(screen.queryByTitle('Delete')).not.toBeInTheDocument();
@@ -76,13 +83,15 @@ describe('BuilderFieldControls', () => {
 
   it('should render move button with drag handle props', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-        dragHandleProps={mockDragHandleProps}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+          dragHandleProps={mockDragHandleProps}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     const moveButton = screen.getByTitle('Move');
@@ -93,13 +102,15 @@ describe('BuilderFieldControls', () => {
 
   it('should spread drag attributes on move button', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-        dragHandleProps={mockDragHandleProps}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+          dragHandleProps={mockDragHandleProps}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     const moveButton = screen.getByTitle('Move');
@@ -108,13 +119,15 @@ describe('BuilderFieldControls', () => {
 
   it('should call drag listener on pointer down', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-        dragHandleProps={mockDragHandleProps}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+          dragHandleProps={mockDragHandleProps}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     const moveButton = screen.getByTitle('Move');
@@ -125,12 +138,14 @@ describe('BuilderFieldControls', () => {
 
   it('should render move button even without drag handle props', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     expect(screen.getByTitle('Move')).toBeInTheDocument();
@@ -138,13 +153,15 @@ describe('BuilderFieldControls', () => {
 
   it('should render both delete and move buttons', () => {
     render(
-      <BuilderFieldControls
-        field={mockField}
-        onDelete={mockOnDelete}
-        dragHandleProps={mockDragHandleProps}
-      >
-        <div>Test Content</div>
-      </BuilderFieldControls>
+      <MockFormBuilderProvider>
+        <BuilderFieldControls
+          field={mockField}
+          onDelete={mockOnDelete}
+          dragHandleProps={mockDragHandleProps}
+        >
+          <div>Test Content</div>
+        </BuilderFieldControls>
+      </MockFormBuilderProvider>
     );
 
     expect(screen.getByTitle('Delete')).toBeInTheDocument();

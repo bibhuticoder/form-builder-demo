@@ -11,7 +11,6 @@ interface TypographySectionProps {
 }
 
 export const TypographySection: React.FC<TypographySectionProps> = ({
-    field,
     capabilities,
     getStyleValue,
     handleStyleUpdate,

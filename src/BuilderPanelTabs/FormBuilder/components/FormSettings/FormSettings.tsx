@@ -167,10 +167,12 @@ const FormStylingSection = React.memo(
               onChange={(e) => onChange("bodyFont", e.target.value)}
               className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option>Default</option>
-              <option>Arial</option>
-              <option>Helvetica</option>
-              <option>Times New Roman</option>
+              <option value="default">Default</option>
+              <option value="inter">Inter</option>
+              <option value="roboto">Roboto</option>
+              <option value="playfair">Playfair Display</option>
+              <option value="lora">Lora</option>
+              <option value="mono">JetBrains Mono</option>
             </select>
           </div>
 
@@ -187,10 +189,12 @@ const FormStylingSection = React.memo(
               onChange={(e) => onChange("titleFont", e.target.value)}
               className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option>Default</option>
-              <option>Arial</option>
-              <option>Helvetica</option>
-              <option>Times New Roman</option>
+              <option value="default">Default</option>
+              <option value="inter">Inter</option>
+              <option value="roboto">Roboto</option>
+              <option value="playfair">Playfair Display</option>
+              <option value="lora">Lora</option>
+              <option value="mono">JetBrains Mono</option>
             </select>
           </div>
         </div>

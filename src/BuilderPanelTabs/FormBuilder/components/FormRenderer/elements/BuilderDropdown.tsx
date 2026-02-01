@@ -7,7 +7,7 @@
 import { DropdownField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { getInputStyles, getLabelStyles, getHelpTextStyles, getPlaceholderStyles } from "../../../utils/styleUtils";
 
 interface BuilderDropdownProps {
   field: DropdownField;
@@ -40,7 +40,10 @@ export default function BuilderDropdown({
           required={field.required}
           disabled
           className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 transition-all duration-200 pointer-events-none outline-none ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-          style={getInputStyles(field.style)}
+          style={{
+            ...getInputStyles(field.style),
+            ...(field.placeholder ? getPlaceholderStyles(field.style) : {})
+          }}
         >
           {field.placeholder && (
             <option value="">{field.placeholder}</option>

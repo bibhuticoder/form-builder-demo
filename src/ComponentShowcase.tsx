@@ -1,36 +1,36 @@
 'use client'
 
 import {
-    Breadcrumb,
-    Button,
-    Card,
-    DefaultDisclosureTransition,
-    ErrorBanner,
-    IconInput,
-    IconSelect,
-    Loading,
-    PageNav,
-    ProfilePicture,
-    SaveButton,
-    SimplePagination,
-    SlidingPanel,
-    SmoothProgressBar,
-    StyledSelect,
-    SubNav,
-    Toast,
-    TvModal,
-    type BreadcrumbItem
+  Breadcrumb,
+  Button,
+  Card,
+  DefaultDisclosureTransition,
+  ErrorBanner,
+  IconInput,
+  IconSelect,
+  Loading,
+  PageNav,
+  ProfilePicture,
+  SaveButton,
+  SimplePagination,
+  SlidingPanel,
+  SmoothProgressBar,
+  StyledSelect,
+  SubNav,
+  Toast,
+  TvModal,
+  type BreadcrumbItem
 } from './components'
 import { Disclosure } from '@headlessui/react'
 import {
-    BuildingOfficeIcon,
-    ChartBarIcon,
-    CogIcon,
-    EnvelopeIcon,
-    MagnifyingGlassIcon,
-    PhoneIcon,
-    SparklesIcon,
-    UserIcon
+  BuildingOfficeIcon,
+  ChartBarIcon,
+  CogIcon,
+  EnvelopeIcon,
+  MagnifyingGlassIcon,
+  PhoneIcon,
+  SparklesIcon,
+  UserIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
@@ -78,12 +78,7 @@ export default function ComponentShowcase() {
     { value: '3', label: 'Option 3' }
   ]
 
-  // Table data
-  const tableColumns = [
-    { key: 'name', label: 'Name', sortable: true },
-    { key: 'email', label: 'Email', sortable: true },
-    { key: 'role', label: 'Role', sortable: false }
-  ]
+
 
   const tableData = [
     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
@@ -133,7 +128,7 @@ export default function ComponentShowcase() {
       </Card>
 
       {/* Conditional Loading */}
-      {showLoading ? (
+      {!!showLoading ? (
         <Card className="h-64">
           <Loading />
         </Card>
@@ -262,7 +257,7 @@ export default function ComponentShowcase() {
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Page Navigation
                 </h4>
-                <PageNav 
+                <PageNav
                   navigation={pageNavItems}
                   currentView={currentView}
                   onNavChange={setCurrentView}
@@ -293,7 +288,7 @@ export default function ComponentShowcase() {
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {tableData.map((row) => (
-                    <tr 
+                    <tr
                       key={row.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                       onClick={() => console.log('Row clicked:', row)}
@@ -435,8 +430,7 @@ export default function ComponentShowcase() {
         </div>
       </SlidingPanel>
 
-      {/* Auto-hide loading */}
-      {showLoading && setTimeout(() => setShowLoading(false), 5000)}
+
     </div>
   )
 }

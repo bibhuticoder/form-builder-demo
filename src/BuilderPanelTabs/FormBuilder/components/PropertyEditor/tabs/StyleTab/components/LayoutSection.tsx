@@ -12,7 +12,6 @@ interface LayoutSectionProps {
 }
 
 export const LayoutSection: React.FC<LayoutSectionProps> = ({
-    field,
     capabilities,
     getStyleValue,
     handleStyleUpdate,

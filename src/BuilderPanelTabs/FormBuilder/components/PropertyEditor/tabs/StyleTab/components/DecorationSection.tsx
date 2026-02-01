@@ -13,7 +13,6 @@ interface DecorationSectionProps {
 }
 
 export const DecorationSection: React.FC<DecorationSectionProps> = ({
-    field,
     capabilities,
     getStyleValue,
     handleStyleUpdate,

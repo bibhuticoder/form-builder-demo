@@ -13,7 +13,7 @@ import {
   FieldType,
   FormStatus,
   TextField,
-} from '../../BuilderPanelTabs/FormBuilder/types';
+} from '../../types';
 
 // ============================================================================
 // TEST HELPERS

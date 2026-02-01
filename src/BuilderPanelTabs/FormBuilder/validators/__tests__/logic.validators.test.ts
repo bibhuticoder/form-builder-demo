@@ -17,9 +17,9 @@ import {
   LogicEvent,
   LogicComparison,
   LogicOperation,
-  LogicEffect,
   LogicRule,
-} from '../../BuilderPanelTabs/FormBuilder/types';
+  LogicEffect,
+} from '../../types';
 
 // ============================================================================
 // TEST HELPERS

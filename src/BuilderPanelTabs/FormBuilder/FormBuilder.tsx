@@ -12,7 +12,7 @@ export default function FormBuilder() {
   return (
     <FormBuilderProvider initialContent={DEFAULT_JSON}>
       <div className="w-full">
-        <div className="h-[75vh]">
+        <div className="h-[80vh]">
           <BuilderShell />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import { FormSettingsTrigger } from "../FormSettingsTrigger";
 import type { FormSettings as FormSettingsType } from "../../../types/form";

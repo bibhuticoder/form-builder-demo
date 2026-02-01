@@ -19,7 +19,7 @@ import {
   HeadingField,
   HeadingLevel,
   DividerField,
-} from '../../BuilderPanelTabs/FormBuilder/types';
+} from '../../types';
 
 // ============================================================================
 // TEST HELPERS
@@ -261,7 +261,7 @@ describe('validateFieldStyle', () => {
 
   test('should pass for field with valid style object', () => {
     const field = createValidTextField({
-      style: { width: '100%', backgroundColor: '#fff' },
+      style: { width: 'full', inputBackgroundColor: '#fff' },
     });
     const errors = validateFieldStyle(field);
     expect(errors).toHaveLength(0);

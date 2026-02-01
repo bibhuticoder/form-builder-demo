@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+
 import { AddLinkButton } from "../AddLinkButton";
 import { FormBuilderProvider } from "../../../context/FormBuilderContext";
 import { FieldType } from "../../../types/enums";

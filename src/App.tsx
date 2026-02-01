@@ -15,9 +15,6 @@ function App() {
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
               Cleave Form Builder
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Build forms and websites with ease
-            </p>
           </div>
         </header>
 

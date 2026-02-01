@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import { CanvasToolbar } from "../CanvasToolbar";
 
@@ -208,7 +208,7 @@ describe("CanvasToolbar", () => {
       expect(linkButton).toHaveAttribute("data-selected-field", "heading_1");
     });
 
-  
+
     it("updates AddLinkButton when selectedFieldId changes", () => {
       const { rerender } = render(
         <CanvasToolbar {...defaultProps} selectedFieldId="heading_1" />

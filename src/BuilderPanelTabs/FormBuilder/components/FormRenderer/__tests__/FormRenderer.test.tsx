@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
+import { ButtonAction, FieldType, FormDefinition, FormStatus, HeadingLevel } from '../../../types';
 import FormRenderer from '../FormRenderer';
-import { FieldType, HeadingLevel, ButtonAction, FormStatus } from '../../../types';
-import { FormDefinition } from '../../../types';
+import { MockFormBuilderProvider } from '../elements/__tests__/MockFormBuilderProvider';
 
 describe('FormRenderer', () => {
   const mockFormData: FormDefinition = {
@@ -49,7 +49,11 @@ describe('FormRenderer', () => {
   };
 
   it('should render form with all fields', () => {
-    render(<FormRenderer formData={mockFormData} />);
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={mockFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Contact Us')).toBeTruthy();
     expect(screen.getByText('Full Name')).toBeTruthy();
@@ -57,7 +61,11 @@ describe('FormRenderer', () => {
   });
 
   it('should render form container with settings styles', () => {
-    const { container } = render(<FormRenderer formData={mockFormData} />);
+    const { container } = render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={mockFormData} />
+      </MockFormBuilderProvider>
+    );
     const formContainer = container.firstChild as HTMLElement;
 
     expect(formContainer).toBeTruthy();
@@ -65,7 +73,11 @@ describe('FormRenderer', () => {
   });
 
   it('should render fields in correct order', () => {
-    const { container } = render(<FormRenderer formData={mockFormData} />);
+    const { container } = render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={mockFormData} />
+      </MockFormBuilderProvider>
+    );
     container.querySelectorAll('[data-field], h1, input, label');
 
     // Check that heading appears before inputs
@@ -80,11 +92,18 @@ describe('FormRenderer', () => {
       fields: [],
     };
 
-    const { container } = render(<FormRenderer formData={emptyFormData} />);
+
+    const { container } = render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={emptyFormData} />
+      </MockFormBuilderProvider>
+    );
     const formContainer = container.firstChild as HTMLElement;
 
     expect(formContainer).toBeTruthy();
-    expect(formContainer.children.length).toBe(0);
+    const grid = formContainer.querySelector('.grid');
+    expect(grid).toBeTruthy();
+    expect(grid?.children.length).toBe(0);
   });
 
   it('should render complex form with multiple field types', () => {
@@ -161,7 +180,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={complexFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={complexFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Survey Form')).toBeTruthy();
     expect(screen.getByText('Please fill out this survey')).toBeTruthy();
@@ -209,7 +233,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={dateTimeFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={dateTimeFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Appointment Date')).toBeTruthy();
     expect(screen.getByText('Appointment Time')).toBeTruthy();
@@ -251,7 +280,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={dropdownFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={dropdownFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Sales')).toBeTruthy();
     expect(screen.getByText('Support')).toBeTruthy();
@@ -290,7 +324,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={uploadFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={uploadFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Upload Document')).toBeTruthy();
     expect(screen.getByText('PDF only')).toBeTruthy();
@@ -325,7 +364,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={captchaFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={captchaFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Security Verification')).toBeTruthy();
   });
@@ -370,7 +414,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={numberPhoneFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={numberPhoneFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Phone Number')).toBeTruthy();
     expect(screen.getByText('Age')).toBeTruthy();
@@ -408,7 +457,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={urlFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={urlFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Website URL')).toBeTruthy();
     expect(screen.getByPlaceholderText('https://example.com')).toBeTruthy();
@@ -452,7 +506,12 @@ describe('FormRenderer', () => {
       ],
     };
 
-    render(<FormRenderer formData={mediaFormData} />);
+
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={mediaFormData} />
+      </MockFormBuilderProvider>
+    );
 
     expect(screen.getByText('Product Image')).toBeTruthy();
     expect(screen.getByText('Demo Video')).toBeTruthy();
@@ -460,7 +519,11 @@ describe('FormRenderer', () => {
   });
 
   it('should use field.id as key for each rendered field', () => {
-    render(<FormRenderer formData={mockFormData} />);
+    render(
+      <MockFormBuilderProvider>
+        <FormRenderer formData={mockFormData} />
+      </MockFormBuilderProvider>
+    );
 
     // Verify that fields are rendered
     expect(screen.getByText('Contact Us')).toBeTruthy();

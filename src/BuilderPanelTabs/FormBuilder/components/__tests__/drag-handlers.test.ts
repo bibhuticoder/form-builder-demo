@@ -23,7 +23,7 @@ describe('Drag Handler Logic', () => {
       expect(newField).toMatchObject({
         type: FieldType.TEXT,
         label: 'Email',
-        name: 'email',
+        // name: 'email', // Field name removed from default creation
         required: false,
       });
       expect(newField.id).toBeTruthy();

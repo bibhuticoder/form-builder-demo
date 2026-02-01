@@ -118,7 +118,7 @@ describe('fieldRegistry', () => {
   });
 
   it('should not have any undefined or null entries', () => {
-    Object.entries(fieldRegistry).forEach(([key, value]) => {
+    Object.entries(fieldRegistry).forEach(([, value]) => {
       expect(value).not.toBeNull();
       expect(value).not.toBeUndefined();
     });

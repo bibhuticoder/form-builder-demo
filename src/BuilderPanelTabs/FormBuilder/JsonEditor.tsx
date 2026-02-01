@@ -9,7 +9,7 @@ export interface JsonEditorProps {
   onSave?: () => void
 }
 
-export const JsonEditor: React.FC<JsonEditorProps> = ({ value, onChange, onSave }) => {
+export const JsonEditor: React.FC<JsonEditorProps> = ({ value, onChange }) => {
   const [localValue, setLocalValue] = useState(value)
   const [isValid, setIsValid] = useState(true)
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([])

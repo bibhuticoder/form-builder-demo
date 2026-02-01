@@ -15,6 +15,14 @@ export default {
                 secondary: {
                     DEFAULT: '#F0750A', // cleave-orange
                 },
+            },
+            fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+                inter: ['Inter', 'sans-serif'],
+                roboto: ['Roboto', 'sans-serif'],
+                playfair: ['"Playfair Display"', 'serif'],
+                lora: ['Lora', 'serif'],
+                mono: ['"JetBrains Mono"', 'monospace'],
             }
         },
     },

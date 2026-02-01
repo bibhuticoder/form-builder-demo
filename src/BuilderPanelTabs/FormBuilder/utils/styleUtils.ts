@@ -45,6 +45,21 @@ export const getContainerStyles = (style: Record<string, any> = {}): CSSProperti
     };
 };
 
+// Helper to map internal font keys to CSS font-family values
+const getFontFamily = (key: string | undefined): string | undefined => {
+    if (!key || key === "default") return undefined;
+
+    switch (key) {
+        case "inter": return "'Inter', sans-serif";
+        case "roboto": return "'Roboto', sans-serif";
+        case "playfair": return "'Playfair Display', serif";
+        case "lora": return "'Lora', serif";
+        case "mono": return "'JetBrains Mono', monospace";
+        // Fallback for legacy or direct values
+        default: return key;
+    }
+};
+
 export const getInputStyles = (style: Record<string, any> = {}): CSSProperties => {
     const css: CSSProperties = {
         // Spacing - Input
@@ -59,7 +74,7 @@ export const getInputStyles = (style: Record<string, any> = {}): CSSProperties =
         paddingLeft: formatUnit(style.inputPaddingLeft),
 
         // Typography - Input
-        fontFamily: style.inputFontFamily !== "default" ? style.inputFontFamily : undefined,
+        fontFamily: getFontFamily(style.inputFontFamily),
         fontSize: style.inputFontSize ? `${style.inputFontSize}${style.inputFontSizeUnit || 'px'}` : undefined,
         fontWeight: style.inputFontWeight,
         textAlign: style.textAlign,
@@ -86,7 +101,7 @@ export const getInputStyles = (style: Record<string, any> = {}): CSSProperties =
 export const getLabelStyles = (style: Record<string, any> = {}): CSSProperties => {
     return {
         // Typography - Label
-        fontFamily: style.labelFontFamily !== "default" ? style.labelFontFamily : undefined,
+        fontFamily: getFontFamily(style.labelFontFamily),
         fontSize: style.labelFontSize ? `${style.labelFontSize}${style.labelFontSizeUnit || 'px'}` : undefined,
         fontWeight: style.labelFontWeight,
         color: style.labelColor,
@@ -103,7 +118,7 @@ export const getHelpTextStyles = (style: Record<string, any> = {}, globalSetting
 
     return {
         // Typography - Help Text
-        fontFamily: style.helpFontFamily !== "default" ? style.helpFontFamily : undefined,
+        fontFamily: getFontFamily(style.helpFontFamily),
         fontSize: style.helpFontSize
             ? `${style.helpFontSize}${style.helpFontSizeUnit || 'px'}`
             : `${defaultFontSize}${defaultFontSizeUnit}`,
@@ -115,7 +130,7 @@ export const getHelpTextStyles = (style: Record<string, any> = {}, globalSetting
 export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProperties => {
     return {
         // Typography - Placeholder
-        fontFamily: style.placeholderFontFamily !== "default" ? style.placeholderFontFamily : undefined,
+        fontFamily: getFontFamily(style.placeholderFontFamily),
         fontSize: style.placeholderFontSize ? `${style.placeholderFontSize}${style.placeholderFontSizeUnit || 'px'}` : undefined,
         fontWeight: style.placeholderFontWeight,
         color: style.placeholderColor,

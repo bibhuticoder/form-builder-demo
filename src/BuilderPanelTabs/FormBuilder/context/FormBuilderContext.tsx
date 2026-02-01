@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { FormDefinition, Field, FormSettings, LogicRule } from "../types";
 import { arrayMove } from "@dnd-kit/sortable";
+import { useHistory } from "../hooks/useHistory";
 
 interface FormBuilderContextType {
   // State
@@ -32,9 +33,16 @@ interface FormBuilderContextType {
   saveForm: () => void;
   publishForm: () => void;
   previewForm: () => void;
+
+  // History operations
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  historyPointer: number;
 }
 
-const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);
+export const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);
 
 export const useFormBuilder = () => {
   const context = useContext(FormBuilderContext);
@@ -50,13 +58,23 @@ interface FormBuilderProviderProps {
 }
 
 export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initialContent, children }) => {
-  const [jsonContent, setJsonContentState] = useState<FormDefinition>(initialContent);
+  // Use history hook for main JSON content
+  const {
+    state: jsonContent,
+    set: setJsonContentState,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    pointer
+  } = useHistory<FormDefinition>(initialContent);
+
   const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
 
   // Core setter
   const setJsonContent = useCallback((content: FormDefinition) => {
     setJsonContentState(content);
-  }, []);
+  }, [setJsonContentState]);
 
   // Form-level operations
   const updateFormName = useCallback((name: string) => {
@@ -219,6 +237,11 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       saveForm,
       publishForm,
       previewForm,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
+      historyPointer: pointer,
     }),
     [
       jsonContent,
@@ -238,6 +261,11 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       saveForm,
       publishForm,
       previewForm,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
+      pointer
     ]
   );
 
