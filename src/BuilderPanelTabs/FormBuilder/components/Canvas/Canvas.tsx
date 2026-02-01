@@ -42,7 +42,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
 
       {/* Canvas Content Area */}
       <div
-        className="flex-1 overflow-auto flex justify-center h-full p-16 overflow-auto"
+        className="flex-1 overflow-auto h-full p-16"
         onClick={() => onSelectField?.(null)}
       >
         <div
@@ -50,7 +50,7 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
             canvasRef.current = node
             setNodeRef(node)
           }}
-          className={`rounded-lg relative bg-transparent`}
+          className={`rounded-lg relative bg-transparent mx-auto`}
           style={{
             ...jsonContent.formSettings.settings,
             width: canvasWidth,

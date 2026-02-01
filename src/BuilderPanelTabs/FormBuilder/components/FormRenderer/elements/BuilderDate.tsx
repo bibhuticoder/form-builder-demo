@@ -7,7 +7,8 @@
 import { DateField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getHelpTextStyles } from "../../../utils/styleUtils";
+import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { PlaceholderStyles } from "./PlaceholderStyles";
 
 interface BuilderDateProps {
   field: DateField;
@@ -19,11 +20,13 @@ export default function BuilderDate({ field, isSelected, activeSubElement }: Rea
   const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
+      <PlaceholderStyles fieldId={field.id} style={field.style} />
       <div className="space-y-0.5">
         {field.label && (
           <label
             htmlFor={field.id}
             className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            style={getLabelStyles(field.style)}
           >
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -38,6 +41,7 @@ export default function BuilderDate({ field, isSelected, activeSubElement }: Rea
           min={field.min}
           max={field.max}
           className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 pointer-events-none outline-none ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+          style={getInputStyles(field.style)}
         />
         {field.helpText && (
           <p

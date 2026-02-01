@@ -7,7 +7,7 @@
 import { RadioField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getHelpTextStyles } from "../../../utils/styleUtils";
+import { getHelpTextStyles, getLabelStyles } from "../../../utils/styleUtils";
 
 interface BuilderRadioProps {
   field: RadioField;
@@ -21,7 +21,7 @@ export default function BuilderRadio({ field, isSelected, activeSubElement }: Re
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-1">
         {field.label && (
-          <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}>
+          <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`} style={getLabelStyles(field.style)}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
