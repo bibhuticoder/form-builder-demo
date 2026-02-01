@@ -4,7 +4,7 @@ import { EyeIcon, CodeBracketIcon, ClipboardDocumentIcon, CheckIcon } from "@her
 import { useFormBuilder } from "../../context"
 
 export const TopBar: React.FC = () => {
-  const { jsonContent, updateFormName } = useFormBuilder();
+  const { jsonContent, updateFormName, setJsonContent } = useFormBuilder();
   const formName = jsonContent?.formSettings?.name || "Untitled Form";
 
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
@@ -55,6 +55,18 @@ export const TopBar: React.FC = () => {
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
+          <Button
+            variant="save"
+            onClick={() => {
+              import("../../data/example.json").then((module) => {
+                setJsonContent(module.default as any);
+              });
+            }}
+            className="flex items-center gap-2 text-xs"
+          >
+            Example JSON
+          </Button>
+
           <Button variant="secondary" onClick={handleEmbed} className="flex items-center gap-2 text-xs">
             <CodeBracketIcon className="w-4 h-4" />
             Embed
