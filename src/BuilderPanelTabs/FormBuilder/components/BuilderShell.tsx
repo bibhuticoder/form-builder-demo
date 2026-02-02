@@ -16,6 +16,16 @@ export const BuilderShell: React.FC = () => {
     setSelectedFieldId(null);
   };
 
+  // Reset selection if the selected field is deleted
+  React.useEffect(() => {
+    if (selectedFieldId && jsonContent.fields) {
+      const fieldExists = jsonContent.fields.some((field) => field.id === selectedFieldId);
+      if (!fieldExists) {
+        setSelectedFieldId(null);
+      }
+    }
+  }, [jsonContent.fields, selectedFieldId]);
+
   return (
     <DndProvider
       onFieldAdd={addField}

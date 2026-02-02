@@ -159,7 +159,11 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       ...old,
       fields: old.fields.filter((field) => field.id !== fieldId),
     }));
-  }, []);
+
+    if (activeSubElement === fieldId) {
+      setActiveSubElement(null);
+    }
+  }, [activeSubElement]);
 
   const reorderFields = useCallback((oldIndex: number, newIndex: number) => {
     setJsonContentState((old) => ({

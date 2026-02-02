@@ -30,7 +30,7 @@ export default function BuilderFieldWrapper({
 
   return (
     <div
-      className={`field-wrapper field-type-${field.type} transition-all duration-200 ${highlightClass}`}
+      className={`field-wrapper h-fit field-type-${field.type} transition-all duration-200 ${highlightClass}`}
       style={getContainerStyles(field.style)}
     >
       {children}

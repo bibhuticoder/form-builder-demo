@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -128,8 +128,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,7 +151,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,21 +159,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,8 +188,8 @@
  * Uses dnd-kit's useSortable hook to enable dragging and reordering.
  */
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { useSortable } from "@dnd-kit/sortable";</span>
+import React from "react";
+import { useSortable } from "@dnd-kit/sortable";
 import type { DragData } from "../../types/dnd";
 &nbsp;
 &nbsp;
@@ -211,7 +211,7 @@ interface SortableItemProps {
  * Wraps a child component to make it sortable via drag-and-drop.
  * The child receives drag handle props to control which element triggers dragging.
  */
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >S</span>ortableItem(</span>{ id, dragData, children, width, className }: SortableItemProps) {
+export function SortableItem({ id, dragData, children, width, className }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -219,21 +219,21 @@ interface SortableItemProps {
     transform,
     transition,
     isDragging,
-  } = <span class="cstat-no" title="statement not covered" >useSortable({ id, data: dragData });</span>
+  } = useSortable({ id, data: dragData });
 &nbsp;
   // Create transform without scaling to prevent scaleX/scaleY effects
-  const transformStyle = <span class="cstat-no" title="statement not covered" >transform ? {</span>
+  const transformStyle = transform ? <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : {};
 &nbsp;
-  const style = <span class="cstat-no" title="statement not covered" >{</span>
+  const style = {
     ...transformStyle,
     transition,
-    opacity: isDragging ? 0 : 1, // Hide completely when dragging
+    opacity: isDragging ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: 1, // Hide completely when dragging
     width: width || undefined, // Apply width if provided (legacy)
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div
       ref={setNodeRef}
       style={style}
@@ -250,7 +250,7 @@ interface SortableItemProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T18:54:26.617Z
+                at 2026-02-01T05:11:21.151Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

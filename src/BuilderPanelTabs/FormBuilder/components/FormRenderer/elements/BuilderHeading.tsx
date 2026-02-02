@@ -29,7 +29,7 @@ export default function BuilderHeading({
       <Tag
         dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
-        className={`transition-all duration-200 text-gray-900 dark:text-white ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
+        className={`block transition-all duration-200 text-gray-900 dark:text-white ${isSelected && activeSubElement === 'input' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
       >
       </Tag>
     </BuilderFieldWrapper>

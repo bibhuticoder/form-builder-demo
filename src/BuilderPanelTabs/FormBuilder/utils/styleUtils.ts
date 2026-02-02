@@ -60,6 +60,24 @@ const getFontFamily = (key: string | undefined): string | undefined => {
     }
 };
 
+// Helper to map weight keywords to numeric values
+const getFontWeight = (weight: string | number | undefined): number | string | undefined => {
+    if (!weight) return undefined;
+    if (weight === "default") return undefined;
+
+    // If it's already a number, return it
+    if (!isNaN(Number(weight))) return weight;
+
+    switch (weight) {
+        case "light": return 300;
+        case "normal": return 400;
+        case "medium": return 500;
+        case "semibold": return 600;
+        case "bold": return 700;
+        default: return weight;
+    }
+};
+
 export const getInputStyles = (style: Record<string, any> = {}): CSSProperties => {
     const css: CSSProperties = {
         // Spacing - Input
@@ -76,7 +94,7 @@ export const getInputStyles = (style: Record<string, any> = {}): CSSProperties =
         // Typography - Input
         fontFamily: getFontFamily(style.inputFontFamily),
         fontSize: style.inputFontSize ? `${style.inputFontSize}${style.inputFontSizeUnit || 'px'}` : undefined,
-        fontWeight: style.inputFontWeight,
+        fontWeight: getFontWeight(style.inputFontWeight),
         textAlign: style.textAlign,
         color: style.inputColor,
 
@@ -93,6 +111,9 @@ export const getInputStyles = (style: Record<string, any> = {}): CSSProperties =
         borderTopRightRadius: formatUnit(style.inputBorderTopRightRadius),
         borderBottomRightRadius: formatUnit(style.inputBorderBottomRightRadius),
         borderBottomLeftRadius: formatUnit(style.inputBorderBottomLeftRadius),
+
+        // Calculated width & height
+        width: `calc(100% - ${formatUnit(style.inputMarginRight)} - ${formatUnit(style.inputMarginLeft)})`
     };
 
     return css;
@@ -103,7 +124,8 @@ export const getLabelStyles = (style: Record<string, any> = {}): CSSProperties =
         // Typography - Label
         fontFamily: getFontFamily(style.labelFontFamily),
         fontSize: style.labelFontSize ? `${style.labelFontSize}${style.labelFontSizeUnit || 'px'}` : undefined,
-        fontWeight: style.labelFontWeight,
+        fontWeight: getFontWeight(style.labelFontWeight),
+        textAlign: style.labelTextAlign,
         color: style.labelColor,
     };
 };
@@ -122,7 +144,8 @@ export const getHelpTextStyles = (style: Record<string, any> = {}, globalSetting
         fontSize: style.helpFontSize
             ? `${style.helpFontSize}${style.helpFontSizeUnit || 'px'}`
             : `${defaultFontSize}${defaultFontSizeUnit}`,
-        fontWeight: style.helpFontWeight,
+        fontWeight: getFontWeight(style.helpFontWeight),
+        textAlign: style.helpTextAlign,
         color: style.helpColor || defaultColor,
     };
 };
@@ -132,7 +155,8 @@ export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProper
         // Typography - Placeholder
         fontFamily: getFontFamily(style.placeholderFontFamily),
         fontSize: style.placeholderFontSize ? `${style.placeholderFontSize}${style.placeholderFontSizeUnit || 'px'}` : undefined,
-        fontWeight: style.placeholderFontWeight,
+        fontWeight: getFontWeight(style.placeholderFontWeight),
+        textAlign: style.placeholderTextAlign,
         color: style.placeholderColor,
     };
 };

@@ -70,7 +70,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedFieldId,
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto pb-8">
         <div className="p-2 space-y-3">
           {activeTab === "content" && <ContentTab field={selectedField} />}
           {activeTab === "style" && <StyleTab field={selectedField} />}

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">64.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>9/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>9/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">69.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>9/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -127,7 +127,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,25 +135,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,7 +184,7 @@
  */
 &nbsp;
 import { VideoField } from "../../../types";
-<span class="cstat-no" title="statement not covered" >import BuilderFieldWrapper from "./BuilderFieldWrapper";</span>
+import BuilderFieldWrapper from "./BuilderFieldWrapper";
 &nbsp;
 interface BuilderVideoProps {
   field: VideoField;
@@ -192,14 +192,14 @@ interface BuilderVideoProps {
   activeSubElement?: string | null;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default function <span class="fstat-no" title="function not covered" >B</span>uilderVideo(</span>{ field, isSelected, activeSubElement }: Readonly&lt;BuilderVideoProps&gt;) {
+export default function BuilderVideo({ field, isSelected, activeSubElement }: Readonly&lt;BuilderVideoProps&gt;) {
   // Convert YouTube watch URLs to embed URLs
-  const getEmbedUrl = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>rl: string | undefined) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!url) <span class="cstat-no" title="statement not covered" >return "";</span></span>
+  const getEmbedUrl = (url: string | undefined) =&gt; {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!url) <span class="cstat-no" title="statement not covered" >return "";</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (url.includes("youtube.com/watch")) {</span>
-      const videoId = <span class="cstat-no" title="statement not covered" >url.split("v=")[1]?.split("&amp;")[0];</span>
-<span class="cstat-no" title="statement not covered" >      return `https://www.youtube.com/embed/${videoId}`;</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (url.includes("youtube.com/watch")) {
+      const videoId = url.split("v=")[1]?.split("&amp;")[0];
+      return `https://www.youtube.com/embed/${videoId}`;
     }
 <span class="cstat-no" title="statement not covered" >    if (url.includes("youtu.be/")) {</span>
       const videoId = <span class="cstat-no" title="statement not covered" >url.split("youtu.be/")[1]?.split("?")[0];</span>
@@ -208,20 +208,20 @@ interface BuilderVideoProps {
 <span class="cstat-no" title="statement not covered" >    return url;</span>
   };
 &nbsp;
-  const embedUrl = <span class="cstat-no" title="statement not covered" >getEmbedUrl(field.url);</span>
+  const embedUrl = getEmbedUrl(field.url);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;div className="space-y-2"&gt;
         {field.label &amp;&amp; (
-          &lt;label className={`block text-sm font-medium text-gray-700 ${isSelected &amp;&amp; activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}&gt;
+          &lt;label className={`block text-sm font-medium text-gray-700 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1 rounded px-1' </span>: ''}`}&gt;
             {field.label}
           &lt;/label&gt;
         )}
-        &lt;div className={`relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 ${isSelected &amp;&amp; ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}&gt;
+        &lt;div className={`relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'url'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}&gt;
           &lt;iframe
             src={embedUrl}
-            title={field.altText || field.label || "Video"}
+            title={field.altText || <span class="branch-1 cbranch-no" title="branch not covered" >field.label </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >"Video"}</span>
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="absolute inset-0 w-full h-full pointer-events-none"
@@ -241,7 +241,7 @@ interface BuilderVideoProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T18:54:26.617Z
+                at 2026-02-01T05:11:21.151Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

@@ -28,7 +28,7 @@ export interface FieldStyleCapabilities {
 export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
     // Display-only fields - only support window styles
     [FieldType.HEADING]: {
-        supportsInputStyles: false,
+        supportsInputStyles: true,
         supportsWindowStyles: true,
         supportsLabelStyles: false,
         supportsPlaceholderStyles: false,
@@ -40,7 +40,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasOptions: false,
     },
     [FieldType.PARAGRAPH]: {
-        supportsInputStyles: false,
+        supportsInputStyles: true,
         supportsWindowStyles: true,
         supportsLabelStyles: false,
         supportsPlaceholderStyles: false,

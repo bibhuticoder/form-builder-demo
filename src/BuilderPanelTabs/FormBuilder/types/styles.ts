@@ -84,6 +84,7 @@ export type FieldStyle = {
   inputFontFamily?: string;
   inputColor?: string;
   inputTextAlign?: 'left' | 'center' | 'right' | 'justify';
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
 
   // Typography (Label)
   labelFontSize?: string | number;
@@ -91,6 +92,7 @@ export type FieldStyle = {
   labelFontWeight?: string | number;
   labelFontFamily?: string;
   labelColor?: string;
+  labelTextAlign?: 'left' | 'center' | 'right' | 'justify';
   labelMarginBottom?: string | number;
 
   // Typography (Help)
@@ -99,6 +101,7 @@ export type FieldStyle = {
   helpFontWeight?: string | number;
   helpFontFamily?: string;
   helpColor?: string;
+  helpTextAlign?: 'left' | 'center' | 'right' | 'justify';
 
   // Typography (Placeholder)
   placeholderFontSize?: string | number;
@@ -106,6 +109,7 @@ export type FieldStyle = {
   placeholderFontWeight?: string | number;
   placeholderFontFamily?: string;
   placeholderColor?: string;
+  placeholderTextAlign?: 'left' | 'center' | 'right' | 'justify';
 
   // Decoration (Input)
   inputBackgroundColor?: string;

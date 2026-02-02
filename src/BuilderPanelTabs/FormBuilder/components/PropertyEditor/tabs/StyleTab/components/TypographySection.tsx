@@ -156,21 +156,19 @@ export const TypographySection: React.FC<TypographySectionProps> = ({
                     </div>
                 </div>
 
-                {/* Text Alignment (for input only) */}
-                {activeTypographyTab === "input" && (
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Text Alignment</label>
-                        <select
-                            value={getStyleValue("textAlign", "left")}
-                            onChange={(e) => handleStyleUpdate("textAlign", e.target.value)}
-                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                        >
-                            <option value="left">Left</option>
-                            <option value="center">Center</option>
-                            <option value="right">Right</option>
-                        </select>
-                    </div>
-                )}
+                {/* Text Alignment */}
+                <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Text Alignment</label>
+                    <select
+                        value={getStyleValue(activeTypographyTab === "input" ? "textAlign" : `${activeTypographyTab}TextAlign`, "left")}
+                        onChange={(e) => handleStyleUpdate(activeTypographyTab === "input" ? "textAlign" : `${activeTypographyTab}TextAlign`, e.target.value)}
+                        className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                        <option value="left">Left</option>
+                        <option value="center">Center</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
 
                 {/* Color */}
                 <ColorControl

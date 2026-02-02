@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">46.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>7/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,8 +108,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,8 +117,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,8 +146,8 @@
  */
 &nbsp;
 import { ImageField } from "../../../types";
-<span class="cstat-no" title="statement not covered" >import BuilderFieldWrapper from "./BuilderFieldWrapper";</span>
-<span class="cstat-no" title="statement not covered" >import { getLabelStyles } from "../../../utils/styleUtils";</span>
+import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getLabelStyles } from "../../../utils/styleUtils";
 &nbsp;
 interface BuilderImageProps {
   field: ImageField;
@@ -155,13 +155,13 @@ interface BuilderImageProps {
   activeSubElement?: string | null;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default function <span class="fstat-no" title="function not covered" >B</span>uilderImage(</span>{ field, isSelected, activeSubElement }: Readonly&lt;BuilderImageProps&gt;) {
-<span class="cstat-no" title="statement not covered" >  return (</span>
+export default function BuilderImage({ field, isSelected, activeSubElement }: Readonly&lt;BuilderImageProps&gt;) {
+  return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;div className="space-y-2"&gt;
         {field.label &amp;&amp; (
           &lt;label
-            className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected &amp;&amp; activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
+            className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1 rounded px-1' </span>: ''}`}
             style={getLabelStyles(field.style)}
           &gt;
             {field.label}
@@ -169,9 +169,9 @@ interface BuilderImageProps {
         )}
         &lt;img
           src={field.url}
-          alt={field.altText || field.label || "Image"}
+          alt={field.altText || <span class="branch-1 cbranch-no" title="branch not covered" >field.label </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >"Image"}</span>
           style={field.style}
-          className={`w-full h-auto rounded-lg ${isSelected &amp;&amp; ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+          className={`w-full h-auto rounded-lg ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'url'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}
         /&gt;
       &lt;/div&gt;
     &lt;/BuilderFieldWrapper&gt;
@@ -184,7 +184,7 @@ interface BuilderImageProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T18:54:26.617Z
+                at 2026-02-01T05:11:21.151Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

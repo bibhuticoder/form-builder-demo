@@ -33,22 +33,18 @@ export const ColorControl: React.FC<ColorControlProps> = ({
       )}
       <div className="flex gap-2 items-center">
         {/* Color Swatch / Trigger */}
-        <div className="relative flex-shrink-0">
+        <div className="relative flex-shrink-0 w-[30px] h-[30px]">
           <div
-            className="w-[30px] h-[30px] rounded border border-gray-300 dark:border-gray-600 cursor-pointer shadow-sm hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+            className="absolute inset-0 rounded border border-gray-300 dark:border-gray-600 shadow-sm transition-colors pointer-events-none"
             style={{ backgroundColor: safeColorValue }}
-            onClick={() => document.getElementById(uniqueId)?.click()}
-            role="button"
-            aria-label={`Pick color for ${label || "picker"}`}
-            title="Click to pick color"
           />
           <input
             id={uniqueId}
             type="color"
             value={safeColorValue}
             onChange={(e) => onChange(e.target.value)}
-            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer -z-10"
-            tabIndex={-1}
+            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+            title="Click to pick color"
           />
         </div>
 

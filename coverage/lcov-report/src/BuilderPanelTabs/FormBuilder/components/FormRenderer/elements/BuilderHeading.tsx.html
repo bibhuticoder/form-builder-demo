@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,8 +109,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,14 +119,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,8 +146,8 @@
 import { ElementType } from "react";
 &nbsp;
 import { HeadingField } from "../../../types";
-<span class="cstat-no" title="statement not covered" >import BuilderFieldWrapper from "./BuilderFieldWrapper";</span>
-<span class="cstat-no" title="statement not covered" >import { getInputStyles } from "../../../utils/styleUtils";</span>
+import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getInputStyles } from "../../../utils/styleUtils";
 &nbsp;
 &nbsp;
 interface BuilderHeadingProps {
@@ -156,19 +156,19 @@ interface BuilderHeadingProps {
   activeSubElement?: string | null;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default function <span class="fstat-no" title="function not covered" >B</span>uilderHeading(</span>{
+export default function BuilderHeading({
   field,
   isSelected,
   activeSubElement,
 }: Readonly&lt;BuilderHeadingProps&gt;) {
-  const Tag = (<span class="cstat-no" title="statement not covered" >field.headingLevel || "h2")</span> as ElementType;
+  const Tag = (field.headingLevel || <span class="branch-1 cbranch-no" title="branch not covered" >"h2")</span> as ElementType;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;Tag
         dangerouslySetInnerHTML={{ __html: field.label }}
         style={getInputStyles(field.style)}
-        className={`transition-all duration-200 text-gray-900 dark:text-white ${isSelected &amp;&amp; activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
+        className={`transition-all duration-200 text-gray-900 dark:text-white ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1 rounded px-1' </span>: ''}`}
       &gt;
       &lt;/Tag&gt;
     &lt;/BuilderFieldWrapper&gt;
@@ -181,7 +181,7 @@ interface BuilderHeadingProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T18:54:26.617Z
+                at 2026-02-01T05:11:21.151Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

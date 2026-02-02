@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>9/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -137,9 +137,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,24 +147,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,9 +204,9 @@
  */
 &nbsp;
 import { CheckboxField } from "../../../types";
-<span class="cstat-no" title="statement not covered" >import BuilderFieldWrapper from "./BuilderFieldWrapper";</span>
-<span class="cstat-no" title="statement not covered" >import { useFormBuilder } from "../../../context";</span>
-<span class="cstat-no" title="statement not covered" >import { getHelpTextStyles } from "../../../utils/styleUtils";</span>
+import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { useFormBuilder } from "../../../context";
+import { getHelpTextStyles, getLabelStyles } from "../../../utils/styleUtils";
 &nbsp;
 interface BuilderCheckboxProps {
   field: CheckboxField;
@@ -214,31 +214,31 @@ interface BuilderCheckboxProps {
   activeSubElement?: string | null;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default function <span class="fstat-no" title="function not covered" >B</span>uilderCheckbox(</span>{
+export default function BuilderCheckbox({
   field,
   isSelected,
   activeSubElement,
 }: Readonly&lt;BuilderCheckboxProps&gt;) {
-  const { jsonContent } = <span class="cstat-no" title="statement not covered" >useFormBuilder();</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  const { jsonContent } = useFormBuilder();
+  return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;div className="space-y-1"&gt;
         {field.label &amp;&amp; (
-          &lt;label className={`block text-xs font-medium text-gray-700 ${isSelected &amp;&amp; activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}&gt;
+          &lt;label className={`block text-xs font-medium text-gray-700 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`} style={getLabelStyles(field.style)}&gt;
             {field.label}
-            {field.required &amp;&amp; &lt;span className="text-red-500 ml-1"&gt;*&lt;/span&gt;}
+            {field.required &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;span className="text-red-500 ml-1"&gt;*&lt;/span&gt;}</span>
           &lt;/label&gt;
         )}
-        &lt;div className={`space-y-1 ${isSelected &amp;&amp; ['input', 'options'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1 rounded p-1' : ''}`}&gt;
-          {field.options.map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;div key={option.value} c</span>lassName="flex items-center"&gt;
+        &lt;div className={`space-y-1 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'options'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1 rounded p-1' </span>: ''}`}&gt;
+          {field.options.map((option) =&gt; (
+            &lt;div key={option.value} className="flex items-center"&gt;
               &lt;input
                 type="checkbox"
                 id={`${field.id}_${option.value}`}
                 name={field.name}
                 value={option.value}
                 required={
-                  field.required &amp;&amp; field.selectionMode === "single"
+                  field.required &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >field.selectionMode === "single"</span>
                 }
                 disabled={true} // Always disabled in builder
                 className="appearance-none w-3.5 h-3.5 bg-white border border-gray-900 rounded checked:bg-primary checked:border-primary outline-none transition-colors"
@@ -253,7 +253,7 @@ interface BuilderCheckboxProps {
           ))}
         &lt;/div&gt;
         {field.helpText &amp;&amp; (
-          &lt;p
+<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;p</span>
             className={`text-[9px] text-gray-500 ${isSelected &amp;&amp; activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
             style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           &gt;
@@ -271,7 +271,7 @@ interface BuilderCheckboxProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T18:54:26.617Z
+                at 2026-02-01T05:11:21.151Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
