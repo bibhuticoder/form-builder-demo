@@ -53,6 +53,13 @@ const HEADING_FIELD_STYLES = {
   inputColor: "#111827",
 };
 
+// Styles specifically for Divider
+const DIVIDER_FIELD_STYLES = {
+  ...DISPLAY_FIELD_STYLES,
+  borderColor: "#000000",
+  borderWidth: 1,
+};
+
 // Full styles for input fields
 const INPUT_FIELD_STYLES = {
   ...DISPLAY_FIELD_STYLES,
@@ -95,9 +102,12 @@ const getDefaultStylesForType = (fieldType: FieldType) => {
     return HEADING_FIELD_STYLES;
   }
 
+  if (fieldType === FieldType.DIVIDER) {
+    return DIVIDER_FIELD_STYLES;
+  }
+
   if ([
     FieldType.PARAGRAPH,
-    FieldType.DIVIDER,
     FieldType.IMAGE,
     FieldType.VIDEO,
     FieldType.BUTTON,

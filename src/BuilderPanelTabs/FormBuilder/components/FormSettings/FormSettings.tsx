@@ -617,7 +617,7 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
               </div>
               <button
                 onClick={() => handleChange("surveyMode", !config.surveyMode)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${config.surveyMode
+                className={`relative inline-flex h-6 w-14 items-center rounded-full transition-colors ${config.surveyMode
                   ? "bg-primary"
                   : "bg-gray-300 dark:bg-gray-600"
                   }`}

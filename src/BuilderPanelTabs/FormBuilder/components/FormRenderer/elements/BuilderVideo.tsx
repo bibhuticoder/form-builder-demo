@@ -14,10 +14,10 @@ interface BuilderVideoProps {
 }
 
 export default function BuilderVideo({ field, isSelected, activeSubElement }: Readonly<BuilderVideoProps>) {
-  // Convert YouTube watch URLs to embed URLs
-  const getEmbedUrl = (url: string | undefined) => {
-    if (!url) return "";
+  const getEmbedUrl = (url: string | undefined): string | null => {
+    if (!url) return null;
 
+    // YouTube
     if (url.includes("youtube.com/watch")) {
       const videoId = url.split("v=")[1]?.split("&")[0];
       return `https://www.youtube.com/embed/${videoId}`;
@@ -26,10 +26,33 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
       const videoId = url.split("youtu.be/")[1]?.split("?")[0];
       return `https://www.youtube.com/embed/${videoId}`;
     }
+
+    // Vimeo
+    if (url.includes("vimeo.com/")) {
+      const videoId = url.split("vimeo.com/")[1]?.split("?")[0];
+      // Check if it's a numeric ID to avoid matching other vimeo paths incorrectly
+      if (/^\d+$/.test(videoId)) {
+        return `https://player.vimeo.com/video/${videoId}`;
+      }
+    }
+
+    // Loom
+    if (url.includes("loom.com/share/")) {
+      const videoId = url.split("loom.com/share/")[1]?.split("?")[0];
+      return `https://www.loom.com/embed/${videoId}`;
+    }
+
     return url;
   };
 
-  const embedUrl = getEmbedUrl(field.url);
+  const isDirectFile = (url: string | undefined) => {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg|mov)$/i.test(url);
+  };
+
+  const url = field.url;
+  const isDirect = isDirectFile(url);
+  const embedUrl = !isDirect ? getEmbedUrl(url) : url;
 
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
@@ -40,16 +63,33 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
           </label>
         )}
         <div className={`relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 ${isSelected && ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}>
-          <iframe
-            src={embedUrl}
-            title={field.altText || field.label || "Video"}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={field.style}
-          />
-          {/* Overlay to prevent iframe interaction in builder */}
-          <div className="absolute inset-0 cursor-pointer" />
+          {url ? (
+            isDirect ? (
+              <video
+                src={url}
+                controls
+                className="absolute inset-0 w-full h-full object-cover"
+                style={field.style}
+              />
+            ) : (
+              embedUrl && (
+                <iframe
+                  src={embedUrl}
+                  title={field.altText || field.label || "Video"}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  style={field.style}
+                />
+              )
+            )
+          ) : (
+            <div className="flex items-center justify-center w-full h-full text-gray-400">
+              No Video Source
+            </div>
+          )}
+          {/* Overlay to prevent interaction in builder (only for iframes) */}
+          {!isDirect && <div className="absolute inset-0 cursor-pointer" />}
         </div>
       </div>
     </BuilderFieldWrapper>

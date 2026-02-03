@@ -87,6 +87,10 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                         </div>
                     )}
 
+
+
+
+
                     {/* Scroll Target Input */}
                     {(field as ButtonField).action === ButtonAction.SCROLL_TO_ELEMENT && (
                         <div className="space-y-1">
@@ -131,20 +135,113 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                 </div>
             )}
 
-            {/* Checkbox Selection Mode */}
-            {field.type === "checkbox" && (
-                <div className="space-y-1 pt-1">
-                    <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Selection Mode</label>
-                    <select
-                        value={(field as CheckboxField).selectionMode || "multi"}
-                        onChange={(e) => handleUpdate("selectionMode", e.target.value)}
-                        className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                    >
-                        <option value="multi">Multi Select (Checkboxes)</option>
-                        <option value="single">Single Select (Radio-style)</option>
-                    </select>
+            {/* Number Field Options */}
+            {field.type === "number" && (
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-700 my-2 space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Min Value</label>
+                            <input
+                                type="number"
+                                value={(field as NumberField).min ?? ""}
+                                onChange={(e) => handleUpdate("min", e.target.value === "" ? undefined : Number(e.target.value))}
+                                className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Max Value</label>
+                            <input
+                                type="number"
+                                value={(field as NumberField).max ?? ""}
+                                onChange={(e) => handleUpdate("max", e.target.value === "" ? undefined : Number(e.target.value))}
+                                className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Step Size</label>
+                        <input
+                            type="number"
+                            step="any"
+                            value={(field as NumberField).step ?? ""}
+                            onChange={(e) => handleUpdate("step", e.target.value === "" ? undefined : Number(e.target.value))}
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                    </div>
                 </div>
             )}
+
+            {/* Image Caption */}
+            {field.type === "image" && (
+                <div className="space-y-1 pt-2 border-t border-gray-200 dark:border-gray-700 my-2">
+                    <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Caption</label>
+                    <input
+                        type="text"
+                        placeholder="Add a caption..."
+                        value={(field as any).caption || ""}
+                        onChange={(e) => handleUpdate("caption", e.target.value)}
+                        className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <p className="text-[9px] text-gray-500">Displayed below the image with help text styling.</p>
+                </div>
+            )}
+
+            {/* Date Format */}
+            {
+                field.type === "date" && (
+                    <div className="space-y-1 pt-1">
+                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Date Format</label>
+                        <select
+                            value={(field as any).format || ""}
+                            onChange={(e) => {
+                                handleUpdate("format", e.target.value);
+                                handleUpdate("placeholder", e.target.value);
+                            }}
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="">Default (Browser)</option>
+                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                )
+            }
+
+            {/* Time Format */}
+            {
+                field.type === "time" && (
+                    <div className="space-y-1 pt-1">
+                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Time Format</label>
+                        <select
+                            value={(field as any).format || ""}
+                            onChange={(e) => handleUpdate("format", e.target.value)}
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="">Default (Browser)</option>
+                            <option value="12h">12-hour (AM/PM)</option>
+                            <option value="24h">24-hour</option>
+                        </select>
+                    </div>
+                )
+            }
+
+            {/* Checkbox Selection Mode */}
+            {
+                field.type === "checkbox" && (
+                    <div className="space-y-1 pt-1">
+                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Selection Mode</label>
+                        <select
+                            value={(field as CheckboxField).selectionMode || "multi"}
+                            onChange={(e) => handleUpdate("selectionMode", e.target.value)}
+                            className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="multi">Multi Select (Checkboxes)</option>
+                            <option value="single">Single Select (Radio-style)</option>
+                        </select>
+                    </div>
+                )
+            }
         </>
     );
 };

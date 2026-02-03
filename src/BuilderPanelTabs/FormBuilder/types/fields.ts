@@ -52,6 +52,7 @@ export interface ImageField extends LabeledField {
   type: typeof FieldType.IMAGE;
   url: string;
   altText?: string;
+  caption?: string;
 }
 
 export interface VideoField extends LabeledField {
@@ -94,10 +95,12 @@ export interface DateField extends InputField {
   type: typeof FieldType.DATE;
   min?: string;
   max?: string;
+  format?: string;
 }
 
 export interface TimeField extends InputField {
   type: typeof FieldType.TIME;
+  format?: string;
 }
 
 export interface DropdownField extends InputField {

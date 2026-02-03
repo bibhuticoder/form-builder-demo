@@ -6,7 +6,8 @@
 
 import { ImageField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
-import { getLabelStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
+import { getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
 
 interface BuilderImageProps {
   field: ImageField;
@@ -15,6 +16,7 @@ interface BuilderImageProps {
 }
 
 export default function BuilderImage({ field, isSelected, activeSubElement }: Readonly<BuilderImageProps>) {
+  const { jsonContent } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-2">
@@ -32,6 +34,14 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
           style={field.style}
           className={`w-full h-auto rounded-lg ${isSelected && ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
         />
+        {field.caption && (
+          <p
+            className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'caption' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+          >
+            {field.caption}
+          </p>
+        )}
       </div>
     </BuilderFieldWrapper>
   );
