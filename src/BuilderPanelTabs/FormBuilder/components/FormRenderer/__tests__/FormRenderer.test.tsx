@@ -51,7 +51,7 @@ describe('FormRenderer', () => {
   it('should render form with all fields', () => {
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={mockFormData} />
+        <FormRenderer formData={mockFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -63,7 +63,7 @@ describe('FormRenderer', () => {
   it('should render form container with settings styles', () => {
     const { container } = render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={mockFormData} />
+        <FormRenderer formData={mockFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
     const formContainer = container.firstChild as HTMLElement;
@@ -75,7 +75,7 @@ describe('FormRenderer', () => {
   it('should render fields in correct order', () => {
     const { container } = render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={mockFormData} />
+        <FormRenderer formData={mockFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
     container.querySelectorAll('[data-field], h1, input, label');
@@ -95,7 +95,7 @@ describe('FormRenderer', () => {
 
     const { container } = render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={emptyFormData} />
+        <FormRenderer formData={emptyFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
     const formContainer = container.firstChild as HTMLElement;
@@ -183,7 +183,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={complexFormData} />
+        <FormRenderer formData={complexFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -236,7 +236,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={dateTimeFormData} />
+        <FormRenderer formData={dateTimeFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -283,7 +283,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={dropdownFormData} />
+        <FormRenderer formData={dropdownFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -327,7 +327,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={uploadFormData} />
+        <FormRenderer formData={uploadFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -367,7 +367,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={captchaFormData} />
+        <FormRenderer formData={captchaFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -417,7 +417,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={numberPhoneFormData} />
+        <FormRenderer formData={numberPhoneFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -460,7 +460,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={urlFormData} />
+        <FormRenderer formData={urlFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -509,7 +509,7 @@ describe('FormRenderer', () => {
 
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={mediaFormData} />
+        <FormRenderer formData={mediaFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 
@@ -521,7 +521,7 @@ describe('FormRenderer', () => {
   it('should use field.id as key for each rendered field', () => {
     render(
       <MockFormBuilderProvider>
-        <FormRenderer formData={mockFormData} />
+        <FormRenderer formData={mockFormData} canvasWidth={768} />
       </MockFormBuilderProvider>
     );
 

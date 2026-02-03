@@ -35,7 +35,7 @@ describe('FormRenderer - Dynamic Updates & Styles', () => {
     it('updates text content when formData prop changes', () => {
         const { rerender } = render(
             <MockFormBuilderProvider>
-                <FormRenderer formData={baseForm} />
+                <FormRenderer formData={baseForm} canvasWidth={768} />
             </MockFormBuilderProvider>
         );
 
@@ -54,7 +54,7 @@ describe('FormRenderer - Dynamic Updates & Styles', () => {
 
         rerender(
             <MockFormBuilderProvider>
-                <FormRenderer formData={updatedForm} />
+                <FormRenderer formData={updatedForm} canvasWidth={768} />
             </MockFormBuilderProvider>
         );
 
@@ -65,7 +65,7 @@ describe('FormRenderer - Dynamic Updates & Styles', () => {
     it('applies field styles to rendered elements', () => {
         render(
             <MockFormBuilderProvider>
-                <FormRenderer formData={baseForm} />
+                <FormRenderer formData={baseForm} canvasWidth={768} />
             </MockFormBuilderProvider>
         );
 
