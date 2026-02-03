@@ -7,7 +7,7 @@
 import { ImageField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { getLabelStyles, getHelpTextStyles, getInputStyles } from "../../../utils/styleUtils";
 
 interface BuilderImageProps {
   field: ImageField;
@@ -31,12 +31,12 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
         <img
           src={field.url}
           alt={field.altText || field.label || "Image"}
-          style={field.style}
+          style={getInputStyles(field.style)}
           className={`w-full h-auto rounded-lg ${isSelected && ['input', 'url'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
         />
         {field.caption && (
           <p
-            className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'caption' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            className={`text-[9px] text-gray-500 ${isSelected && (activeSubElement === 'caption' || activeSubElement === 'help') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
             style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
           >
             {field.caption}

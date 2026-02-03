@@ -7,7 +7,7 @@
 import { TimeField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { getInputStyles, getLabelStyles, getHelpTextStyles, getPlaceholderStyles } from "../../../utils/styleUtils";
 import { PlaceholderStyles } from "./PlaceholderStyles";
 
 interface BuilderTimeProps {
@@ -32,15 +32,27 @@ export default function BuilderTime({ field, isSelected, activeSubElement }: Rea
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
-        <input
-          type="time"
-          id={field.id}
-          name={field.name}
-          required={field.required}
-          readOnly
-          className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 pointer-events-none outline-none ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-          style={getInputStyles(field.style)}
-        />
+        <div className="relative w-full">
+          <div
+            className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap min-h-[26px] ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            style={getInputStyles(field.style)}
+          >
+            <span
+              className={field.placeholder ? "text-gray-500" : "text-gray-400"}
+              style={getPlaceholderStyles(field.style)}
+            >
+              {field.placeholder}
+            </span>
+          </div>
+          <input
+            type="time"
+            id={field.id}
+            name={field.name}
+            required={field.required}
+            readOnly
+            className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+          />
+        </div>
         {field.helpText && (
           <p
             className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}

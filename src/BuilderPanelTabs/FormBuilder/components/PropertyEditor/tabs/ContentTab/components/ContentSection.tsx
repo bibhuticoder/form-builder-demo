@@ -174,15 +174,19 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
             {/* Image Caption */}
             {field.type === "image" && (
                 <div className="space-y-1 pt-2 border-t border-gray-200 dark:border-gray-700 my-2">
-                    <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Caption</label>
+                    <div className="flex justify-between items-center">
+                        <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Caption</label>
+                        <span className="text-[9px] text-gray-400">{(field as any).caption?.length || 0}/100</span>
+                    </div>
                     <input
                         type="text"
+                        maxLength={100}
                         placeholder="Add a caption..."
                         value={(field as any).caption || ""}
                         onChange={(e) => handleUpdate("caption", e.target.value)}
                         className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
-                    <p className="text-[9px] text-gray-500">Displayed below the image with help text styling.</p>
+                    <p className="text-[9px] text-gray-500">Displayed below the image with Help Text styling (max 100 chars).</p>
                 </div>
             )}
 
@@ -193,10 +197,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                         <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Date Format</label>
                         <select
                             value={(field as any).format || ""}
-                            onChange={(e) => {
-                                handleUpdate("format", e.target.value);
-                                handleUpdate("placeholder", e.target.value);
-                            }}
+                            onChange={(e) => handleUpdate("format", e.target.value)}
                             className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="">Default (Browser)</option>
