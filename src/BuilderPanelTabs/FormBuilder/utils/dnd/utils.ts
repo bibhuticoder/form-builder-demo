@@ -137,7 +137,7 @@ export function createFieldFromType(
   existingFields: Field[] = []
 ): Field {
   const id = generateFieldId(fieldType, existingFields);
-  const placeholder = `Enter ${label.toLowerCase()}`;
+  let placeholder = `Enter ${label.toLowerCase()}`;
 
   // Option-based fields need default choices
   if (fieldType === FieldType.CHECKBOX || fieldType === FieldType.RADIO || fieldType === FieldType.DROPDOWN) {

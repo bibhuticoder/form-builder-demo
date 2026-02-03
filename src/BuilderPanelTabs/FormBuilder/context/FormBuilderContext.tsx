@@ -72,9 +72,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
 
   const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
 
-  const [canvasWidth, setCanvasWidth] = useState<number>(
-    initialContent.formSettings?.settings?.width || 768
-  );
+  const [canvasWidth, setCanvasWidth] = useState<number>(768);
 
   // Core setter
   const setJsonContent = useCallback((content: FormDefinition) => {
