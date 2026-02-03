@@ -4,6 +4,7 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 interface CanvasResizerProps {
     canvasRef: React.RefObject<HTMLDivElement>;
     onResize: (width: number) => void;
+    onResizeEnd?: (width: number) => void;
     minWidth: number;
     maxWidth: number;
 }
@@ -11,6 +12,7 @@ interface CanvasResizerProps {
 export const CanvasResizer: React.FC<CanvasResizerProps> = ({
     canvasRef,
     onResize,
+    onResizeEnd,
     minWidth,
     maxWidth,
 }) => {
@@ -36,6 +38,10 @@ export const CanvasResizer: React.FC<CanvasResizerProps> = ({
 
         const handleMouseUp = () => {
             setIsResizing(false);
+            if (onResizeEnd && canvasRef.current) {
+                const rect = canvasRef.current.getBoundingClientRect();
+                onResizeEnd(Math.round(rect.width));
+            }
         };
 
         if (isResizing) {
@@ -56,7 +62,7 @@ export const CanvasResizer: React.FC<CanvasResizerProps> = ({
     return (
         <div
             onMouseDown={handleMouseDown}
-            className="absolute top-0 -right-3 h-full w-6 cursor-ew-resize flex items-center justify-center z-10 group hover:bg-primary/10 rounded-2xl"
+            className="absolute top-0 -right-3 h-full w-6 cursor-ew-resize flex items-center justify-center z-20 group hover:bg-primary/10 rounded-2xl"
         >
             <EllipsisVerticalIcon className="w-5 h-16 rounded-2xl text-white bg-primary opacity-50 transition-opacity group-hover:opacity-100" />
         </div>

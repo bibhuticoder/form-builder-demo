@@ -161,5 +161,42 @@ export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProper
     };
 };
 
+export const getFormSettingsStyles = (settings: Record<string, any> = {}): CSSProperties => {
+
+    console.log("settings", settings.maxWidth, settings.maxHeight);
+
+    const style: CSSProperties = {
+        width: `calc(100% - ${settings.marginLeft || '0'}px - ${settings.marginRight || '0'}px)`,
+        height: `calc(100% - ${settings.marginTop || '0'}px - ${settings.marginBottom || '0'}px)`,
+        maxWidth: settings.maxWidth ? `${settings.maxWidth}px` : undefined,
+        maxHeight: settings.maxHeight === 'auto' ? 'auto' : `${settings.maxHeight}px`,
+        fontFamily: settings.fontFamilyBody,
+        backgroundColor: settings.backgroundColor,
+        borderColor: settings.borderColor,
+        borderStyle: settings.borderStyle,
+        borderWidth: formatUnit(settings.borderWidth),
+        borderRadius: formatUnit(settings.borderRadius),
+        paddingTop: formatUnit(settings.paddingTop),
+        paddingRight: formatUnit(settings.paddingRight),
+        paddingBottom: formatUnit(settings.paddingBottom),
+        paddingLeft: formatUnit(settings.paddingLeft),
+        marginTop: formatUnit(settings.marginTop),
+        marginRight: formatUnit(settings.marginRight),
+        marginBottom: formatUnit(settings.marginBottom),
+        marginLeft: formatUnit(settings.marginLeft),
+    };
+
+    // Add background image properties if present
+    if (settings.backgroundImage) {
+        style.backgroundImage = `url(${settings.backgroundImage})`;
+        style.backgroundRepeat = settings.backgroundRepeat;
+        style.backgroundSize = settings.backgroundSize;
+        style.backgroundPosition = settings.backgroundPosition;
+        style.backgroundAttachment = settings.backgroundAttachment;
+    }
+
+    return style;
+};
+
 // Returns a class name for the font family if appropriate, or assumes it's handled by style
 // The current implementation uses inline styles for fonts.

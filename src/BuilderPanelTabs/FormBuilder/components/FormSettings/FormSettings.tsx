@@ -427,7 +427,8 @@ const convertToFormSettings = (
   config: FormSettingsConfig,
 ): FormSettingsType => {
   const settings: StyleSettings = {
-    width: config.maxWidth,
+    maxWidth: config.maxWidth,
+    maxHeight: config.maxHeight,
     fontFamilyBody: config.bodyFont,
     fontFamilyTitle: config.titleFont,
     backgroundColor: config.backgroundColor,
@@ -453,6 +454,7 @@ const convertToFormSettings = (
       .replace(" ", "-");
     settings.backgroundSize = config.backgroundSize.toLowerCase();
     settings.backgroundPosition = config.backgroundPosition.toLowerCase();
+    settings.backgroundAttachment = config.backgroundAttachment.toLowerCase();
   }
 
   return {

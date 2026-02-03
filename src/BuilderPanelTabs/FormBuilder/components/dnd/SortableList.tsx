@@ -18,7 +18,7 @@ interface SortableListProps {
  */
 export function SortableList({ items, children }: SortableListProps) {
   return (
-    <SortableContext items={items.map((item) => item.id)} strategy={rectSortingStrategy}>
+    <SortableContext id="sortable-list-container" items={items.map((item) => item.id)} strategy={rectSortingStrategy}>
       {children}
     </SortableContext>
   );

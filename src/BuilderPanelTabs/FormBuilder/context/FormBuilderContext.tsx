@@ -7,15 +7,16 @@ interface FormBuilderContextType {
   // State
   jsonContent: FormDefinition;
   activeSubElement: string | null;
+  canvasWidth: number;
 
   // Core setters
   setJsonContent: (content: FormDefinition) => void;
   setActiveSubElement: (subElement: string | null) => void;
+  setCanvasWidth: (width: number) => void;
 
   // Form-level operations
   updateFormName: (name: string) => void;
   updateFormSettings: (settings: Partial<FormSettings>) => void;
-  updateCanvasWidth: (width: number) => void;
 
   // Field operations
   addField: (field: Field, afterId?: string) => void;
@@ -71,6 +72,10 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
 
   const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
 
+  const [canvasWidth, setCanvasWidth] = useState<number>(
+    initialContent.formSettings?.settings?.width || 768
+  );
+
   // Core setter
   const setJsonContent = useCallback((content: FormDefinition) => {
     setJsonContentState(content);
@@ -97,18 +102,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     }));
   }, []);
 
-  const updateCanvasWidth = useCallback((width: number) => {
-    setJsonContentState((old) => ({
-      ...old,
-      formSettings: {
-        ...old.formSettings,
-        settings: {
-          ...old.formSettings.settings,
-          width: Math.round(width),
-        },
-      },
-    }));
-  }, []);
+
 
   // Field operations
   const addField = useCallback((field: Field, afterId?: string) => {
@@ -225,11 +219,12 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     () => ({
       jsonContent,
       activeSubElement,
+      canvasWidth,
       setJsonContent,
       setActiveSubElement,
+      setCanvasWidth,
       updateFormName,
       updateFormSettings,
-      updateCanvasWidth,
       addField,
       updateField,
       updateFieldStyleBatch,
@@ -250,10 +245,10 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
     [
       jsonContent,
       activeSubElement,
+      canvasWidth,
       setJsonContent,
       updateFormName,
       updateFormSettings,
-      updateCanvasWidth,
       addField,
       updateField,
       updateFieldStyleBatch,
@@ -272,6 +267,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       pointer
     ]
   );
+
 
   return <FormBuilderContext.Provider value={value}>{children}</FormBuilderContext.Provider>;
 };

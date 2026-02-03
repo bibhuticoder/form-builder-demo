@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { CanvasResizer } from "./CanvasResizer";
 
@@ -18,8 +18,7 @@ export interface CanvasProps {
 }
 
 export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onSelectField }) => {
-  const { jsonContent, updateCanvasWidth } = useFormBuilder();
-  const [canvasWidth, setCanvasWidth] = useState(768);
+  const { jsonContent, canvasWidth, setCanvasWidth } = useFormBuilder();
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
   // Make canvas a droppable target for palette fields
@@ -27,18 +26,10 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
 
   const isEmpty = jsonContent.fields.length === 0;
 
-  const handleCanvasWidthChange = () => {
-    updateCanvasWidth(canvasWidth);
-  }
-
-  useEffect(() => {
-    handleCanvasWidthChange()
-  }, [canvasWidth])
-
   return (
     <div className="flex-1 pt-2 flex flex-col gap-2">
       {/* Canvas Toolbar */}
-      <CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} />
+      <CanvasToolbar canvasWidth={canvasWidth} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} />
 
       {/* Canvas Content Area */}
       <div
@@ -50,30 +41,33 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedFieldId, onS
             canvasRef.current = node
             setNodeRef(node)
           }}
-          className={`rounded-lg relative bg-transparent mx-auto`}
+          className="relative mx-auto h-full"
           style={{
-            ...jsonContent.formSettings.settings,
             width: canvasWidth,
             minWidth: `${MIN_CANVAS_WIDTH}px`,
             maxWidth: `${MAX_CANVAS_WIDTH}px`,
             minHeight: "600px",
           }}
         >
-          {isEmpty ? (
-            <div className="h-full flex items-center justify-center p-8">
-              <EmptyState isOver={isOver} />
-            </div>
-          ) : (
-            <div className="canvas-content">
-              {/* Form Renderer */}
-              <FormRenderer
-                formData={jsonContent}
-                dragOverId={dragOverId}
-                selectedFieldId={selectedFieldId}
-                onSelectField={onSelectField}
-              />
-            </div>
-          )}
+          {/* Visual Canvas (Scrollable) */}
+          <div className="h-full rounded-lg bg-white dark:bg-gray-800 overflow-auto shadow-md">
+            {isEmpty ? (
+              <div className="h-full flex items-center justify-center p-8">
+                <EmptyState isOver={isOver} />
+              </div>
+            ) : (
+              <div className="canvas-content h-full">
+                {/* Form Renderer */}
+                <FormRenderer
+                  formData={jsonContent}
+                  dragOverId={dragOverId}
+                  selectedFieldId={selectedFieldId}
+                  onSelectField={onSelectField}
+                  canvasWidth={canvasWidth}
+                />
+              </div>
+            )}
+          </div>
 
           {/* Resize Handle */}
           <CanvasResizer

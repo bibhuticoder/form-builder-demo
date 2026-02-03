@@ -3,7 +3,8 @@
     "name": "Contact Us Form",
     "status": "published",
     "settings": {
-      "width": 768,
+      "maxWidth": 768,
+      "maxHeight": "auto",
       "backgroundColor": "#FFFFFF",
       "borderColor": "#E5E5E5",
       "borderStyle": "solid",

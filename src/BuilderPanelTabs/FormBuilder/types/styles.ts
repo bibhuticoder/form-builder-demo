@@ -9,13 +9,18 @@ export type WidthValue = 'full' | 'three-quarters' | 'half' | 'third' | 'quarter
 export type StyleSettings = {
   fontFamilyBody: string;
   fontFamilyTitle: string;
-  width: number;
+
+  width?: number;
+  maxWidth?: number;
+  maxHeight?: number | string;
+
   // CSS Properties
   backgroundColor?: string;
   backgroundImage?: string;
   backgroundRepeat?: string;
   backgroundPosition?: string;
   backgroundSize?: string;
+  backgroundAttachment?: string;
   color?: string;
 
   // Padding
@@ -40,11 +45,6 @@ export type StyleSettings = {
   borderRadius?: string | number;
   borderWidth?: string | number;
   borderColor?: string;
-
-  // Help Text
-  helpFontSize?: string | number;
-  helpFontSizeUnit?: string;
-  helpColor?: string;
 
   textAlign?: 'left' | 'center' | 'right' | 'justify';
 }
