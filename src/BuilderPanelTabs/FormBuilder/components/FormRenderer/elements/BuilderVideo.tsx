@@ -5,6 +5,7 @@
  */
 
 import { VideoField } from "../../../types";
+import { getHelpTextStyles } from "../../../utils/styleUtils";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderVideoProps {
@@ -91,6 +92,14 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
           {/* Overlay to prevent interaction in builder (only for iframes) */}
           {!isDirect && <div className="absolute inset-0 cursor-pointer" />}
         </div>
+        {field.caption && (
+          <p
+            className={`text-[9px] text-gray-500 ${isSelected && (activeSubElement === 'caption' || activeSubElement === 'help') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            style={getHelpTextStyles(field.style)}
+          >
+            {field.caption}
+          </p>
+        )}
       </div>
     </BuilderFieldWrapper>
   );

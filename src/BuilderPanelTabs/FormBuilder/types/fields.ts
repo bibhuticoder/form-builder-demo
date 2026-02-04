@@ -59,6 +59,7 @@ export interface VideoField extends LabeledField {
   type: typeof FieldType.VIDEO;
   url: string;
   altText?: string;
+  caption?: string;
 }
 
 export interface TextField extends InputField {

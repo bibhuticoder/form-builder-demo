@@ -171,8 +171,8 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                 </div>
             )}
 
-            {/* Image Caption */}
-            {field.type === "image" && (
+            {/* Image/Video Caption */}
+            {(field.type === "image" || field.type === "video") && (
                 <div className="space-y-1 pt-2 border-t border-gray-200 dark:border-gray-700 my-2">
                     <div className="flex justify-between items-center">
                         <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">Caption</label>
@@ -186,7 +186,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ field, capabilit
                         onChange={(e) => handleUpdate("caption", e.target.value)}
                         className="shadow w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
-                    <p className="text-[9px] text-gray-500">Displayed below the image with Help Text styling (max 100 chars).</p>
+                    <p className="text-[9px] text-gray-500">Displayed below the media with Help Text styling (max 100 chars).</p>
                 </div>
             )}
 
