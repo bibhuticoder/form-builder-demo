@@ -6,6 +6,7 @@
 
 import { DividerField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
+import { getInputStyles } from "../../../utils/styleUtils";
 
 interface BuilderDividerProps {
   field: DividerField;
@@ -18,11 +19,16 @@ export default function BuilderDivider({
   isSelected,
   activeSubElement,
 }: Readonly<BuilderDividerProps>) {
+
+  const dividerStyle = getInputStyles(field.style);
+  if (!dividerStyle.backgroundColor) {
+    dividerStyle.backgroundColor = "#000000";
+  }
+
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
-      <hr
-        style={field.style}
-        className="border-t border-black dark:border-white my-6"
+      <div className="h-0.5"
+        style={dividerStyle}
       />
     </BuilderFieldWrapper>
   );

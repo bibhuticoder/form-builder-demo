@@ -61,7 +61,7 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
                 const Icon = typeInfo.icon;
 
                 return (
-                    <div key={rule.id} className="select-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-2 text-xs shadow-sm flex justify-between items-center group hover:border-primary dark:hover:border-primary transition-colors">
+                    <div key={rule.id} className="select-none bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md p-2 text-xs shadow-sm flex justify-between items-center group hover:border-primary dark:hover:border-primary transition-colors">
                         <div className="flex flex-col gap-2 w-full">
 
                             {/* Type and action buttons */}
@@ -82,7 +82,7 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
                             </div>
 
                             {/* Logic Name */}
-                            <div className="text-gray-700 dark:text-gray-300">
+                            <div className="text-gray-700 dark:text-gray-400">
                                 {formatCondition(rule)}
                             </div>
                         </div>

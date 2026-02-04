@@ -4,7 +4,7 @@
 import { ReactNode, useState } from "react";
 import { TrashIcon, QueueListIcon } from "@heroicons/react/24/outline";
 import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
-import { BaseField, LabeledField } from "../../../types";
+import { BaseField, HeadingField, LabeledField } from "../../../types";
 
 interface BuilderFieldWrapperProps {
   field: BaseField & { name?: string };
@@ -41,6 +41,10 @@ export default function BuilderFieldControls({
 
     if (field.type === "paragraph") {
       value = "Paragraph";
+    }
+
+    else if (field.type === "heading") {
+      value = "Heading " + (field as HeadingField).headingLevel;
     }
 
     return value.toUpperCase();

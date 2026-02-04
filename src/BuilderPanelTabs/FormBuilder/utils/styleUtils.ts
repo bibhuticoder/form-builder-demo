@@ -162,9 +162,6 @@ export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProper
 };
 
 export const getFormSettingsStyles = (settings: Record<string, any> = {}): CSSProperties => {
-
-    console.log("settings", settings.maxWidth, settings.maxHeight);
-
     const style: CSSProperties = {
         width: `calc(100% - ${settings.marginLeft || '0'}px - ${settings.marginRight || '0'}px)`,
         height: `calc(100% - ${settings.marginTop || '0'}px - ${settings.marginBottom || '0'}px)`,

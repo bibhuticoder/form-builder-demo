@@ -52,7 +52,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasOptions: false,
     },
     [FieldType.DIVIDER]: {
-        supportsInputStyles: false,
+        supportsInputStyles: true,
         supportsWindowStyles: true,
         supportsLabelStyles: false,
         supportsPlaceholderStyles: false,
