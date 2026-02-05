@@ -57,9 +57,9 @@ describe('FormBuilderContext', () => {
     it('updates canvas width', () => {
         renderProvider(initialForm);
         act(() => {
-            context.updateCanvasWidth(500);
+            context.setCanvasWidth(500);
         });
-        expect(context.jsonContent.formSettings.settings.width).toBe(500);
+        expect(context.canvasWidth).toBe(500);
     });
 
     // Field Operations
@@ -73,7 +73,7 @@ describe('FormBuilderContext', () => {
         expect(context.jsonContent.fields[0].id).toBe('f1');
     });
 
-    it('inserts a field in specific position', () => {
+    it('inserts a field in specific position (legacy ID)', () => {
         const formWithFields = {
             ...initialForm,
             fields: [
@@ -90,6 +90,33 @@ describe('FormBuilderContext', () => {
 
         const ids = context.jsonContent.fields.map((f: any) => f.id);
         expect(ids).toEqual(['f1', 'f3', 'f2']);
+    });
+
+    it('inserts a field at specific index', () => {
+        const formWithFields = {
+            ...initialForm,
+            fields: [
+                { id: 'f1', type: FieldType.TEXT },
+                { id: 'f2', type: FieldType.TEXT }
+            ]
+        };
+        renderProvider(formWithFields);
+
+        // Insert at start
+        const newFieldStart = { id: 'f0', type: FieldType.TEXT };
+        act(() => {
+            context.addField(newFieldStart, 0);
+        });
+
+        expect(context.jsonContent.fields[0].id).toBe('f0');
+        expect(context.jsonContent.fields).toHaveLength(3);
+
+        // Insert at end via index
+        const newFieldEnd = { id: 'f4', type: FieldType.TEXT };
+        act(() => {
+            context.addField(newFieldEnd, 3);
+        });
+        expect(context.jsonContent.fields[3].id).toBe('f4');
     });
 
     it('updates a field', () => {

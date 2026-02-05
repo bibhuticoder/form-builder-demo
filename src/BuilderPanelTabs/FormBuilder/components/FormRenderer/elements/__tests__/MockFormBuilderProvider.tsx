@@ -23,7 +23,7 @@ const mockContextValue = {
     // Form-level operations
     updateFormName: jest.fn(),
     updateFormSettings: jest.fn(),
-    updateCanvasWidth: jest.fn(),
+    setCanvasWidth: jest.fn(),
 
     // Field operations
     addField: jest.fn(),

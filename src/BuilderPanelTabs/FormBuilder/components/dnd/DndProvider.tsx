@@ -17,7 +17,7 @@ const DRAG_PREVIEW_OPACITY = 0.9;
 interface DndProviderProps {
   children: (dragOverId: string | null) => React.ReactNode;
   /** Callback when a new field is added from the palette */
-  onFieldAdd: (field: Field, afterId?: string) => void;
+  onFieldAdd: (field: Field, position?: string | number) => void;
   /** Callback when fields are reordered */
   onFieldReorder: (oldIndex: number, newIndex: number) => void;
   /** Current list of fields for finding active field during drag */
@@ -65,8 +65,15 @@ export function DndProvider({
   const handlePaletteFieldDrop = useCallback((overId: string, activeData: DragData) => {
     if (!activeData.fieldType) return;
 
+    // Find index of the drop target
+    const overIndex = fields.findIndex((f) => f.id === overId);
+
+    // If dropping over a valid field, insert at that index (before the item)
+    // If overIndex is -1 (shouldn't happen with valid overId), default to end
+    const insertIndex = overIndex >= 0 ? overIndex : undefined;
+
     const newField = createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields);
-    onFieldAdd(newField, overId);
+    onFieldAdd(newField, insertIndex);
   }, [onFieldAdd, fields]);
 
   /**

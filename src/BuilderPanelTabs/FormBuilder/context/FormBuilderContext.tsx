@@ -19,7 +19,7 @@ interface FormBuilderContextType {
   updateFormSettings: (settings: Partial<FormSettings>) => void;
 
   // Field operations
-  addField: (field: Field, afterId?: string) => void;
+  addField: (field: Field, position?: string | number) => void;
   updateField: (fieldId: string, updates: Partial<Field>) => void;
   updateFieldStyleBatch: (fieldId: string, styleUpdates: Record<string, any>) => void;
   deleteField: (fieldId: string) => void;
@@ -103,26 +103,40 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
 
 
   // Field operations
-  const addField = useCallback((field: Field, afterId?: string) => {
+  const addField = useCallback((field: Field, position?: string | number) => {
     setJsonContentState((old) => {
       const fields = old.fields ?? [];
 
-      if (!afterId) {
-        // Add to end if no afterId specified
+      // Case 1: No position specified -> Append to end
+      if (position === undefined || position === null) {
         return {
           ...old,
           fields: [...fields, field],
         };
       }
 
-      // Insert after the specified field
-      const insertAfterIndex = fields.findIndex((f) => f.id === afterId);
-      const insertIndex = insertAfterIndex >= 0 ? insertAfterIndex + 1 : fields.length;
+      // Case 2: Position is an ID (legacy behavior, insert AFTER)
+      if (typeof position === "string") {
+        const insertAfterIndex = fields.findIndex((f) => f.id === position);
+        const insertIndex = insertAfterIndex >= 0 ? insertAfterIndex + 1 : fields.length;
 
-      return {
-        ...old,
-        fields: [...fields.slice(0, insertIndex), field, ...fields.slice(insertIndex)],
-      };
+        return {
+          ...old,
+          fields: [...fields.slice(0, insertIndex), field, ...fields.slice(insertIndex)],
+        };
+      }
+
+      // Case 3: Position is an index (new behavior, insert AT index)
+      if (typeof position === "number") {
+        const insertIndex = Math.max(0, Math.min(position, fields.length));
+
+        return {
+          ...old,
+          fields: [...fields.slice(0, insertIndex), field, ...fields.slice(insertIndex)],
+        };
+      }
+
+      return old;
     });
   }, []);
 

@@ -64,32 +64,36 @@ export default function FormRenderer({
   return (
 
     <SortableList items={fields}>
-      <div className="grid grid-cols-12 content-start gap-2 mx-auto overflow-auto" style={getFormSettingsStyles(formSettings.settings)}>
-        {fields.map((field) => (
-          <React.Fragment key={field.id}>
-            <SortableItem
-              id={field.id}
-              dragData={{ kind: "canvas-field", fieldId: field.id } as DragData}
-              className={getWidthClass(field)}
-            >
-              {(dragHandleProps) => (
-                <BuilderFieldControls
-                  field={field}
-                  onDelete={onDelete}
-                  dragHandleProps={dragHandleProps}
-                  selected={selectedFieldId === field.id}
-                  onSelect={onSelectField}
-                >
-                  <FieldRenderer field={field} isSelected={selectedFieldId === field.id} activeSubElement={activeSubElement} />
-                </BuilderFieldControls>
-              )}
-            </SortableItem>
-            {/* Show drop indicator when hovering over this field */}
-            {dragOverId === field.id && <DropIndicator width={getWidthClass(field)} />}
-          </React.Fragment>
-        ))}
-        {/* Show drop indicator at bottom when hovering over empty canvas */}
-        {dragOverId === CANVAS_DROPPABLE_ID && fields.length > 0 && <DropIndicator width={`col-span-12`} />}
+      {/* outer layer to center form */}
+      <div className="mx-auto w-full h-full" style={{ maxWidth: getFormSettingsStyles(formSettings.settings).maxWidth, maxHeight: getFormSettingsStyles(formSettings.settings).maxHeight }}>
+        <div className="grid grid-cols-12 content-start gap-2 mx-auto overflow-auto" style={getFormSettingsStyles(formSettings.settings)}>
+          {fields.map((field) => (
+            <React.Fragment key={field.id}>
+              {/* Show drop indicator when hovering over this field (inserts before) */}
+              {dragOverId === field.id && <DropIndicator width={getWidthClass(field)} />}
+
+              <SortableItem
+                id={field.id}
+                dragData={{ kind: "canvas-field", fieldId: field.id } as DragData}
+                className={getWidthClass(field)}
+              >
+                {(dragHandleProps) => (
+                  <BuilderFieldControls
+                    field={field}
+                    onDelete={onDelete}
+                    dragHandleProps={dragHandleProps}
+                    selected={selectedFieldId === field.id}
+                    onSelect={onSelectField}
+                  >
+                    <FieldRenderer field={field} isSelected={selectedFieldId === field.id} activeSubElement={activeSubElement} />
+                  </BuilderFieldControls>
+                )}
+              </SortableItem>
+            </React.Fragment>
+          ))}
+          {/* Show drop indicator at bottom when hovering over empty canvas */}
+          {dragOverId === CANVAS_DROPPABLE_ID && fields.length > 0 && <DropIndicator width={`col-span-12`} />}
+        </div>
       </div>
     </SortableList>
 
