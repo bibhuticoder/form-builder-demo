@@ -3,14 +3,12 @@ import { Dialog } from "../../../../../../../components/Dialog";
 import { Button } from "../../../../../../../components/Button";
 import { Field, LogicRule, LogicEvent, LogicOperation, LogicComparison, LogicEffect, LogicExpression } from "../../../../../types";
 // import { ConditionRow } from "../utils";
-import { LogicBuilder } from "./LogicBuilder";
+// import { ConditionRow } from "../utils";
 import {
-    ArrowRightCircleIcon,
-    ChatBubbleBottomCenterTextIcon,
-    NoSymbolIcon,
-    EyeIcon,
     ChevronLeftIcon
 } from "@heroicons/react/24/outline";
+import { LogicTypeSelection } from "./LogicTypeSelection";
+import { LogicRuleEditor } from "./LogicRuleEditor";
 
 interface LogicDialogProps {
     isOpen: boolean;
@@ -88,10 +86,6 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
             operation: LogicOperation.AND,
             args: [{ comparison: LogicComparison.EQ, left: { var: '' }, right: { str: '' } }]
         });
-    };
-
-    const getFieldLabel = (f: Field) => {
-        return (f as any).label || f.type;
     };
 
     const generateLogicId = () => {
@@ -202,141 +196,16 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
             body={
                 <div className="space-y-4">
                     {logicStep === 'select' ? (
-                        <div className="grid grid-cols-2 gap-3">
-
-                            {/* Custom Message */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-green-500 border-transparent ring-1 ring-gray-200 hover:ring-green-500 hover:bg-green-50/10 dark:hover:bg-green-900/20 transition-all group" onClick={() => handleSelectRuleType('message')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-green-50 dark:bg-green-900/30 flex items-center justify-center shrink-0 group-hover:bg-green-100 dark:group-hover:bg-green-900/50 transition-colors">
-                                        <ChatBubbleBottomCenterTextIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Custom Message</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Show a custom success message.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Page Redirect */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-blue-500 border-transparent ring-1 ring-gray-200 hover:ring-blue-500 hover:bg-blue-50/10 dark:hover:bg-blue-900/20 transition-all group" onClick={() => handleSelectRuleType('redirect')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
-                                        <ArrowRightCircleIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Page Redirect</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Redirect users after submission.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Conditional visibility */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-purple-500 border-transparent ring-1 ring-gray-200 hover:ring-purple-500 hover:bg-purple-50/10 dark:hover:bg-purple-900/20 transition-all group" onClick={() => handleSelectRuleType('visibility')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center shrink-0 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50 transition-colors">
-                                        <EyeIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Conditional Visibility</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Show or hide fields based on input.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Filter Submission */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-red-500 border-transparent ring-1 ring-gray-200 hover:ring-red-500 hover:bg-red-50/10 dark:hover:bg-red-900/20 transition-all group" onClick={() => handleSelectRuleType('disqualify')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center shrink-0 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-colors">
-                                        <NoSymbolIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Filter Submission</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Reject submissions based on criteria.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <LogicTypeSelection onSelect={handleSelectRuleType} />
                     ) : (
-                        <div className="space-y-6">
-                            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700 min-h-[150px] overflow-x-auto">
-                                <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Logic Conditions</h5>
-                                <LogicBuilder
-                                    expression={rootExpression}
-                                    onChange={setRootExpression}
-                                    fields={formFields}
-                                />
-                            </div>
-
-                            <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg border border-primary/20 dark:border-primary/20 space-y-3 overflow-auto">
-                                <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
-                                    <span className="bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">THEN</span>
-                                    <span>Perform action:</span>
-                                </div>
-
-                                {selectedRuleType === 'visibility' && (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Action</label>
-                                            <select
-                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                value={ruleAction.action}
-                                                onChange={(e) => setRuleAction({ ...ruleAction, action: e.target.value })}
-                                            >
-                                                <option value="">Select Action...</option>
-                                                <option value="show">Show Field</option>
-                                                <option value="hide">Hide Field</option>
-                                            </select>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Target Field</label>
-                                            <select
-                                                className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                value={ruleAction.targetField}
-                                                onChange={(e) => setRuleAction({ ...ruleAction, targetField: e.target.value })}
-                                            >
-                                                <option value="">Select Field...</option>
-                                                {formFields.map(f => (
-                                                    <option key={f.id} value={f.id}>{getFieldLabel(f)}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {selectedRuleType === 'redirect' && (
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Redirect URL</label>
-                                        <input
-                                            type="url"
-                                            className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none focus:ring-1 px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
-                                            placeholder="https://example.com/thank-you"
-                                            value={ruleAction.action}
-                                            onChange={(e) => setRuleAction({ ...ruleAction, action: e.target.value })}
-                                        />
-                                    </div>
-                                )}
-
-                                {selectedRuleType === 'message' && (
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Message</label>
-                                        <textarea
-                                            className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none focus:ring-1 px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
-                                            placeholder="Success message..."
-                                            rows={3}
-                                            value={ruleAction.action}
-                                            onChange={(e) => setRuleAction({ ...ruleAction, action: e.target.value })}
-                                        />
-                                    </div>
-                                )}
-
-                                {selectedRuleType === 'disqualify' && (
-                                    <div className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded border border-red-100 dark:border-red-900/30 flex items-center gap-2">
-                                        <NoSymbolIcon className="w-4 h-4" />
-                                        Submission will be rejected as disqualified.
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        <LogicRuleEditor
+                            expression={rootExpression}
+                            onExpressionChange={setRootExpression}
+                            action={ruleAction}
+                            onActionChange={setRuleAction}
+                            type={selectedRuleType!}
+                            fields={formFields}
+                        />
                     )}
                 </div>
             }
