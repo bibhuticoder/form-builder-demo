@@ -74,8 +74,7 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
 
     return (
         <div className={`
-      ${depth > 1 ? 'ml-4 mt-2 p-3 bg-gray-50/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 relative' : 'space-y-3'}
-      min-w-[500px]
+      ${depth > 1 ? 'ml-4 mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 relative' : 'space-y-3'} min-w-[500px] w-fit
     `}>
             {/* Connecting line for nested groups */}
             {depth > 1 && (
