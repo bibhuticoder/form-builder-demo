@@ -13,18 +13,18 @@ export default function BuilderPanel() {
   };
 
   const subNavItems = [
-    { 
-      label: "Form Builder", 
+    {
+      label: "Form Builder",
       value: "form-builder",
       icon: <DocumentTextIcon className="w-5 h-5" />
     },
-    { 
-      label: "Website Builder", 
+    {
+      label: "Website Builder",
       value: "website-builder",
       icon: <GlobeAltIcon className="w-5 h-5" />
     },
-    { 
-      label: "Component Showcase", 
+    {
+      label: "Component Showcase",
       value: "component-showcase",
       icon: <SparklesIcon className="w-5 h-5" />
     }
@@ -32,8 +32,8 @@ export default function BuilderPanel() {
 
   return (
     <div>
-      <div className="mb-6">
-        <SubNav 
+      <div className="border">
+        <SubNav
           items={subNavItems}
           activeTab={activeTab}
           onTabClick={handleTabClick}

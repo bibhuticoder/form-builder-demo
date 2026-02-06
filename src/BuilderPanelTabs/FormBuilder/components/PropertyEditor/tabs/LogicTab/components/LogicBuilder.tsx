@@ -70,12 +70,15 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
         return (arg as LogicExpression).operation !== undefined;
     };
 
+    const MAX_NESTING_LEVEL = 3;
+
     return (
         <div className={`
-      ${depth > 0 ? 'ml-4 mt-2 p-3 bg-gray-50/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 relative' : 'space-y-3'}
+      ${depth > 1 ? 'ml-4 mt-2 p-3 bg-gray-50/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 relative' : 'space-y-3'}
+      min-w-[500px]
     `}>
             {/* Connecting line for nested groups */}
-            {depth > 0 && (
+            {depth > 1 && (
                 <div className="absolute -left-4 top-4 w-4 h-0.5 bg-gray-200 dark:bg-gray-600"></div>
             )}
 
@@ -108,12 +111,12 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
             {/* List of Conditions/Groups */}
             <div className="space-y-2 relative">
                 {/* Vertical line connecting items */}
-                {expression.args.length > 0 && <div className="absolute left-2 top-0 bottom-4 w-0.5 bg-gray-200 dark:bg-gray-700 -z-10"></div>}
+                {expression.args.length > 0 && depth > 0 && <div className="absolute left-2 top-0 bottom-4 w-0.5 bg-gray-200 dark:bg-gray-700 -z-10"></div>}
 
                 {expression.args.map((arg, index) => (
-                    <div key={index} className="relative pl-6">
+                    <div key={index} className={`relative ${depth > 0 ? 'pl-6' : ''}`}>
                         {/* Horizontal line for items */}
-                        <div className="absolute left-2 top-3 w-4 h-0.5 bg-gray-200 dark:bg-gray-700"></div>
+                        {depth > 0 && <div className="absolute left-2 top-3 w-4 h-0.5 bg-gray-200 dark:bg-gray-700"></div>}
 
                         {isExpression(arg) ? (
                             <LogicBuilder
@@ -127,42 +130,51 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
                             // Single Condition Row
                             <div className="grid grid-cols-12 gap-2 items-start bg-white dark:bg-gray-800 p-2 rounded border border-gray-100 dark:border-gray-700 shadow-sm relative group">
                                 {/* Field Selection */}
-                                <div className="col-span-4">
+                                <div className={`${[LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(arg.comparison) ? 'col-span-6' : 'col-span-4'}`}>
                                     <select
                                         className="w-full text-xs border border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                         value={arg.left.var || ''}
-                                        onChange={(e) => handleUpdateArg(index, { ...arg, left: { ...arg.left, var: e.target.value } })}
+                                        onChange={(e) => handleUpdateArg(index, {
+                                            ...arg,
+                                            left: { ...arg.left, var: e.target.value },
+                                            comparison: e.target.value === 'submit_btn' ? LogicComparison.ON_SUBMIT : LogicComparison.EQ
+                                        })}
                                     >
                                         <option value="">Select Field...</option>
                                         {fields.map(f => (
                                             <option key={f.id} value={f.id}>{getFieldLabel(f)}</option>
                                         ))}
-                                        <option value="submit_btn">Submit Button</option>
                                     </select>
                                 </div>
 
                                 {/* Operator Selection */}
-                                <div className="col-span-3">
+                                <div className={`${[LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(arg.comparison) ? 'col-span-5' : 'col-span-3'}`}>
                                     <select
                                         className="w-full text-xs border border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                         value={arg.comparison}
                                         onChange={(e) => handleUpdateArg(index, { ...arg, comparison: e.target.value as LogicComparison })}
                                     >
-                                        <option value={LogicComparison.EQ}>Equals</option>
-                                        <option value={LogicComparison.NEQ}>Does not equal</option>
-                                        <option value={LogicComparison.CONTAINS}>Contains</option>
-                                        <option value={LogicComparison.IS_EMPTY}>Is Empty</option>
-                                        <option value={LogicComparison.EXISTS}>Is Not Empty</option>
-                                        <option value={LogicComparison.GT}>Greater Than</option>
-                                        <option value={LogicComparison.LT}>Less Than</option>
-                                        <option value={LogicComparison.GTE}>Greater/Equal</option>
-                                        <option value={LogicComparison.LTE}>Less/Equal</option>
+                                        {arg.left.var === 'submit_btn' ? (
+                                            <option value={LogicComparison.ON_SUBMIT}>On Submit</option>
+                                        ) : (
+                                            <>
+                                                <option value={LogicComparison.EQ}>Equals</option>
+                                                <option value={LogicComparison.NEQ}>Does not equal</option>
+                                                <option value={LogicComparison.CONTAINS}>Contains</option>
+                                                <option value={LogicComparison.IS_EMPTY}>Is Empty</option>
+                                                <option value={LogicComparison.EXISTS}>Is Not Empty</option>
+                                                <option value={LogicComparison.GT}>Greater Than</option>
+                                                <option value={LogicComparison.LT}>Less Than</option>
+                                                <option value={LogicComparison.GTE}>Greater/Equal</option>
+                                                <option value={LogicComparison.LTE}>Less/Equal</option>
+                                            </>
+                                        )}
                                     </select>
                                 </div>
 
-                                {/* Value Input */}
-                                <div className="col-span-4">
-                                    {![LogicComparison.IS_EMPTY, LogicComparison.EXISTS].includes(arg.comparison) ? (
+                                {/* Value Input - Hidden when not needed */}
+                                {![LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(arg.comparison) && (
+                                    <div className="col-span-4">
                                         <input
                                             type="text"
                                             className="w-full text-xs border border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400"
@@ -170,10 +182,8 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
                                             value={arg.right?.str || ''}
                                             onChange={(e) => handleUpdateArg(index, { ...arg, right: { ...arg.right, str: e.target.value } })}
                                         />
-                                    ) : (
-                                        <div className="h-[26px] bg-gray-50 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600"></div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
 
                                 {/* Remove Button */}
                                 <div className="col-span-1 flex justify-center">
@@ -192,19 +202,21 @@ export const LogicBuilder: React.FC<LogicBuilderProps> = ({
             </div>
 
             {/* Add Buttons */}
-            <div className="flex gap-2 pl-6 mt-2">
+            <div className={`flex gap-2 mt-2 ${depth > 0 ? 'pl-6' : ''}`}>
                 <button
                     onClick={handleAddCondition}
                     className="text-xs flex items-center gap-1 text-primary hover:text-primary-dark font-medium px-2 py-1 hover:bg-primary/5 rounded transition-colors"
                 >
                     <PlusIcon className="w-3 h-3" /> Condition
                 </button>
-                <button
-                    onClick={handleAddGroup}
-                    className="text-xs flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                >
-                    <PlusIcon className="w-3 h-3" /> Group
-                </button>
+                {depth < MAX_NESTING_LEVEL && (
+                    <button
+                        onClick={handleAddGroup}
+                        className="text-xs flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                    >
+                        <PlusIcon className="w-3 h-3" /> Group
+                    </button>
+                )}
             </div>
         </div>
     );

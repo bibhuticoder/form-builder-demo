@@ -14,6 +14,8 @@ export const LogicTab: React.FC<LogicTabProps> = () => {
     const rules = jsonContent.logic?.rules || [];
     const formFields = jsonContent.fields || [];
 
+    console.log(formFields);
+
     const [showLogicDialog, setShowLogicDialog] = useState(false);
     const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
 
@@ -55,7 +57,10 @@ export const LogicTab: React.FC<LogicTabProps> = () => {
 
             <LogicDialog
                 isOpen={showLogicDialog}
-                onClose={() => setShowLogicDialog(false)}
+                onClose={() => {
+                    setShowLogicDialog(false);
+                    setEditingRuleId(null);
+                }}
                 onSave={handleSaveRule}
                 initialRule={editingRule}
                 existingRules={rules}

@@ -112,7 +112,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                 const cond = arg as any; // Cast for easier access
                 // Helper to map comparison to validation logic if needed, 
                 // but checking `left.var` existence is primary check for now.
-                const noValue = [LogicComparison.IS_EMPTY, LogicComparison.EXISTS].includes(cond.comparison);
+                const noValue = [LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(cond.comparison);
                 // Also check on_submit case if it existed (removed in simplified view but kept in logic)
                 return cond.left?.var && (noValue || cond.right?.str !== undefined);
             }
@@ -144,8 +144,17 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
         const ruleId = initialRule?.id || generateLogicId();
 
         let triggerEvent = LogicEvent.FIELD_CHANGE;
-        // Simple check for submission (if we re-add on_submit logic later)
-        // For now defaulted to FIELD_CHANGE
+        // Check if any condition is ON_SUBMIT
+        const hasSubmitCondition = (expr: LogicExpression): boolean => {
+            return expr.args.some(arg => {
+                if ((arg as LogicExpression).operation) return hasSubmitCondition(arg as LogicExpression);
+                return (arg as any).comparison === LogicComparison.ON_SUBMIT;
+            });
+        };
+
+        if (hasSubmitCondition(rootExpression)) {
+            triggerEvent = LogicEvent.SUBMISSION_ATTEMPT;
+        }
 
         let effectType = LogicEffect.FIELD_VISIBILITY_SET;
         switch (selectedRuleType) {
@@ -174,42 +183,28 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
             ]
         };
 
+        setLogicStep("select")
         onSave(rule);
         onClose();
     };
 
+    const handleClose = () => {
+        setLogicStep("select")
+        onClose();
+    }
+
     return (
         <Dialog
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             header={logicStep === 'select' ? "Add Logic Rule" : "Configure Rule"}
             className="max-w-3xl"
             body={
                 <div className="space-y-4">
                     {logicStep === 'select' ? (
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-purple-500 border-transparent ring-1 ring-gray-200 hover:ring-purple-500 hover:bg-purple-50/10 dark:hover:bg-purple-900/20 transition-all group" onClick={() => handleSelectRuleType('visibility')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center shrink-0 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50 transition-colors">
-                                        <EyeIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Conditional Visibility</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Show or hide fields based on input.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-blue-500 border-transparent ring-1 ring-gray-200 hover:ring-blue-500 hover:bg-blue-50/10 dark:hover:bg-blue-900/20 transition-all group" onClick={() => handleSelectRuleType('redirect')}>
-                                <div className="flex gap-3 items-start">
-                                    <div className="h-8 w-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
-                                        <ArrowRightCircleIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Page Redirect</h4>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Redirect users after submission.</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                            {/* Custom Message */}
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-green-500 border-transparent ring-1 ring-gray-200 hover:ring-green-500 hover:bg-green-50/10 dark:hover:bg-green-900/20 transition-all group" onClick={() => handleSelectRuleType('message')}>
                                 <div className="flex gap-3 items-start">
                                     <div className="h-8 w-8 rounded-lg bg-green-50 dark:bg-green-900/30 flex items-center justify-center shrink-0 group-hover:bg-green-100 dark:group-hover:bg-green-900/50 transition-colors">
@@ -221,6 +216,34 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Page Redirect */}
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-blue-500 border-transparent ring-1 ring-gray-200 hover:ring-blue-500 hover:bg-blue-50/10 dark:hover:bg-blue-900/20 transition-all group" onClick={() => handleSelectRuleType('redirect')}>
+                                <div className="flex gap-3 items-start">
+                                    <div className="h-8 w-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
+                                        <ArrowRightCircleIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Page Redirect</h4>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Redirect users after submission.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Conditional visibility */}
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-purple-500 border-transparent ring-1 ring-gray-200 hover:ring-purple-500 hover:bg-purple-50/10 dark:hover:bg-purple-900/20 transition-all group" onClick={() => handleSelectRuleType('visibility')}>
+                                <div className="flex gap-3 items-start">
+                                    <div className="h-8 w-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center shrink-0 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/50 transition-colors">
+                                        <EyeIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">Conditional Visibility</h4>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Show or hide fields based on input.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Filter Submission */}
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 cursor-pointer hover:border-red-500 border-transparent ring-1 ring-gray-200 hover:ring-red-500 hover:bg-red-50/10 dark:hover:bg-red-900/20 transition-all group" onClick={() => handleSelectRuleType('disqualify')}>
                                 <div className="flex gap-3 items-start">
                                     <div className="h-8 w-8 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center shrink-0 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-colors">
@@ -235,7 +258,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700 min-h-[150px]">
+                            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700 min-h-[150px] overflow-x-auto">
                                 <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Logic Conditions</h5>
                                 <LogicBuilder
                                     expression={rootExpression}
@@ -244,7 +267,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                                 />
                             </div>
 
-                            <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg border border-primary/20 dark:border-primary/20 space-y-3">
+                            <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg border border-primary/20 dark:border-primary/20 space-y-3 overflow-auto">
                                 <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
                                     <span className="bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">THEN</span>
                                     <span>Perform action:</span>
@@ -325,7 +348,7 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                         </Button>
                     ) : <div></div>}
                     <div className="flex gap-2">
-                        <Button className="text-xs" variant="transparent" onClick={onClose}>
+                        <Button className="text-xs" variant="transparent" onClick={handleClose}>
                             Cancel
                         </Button>
                         {logicStep === 'configure' && (

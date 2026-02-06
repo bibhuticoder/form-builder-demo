@@ -80,6 +80,7 @@ export enum LogicComparison {
   EXISTS = 'exists',
   IS_EMPTY = 'isEmpty',
   MATCHES_REGEX = 'matchesRegex',
+  ON_SUBMIT = 'onSubmit',
 }
 
 export enum LogicOperation {

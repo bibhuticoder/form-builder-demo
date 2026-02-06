@@ -12,7 +12,7 @@ export default function FormBuilder() {
   return (
     <FormBuilderProvider initialContent={DEFAULT_JSON}>
       <div className="w-full">
-        <div className="h-[78vh]">
+        <div style={{ height: `calc(100vh - 7rem)` }}>
           <BuilderShell />
         </div>
       </div>

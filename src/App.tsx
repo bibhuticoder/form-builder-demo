@@ -10,9 +10,9 @@ function App() {
         </div>
       </div>
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <header className="shrink-0 flex items-start justify-between px-4 py-8">
+        <header className="shrink-0 flex items-center justify-between px-4 h-16">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            <h1 className="font-bold text-gray-900 dark:text-white">
               Cleave Form Builder
             </h1>
           </div>

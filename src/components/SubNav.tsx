@@ -22,10 +22,9 @@ export const SubNav: React.FC<SubNavProps> = ({ items, activeTab, onTabClick }) 
           className={`
             flex items-center gap-2 px-4 py-3 font-medium text-sm transition-all duration-200
             border-b-2 -mb-px
-            ${
-              activeTab === item.value
-                ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500'
-                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
+            ${activeTab === item.value
+              ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500'
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
             }
           `}
         >
