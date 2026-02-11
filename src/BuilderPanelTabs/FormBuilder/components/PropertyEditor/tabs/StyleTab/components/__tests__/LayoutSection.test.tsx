@@ -27,23 +27,16 @@ describe('LayoutSection', () => {
         expect(screen.getByText('Width')).toBeTruthy();
     });
 
-    it('renders subtabs for Input and Window', () => {
+    it('renders width options', () => {
         render(<LayoutSection {...props} />);
-        expect(screen.getByText('Input')).toBeTruthy();
-        expect(screen.getByText('Window')).toBeTruthy();
+        expect(screen.getByText('Full Width (100%)')).toBeTruthy();
+        expect(screen.getByText('Half Width (50%)')).toBeTruthy();
     });
 
-    it('switches to Window tab', () => {
+    it('calls handleStyleUpdate when width changes', () => {
         render(<LayoutSection {...props} />);
-
-        const windowTab = screen.getByText('Window');
-        fireEvent.click(windowTab);
-
-        expect(mockSetActiveSubElement).toHaveBeenCalledWith('window');
-        // Once switched, window specific controls should verify... 
-        // Logic relies on internal state state 'activeSpacingTab', difficult to assert directly without checking rendered content change
-        // We assume SpacingControl for Window renders with prefix "windowMargin"
+        const select = screen.getByRole('combobox');
+        fireEvent.change(select, { target: { value: 'half' } });
+        expect(mockHandleStyleUpdate).toHaveBeenCalledWith('width', 'half');
     });
-
-    // We accept that SpacingControl is tested elsewhere or implicitly here by existence
 });

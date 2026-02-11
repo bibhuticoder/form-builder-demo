@@ -122,6 +122,34 @@ export const DecorationSection: React.FC<DecorationSectionProps> = ({
                         left: getStyleValue(`${activeDecorationTab}BorderBottomLeftRadius`, 4),
                     }}
                 />
+
+                {/* Margin */}
+                <SpacingControl
+                    label="Margin"
+                    values={{
+                        top: getStyleValue(`${activeDecorationTab}MarginTop`),
+                        right: getStyleValue(`${activeDecorationTab}MarginRight`),
+                        bottom: getStyleValue(`${activeDecorationTab}MarginBottom`),
+                        left: getStyleValue(`${activeDecorationTab}MarginLeft`),
+                    }}
+                    onChange={handleStyleUpdate}
+                    onBatchChange={handleStyleBatchUpdate}
+                    prefix={`${activeDecorationTab}Margin`}
+                />
+
+                {/* Padding */}
+                <SpacingControl
+                    label="Padding"
+                    values={{
+                        top: getStyleValue(`${activeDecorationTab}PaddingTop`),
+                        right: getStyleValue(`${activeDecorationTab}PaddingRight`),
+                        bottom: getStyleValue(`${activeDecorationTab}PaddingBottom`),
+                        left: getStyleValue(`${activeDecorationTab}PaddingLeft`),
+                    }}
+                    onChange={handleStyleUpdate}
+                    onBatchChange={handleStyleBatchUpdate}
+                    prefix={`${activeDecorationTab}Padding`}
+                />
             </div>
         </div>
     );
