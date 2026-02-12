@@ -7,6 +7,7 @@
 import { DividerField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
 
 interface BuilderDividerProps {
   field: DividerField;
@@ -19,8 +20,9 @@ export default function BuilderDivider({
   isSelected,
   activeSubElement,
 }: Readonly<BuilderDividerProps>) {
+  const { activeBreakpoint } = useFormBuilder();
 
-  const dividerStyle = getInputStyles(field.style);
+  const dividerStyle = getInputStyles(field.style, activeBreakpoint);
   if (!dividerStyle.backgroundColor) {
     dividerStyle.backgroundColor = "#000000";
   }

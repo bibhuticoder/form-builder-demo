@@ -4,21 +4,22 @@ import { useFormBuilder } from "../../../../context";
 import { LayoutSection } from "./components/LayoutSection";
 import { TypographySection } from "./components/TypographySection";
 import { DecorationSection } from "./components/DecorationSection";
+import { resolveBreakpointStyle } from "../../../../utils/styleUtils";
+import { StyleSwitcher } from "./components/StyleSwitcher";
 
 interface StyleTabProps {
     field: Field;
 }
 
 export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
-    const { updateField, updateFieldStyleBatch, setActiveSubElement } = useFormBuilder();
+    const { updateField, updateFieldStyleBatch, setActiveSubElement, activeBreakpoint } = useFormBuilder();
 
     // Get field capabilities
     const capabilities = useMemo(() => getFieldCapabilities(field.type), [field.type]);
 
+    // Use updateFieldStyleBatch for individual updates too, as it handles responsive nesting correctly
     const handleStyleUpdate = (key: string, value: string | number | undefined) => {
-        updateField(field.id, {
-            style: { ...field.style, [key]: value },
-        });
+        updateFieldStyleBatch(field.id, { [key]: value });
     };
 
     const handleStyleBatchUpdate = (updates: Record<string, string | number | undefined>) => {
@@ -26,11 +27,21 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
     };
 
     const getStyleValue = (key: string, defaultValue: string | number | undefined = "") => {
-        return (field.style as Record<string, string | number | undefined>)?.[key] ?? defaultValue;
+        const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint);
+        return (resolvedStyle as Record<string, string | number | undefined>)?.[key] ?? defaultValue;
     };
+
+
 
     return (
         <div className="space-y-6">
+            {/* Breakpoint / Copy From Control */}
+            <StyleSwitcher
+                field={field}
+                activeBreakpoint={activeBreakpoint}
+                updateField={updateField}
+            />
+
             {/* Layout Section */}
             <LayoutSection
                 field={field}

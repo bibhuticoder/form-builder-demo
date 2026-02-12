@@ -10,7 +10,7 @@ describe('LayoutSection', () => {
     const mockGetStyleValue = jest.fn((_key, def) => def || '');
 
     const props = {
-        field: { id: '1', type: FieldType.TEXT, label: 'Text Field' } as any,
+        field: { id: '1', type: FieldType.TEXT, label: 'Text Field', style: { md: {} } } as any,
         capabilities: { supportsInputStyles: true, supportsWindowStyles: true },
         getStyleValue: mockGetStyleValue,
         handleStyleUpdate: mockHandleStyleUpdate,

@@ -6,6 +6,7 @@
 import { ReactNode } from "react";
 import { BaseField } from "../../../types";
 import { getContainerStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
 
 interface FieldWrapperProps {
   field: BaseField;
@@ -22,6 +23,7 @@ export default function BuilderFieldWrapper({
   isSelected,
   activeSubElement,
 }: Readonly<FieldWrapperProps>) {
+  const { activeBreakpoint } = useFormBuilder();
 
   // Apply highlighting ring when window is selected
   const highlightClass = isSelected && activeSubElement === 'window'
@@ -31,7 +33,7 @@ export default function BuilderFieldWrapper({
   return (
     <div
       className={`field-wrapper h-fit field-type-${field.type} transition-all duration-200 ${highlightClass}`}
-      style={getContainerStyles(field.style)}
+      style={getContainerStyles(field.style, activeBreakpoint)}
     >
       {children}
     </div>

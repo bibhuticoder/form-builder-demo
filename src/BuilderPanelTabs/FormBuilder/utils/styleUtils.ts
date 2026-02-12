@@ -1,4 +1,54 @@
 import { CSSProperties } from "react";
+import { BreakpointId, FieldStyleObject, ResponsiveFieldStyle } from "../types/styles";
+import { SCREEN_SIZES, MAX_CANVAS_WIDTH, BREAKPOINT_IDS } from "../constants";
+
+/**
+ * Determines the active breakpoint based on the current canvas width
+ */
+export const getActiveBreakpoint = (canvasWidth: number): BreakpointId => {
+    if (canvasWidth < SCREEN_SIZES[1].width) return BREAKPOINT_IDS[0];
+    if (canvasWidth < SCREEN_SIZES[2].width) return BREAKPOINT_IDS[1];
+    if (canvasWidth < SCREEN_SIZES[3].width) return BREAKPOINT_IDS[2];
+    if (canvasWidth < SCREEN_SIZES[4].width) return BREAKPOINT_IDS[3];
+    if (canvasWidth < MAX_CANVAS_WIDTH) return BREAKPOINT_IDS[4];
+    return BREAKPOINT_IDS[5];
+};
+
+
+/**
+ * Resolves a responsive style to the actual style object for a given breakpoint
+ * Handles references (e.g., "xs" -> "md") recursively
+ */
+export const resolveBreakpointStyle = (
+    responsiveStyle: ResponsiveFieldStyle | undefined,
+    breakpoint: BreakpointId,
+    visited: Set<BreakpointId> = new Set()
+): FieldStyleObject => {
+    if (!responsiveStyle) return {};
+
+    // Cycle detection
+    if (visited.has(breakpoint)) {
+        console.warn(`Circular style reference detected for breakpoint: ${breakpoint}`);
+        return {};
+    }
+    visited.add(breakpoint);
+
+    const styleOrRef = responsiveStyle[breakpoint];
+
+    if (!styleOrRef) {
+        return {};
+    }
+
+    if (typeof styleOrRef === 'string') {
+        const refBreakpoint = styleOrRef as BreakpointId;
+        // Prevent immediate self-ref (already caught by visited, but keep for clarity)
+        if (refBreakpoint === breakpoint) return {};
+
+        return resolveBreakpointStyle(responsiveStyle, refBreakpoint, visited);
+    }
+
+    return styleOrRef;
+};
 
 // Helper to add 'px' if the value is a number or a numeric string, 
 // unless it already has a unit.
@@ -16,32 +66,34 @@ const formatUnit = (value: string | number | undefined, defaultUnit = "px"): str
     return strValue;
 };
 
-export const getContainerStyles = (style: Record<string, any> = {}): CSSProperties => {
+export const getContainerStyles = (style: ResponsiveFieldStyle | undefined, breakpoint: BreakpointId = 'md'): CSSProperties => {
+    const resolvedStyle = resolveBreakpointStyle(style, breakpoint);
+
     return {
         // Spacing - Window
-        marginTop: formatUnit(style.windowMarginTop),
-        marginRight: formatUnit(style.windowMarginRight),
-        marginBottom: formatUnit(style.windowMarginBottom),
-        marginLeft: formatUnit(style.windowMarginLeft),
+        marginTop: formatUnit(resolvedStyle.windowMarginTop),
+        marginRight: formatUnit(resolvedStyle.windowMarginRight),
+        marginBottom: formatUnit(resolvedStyle.windowMarginBottom),
+        marginLeft: formatUnit(resolvedStyle.windowMarginLeft),
 
-        paddingTop: formatUnit(style.windowPaddingTop),
-        paddingRight: formatUnit(style.windowPaddingRight),
-        paddingBottom: formatUnit(style.windowPaddingBottom),
-        paddingLeft: formatUnit(style.windowPaddingLeft),
+        paddingTop: formatUnit(resolvedStyle.windowPaddingTop),
+        paddingRight: formatUnit(resolvedStyle.windowPaddingRight),
+        paddingBottom: formatUnit(resolvedStyle.windowPaddingBottom),
+        paddingLeft: formatUnit(resolvedStyle.windowPaddingLeft),
 
         // Decoration - Window
-        backgroundColor: style.windowBackgroundColor,
+        backgroundColor: resolvedStyle.windowBackgroundColor,
 
         // Border - Window
-        borderStyle: style.windowBorderStyle,
-        borderWidth: formatUnit(style.windowBorderWidth),
-        borderColor: style.windowBorderColor,
+        borderStyle: resolvedStyle.windowBorderStyle,
+        borderWidth: formatUnit(resolvedStyle.windowBorderWidth),
+        borderColor: resolvedStyle.windowBorderColor,
 
         // Border Radius - Window
-        borderTopLeftRadius: formatUnit(style.windowBorderTopLeftRadius),
-        borderTopRightRadius: formatUnit(style.windowBorderTopRightRadius),
-        borderBottomRightRadius: formatUnit(style.windowBorderBottomRightRadius),
-        borderBottomLeftRadius: formatUnit(style.windowBorderBottomLeftRadius),
+        borderTopLeftRadius: formatUnit(resolvedStyle.windowBorderTopLeftRadius),
+        borderTopRightRadius: formatUnit(resolvedStyle.windowBorderTopRightRadius),
+        borderBottomRightRadius: formatUnit(resolvedStyle.windowBorderBottomRightRadius),
+        borderBottomLeftRadius: formatUnit(resolvedStyle.windowBorderBottomLeftRadius),
     };
 };
 
@@ -78,61 +130,69 @@ const getFontWeight = (weight: string | number | undefined): number | string | u
     }
 };
 
-export const getInputStyles = (style: Record<string, any> = {}): CSSProperties => {
+export const getInputStyles = (style: ResponsiveFieldStyle | undefined, breakpoint: BreakpointId = 'md'): CSSProperties => {
+    const resolvedStyle = resolveBreakpointStyle(style, breakpoint);
+
     const css: CSSProperties = {
         // Spacing - Input
-        marginTop: formatUnit(style.inputMarginTop),
-        marginRight: formatUnit(style.inputMarginRight),
-        marginBottom: formatUnit(style.inputMarginBottom),
-        marginLeft: formatUnit(style.inputMarginLeft),
+        marginTop: formatUnit(resolvedStyle.inputMarginTop),
+        marginRight: formatUnit(resolvedStyle.inputMarginRight),
+        marginBottom: formatUnit(resolvedStyle.inputMarginBottom),
+        marginLeft: formatUnit(resolvedStyle.inputMarginLeft),
 
-        paddingTop: formatUnit(style.inputPaddingTop),
-        paddingRight: formatUnit(style.inputPaddingRight),
-        paddingBottom: formatUnit(style.inputPaddingBottom),
-        paddingLeft: formatUnit(style.inputPaddingLeft),
+        paddingTop: formatUnit(resolvedStyle.inputPaddingTop),
+        paddingRight: formatUnit(resolvedStyle.inputPaddingRight),
+        paddingBottom: formatUnit(resolvedStyle.inputPaddingBottom),
+        paddingLeft: formatUnit(resolvedStyle.inputPaddingLeft),
 
         // Typography - Input
-        fontFamily: getFontFamily(style.inputFontFamily),
-        fontSize: style.inputFontSize ? `${style.inputFontSize}${style.inputFontSizeUnit || 'px'}` : undefined,
-        fontWeight: getFontWeight(style.inputFontWeight),
-        textAlign: style.textAlign,
-        color: style.inputColor,
+        fontFamily: getFontFamily(resolvedStyle.inputFontFamily),
+        fontSize: resolvedStyle.inputFontSize ? `${resolvedStyle.inputFontSize}${resolvedStyle.inputFontSizeUnit || 'px'}` : undefined,
+        fontWeight: getFontWeight(resolvedStyle.inputFontWeight),
+        textAlign: resolvedStyle.inputTextAlign || resolvedStyle.textAlign, // Fallback to legacy textAlign
+        color: resolvedStyle.inputColor,
 
         // Decoration - Input
-        backgroundColor: style.inputBackgroundColor,
+        backgroundColor: resolvedStyle.inputBackgroundColor,
 
         // Border - Input
-        borderStyle: style.inputBorderStyle,
-        borderWidth: formatUnit(style.inputBorderWidth),
-        borderColor: style.inputBorderColor,
+        borderStyle: resolvedStyle.inputBorderStyle,
+        borderWidth: formatUnit(resolvedStyle.inputBorderWidth),
+        borderColor: resolvedStyle.inputBorderColor,
 
         // Border Radius - Input
-        borderTopLeftRadius: formatUnit(style.inputBorderTopLeftRadius),
-        borderTopRightRadius: formatUnit(style.inputBorderTopRightRadius),
-        borderBottomRightRadius: formatUnit(style.inputBorderBottomRightRadius),
-        borderBottomLeftRadius: formatUnit(style.inputBorderBottomLeftRadius),
+        borderTopLeftRadius: formatUnit(resolvedStyle.inputBorderTopLeftRadius),
+        borderTopRightRadius: formatUnit(resolvedStyle.inputBorderTopRightRadius),
+        borderBottomRightRadius: formatUnit(resolvedStyle.inputBorderBottomRightRadius),
+        borderBottomLeftRadius: formatUnit(resolvedStyle.inputBorderBottomLeftRadius),
 
         // Calculated width & height
-        width: `calc(100% - ${formatUnit(style.inputMarginRight)} - ${formatUnit(style.inputMarginLeft)})`
+        width: `calc(100% - ${formatUnit(resolvedStyle.inputMarginRight)} - ${formatUnit(resolvedStyle.inputMarginLeft)})`
     };
 
     return css;
 };
 
-export const getLabelStyles = (style: Record<string, any> = {}): CSSProperties => {
+export const getLabelStyles = (style: ResponsiveFieldStyle | undefined, breakpoint: BreakpointId = 'md'): CSSProperties => {
+    const resolvedStyle = resolveBreakpointStyle(style, breakpoint);
+
     return {
         // Typography - Label
-        fontFamily: getFontFamily(style.labelFontFamily),
-        fontSize: style.labelFontSize ? `${style.labelFontSize}${style.labelFontSizeUnit || 'px'}` : undefined,
-        fontWeight: getFontWeight(style.labelFontWeight),
-        textAlign: style.labelTextAlign,
-        color: style.labelColor,
+        fontFamily: getFontFamily(resolvedStyle.labelFontFamily),
+        fontSize: resolvedStyle.labelFontSize ? `${resolvedStyle.labelFontSize}${resolvedStyle.labelFontSizeUnit || 'px'}` : undefined,
+        fontWeight: getFontWeight(resolvedStyle.labelFontWeight),
+        textAlign: resolvedStyle.labelTextAlign,
+        color: resolvedStyle.labelColor,
+        // Margin bottom for label
+        marginBottom: formatUnit(resolvedStyle.labelMarginBottom)
     };
 };
 
 import { DEFAULT_CONFIG } from "../constants";
 
-export const getHelpTextStyles = (style: Record<string, any> = {}, globalSettings?: Record<string, any>): CSSProperties => {
+export const getHelpTextStyles = (style: ResponsiveFieldStyle | undefined, globalSettings?: Record<string, any>, breakpoint: BreakpointId = 'md'): CSSProperties => {
+    const resolvedStyle = resolveBreakpointStyle(style, breakpoint);
+
     // Default to global settings if provided, otherwise fallback to constants
     const defaultFontSize = globalSettings?.helpFontSize !== undefined ? globalSettings.helpFontSize : DEFAULT_CONFIG.helpFontSize;
     const defaultFontSizeUnit = globalSettings?.helpFontSizeUnit || DEFAULT_CONFIG.helpFontSizeUnit;
@@ -140,24 +200,26 @@ export const getHelpTextStyles = (style: Record<string, any> = {}, globalSetting
 
     return {
         // Typography - Help Text
-        fontFamily: getFontFamily(style.helpFontFamily),
-        fontSize: style.helpFontSize
-            ? `${style.helpFontSize}${style.helpFontSizeUnit || 'px'}`
+        fontFamily: getFontFamily(resolvedStyle.helpFontFamily),
+        fontSize: resolvedStyle.helpFontSize
+            ? `${resolvedStyle.helpFontSize}${resolvedStyle.helpFontSizeUnit || 'px'}`
             : `${defaultFontSize}${defaultFontSizeUnit}`,
-        fontWeight: getFontWeight(style.helpFontWeight),
-        textAlign: style.helpTextAlign,
-        color: style.helpColor || defaultColor,
+        fontWeight: getFontWeight(resolvedStyle.helpFontWeight),
+        textAlign: resolvedStyle.helpTextAlign,
+        color: resolvedStyle.helpColor || defaultColor,
     };
 };
 
-export const getPlaceholderStyles = (style: Record<string, any> = {}): CSSProperties => {
+export const getPlaceholderStyles = (style: ResponsiveFieldStyle | undefined, breakpoint: BreakpointId = 'md'): CSSProperties => {
+    const resolvedStyle = resolveBreakpointStyle(style, breakpoint);
+
     return {
         // Typography - Placeholder
-        fontFamily: getFontFamily(style.placeholderFontFamily),
-        fontSize: style.placeholderFontSize ? `${style.placeholderFontSize}${style.placeholderFontSizeUnit || 'px'}` : undefined,
-        fontWeight: getFontWeight(style.placeholderFontWeight),
-        textAlign: style.placeholderTextAlign,
-        color: style.placeholderColor,
+        fontFamily: getFontFamily(resolvedStyle.placeholderFontFamily),
+        fontSize: resolvedStyle.placeholderFontSize ? `${resolvedStyle.placeholderFontSize}${resolvedStyle.placeholderFontSizeUnit || 'px'}` : undefined,
+        fontWeight: getFontWeight(resolvedStyle.placeholderFontWeight),
+        textAlign: resolvedStyle.placeholderTextAlign,
+        color: resolvedStyle.placeholderColor,
     };
 };
 

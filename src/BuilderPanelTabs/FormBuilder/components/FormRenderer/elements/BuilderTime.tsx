@@ -17,7 +17,7 @@ interface BuilderTimeProps {
 }
 
 export default function BuilderTime({ field, isSelected, activeSubElement }: Readonly<BuilderTimeProps>) {
-  const { jsonContent } = useFormBuilder();
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <PlaceholderStyles fieldId={field.id} style={field.style} />
@@ -26,7 +26,7 @@ export default function BuilderTime({ field, isSelected, activeSubElement }: Rea
           <label
             htmlFor={field.id}
             className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getLabelStyles(field.style)}
+            style={getLabelStyles(field.style, activeBreakpoint)}
           >
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -35,7 +35,7 @@ export default function BuilderTime({ field, isSelected, activeSubElement }: Rea
         <div className="relative w-full">
           <div
             className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap min-h-[26px] ${isSelected && ['input', 'placeholder'].includes(activeSubElement || '') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getInputStyles(field.style)}
+            style={getInputStyles(field.style, activeBreakpoint)}
           >
             <span
               className={field.placeholder ? "text-gray-500" : "text-gray-400"}
@@ -56,7 +56,7 @@ export default function BuilderTime({ field, isSelected, activeSubElement }: Rea
         {field.helpText && (
           <p
             className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
           >
             {field.helpText}
           </p>

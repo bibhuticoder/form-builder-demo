@@ -9,7 +9,7 @@ import { DndProvider } from "./dnd";
 import { useFormBuilder } from "../context";
 
 export const BuilderShell: React.FC = () => {
-  const { jsonContent, addField, reorderFields } = useFormBuilder();
+  const { jsonContent, addField, reorderFields, activeBreakpoint } = useFormBuilder();
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
 
   const handleClearSelection = () => {
@@ -31,6 +31,7 @@ export const BuilderShell: React.FC = () => {
       onFieldAdd={addField}
       onFieldReorder={reorderFields}
       fields={jsonContent.fields ?? []}
+      activeBreakpoint={activeBreakpoint}
       renderPreview={(field) => (
         <BuilderFieldControls field={field} forceHover={true}>
           <FieldRenderer field={field} />

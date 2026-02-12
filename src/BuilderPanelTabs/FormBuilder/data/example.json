@@ -28,11 +28,18 @@
       "label": "Welcome to our Form",
       "headingLevel": "h1",
       "style": {
-        "color": "#111827",
-        "textAlign": "center",
-        "fontSize": "32",
-        "fontWeight": "bold",
-        "marginBottom": 24
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "color": "#111827",
+          "textAlign": "center",
+          "fontSize": "32",
+          "fontWeight": "bold",
+          "marginBottom": 24
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -40,9 +47,16 @@
       "type": "paragraph",
       "label": "Please fill out the information below completely.",
       "style": {
-        "color": "#6B7280",
-        "textAlign": "center",
-        "fontSize": "16"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "color": "#6B7280",
+          "textAlign": "center",
+          "fontSize": "16"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -54,7 +68,14 @@
       "required": true,
       "helpText": "Your given name",
       "style": {
-        "width": "half"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "width": "half"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -65,7 +86,14 @@
       "placeholder": "Doe",
       "required": true,
       "style": {
-        "width": "half"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "width": "half"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -105,7 +133,14 @@
       "label": "City",
       "name": "city",
       "style": {
-        "width": "third"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "width": "third"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -114,7 +149,14 @@
       "label": "State",
       "name": "state",
       "style": {
-        "width": "third"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "width": "third"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -123,7 +165,14 @@
       "label": "Zip Code",
       "name": "zip_code",
       "style": {
-        "width": "third"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "width": "third"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     },
     {
@@ -266,11 +315,18 @@
       "label": "Send Message",
       "action": "submit",
       "style": {
-        "backgroundColor": "#4F46E5",
-        "color": "#FFFFFF",
-        "width": "full",
-        "borderRadius": 8,
-        "fontWeight": "bold"
+        "xs": "md",
+        "sm": "md",
+        "md": {
+          "backgroundColor": "#4F46E5",
+          "color": "#FFFFFF",
+          "width": "full",
+          "borderRadius": 8,
+          "fontWeight": "bold"
+        },
+        "lg": "md",
+        "xl": "md",
+        "2xl": "md"
       }
     }
   ],

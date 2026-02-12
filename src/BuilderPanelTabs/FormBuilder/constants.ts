@@ -1,12 +1,16 @@
 import type { ScreenSize } from './types/canvas'
 
+export const BREAKPOINT_IDS = ["xs", "sm", "md", "lg", "xl", "2xl"] as const;
+export const BASE_BREAKPOINT_ID = "md";
+
+
 export const SCREEN_SIZES: ScreenSize[] = [
-    { id: "xs", label: "XS", width: 375, title: "Mobile (375px)" },
-    { id: "sm", label: "SM", width: 640, title: "SM (640px)" },
-    { id: "md", label: "MD", width: 768, title: "MD (768px)" },
-    { id: "lg", label: "LG", width: 1024, title: "LG (1024px)" },
-    { id: "xl", label: "XL", width: 1280, title: "XL (1280px)" },
-    { id: "2xl", label: "2XL", width: 1536, title: "2XL (1536px)" },
+    { id: BREAKPOINT_IDS[0], label: "XS", width: 375, title: "Mobile (375px)" },
+    { id: BREAKPOINT_IDS[1], label: "SM", width: 640, title: "SM (640px)" },
+    { id: BREAKPOINT_IDS[2], label: "MD", width: 768, title: "MD (768px)" },
+    { id: BREAKPOINT_IDS[3], label: "LG", width: 1024, title: "LG (1024px)" },
+    { id: BREAKPOINT_IDS[4], label: "XL", width: 1280, title: "XL (1280px)" },
+    { id: BREAKPOINT_IDS[5], label: "2XL", width: 1536, title: "2XL (1536px)" },
 ]
 
 export const MIN_CANVAS_WIDTH = SCREEN_SIZES[0].width

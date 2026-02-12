@@ -7,6 +7,7 @@
 import { ParagraphField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { getInputStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
 
 interface BuilderParagraphProps {
   field: ParagraphField;
@@ -19,11 +20,13 @@ export default function BuilderParagraph({
   isSelected,
   activeSubElement,
 }: Readonly<BuilderParagraphProps>) {
+  const { activeBreakpoint } = useFormBuilder();
+
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <p
         dangerouslySetInnerHTML={{ __html: field.label }}
-        style={getInputStyles(field.style)}
+        style={getInputStyles(field.style, activeBreakpoint)}
         className={`transition-all duration-200 text-gray-900 dark:text-white ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1 rounded px-1' : ''}`}
       >
       </p>

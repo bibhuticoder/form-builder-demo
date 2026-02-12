@@ -5,7 +5,8 @@
  */
 
 import { VideoField } from "../../../types";
-import { getHelpTextStyles } from "../../../utils/styleUtils";
+import { getHelpTextStyles, getInputStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 
 interface BuilderVideoProps {
@@ -15,6 +16,8 @@ interface BuilderVideoProps {
 }
 
 export default function BuilderVideo({ field, isSelected, activeSubElement }: Readonly<BuilderVideoProps>) {
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
+
   const getEmbedUrl = (url: string | undefined): string | null => {
     if (!url) return null;
 
@@ -70,7 +73,7 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
                 src={url}
                 controls
                 className="absolute inset-0 w-full h-full object-cover"
-                style={field.style}
+                style={getInputStyles(field.style, activeBreakpoint)}
               />
             ) : (
               embedUrl && (
@@ -80,7 +83,7 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="absolute inset-0 w-full h-full pointer-events-none"
-                  style={field.style}
+                  style={getInputStyles(field.style, activeBreakpoint)}
                 />
               )
             )
@@ -95,7 +98,7 @@ export default function BuilderVideo({ field, isSelected, activeSubElement }: Re
         {field.caption && (
           <p
             className={`text-[9px] text-gray-500 ${isSelected && (activeSubElement === 'caption' || activeSubElement === 'help') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getHelpTextStyles(field.style)}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
           >
             {field.caption}
           </p>

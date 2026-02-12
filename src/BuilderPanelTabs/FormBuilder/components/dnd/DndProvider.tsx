@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent, type DragOverEvent } from "@dnd-kit/core";
 import type { DragData } from "../../types/dnd";
-import type { Field } from "../../types";
+import type { Field, BreakpointId } from "../../types";
 import { createFieldFromType } from "../../utils/dnd/utils";
 
 /** Width of the drag preview overlay */
@@ -24,6 +24,8 @@ interface DndProviderProps {
   fields: Field[];
   /** Custom render function for drag preview */
   renderPreview?: (field: Field) => React.ReactNode;
+  /** Active breakpoint for initializing new field styles */
+  activeBreakpoint: BreakpointId;
 }
 
 /**
@@ -37,7 +39,8 @@ export function DndProvider({
   onFieldAdd,
   onFieldReorder,
   fields,
-  renderPreview
+  renderPreview,
+  activeBreakpoint
 }: DndProviderProps) {
   const [activeDrag, setActiveDrag] = useState<{ id?: string; data?: DragData }>({});
   const [overId, setOverId] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export function DndProvider({
     // If overIndex is -1 (shouldn't happen with valid overId), default to end
     const insertIndex = overIndex >= 0 ? overIndex : undefined;
 
-    const newField = createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields);
+    const newField = createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields, activeBreakpoint);
     onFieldAdd(newField, insertIndex);
   }, [onFieldAdd, fields]);
 
@@ -120,7 +123,7 @@ export function DndProvider({
   /** Creates a preview field instance when dragging from the palette */
   const activePalettePreview = useMemo(() => {
     if (activeDrag.data?.kind === "palette-field" && activeDrag.data.fieldType && activeDrag.data.label) {
-      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label, fields);
+      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label, fields, activeBreakpoint);
     }
     return null;
   }, [activeDrag.data, fields]);

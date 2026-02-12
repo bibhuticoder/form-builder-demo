@@ -17,7 +17,7 @@ interface BuilderUploadProps {
 }
 
 export default function BuilderUpload({ field, isSelected, activeSubElement }: Readonly<BuilderUploadProps>) {
-  const { jsonContent } = useFormBuilder();
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
   const labelId = `${field.id}-label`;
 
   const fileTypes = field.acceptedFileTypes
@@ -95,7 +95,7 @@ export default function BuilderUpload({ field, isSelected, activeSubElement }: R
             {(helperText || field.helpText) && (
               <span
                 className={`text-xs text-slate-400 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-                style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+                style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
               >
                 {helperText || field.helpText}
               </span>

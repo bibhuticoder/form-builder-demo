@@ -12,7 +12,8 @@ import { CANVAS_DROPPABLE_ID } from "../../types/dnd";
 import { useFormBuilder } from "../../context";
 import { SortableList, SortableItem, DropIndicator } from "../dnd";
 import { DEF_CANVAS_WIDTH } from "../../constants";
-import { getFormSettingsStyles } from "../../utils/styleUtils";
+import { getFormSettingsStyles, resolveBreakpointStyle, getActiveBreakpoint } from "../../utils/styleUtils";
+import { BreakpointId } from "../../types";
 
 interface FormRendererProps {
   formData: FormDefinition;
@@ -36,8 +37,12 @@ export default function FormRenderer({
     deleteField(fieldId);
   };
 
+  // Determine active breakpoint based on canvas width
+  const activeBreakpoint: BreakpointId = getActiveBreakpoint(canvasWidth);
+
   const getWidthClass = (field: typeof fields[0]): string => {
-    const width = field.style?.width || "full";
+    const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint);
+    const width = resolvedStyle.width || "full";
 
     const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH;
 

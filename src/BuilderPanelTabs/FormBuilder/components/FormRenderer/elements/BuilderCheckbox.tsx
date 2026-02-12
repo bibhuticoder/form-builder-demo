@@ -20,12 +20,12 @@ export default function BuilderCheckbox({
   isSelected,
   activeSubElement,
 }: Readonly<BuilderCheckboxProps>) {
-  const { jsonContent } = useFormBuilder();
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
   return (
     <BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div className="space-y-1">
         {field.label && (
-          <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`} style={getLabelStyles(field.style)}>
+          <label className={`block text-xs font-medium text-gray-700 ${isSelected && activeSubElement === 'label' ? 'ring-1 ring-primary ring-offset-1' : ''}`} style={getLabelStyles(field.style, activeBreakpoint)}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -56,7 +56,7 @@ export default function BuilderCheckbox({
         {field.helpText && (
           <p
             className={`text-[9px] text-gray-500 ${isSelected && activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
           >
             {field.helpText}
           </p>

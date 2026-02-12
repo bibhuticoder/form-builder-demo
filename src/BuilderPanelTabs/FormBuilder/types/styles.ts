@@ -3,8 +3,11 @@
  * Global and field-level styling configurations
  */
 
+import { BREAKPOINT_IDS } from '../constants';
 
 export type WidthValue = 'full' | 'three-quarters' | 'half' | 'third' | 'quarter';
+
+export type BreakpointId = typeof BREAKPOINT_IDS[number];
 
 export type StyleSettings = {
   fontFamilyBody: string;
@@ -49,7 +52,8 @@ export type StyleSettings = {
   textAlign?: 'left' | 'center' | 'right' | 'justify';
 }
 
-export type FieldStyle = {
+// Single breakpoint style object
+export type FieldStyleObject = {
   // Layout
   width?: WidthValue;
 
@@ -139,3 +143,14 @@ export type FieldStyle = {
   display?: 'block' | 'inline' | 'inline-block' | 'flex' | 'grid' | 'none';
   opacity?: number;
 }
+
+// Responsive style structure
+export type ResponsiveFieldStyle = {
+  [K in BreakpointId]?: FieldStyleObject | BreakpointId;
+};
+
+// Re-export FieldStyle as the main type for backward compatibility or clarity
+// Ideally we update usages to ResponsiveFieldStyle, but `Field` type likely uses `style?: FieldStyle`
+// Let's make FieldStyle the responsive one to minimize churn in other files
+export type FieldStyle = ResponsiveFieldStyle;
+

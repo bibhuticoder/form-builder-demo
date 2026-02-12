@@ -4,6 +4,7 @@
 
 import { FieldType } from "../../types/enums";
 import { Field } from "../../types";
+import { BREAKPOINT_IDS, BASE_BREAKPOINT_ID } from "../../constants";
 
 /**
  * Generates a unique ID combining timestamp and random string
@@ -120,6 +121,21 @@ const getDefaultStylesForType = (fieldType: FieldType) => {
   return INPUT_FIELD_STYLES;
 };
 
+import { BreakpointId } from "../../types";
+
+// Helper to create responsive style structure
+const createResponsiveStyle = (baseStyle: any, initialBreakpoint: BreakpointId) => {
+  const style: any = {};
+  BREAKPOINT_IDS.forEach((id) => {
+    if (id === initialBreakpoint) {
+      style[id] = { ...baseStyle };
+    } else {
+      style[id] = initialBreakpoint;
+    }
+  });
+  return style;
+};
+
 
 /**
  * Generates a semantic ID for a field based on its type and existing fields
@@ -134,10 +150,12 @@ const generateFieldId = (fieldType: FieldType, existingFields: Field[] = []): st
 export function createFieldFromType(
   fieldType: FieldType,
   label: string,
-  existingFields: Field[] = []
+  existingFields: Field[] = [],
+  activeBreakpoint: BreakpointId = 'md'
 ): Field {
   const id = generateFieldId(fieldType, existingFields);
   let placeholder = `Enter ${label.toLowerCase()}`;
+  const defaultStyles = getDefaultStylesForType(fieldType);
 
   // Option-based fields need default choices
   if (fieldType === FieldType.CHECKBOX || fieldType === FieldType.RADIO || fieldType === FieldType.DROPDOWN) {
@@ -154,7 +172,7 @@ export function createFieldFromType(
       required: false,
       placeholder,
       options,
-      style: { ...getDefaultStylesForType(fieldType) },
+      style: createResponsiveStyle(defaultStyles, activeBreakpoint),
     } as Field;
   }
 
@@ -165,7 +183,7 @@ export function createFieldFromType(
       type: fieldType,
       label,
       headingLevel: "h2", // Default to h2
-      style: { ...getDefaultStylesForType(fieldType) },
+      style: createResponsiveStyle(defaultStyles, activeBreakpoint),
     } as Field;
   }
 
@@ -176,6 +194,6 @@ export function createFieldFromType(
     label,
     required: false,
     placeholder,
-    style: { ...getDefaultStylesForType(fieldType) },
+    style: createResponsiveStyle(defaultStyles, activeBreakpoint),
   } as Field;
 }

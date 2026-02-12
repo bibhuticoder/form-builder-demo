@@ -1,13 +1,17 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
-import { FormDefinition, Field, FormSettings, LogicRule } from "../types";
+import { FormDefinition, Field, FormSettings, LogicRule, BreakpointId, ResponsiveFieldStyle, FieldStyleObject } from "../types";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useHistory } from "../hooks/useHistory";
+// import { SCREEN_SIZES, MAX_CANVAS_WIDTH, BREAKPOINT_IDS } from "../constants"; // Removed
+
+import { resolveBreakpointStyle, getActiveBreakpoint } from "../utils/styleUtils";
 
 interface FormBuilderContextType {
   // State
   jsonContent: FormDefinition;
   activeSubElement: string | null;
   canvasWidth: number;
+  activeBreakpoint: BreakpointId;
 
   // Core setters
   setJsonContent: (content: FormDefinition) => void;
@@ -73,6 +77,9 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
   const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
 
   const [canvasWidth, setCanvasWidth] = useState<number>(768);
+
+  // Derive active breakpoint from canvas width
+  const activeBreakpoint = useMemo<BreakpointId>(() => getActiveBreakpoint(canvasWidth), [canvasWidth]);
 
   // Core setter
   const setJsonContent = useCallback((content: FormDefinition) => {
@@ -152,13 +159,37 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
   const updateFieldStyleBatch = useCallback((fieldId: string, styleUpdates: Record<string, any>) => {
     setJsonContentState((old) => ({
       ...old,
-      fields: old.fields.map((field) =>
-        field.id === fieldId
-          ? ({ ...field, style: { ...field.style, ...styleUpdates } } as Field)
-          : field
-      ),
+      fields: old.fields.map((field) => {
+        if (field.id !== fieldId) return field;
+
+        const currentStyle: ResponsiveFieldStyle = field.style || {};
+        // Use the current activeBreakpoint from the closure (will be stale? No, useCallback deps will fix it)
+        // Wait, activeBreakpoint is outside. I need to include it in deps.
+
+        // Get current style for this breakpoint
+        const currentBreakpointStyleOrRef = currentStyle[activeBreakpoint];
+
+        let newBreakpointStyle: FieldStyleObject;
+
+        // If it's a string reference, resolve it and merge
+        if (typeof currentBreakpointStyleOrRef === 'string') {
+          const resolved = resolveBreakpointStyle(currentStyle, activeBreakpoint);
+          newBreakpointStyle = { ...resolved, ...styleUpdates };
+        } else {
+          // If it's an object or undefined, just merge
+          newBreakpointStyle = { ...(currentBreakpointStyleOrRef || {}), ...styleUpdates };
+        }
+
+        return {
+          ...field,
+          style: {
+            ...currentStyle,
+            [activeBreakpoint]: newBreakpointStyle
+          }
+        } as Field;
+      }),
     }));
-  }, []);
+  }, [activeBreakpoint]); // Add activeBreakpoint to deps
 
   const deleteField = useCallback((fieldId: string) => {
     setJsonContentState((old) => ({
@@ -232,6 +263,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       jsonContent,
       activeSubElement,
       canvasWidth,
+      activeBreakpoint,
       setJsonContent,
       setActiveSubElement,
       setCanvasWidth,
@@ -258,6 +290,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ initia
       jsonContent,
       activeSubElement,
       canvasWidth,
+      activeBreakpoint,
       setJsonContent,
       updateFormName,
       updateFormSettings,
