@@ -22,46 +22,27 @@ export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete })
             return <span className="text-gray-400">No conditions</span>;
         }
 
-        const count = rule.if.args.length;
-        if (count === 0) return <span className="text-gray-400">No conditions</span>;
+        const conditions = rule.if.conditions;
+        if (!conditions || conditions.length === 0) return <span className="text-gray-400">No conditions</span>;
 
-        const op = rule.if.operation === LogicOperation.OR ? 'OR' : 'AND';
-
-        // Just show first condition + "and X more" if multiple
-        const firstArg: any = rule.if.args[0];
-        const fieldName = firstArg.left?.var || 'Form';
-        const operator = firstArg.comparison;
-        const value = firstArg.right?.str || '';
-
-        let readableOp = 'is equal to';
-        if (operator === LogicComparison.NEQ) readableOp = 'is not equal to';
-        if (operator === LogicComparison.CONTAINS) readableOp = 'contains';
-        if (operator === LogicComparison.IS_EMPTY) readableOp = 'is empty';
-        if (operator === LogicComparison.EXISTS) readableOp = 'is not empty';
-
-        let textSpy = (
-            <span className="text-xs">
-                If <span className="font-semibold text-primary dark:text-primary">"{fieldName}"</span> <span className="text-purple-600 dark:text-purple-400 font-medium">{readableOp}</span> {value && <span className="font-semibold text-orange-600 dark:text-orange-400">"{value}"</span>}
-            </span>
+        return (
+            <div className="flex flex-wrap items-center gap-1 text-xs">
+                {conditions.map((cond, index) => (
+                    <React.Fragment key={index}>
+                        {index > 0 && (
+                            <span className="font-bold text-gray-400 uppercase text-[10px] mx-1">
+                                {conditions[index - 1].logicalOp || 'AND'}
+                            </span>
+                        )}
+                        <span className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                            <span className="font-medium text-indigo-600 dark:text-indigo-400">{cond.left.var}</span>
+                            <span className="mx-1 text-gray-400">{cond.comparison}</span>
+                            {cond.right?.str && <span className="font-medium text-gray-900 dark:text-gray-100">"{cond.right.str}"</span>}
+                        </span>
+                    </React.Fragment>
+                ))}
+            </div>
         );
-
-        if (rule.trigger.event === LogicEvent.SUBMISSION_ATTEMPT) {
-            textSpy = (
-                <span className="text-xs">
-                    On <span className="font-semibold text-primary dark:text-primary">Submit</span>
-                </span>
-            );
-        }
-
-        if (count > 1) {
-            return (
-                <span className="font-bold">
-                    {textSpy} <span className="text-[10px] border rounded bg-gray-200 whitespace-nowrap px-1.5 py-0.5">+{count - 1} {op}</span>
-                </span>
-            );
-        }
-
-        return textSpy;
     };
 
     return (

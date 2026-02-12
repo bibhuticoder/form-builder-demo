@@ -22,9 +22,11 @@ export interface LogicTrigger {
 // ============================================================================
 
 export interface LogicCondition {
+  id: string; // Unique ID for React rendering
   comparison: LogicComparison;
   left: LogicOperand;
   right?: LogicOperand; // optional for unary operators like exists/isEmpty
+  logicalOp?: 'and' | 'or'; // Operator connecting to the NEXT condition
 }
 
 export interface LogicOperand {
@@ -35,8 +37,7 @@ export interface LogicOperand {
 }
 
 export interface LogicExpression {
-  operation: LogicOperation;
-  args: (LogicCondition | LogicExpression)[]; // supports nested expressions
+  conditions: LogicCondition[];
 }
 
 // ============================================================================

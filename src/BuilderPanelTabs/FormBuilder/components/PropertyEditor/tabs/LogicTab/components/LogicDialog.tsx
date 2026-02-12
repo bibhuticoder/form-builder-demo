@@ -32,8 +32,12 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
 
     // Nested Logic State
     const [rootExpression, setRootExpression] = useState<LogicExpression | undefined>({
-        operation: LogicOperation.AND,
-        args: [{ comparison: LogicComparison.EQ, left: { var: '' }, right: { str: '' } }]
+        conditions: [{
+            id: crypto.randomUUID(),
+            comparison: LogicComparison.EQ,
+            left: { var: '' },
+            right: { str: '' }
+        }]
     });
 
     // Action State
@@ -70,8 +74,12 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
                 setLogicStep('select');
                 setSelectedRuleType(null);
                 setRootExpression({
-                    operation: LogicOperation.AND,
-                    args: [{ comparison: LogicComparison.EQ, left: { var: '' }, right: { str: '' } }]
+                    conditions: [{
+                        id: crypto.randomUUID(),
+                        comparison: LogicComparison.EQ,
+                        left: { var: '' },
+                        right: { str: '' }
+                    }]
                 });
                 setRuleAction({ action: '', targetField: '' });
             }
@@ -86,8 +94,12 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
         setLogicStep('configure');
         // Reset expression for new rule
         setRootExpression({
-            operation: LogicOperation.AND,
-            args: [{ comparison: LogicComparison.EQ, left: { var: '' }, right: { str: '' } }]
+            conditions: [{
+                id: crypto.randomUUID(),
+                comparison: LogicComparison.EQ,
+                left: { var: '' },
+                right: { str: '' }
+            }]
         });
     };
 
@@ -103,32 +115,19 @@ export const LogicDialog: React.FC<LogicDialogProps> = ({
 
     const validateExpression = (expr: LogicExpression | undefined): boolean => {
         if (!expr) return true; // Valid if undefined (e.g. for onSubmit actions)
-        return expr.args.every(arg => {
-            if ((arg as LogicExpression).operation) {
-                return validateExpression(arg as LogicExpression);
-            } else {
-                const cond = arg as any; // Cast for easier access
-                // Helper to map comparison to validation logic if needed, 
-                // but checking `left.var` existence is primary check for now.
-                const noValue = [LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(cond.comparison);
-                // Also check on_submit case if it existed (removed in simplified view but kept in logic)
-                return cond.left?.var && (noValue || cond.right?.str !== undefined);
-            }
+        return expr.conditions.every(cond => {
+            // Helper to map comparison to validation logic if needed, 
+            // but checking `left.var` existence is primary check for now.
+            const noValue = [LogicComparison.IS_EMPTY, LogicComparison.EXISTS, LogicComparison.ON_SUBMIT].includes(cond.comparison);
+            // Also check on_submit case if it existed (removed in simplified view but kept in logic)
+            return cond.left?.var && (noValue || cond.right?.str !== undefined);
         });
     };
 
     const getFirstFieldId = (expr: LogicExpression | undefined): string | undefined => {
-        if (!expr) return undefined;
-        for (const arg of expr.args) {
-            if ((arg as LogicExpression).operation) {
-                const found = getFirstFieldId(arg as LogicExpression);
-                if (found) return found;
-            } else {
-                const cond = arg as any;
-                if (cond.left?.var) return cond.left.var;
-            }
-        }
-        return undefined;
+        if (!expr || expr.conditions.length === 0) return undefined;
+        // Just return the first condition's field
+        return expr.conditions[0].left.var;
     };
 
     const handleSave = () => {

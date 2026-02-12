@@ -334,16 +334,16 @@
     "version": 1,
     "rules": [
       {
-        "id": "show_phone_if_contact_pref_phone",
+        "id": "phone_visibility",
         "enabled": true,
         "trigger": {
           "event": "field.change",
           "fieldId": "radio_demo"
         },
         "if": {
-          "operation": "and",
-          "args": [
+          "conditions": [
             {
+              "id": "cond_1",
               "comparison": "eq",
               "left": {
                 "var": "radio_demo"
@@ -409,45 +409,46 @@
           "fieldId": "radio_demo"
         },
         "if": {
-          "operation": "and",
-          "args": [
+          "conditions": [
             {
+              "id": "cond_1",
               "comparison": "eq",
               "left": {
                 "var": "radio_demo"
               },
               "right": {
                 "str": "phone"
-              }
+              },
+              "logicalOp": "and"
             },
             {
+              "id": "cond_2",
               "comparison": "exists",
               "left": {
                 "var": "phone_demo"
-              }
+              },
+              "logicalOp": "or"
             },
             {
-              "operation": "or",
-              "args": [
-                {
-                  "comparison": "eq",
-                  "left": {
-                    "var": "dropdown_demo"
-                  },
-                  "right": {
-                    "str": "sales"
-                  }
-                },
-                {
-                  "comparison": "eq",
-                  "left": {
-                    "var": "dropdown_demo"
-                  },
-                  "right": {
-                    "str": "support"
-                  }
-                }
-              ]
+              "id": "cond_3",
+              "comparison": "eq",
+              "left": {
+                "var": "dropdown_demo"
+              },
+              "right": {
+                "str": "sales"
+              },
+              "logicalOp": "or"
+            },
+            {
+              "id": "cond_4",
+              "comparison": "eq",
+              "left": {
+                "var": "dropdown_demo"
+              },
+              "right": {
+                "str": "support"
+              }
             }
           ]
         },
@@ -477,18 +478,20 @@
           "event": "submission.attempt"
         },
         "if": {
-          "operation": "or",
-          "args": [
+          "conditions": [
             {
+              "id": "cond_1",
               "comparison": "contains",
               "left": {
                 "var": "email_demo"
               },
               "right": {
                 "str": "@gmail.com"
-              }
+              },
+              "logicalOp": "or"
             },
             {
+              "id": "cond_2",
               "comparison": "contains",
               "left": {
                 "var": "email_demo"
