@@ -379,20 +379,6 @@
         "trigger": {
           "event": "submission.success"
         },
-        "if": {
-          "operation": "and",
-          "args": [
-            {
-              "comparison": "eq",
-              "left": {
-                "var": "dropdown_demo"
-              },
-              "right": {
-                "str": "sales"
-              }
-            }
-          ]
-        },
         "then": [
           {
             "effect": "nav.redirect",
@@ -406,20 +392,6 @@
         "trigger": {
           "event": "submission.success"
         },
-        "if": {
-          "operation": "and",
-          "args": [
-            {
-              "comparison": "eq",
-              "left": {
-                "var": "dropdown_demo"
-              },
-              "right": {
-                "str": "support"
-              }
-            }
-          ]
-        },
         "then": [
           {
             "effect": "ui.toast",
@@ -430,7 +402,7 @@
         ]
       },
       {
-        "id": "nested_expression_example",
+        "id": "nested_visibility_example",
         "enabled": true,
         "trigger": {
           "event": "field.change",
@@ -481,10 +453,20 @@
         },
         "then": [
           {
-            "effect": "ui.toast",
-            "variant": "info",
-            "title": "Complex Condition Met",
-            "body": "This demonstrates nested AND/OR logic expressions."
+            "effect": "field.visibility.set",
+            "targets": [
+              "upload_demo"
+            ],
+            "value": true
+          }
+        ],
+        "else": [
+          {
+            "effect": "field.visibility.set",
+            "targets": [
+              "upload_demo"
+            ],
+            "value": false
           }
         ]
       },

@@ -11,6 +11,17 @@ interface LogicListProps {
 
 export const LogicList: React.FC<LogicListProps> = ({ rules, onEdit, onDelete }) => {
     const formatCondition = (rule: LogicRule) => {
+        if (!rule.if) {
+            if (rule.trigger.event === LogicEvent.SUBMISSION_SUCCESS) {
+                return (
+                    <span className="text-xs">
+                        On <span className="font-semibold text-primary dark:text-primary">Form Submit</span>
+                    </span>
+                );
+            }
+            return <span className="text-gray-400">No conditions</span>;
+        }
+
         const count = rule.if.args.length;
         if (count === 0) return <span className="text-gray-400">No conditions</span>;
 

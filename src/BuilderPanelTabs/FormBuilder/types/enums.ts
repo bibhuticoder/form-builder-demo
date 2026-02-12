@@ -110,3 +110,10 @@ export enum ButtonAction {
   SCROLL_TO_ELEMENT = 'scroll_to_element',
   CUSTOM = 'custom',
 }
+
+export enum LogicActionType {
+  REDIRECT = 'redirect',
+  MESSAGE = 'message',
+  DISQUALIFY = 'disqualify',
+  VISIBILITY = 'visibility',
+}

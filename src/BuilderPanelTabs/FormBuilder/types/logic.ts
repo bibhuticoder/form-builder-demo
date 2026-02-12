@@ -3,7 +3,10 @@
  * Conditional behavior definitions for forms
  */
 
-import { LogicEvent, LogicComparison, LogicOperation, LogicEffect, ToastVariant } from './enums';
+import { LogicEvent, LogicComparison, LogicOperation, LogicEffect, ToastVariant, LogicActionType } from './enums';
+
+export const ON_SUBMIT_LOGIC_TYPES: ReadonlyArray<LogicActionType> = [LogicActionType.REDIRECT, LogicActionType.MESSAGE];
+export const IN_FORM_LOGIC_TYPES: ReadonlyArray<LogicActionType> = [LogicActionType.DISQUALIFY, LogicActionType.VISIBILITY];
 
 // ============================================================================
 // LOGIC TRIGGER
@@ -80,7 +83,7 @@ export interface LogicRule {
   id: string;
   enabled: boolean;
   trigger: LogicTrigger;
-  if: LogicExpression;
+  if?: LogicExpression;
   then: LogicEffectAction[];
   else?: LogicEffectAction[];
 }
