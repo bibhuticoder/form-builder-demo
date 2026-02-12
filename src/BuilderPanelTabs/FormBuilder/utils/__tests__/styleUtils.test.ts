@@ -1,4 +1,8 @@
 import { getContainerStyles, getInputStyles, getLabelStyles, getHelpTextStyles, getPlaceholderStyles } from '../styleUtils';
+import { FieldStyleObject, ResponsiveFieldStyle } from '../../types/styles';
+
+/** Helper to wrap a FieldStyleObject under the 'md' breakpoint */
+const md = (style: FieldStyleObject): ResponsiveFieldStyle => ({ md: style });
 
 describe('styleUtils', () => {
     describe('getContainerStyles', () => {
@@ -7,21 +11,21 @@ describe('styleUtils', () => {
         });
 
         it('formats margin and padding with px', () => {
-            const style = {
+            const style = md({
                 windowMarginTop: 10,
                 windowPaddingLeft: '2em'
-            };
+            });
             const result = getContainerStyles(style);
             expect(result.marginTop).toBe('10px');
             expect(result.paddingLeft).toBe('2em');
         });
 
         it('applies border styles', () => {
-            const style = {
+            const style = md({
                 windowBorderWidth: 2,
                 windowBorderColor: 'red',
                 windowBorderStyle: 'solid'
-            };
+            });
             const result = getContainerStyles(style);
             expect(result.borderWidth).toBe('2px');
             expect(result.borderColor).toBe('red');
@@ -31,13 +35,13 @@ describe('styleUtils', () => {
 
     describe('getInputStyles', () => {
         it('handles typography styles', () => {
-            const style = {
+            const style = md({
                 inputFontFamily: 'Roboto',
                 inputFontSize: 16,
                 inputFontSizeUnit: 'rem',
                 inputFontWeight: 'bold',
                 textAlign: 'center'
-            };
+            });
             const result = getInputStyles(style);
             expect(result.fontFamily).toBe('Roboto');
             expect(result.fontSize).toBe('16rem');
@@ -46,22 +50,22 @@ describe('styleUtils', () => {
         });
 
         it('ignores default font family', () => {
-            const result = getInputStyles({ inputFontFamily: 'default' });
+            const result = getInputStyles(md({ inputFontFamily: 'default' }));
             expect(result.fontFamily).toBeUndefined();
         });
 
         it('defaults font size unit to px if missing', () => {
-            const result = getInputStyles({ inputFontSize: 14 });
+            const result = getInputStyles(md({ inputFontSize: 14 }));
             expect(result.fontSize).toBe('14px');
         });
     });
 
     describe('getLabelStyles', () => {
         it('returns correct label styles', () => {
-            const style = {
+            const style = md({
                 labelColor: 'blue',
                 labelFontSize: 12
-            };
+            });
             const result = getLabelStyles(style);
             expect(result.color).toBe('blue');
             expect(result.fontSize).toBe('12px');
@@ -81,10 +85,10 @@ describe('styleUtils', () => {
         });
 
         it('overrides global defaults with specific style', () => {
-            const style = {
+            const style = md({
                 helpFontSize: 14,
                 helpColor: 'black'
-            };
+            });
             const globalSettings = {
                 helpFontSize: 10,
                 helpColor: 'gray'
@@ -97,10 +101,10 @@ describe('styleUtils', () => {
 
     describe('getPlaceholderStyles', () => {
         it('returns placeholder styles', () => {
-            const style = {
+            const style = md({
                 placeholderColor: '#ccc',
                 placeholderFontWeight: 'light'
-            };
+            });
             const result = getPlaceholderStyles(style);
             expect(result.color).toBe('#ccc');
             expect(result.fontWeight).toBe('light');

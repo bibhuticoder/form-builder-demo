@@ -3,7 +3,7 @@
  * Conditional behavior definitions for forms
  */
 
-import { LogicEvent, LogicComparison, LogicOperation, LogicEffect, ToastVariant, LogicActionType } from './enums';
+import { LogicEvent, LogicComparison, LogicEffect, ToastVariant, LogicActionType } from './enums';
 
 export const ON_SUBMIT_LOGIC_TYPES: ReadonlyArray<LogicActionType> = [LogicActionType.REDIRECT, LogicActionType.MESSAGE];
 export const IN_FORM_LOGIC_TYPES: ReadonlyArray<LogicActionType> = [LogicActionType.DISQUALIFY, LogicActionType.VISIBILITY];

@@ -19,7 +19,7 @@ describe('BuilderText', () => {
             placeholder: 'Jane',
             required: true,
             helpText: 'Your given name',
-            style: { width: 'half' },
+            style: { md: { width: 'half' } },
           }}
         />
       </MockFormBuilderProvider>

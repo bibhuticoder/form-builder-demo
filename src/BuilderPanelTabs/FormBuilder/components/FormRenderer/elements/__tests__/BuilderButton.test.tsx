@@ -17,8 +17,10 @@ describe('FormBuilderButton', () => {
             label: 'Send Message',
             action: ButtonAction.SUBMIT,
             style: {
-              inputBackgroundColor: '#4F46E5',
-              width: 'full',
+              md: {
+                inputBackgroundColor: '#4F46E5',
+                width: 'full',
+              },
             },
           }}
         />

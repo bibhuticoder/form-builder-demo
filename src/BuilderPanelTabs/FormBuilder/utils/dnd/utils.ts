@@ -4,7 +4,7 @@
 
 import { FieldType } from "../../types/enums";
 import { Field } from "../../types";
-import { BREAKPOINT_IDS, BASE_BREAKPOINT_ID } from "../../constants";
+import { BREAKPOINT_IDS } from "../../constants";
 
 /**
  * Generates a unique ID combining timestamp and random string

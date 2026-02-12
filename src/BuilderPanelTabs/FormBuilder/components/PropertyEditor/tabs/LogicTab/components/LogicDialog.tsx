@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "../../../../../../../components/Dialog";
 import { Button } from "../../../../../../../components/Button";
-import { Field, LogicRule, LogicEvent, LogicOperation, LogicComparison, LogicEffect, LogicExpression, LogicActionType, ON_SUBMIT_LOGIC_TYPES } from "../../../../../types";
+import { Field, LogicRule, LogicEvent, LogicComparison, LogicEffect, LogicExpression, LogicActionType, ON_SUBMIT_LOGIC_TYPES } from "../../../../../types";
 // import { ConditionRow } from "../utils";
 // import { ConditionRow } from "../utils";
 import {

@@ -261,7 +261,7 @@ describe('validateFieldStyle', () => {
 
   test('should pass for field with valid style object', () => {
     const field = createValidTextField({
-      style: { width: 'full', inputBackgroundColor: '#fff' },
+      style: { md: { width: 'full', inputBackgroundColor: '#fff' } },
     });
     const errors = validateFieldStyle(field);
     expect(errors).toHaveLength(0);

@@ -1,5 +1,5 @@
 import React from "react";
-import { LogicRule, LogicEvent, LogicOperation, LogicComparison } from "../../../../../types";
+import { LogicRule, LogicEvent } from "../../../../../types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getLogicTypeFromRule, getLogicTypeInfo } from "../utils";
 

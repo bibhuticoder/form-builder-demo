@@ -100,17 +100,15 @@ export const validateLogicFieldReferences = (
     }
 
     // Check field references in conditions
-    const checkExpression = (expr: { args?: any[] }, context: string) => {
-      if (!expr || !expr.args) return;
-
-      expr.args.forEach((condition: any, index: number) => {
+    if (rule.if && rule.if.conditions) {
+      rule.if.conditions.forEach((condition, index) => {
         if (
           condition.left &&
           condition.left.var &&
           !fieldIds.has(condition.left.var)
         ) {
           errors.push({
-            path: `logic.rules[${rule.id}].${context}.args[${index}].left.var`,
+            path: `logic.rules[${rule.id}].if.conditions[${index}].left.var`,
             message: `Field "${condition.left.var}" does not exist`,
             type: 'invalid_reference',
           });
@@ -122,15 +120,13 @@ export const validateLogicFieldReferences = (
           !fieldIds.has(condition.right.var)
         ) {
           errors.push({
-            path: `logic.rules[${rule.id}].${context}.args[${index}].right.var`,
+            path: `logic.rules[${rule.id}].if.conditions[${index}].right.var`,
             message: `Field "${condition.right.var}" does not exist`,
             type: 'invalid_reference',
           });
         }
       });
-    };
-
-    checkExpression(rule.if, 'if');
+    }
   });
 
   return errors;
