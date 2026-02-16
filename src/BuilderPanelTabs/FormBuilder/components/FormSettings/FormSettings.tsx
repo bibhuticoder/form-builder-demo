@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Dialog } from "../../../../components/Dialog";
 import { ColorControl } from "../PropertyEditor/components/ColorControl";
 import { SpacingControl } from "../PropertyEditor/components/SpacingControl";
@@ -425,6 +425,7 @@ FormStylingSection.displayName = "FormStylingSection";
  */
 const convertToFormSettings = (
   config: FormSettingsConfig,
+  currentFormSettings?: Partial<FormSettingsType>,
 ): FormSettingsType => {
   const settings: StyleSettings = {
     maxWidth: config.maxWidth,
@@ -458,8 +459,8 @@ const convertToFormSettings = (
   }
 
   return {
-    name: "Form", // Default name, should be provided by parent component
-    status: FormStatus.DRAFT, // Default status
+    name: currentFormSettings?.name || "Form",
+    status: currentFormSettings?.status || FormStatus.DRAFT,
     settings,
   };
 };
@@ -551,6 +552,18 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
     ...convertFromFormSettings(initialConfig),
   });
 
+  // Re-sync local config from context whenever the dialog opens
+  const prevIsOpenRef = useRef(false);
+  useEffect(() => {
+    if (isOpen && !prevIsOpenRef.current) {
+      setConfig({
+        ...DEFAULT_CONFIG,
+        ...convertFromFormSettings(initialConfig),
+      });
+    }
+    prevIsOpenRef.current = isOpen;
+  }, [isOpen, initialConfig]);
+
   /**
    * Handle configuration changes
    * Updates local state and immediately syncs to context for real-time preview
@@ -564,12 +577,12 @@ export const FormSettings: React.FC<FormSettingsProps> = ({
           [key]: value,
         };
         // Immediately update context with new settings (real-time)
-        const formSettings = convertToFormSettings(updated);
+        const formSettings = convertToFormSettings(updated, initialConfig);
         onChangeRealTime(formSettings);
         return updated;
       });
     },
-    [onChangeRealTime],
+    [onChangeRealTime, initialConfig],
   );
 
   /**

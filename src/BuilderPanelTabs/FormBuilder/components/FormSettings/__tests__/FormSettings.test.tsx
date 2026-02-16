@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FormSettings } from '../FormSettings';
+import { FormStatus } from '../../../types/enums';
 
 // Mock dependencies
 jest.mock('../../../../../components/Dialog', () => ({
@@ -158,8 +159,48 @@ describe('FormSettings', () => {
 
     fireEvent.click(screen.getByText('Cancel'));
     expect(mockOnCancel).toHaveBeenCalled();
-    // Should also revert? Implementation calls setConfig with initial.
-    // Difficult to test local state revert without reopening.
+  });
+
+  it('resets local config to initial values when re-opened after cancel', () => {
+    const { rerender } = render(<FormSettings {...defaultProps} />);
+
+    // Change background color
+    fireEvent.change(screen.getByTestId('color-Background Color'), { target: { value: '#123456' } });
+    expect(screen.getByTestId('color-Background Color')).toHaveValue('#123456');
+
+    // Cancel and close the dialog
+    fireEvent.click(screen.getByText('Cancel'));
+    rerender(<FormSettings {...defaultProps} isOpen={false} />);
+
+    // Re-open the dialog — local config should sync from initialConfig
+    rerender(<FormSettings {...defaultProps} isOpen={true} />);
+    expect(screen.getByTestId('color-Background Color')).toHaveValue('#ffffff');
+  });
+
+  it('preserves form name and status through settings changes', () => {
+    const propsWithNameAndStatus = {
+      ...defaultProps,
+      initialConfig: {
+        name: 'My Custom Form',
+        status: FormStatus.PUBLISHED,
+        settings: {
+          width: 800,
+          backgroundColor: '#ffffff',
+          fontFamilyBody: 'Inter',
+          fontFamilyTitle: 'Inter'
+        } as any
+      }
+    };
+    render(<FormSettings {...propsWithNameAndStatus} />);
+
+    // Make a change to trigger onChangeRealTime
+    fireEvent.change(screen.getByTestId('color-Background Color'), { target: { value: '#000000' } });
+
+    // Verify that name and status are preserved (not hardcoded)
+    expect(mockOnChangeRealTime).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'My Custom Form',
+      status: FormStatus.PUBLISHED,
+    }));
   });
   it('updates complex styles (border, font)', () => {
     render(<FormSettings {...defaultProps} />);
