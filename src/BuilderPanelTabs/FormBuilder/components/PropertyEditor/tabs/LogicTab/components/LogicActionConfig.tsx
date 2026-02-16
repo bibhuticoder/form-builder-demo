@@ -1,6 +1,7 @@
 import React from "react";
 import { Field } from "../../../../../types";
 import { NoSymbolIcon } from "@heroicons/react/24/outline";
+import RichText from "../../../../FormRenderer/elements/RichText";
 
 interface LogicActionConfigProps {
     type: 'redirect' | 'message' | 'disqualify' | 'visibility';
@@ -67,12 +68,10 @@ export const LogicActionConfig: React.FC<LogicActionConfigProps> = ({ type, acti
             {type === 'message' && (
                 <div className="space-y-1">
                     <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Message</label>
-                    <textarea
-                        className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none focus:ring-1 px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                    <RichText
+                        content={action.action}
+                        onChange={(html) => onChange({ ...action, action: html })}
                         placeholder="Success message..."
-                        rows={3}
-                        value={action.action}
-                        onChange={(e) => onChange({ ...action, action: e.target.value })}
                     />
                 </div>
             )}
@@ -81,16 +80,14 @@ export const LogicActionConfig: React.FC<LogicActionConfigProps> = ({ type, acti
                 <div className="space-y-3">
                     <div className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded border border-red-100 dark:border-red-900/30 flex items-center gap-2">
                         <NoSymbolIcon className="w-4 h-4" />
-                        Submission will be rejected as disqualified.
+                        Lead will be rejected as disqualified.
                     </div>
                     <div className="space-y-1">
                         <label className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Custom Message</label>
-                        <textarea
-                            className="shadow w-full text-xs border-gray-300 dark:border-gray-600 rounded focus:border-primary focus:ring-primary focus:outline-none focus:ring-1 px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                        <RichText
+                            content={action.action}
+                            onChange={(html) => onChange({ ...action, action: html })}
                             placeholder="Reason for disqualification..."
-                            rows={3}
-                            value={action.action}
-                            onChange={(e) => onChange({ ...action, action: e.target.value })}
                         />
                     </div>
                 </div>
