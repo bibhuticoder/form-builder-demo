@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Field, BreakpointId, ResponsiveFieldStyle } from "../../../../../types";
 import { SCREEN_SIZES, BREAKPOINT_IDS } from "../../../../../constants";
 import { resolveBreakpointStyle } from "../../../../../utils/styleUtils";
@@ -10,136 +10,136 @@ interface StyleSwitcherProps {
 }
 
 export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreakpoint, updateField }) => {
-    // Determine current "Copy from" value
-    // If activeBreakpoint style is a string, that's the reference.
-    // If it's an object or undefined, it's "none" (custom).
-    const currentStyleRef = field.style?.[activeBreakpoint];
-    const copyFromValue = typeof currentStyleRef === 'string' ? currentStyleRef : "";
+    // Compute which breakpoints currently reference the active breakpoint (or ARE the active)
+    const getSelectedFromField = useCallback((): Set<BreakpointId> => {
+        const selected = new Set<BreakpointId>();
+        selected.add(activeBreakpoint);
 
-    const handleCopyFromChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-
-        // If "None" (empty string), we want to convert current reference to an object
-        if (value === "") {
-            if (typeof currentStyleRef === 'string') {
-                const resolved = resolveBreakpointStyle(field.style, activeBreakpoint);
-                updateField(field.id, {
-                    style: {
-                        ...field.style,
-                        [activeBreakpoint]: resolved
-                    }
-                });
+        BREAKPOINT_IDS.forEach(id => {
+            if (id === activeBreakpoint) return;
+            const styleVal = field.style?.[id];
+            if (styleVal === activeBreakpoint) {
+                selected.add(id);
             }
-        } else {
-            const sourceBreakpoint = value as BreakpointId;
+        });
 
-            // Cycle detection: Does source eventually depend on active?
-            let createsCycle = false;
-            let currentPointer = sourceBreakpoint;
-            const visited = new Set<BreakpointId>();
+        return selected;
+    }, [field.style, activeBreakpoint]);
 
-            // Traverse the chain starting from the source
-            while (true) {
-                if (currentPointer === activeBreakpoint) {
-                    createsCycle = true;
-                    break;
-                }
-                if (visited.has(currentPointer)) break; // Internal cycle in chain, but not involving us directly in a loop yet? 
-                // Actually if source has a cycle A->B->A, and we are C. C->ref->A. Safe.
-                // Critical cycle is if leads back to C (activeBreakpoint).
+    const [selectedSizes, setSelectedSizes] = useState<Set<BreakpointId>>(getSelectedFromField);
+    const [isDirty, setIsDirty] = useState(false);
 
-                visited.add(currentPointer);
+    // Re-sync when field style or activeBreakpoint changes externally
+    useEffect(() => {
+        setSelectedSizes(getSelectedFromField());
+        setIsDirty(false);
+    }, [getSelectedFromField]);
 
-                const nextStep = field.style?.[currentPointer];
-                if (typeof nextStep === 'string' && nextStep !== currentPointer) {
-                    currentPointer = nextStep as BreakpointId;
-                } else {
-                    break; // End of chain (object or undefined)
-                }
-            }
+    const isApplyAll = BREAKPOINT_IDS.every(id => selectedSizes.has(id));
 
-            if (createsCycle) {
-                // Cycle would be created: Fallback to Value Copy
-                const sourceStyle = resolveBreakpointStyle(field.style, sourceBreakpoint);
-                updateField(field.id, {
-                    style: {
-                        ...field.style,
-                        [activeBreakpoint]: sourceStyle
-                    }
-                });
+    const handleToggleSize = (id: BreakpointId) => {
+        if (id === activeBreakpoint) return; // Can't deselect active
+
+        setSelectedSizes(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) {
+                next.delete(id);
             } else {
-                // Safe to set Reference
-                updateField(field.id, {
-                    style: {
-                        ...field.style,
-                        [activeBreakpoint]: sourceBreakpoint
-                    }
-                });
+                next.add(id);
             }
-        }
+            return next;
+        });
+        setIsDirty(true);
     };
 
-    const handleApplyToAll = () => {
-        // Resolve current style to get the "look" we want everywhere
+    const handleApplyAllToggle = () => {
+        if (isApplyAll) {
+            // Deselect all except active
+            setSelectedSizes(new Set([activeBreakpoint]));
+        } else {
+            // Select all
+            setSelectedSizes(new Set([...BREAKPOINT_IDS]));
+        }
+        setIsDirty(true);
+    };
+
+    const handleSave = () => {
         const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint);
+        const newStyle: ResponsiveFieldStyle = { ...field.style };
 
-        // Create new style object where CURRENT active is the base,
-        // and everything else inherits from CURRENT active.
-        const newStyle: ResponsiveFieldStyle = {};
-
-        // 1. Set active style as object
+        // Ensure active breakpoint has the resolved object style
         newStyle[activeBreakpoint] = resolvedStyle;
 
-        // 2. Set others to reference active
         BREAKPOINT_IDS.forEach(id => {
-            if (id !== activeBreakpoint) {
+            if (id === activeBreakpoint) return;
+
+            if (selectedSizes.has(id)) {
+                // Reference the active breakpoint
                 newStyle[id] = activeBreakpoint;
+            } else {
+                // If it was previously referencing active, resolve to its own object
+                const currentVal = field.style?.[id];
+                if (currentVal === activeBreakpoint) {
+                    newStyle[id] = resolveBreakpointStyle(field.style, id);
+                }
+                // Otherwise leave as-is
             }
         });
 
         updateField(field.id, { style: newStyle });
+        setIsDirty(false);
     };
 
-    const availableOptions = SCREEN_SIZES
-        .filter(s => s.id !== activeBreakpoint) // Can't copy from self
-        .filter(s => {
-            // Only show options that have their own styles (are not references)
-            // accessing field.style[s.id] directly
-            const styleVal = field.style?.[s.id as BreakpointId];
-            // It's a source if it's NOT a string reference.
-            // (Undefined/Object are valid sources, String is a reference)
-            return typeof styleVal !== 'string';
-        });
-
     return (
-        <div className="flex flex-col gap-2 bg-gray-50 dark:bg-gray-800 p-2 rounded-md border border-gray-200 dark:border-gray-700">
-            <div className="flex justify-between items-center w-full">
-                {copyFromValue === "" && (
-                    <button
-                        onClick={handleApplyToAll}
-                        className="text-[10px] bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                        title="Apply this style to all screen sizes"
-                    >
-                        Apply to all sizes
-                    </button>
-                )}
-
-                {availableOptions.length > 0 && (
-                    <select
-                        value={copyFromValue}
-                        onChange={handleCopyFromChange}
-                        className="text-xs bg-transparent p-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-0 focus:ring-0"
-                        id="style-size-options"
-                    >
-                        <option value={""}>Custom Styles</option>
-                        {availableOptions.map(size => (
-                            <option key={size.id} value={size.id}>
-                                Copy from {size.label}
-                            </option>
-                        ))}
-                    </select>
-                )}
+        <div className="flex flex-col gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+                <span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                    Apply to sizes:
+                </span>
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={isApplyAll}
+                        onChange={handleApplyAllToggle}
+                        className="w-3.5 h-3.5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer bg-white dark:bg-gray-700"
+                    />
+                    <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">Apply All</span>
+                </label>
             </div>
+
+            <div className="flex gap-1.5">
+                {SCREEN_SIZES.map(size => {
+                    const bpId = size.id as BreakpointId;
+                    const isActive = bpId === activeBreakpoint;
+                    const isSelected = selectedSizes.has(bpId);
+
+                    return (
+                        <button
+                            key={size.id}
+                            onClick={() => handleToggleSize(bpId)}
+                            className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all ${
+                                isSelected
+                                    ? "bg-primary text-white shadow-sm"
+                                    : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+                            } ${isActive ? "cursor-default ring-2 ring-primary/30" : "cursor-pointer hover:opacity-80"}`}
+                            title={isActive ? `${size.title} (current)` : size.title}
+                        >
+                            {size.label}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {isDirty && (
+                <div className="flex justify-end">
+                    <button
+                        onClick={handleSave}
+                        className="px-4 py-1.5 bg-primary text-white text-xs font-semibold rounded-md hover:opacity-90 transition-opacity"
+                    >
+                        Save
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
