@@ -5,7 +5,6 @@ import { LayoutSection } from "./components/LayoutSection";
 import { TypographySection } from "./components/TypographySection";
 import { DecorationSection } from "./components/DecorationSection";
 import { resolveBreakpointStyle } from "../../../../utils/styleUtils";
-import { StyleSwitcher } from "./components/StyleSwitcher";
 
 interface StyleTabProps {
     field: Field;
@@ -35,21 +34,13 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
 
     return (
         <div className="space-y-6">
-            {/* Breakpoint / Copy From Control */}
-            <StyleSwitcher
-                field={field}
-                activeBreakpoint={activeBreakpoint}
-                updateField={updateField}
-            />
-
             {/* Layout Section */}
             <LayoutSection
                 field={field}
-                capabilities={capabilities}
                 getStyleValue={getStyleValue}
                 handleStyleUpdate={handleStyleUpdate}
-                handleStyleBatchUpdate={handleStyleBatchUpdate}
-                setActiveSubElement={setActiveSubElement}
+                activeBreakpoint={activeBreakpoint}
+                updateField={updateField}
             />
 
             <div className="border-t border-gray-200 dark:border-gray-700" />

@@ -5,17 +5,15 @@ import { FieldType } from '../../../../../../types';
 
 describe('LayoutSection', () => {
     const mockHandleStyleUpdate = jest.fn();
-    const mockHandleStyleBatchUpdate = jest.fn();
-    const mockSetActiveSubElement = jest.fn();
     const mockGetStyleValue = jest.fn((_key, def) => def || '');
+    const mockUpdateField = jest.fn();
 
     const props = {
         field: { id: '1', type: FieldType.TEXT, label: 'Text Field', style: { md: {} } } as any,
-        capabilities: { supportsInputStyles: true, supportsWindowStyles: true },
         getStyleValue: mockGetStyleValue,
         handleStyleUpdate: mockHandleStyleUpdate,
-        handleStyleBatchUpdate: mockHandleStyleBatchUpdate,
-        setActiveSubElement: mockSetActiveSubElement
+        activeBreakpoint: 'md' as const,
+        updateField: mockUpdateField,
     };
 
     beforeEach(() => {
@@ -39,4 +37,12 @@ describe('LayoutSection', () => {
         fireEvent.change(select, { target: { value: 'half' } });
         expect(mockHandleStyleUpdate).toHaveBeenCalledWith('width', 'half');
     });
+
+    it('renders StyleSwitcher inside LayoutSection', () => {
+        render(<LayoutSection {...props} />);
+        expect(screen.getByText('Apply All')).toBeTruthy();
+        expect(screen.getByText('XS')).toBeTruthy();
+        expect(screen.getByText('MD')).toBeTruthy();
+    });
 });
+
