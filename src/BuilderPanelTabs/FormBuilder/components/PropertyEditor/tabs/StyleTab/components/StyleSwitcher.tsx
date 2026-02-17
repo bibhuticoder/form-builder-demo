@@ -101,7 +101,7 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreak
                         type="checkbox"
                         checked={isApplyAll}
                         onChange={handleApplyAllToggle}
-                        className="w-3.5 h-3.5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer bg-white dark:bg-gray-700"
+                        className="w-3.5 h-3.5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer bg-white dark:bg-white"
                     />
                     <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">Apply All</span>
                 </label>
@@ -117,7 +117,7 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreak
                         <button
                             key={size.id}
                             onClick={() => handleToggleSize(bpId)}
-                            className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all ${
+                            className={`flex-1 py-1.5 rounded-md text-xs select-none font-semibold transition-all ${
                                 isSelected
                                     ? "bg-primary text-white shadow-sm"
                                     : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
