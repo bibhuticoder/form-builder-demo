@@ -51,6 +51,14 @@ jest.mock('@tiptap/extension-link', () => ({
   __esModule: true,
   default: { configure: () => ({}) },
 }));
+jest.mock('@tiptap/extension-image', () => ({
+  __esModule: true,
+  default: { configure: () => ({}) },
+}));
+jest.mock('@tiptap/extension-youtube', () => ({
+  __esModule: true,
+  default: { configure: () => ({}) },
+}));
 
 describe('RichText', () => {
   beforeEach(() => {
@@ -92,6 +100,8 @@ describe('RichText', () => {
     expect(screen.getByLabelText('Ordered list')).toBeTruthy();
     expect(screen.getByLabelText('Blockquote')).toBeTruthy();
     expect(screen.getByLabelText('Link')).toBeTruthy();
+    expect(screen.getByLabelText('Image')).toBeTruthy();
+    expect(screen.getByLabelText('Video')).toBeTruthy();
     expect(screen.getByLabelText('Undo')).toBeTruthy();
     expect(screen.getByLabelText('Redo')).toBeTruthy();
   });
