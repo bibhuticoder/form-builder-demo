@@ -25,6 +25,14 @@ describe('LayoutSection', () => {
         expect(screen.getByText('Width')).toBeTruthy();
     });
 
+    it('renders alignment control', () => {
+        render(<LayoutSection {...props} />);
+        expect(screen.getByText('Alignment')).toBeTruthy();
+        expect(screen.getByText('Left')).toBeTruthy();
+        expect(screen.getByText('Center')).toBeTruthy();
+        expect(screen.getByText('Right')).toBeTruthy();
+    });
+
     it('renders width options', () => {
         render(<LayoutSection {...props} />);
         expect(screen.getByText('Full Width (100%)')).toBeTruthy();
@@ -33,9 +41,16 @@ describe('LayoutSection', () => {
 
     it('calls handleStyleUpdate when width changes', () => {
         render(<LayoutSection {...props} />);
-        const select = screen.getByRole('combobox');
+        const select = screen.getByLabelText('Width');
         fireEvent.change(select, { target: { value: 'half' } });
         expect(mockHandleStyleUpdate).toHaveBeenCalledWith('width', 'half');
+    });
+
+    it('calls handleStyleUpdate when alignment changes', () => {
+        render(<LayoutSection {...props} />);
+        const select = screen.getByLabelText('Alignment');
+        fireEvent.change(select, { target: { value: 'center' } });
+        expect(mockHandleStyleUpdate).toHaveBeenCalledWith('alignment', 'center');
     });
 
     it('renders StyleSwitcher inside LayoutSection', () => {

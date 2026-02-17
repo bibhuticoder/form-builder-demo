@@ -2,72 +2,105 @@
  * Renders a form based on the provided form definition with drag-and-drop support.
  */
 
-import React from "react";
+import React from "react"
 
-import { FormDefinition } from "../../types";
-import FieldRenderer from "./FieldRenderer";
-import BuilderFieldControls from "./elements/BuilderFieldControls";
-import type { DragData } from "../../types/dnd";
-import { CANVAS_DROPPABLE_ID } from "../../types/dnd";
-import { useFormBuilder } from "../../context";
-import { SortableList, SortableItem, DropIndicator } from "../dnd";
-import { DEF_CANVAS_WIDTH } from "../../constants";
-import { getFormSettingsStyles, resolveBreakpointStyle, getActiveBreakpoint } from "../../utils/styleUtils";
-import { BreakpointId } from "../../types";
+import { FormDefinition } from "../../types"
+import FieldRenderer from "./FieldRenderer"
+import BuilderFieldControls from "./elements/BuilderFieldControls"
+import type { DragData } from "../../types/dnd"
+import { CANVAS_DROPPABLE_ID } from "../../types/dnd"
+import { useFormBuilder } from "../../context"
+import { SortableList, SortableItem, DropIndicator } from "../dnd"
+import { DEF_CANVAS_WIDTH } from "../../constants"
+import { getFormSettingsStyles, resolveBreakpointStyle, getActiveBreakpoint } from "../../utils/styleUtils"
+import { BreakpointId } from "../../types"
 
 interface FormRendererProps {
-  formData: FormDefinition;
-  dragOverId?: string | null;
-  selectedFieldId?: string | null;
-  onSelectField?: (id: string) => void;
-  canvasWidth: number;
+  formData: FormDefinition
+  dragOverId?: string | null
+  selectedFieldId?: string | null
+  onSelectField?: (id: string) => void
+  canvasWidth: number
 }
 
-export default function FormRenderer({
-  formData,
-  dragOverId,
-  selectedFieldId,
-  onSelectField,
-  canvasWidth
-}: Readonly<FormRendererProps>) {
-  const { deleteField, activeSubElement } = useFormBuilder();
-  const { fields, formSettings } = formData;
+export default function FormRenderer({ formData, dragOverId, selectedFieldId, onSelectField, canvasWidth }: Readonly<FormRendererProps>) {
+  const { deleteField, activeSubElement } = useFormBuilder()
+  const { fields, formSettings } = formData
 
   const onDelete = (fieldId: string) => {
-    deleteField(fieldId);
-  };
+    deleteField(fieldId)
+  }
 
   // Determine active breakpoint based on canvas width
-  const activeBreakpoint: BreakpointId = getActiveBreakpoint(canvasWidth);
+  const activeBreakpoint: BreakpointId = getActiveBreakpoint(canvasWidth)
 
-  const getWidthClass = (field: typeof fields[0]): string => {
-    const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint);
-    const width = resolvedStyle.width || "full";
+  const getWidthClass = (field: (typeof fields)[0]): string => {
+    const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
+    const width = resolvedStyle.width || "full"
 
-    const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH;
+    const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH
 
     if (isSmallScreen) {
-      return "col-span-12";
+      return "col-span-12"
     }
 
     switch (width) {
       case "full":
-        return "col-span-12";
+        return "col-span-12"
       case "three-quarters":
-        return "col-span-9";
+        return "col-span-9"
       case "half":
-        return "col-span-6";
+        return "col-span-6"
       case "third":
-        return "col-span-4";
+        return "col-span-4"
       case "quarter":
-        return "col-span-3";
+        return "col-span-3"
       default:
-        return "col-span-12";
+        return "col-span-12"
     }
-  };
+  }
+
+  // const getAlignmentClass = (field: (typeof fields)[0]): string => {
+  //   const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
+  //   const alignment = resolvedStyle.alignment || "left"
+
+  //   const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH
+
+  //   const span = isSmallScreen ? 12 : resolvedStyle.width === "three-quarters" ? 9 : resolvedStyle.width === "half" ? 6 : resolvedStyle.width === "third" ? 4 : resolvedStyle.width === "quarter" ? 3 : 12
+
+  //   const startCol = alignment === "center" ? Math.floor((12 - span) / 2) + 1 : alignment === "right" ? 12 - span + 1 : 1
+
+  //   switch (startCol) {
+  //     case 1:
+  //       return "col-start-1"
+  //     case 2:
+  //       return "col-start-2"
+  //     case 3:
+  //       return "col-start-3"
+  //     case 4:
+  //       return "col-start-4"
+  //     case 5:
+  //       return "col-start-5"
+  //     case 6:
+  //       return "col-start-6"
+  //     case 7:
+  //       return "col-start-7"
+  //     case 8:
+  //       return "col-start-8"
+  //     case 9:
+  //       return "col-start-9"
+  //     case 10:
+  //       return "col-start-10"
+  //     case 11:
+  //       return "col-start-11"
+  //     case 12:
+  //       return "col-start-12"
+  //     default:
+  //       return "col-start-1"
+  //   }
+  // }
 
   return (
-
     <SortableList items={fields}>
       {/* outer layer to center form */}
       <div className="mx-auto w-full h-full" style={{ maxWidth: getFormSettingsStyles(formSettings.settings).maxWidth, maxHeight: getFormSettingsStyles(formSettings.settings).maxHeight }}>
@@ -77,19 +110,9 @@ export default function FormRenderer({
               {/* Show drop indicator when hovering over this field (inserts before) */}
               {dragOverId === field.id && <DropIndicator width={getWidthClass(field)} />}
 
-              <SortableItem
-                id={field.id}
-                dragData={{ kind: "canvas-field", fieldId: field.id } as DragData}
-                className={getWidthClass(field)}
-              >
+              <SortableItem id={field.id} dragData={{ kind: "canvas-field", fieldId: field.id } as DragData} className={`${getWidthClass(field)}`}>
                 {(dragHandleProps) => (
-                  <BuilderFieldControls
-                    field={field}
-                    onDelete={onDelete}
-                    dragHandleProps={dragHandleProps}
-                    selected={selectedFieldId === field.id}
-                    onSelect={onSelectField}
-                  >
+                  <BuilderFieldControls field={field} onDelete={onDelete} dragHandleProps={dragHandleProps} selected={selectedFieldId === field.id} onSelect={onSelectField}>
                     <FieldRenderer field={field} isSelected={selectedFieldId === field.id} activeSubElement={activeSubElement} />
                   </BuilderFieldControls>
                 )}
@@ -101,6 +124,5 @@ export default function FormRenderer({
         </div>
       </div>
     </SortableList>
-
-  );
+  )
 }

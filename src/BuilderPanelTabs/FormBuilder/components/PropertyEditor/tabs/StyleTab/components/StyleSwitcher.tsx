@@ -101,9 +101,9 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreak
                         type="checkbox"
                         checked={isApplyAll}
                         onChange={handleApplyAllToggle}
-                        className="w-3.5 h-3.5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer bg-white dark:bg-white"
+                        className="editor-checkbox w-3.5 h-3.5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer bg-white dark:bg-white"
                     />
-                    <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">Apply All</span>
+                    <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">Apply all</span>
                 </label>
             </div>
 

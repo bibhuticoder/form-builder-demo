@@ -17,7 +17,7 @@ export const MediaSection: React.FC<MediaSectionProps> = ({ field, handleUpdate 
                     type="text"
                     value={(field as ImageField | VideoField).url || ""}
                     onChange={(e) => handleUpdate("url", e.target.value)}
-                    placeholder={field.type === "video" ? "https://youtube.com/..." : "https://example.com/image.jpg"}
+                    placeholder={field.type === "video" ? "YouTube, Vimeo, or Loom URL" : "https://example.com/image.jpg"}
                     className="w-full px-2 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 />
             </div>

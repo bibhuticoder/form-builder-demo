@@ -6,6 +6,7 @@
 import { BREAKPOINT_IDS } from '../constants';
 
 export type WidthValue = 'full' | 'three-quarters' | 'half' | 'third' | 'quarter';
+export type AlignmentValue = 'left' | 'center' | 'right' | 'auto';
 
 export type BreakpointId = typeof BREAKPOINT_IDS[number];
 
@@ -56,6 +57,7 @@ export type StyleSettings = {
 export type FieldStyleObject = {
   // Layout
   width?: WidthValue;
+  alignment?: AlignmentValue;
 
   // Spacing (Input)
   inputMargin?: string | number;

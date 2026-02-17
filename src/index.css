@@ -55,7 +55,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="checkbox"]:before {
+input[type="checkbox"].editor-checkbox:before {
   content: "";
   position: absolute;
   width: 16px;
@@ -68,11 +68,11 @@ input[type="checkbox"]:before {
   background-color: #ffffff;
 }
 
-input[type="checkbox"]:checked:before {
+input[type="checkbox"].editor-checkbox:checked:before {
   background-color: #525DF8;
 }
 
-input[type="checkbox"]:checked:after {
+input[type="checkbox"].editor-checkbox:checked:after {
   content: "";
   display: block;
   width: 5px;

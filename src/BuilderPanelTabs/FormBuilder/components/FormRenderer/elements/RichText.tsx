@@ -4,6 +4,7 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import Youtube from '@tiptap/extension-youtube';
+import { Node } from '@tiptap/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dialog } from '../../../../../components/Dialog';
 
@@ -13,71 +14,100 @@ interface RichTextProps {
   editable?: boolean;
   placeholder?: string;
   className?: string;
-  uploadEndpoint?: string;
-  uploadFieldName?: string;
-  uploadHeaders?: Record<string, string>;
-  uploadMedia?: (file: File, type: 'image' | 'video') => Promise<string>;
-  resolveUploadUrl?: (response: unknown, type: 'image' | 'video') => string | null;
 }
 
 interface ToolbarProps {
   editor: ReturnType<typeof useEditor>;
-  uploadMediaFile?: (file: File, type: 'image' | 'video') => Promise<string>;
 }
 
-const URL_CANDIDATE_KEYS = ['url', 'fileUrl', 'secure_url', 'location', 'src', 'href'];
+const EmbedIframe = Node.create({
+  name: 'embedIframe',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      class: {
+        default: 'w-full rounded aspect-video',
+      },
+      frameborder: {
+        default: '0',
+      },
+      allow: {
+        default: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+      },
+      allowfullscreen: {
+        default: 'true',
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'iframe[src]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['iframe', HTMLAttributes];
+  },
+});
 
-function isDirectVideoUrl(url: string): boolean {
-  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
-}
+function getVideoEmbedInfo(url: string): { provider: 'youtube' | 'vimeo' | 'loom'; embedUrl: string } | null {
+  if (!url) return null;
 
-function extractUrlFromResponse(response: unknown): string | null {
-  if (!response) return null;
-
-  if (typeof response === 'string') {
-    return /^https?:\/\//i.test(response) ? response : null;
+  // YouTube
+  if (url.includes('youtube.com/watch')) {
+    const videoId = url.split('v=')[1]?.split('&')[0];
+    if (videoId) {
+      return {
+        provider: 'youtube',
+        embedUrl: `https://www.youtube.com/embed/${videoId}`,
+      };
+    }
+  }
+  if (url.includes('youtu.be/')) {
+    const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    if (videoId) {
+      return {
+        provider: 'youtube',
+        embedUrl: `https://www.youtube.com/embed/${videoId}`,
+      };
+    }
   }
 
-  if (typeof response !== 'object') return null;
-
-  const queue: unknown[] = [response];
-  const seen = new Set<unknown>();
-
-  while (queue.length > 0) {
-    const current = queue.shift();
-    if (!current || typeof current !== 'object' || seen.has(current)) continue;
-    seen.add(current);
-
-    const obj = current as Record<string, unknown>;
-
-    for (const key of URL_CANDIDATE_KEYS) {
-      const value = obj[key];
-      if (typeof value === 'string' && /^https?:\/\//i.test(value)) {
-        return value;
-      }
+  // Vimeo
+  if (url.includes('vimeo.com/')) {
+    const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
+    if (videoId && /^\d+$/.test(videoId)) {
+      return {
+        provider: 'vimeo',
+        embedUrl: `https://player.vimeo.com/video/${videoId}`,
+      };
     }
+  }
 
-    for (const value of Object.values(obj)) {
-      if (value && typeof value === 'object') {
-        queue.push(value);
-      }
+  // Loom
+  if (url.includes('loom.com/share/')) {
+    const videoId = url.split('loom.com/share/')[1]?.split('?')[0];
+    if (videoId) {
+      return {
+        provider: 'loom',
+        embedUrl: `https://www.loom.com/embed/${videoId}`,
+      };
     }
   }
 
   return null;
 }
 
-function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
+function Toolbar({ editor }: Readonly<ToolbarProps>) {
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [videoDialogOpen, setVideoDialogOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const imageFileInputRef = useRef<HTMLInputElement | null>(null);
-  const videoFileInputRef = useRef<HTMLInputElement | null>(null);
   const savedSelection = useRef<{ from: number; to: number } | null>(null);
   const [, forceUpdate] = useState(0);
 
@@ -97,7 +127,6 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
   const hasTextSelection = !editor.state.selection.empty;
   const isOnLink = editor.isActive('link');
   const canLink = hasTextSelection || isOnLink;
-  const canUploadMedia = Boolean(uploadMediaFile);
 
   const btnBase =
     'p-1 rounded text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
@@ -153,56 +182,32 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
     const url = videoUrl.trim();
     setVideoDialogOpen(false);
     if (!url) return;
+
+    const embedInfo = getVideoEmbedInfo(url);
+    if (!embedInfo) {
+      setVideoUrl('');
+      return;
+    }
+
     requestAnimationFrame(() => {
-      if (isDirectVideoUrl(url)) {
-        editor
-          .chain()
-          .focus()
-          .insertContent(`<video controls src="${url}" class="w-full rounded"></video>`)
-          .run();
-      } else {
+      if (embedInfo.provider === 'youtube') {
         editor.chain().focus().setYoutubeVideo({ src: url }).run();
+        return;
       }
+
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'embedIframe',
+          attrs: {
+            src: embedInfo.embedUrl,
+          },
+        })
+        .run();
     });
     setVideoUrl('');
   }, [editor, videoUrl]);
-
-  const handleUploadFile = useCallback(
-    async (file: File, type: 'image' | 'video') => {
-      if (!uploadMediaFile) return;
-
-      setUploadError(null);
-      setIsUploading(true);
-      try {
-        const uploadedUrl = await uploadMediaFile(file, type);
-        requestAnimationFrame(() => {
-          if (type === 'image') {
-            editor.chain().focus().setImage({ src: uploadedUrl, alt: file.name }).run();
-            setImageDialogOpen(false);
-            setImageUrl('');
-          } else {
-            if (isDirectVideoUrl(uploadedUrl)) {
-              editor
-                .chain()
-                .focus()
-                .insertContent(`<video controls src="${uploadedUrl}" class="w-full rounded"></video>`)
-                .run();
-            } else {
-              editor.chain().focus().setYoutubeVideo({ src: uploadedUrl }).run();
-            }
-            setVideoDialogOpen(false);
-            setVideoUrl('');
-          }
-        });
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Upload failed';
-        setUploadError(message);
-      } finally {
-        setIsUploading(false);
-      }
-    },
-    [editor, uploadMediaFile]
-  );
 
   return (
     <div
@@ -328,7 +333,6 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
       <button
         type="button"
         onClick={() => {
-          setUploadError(null);
           setImageDialogOpen(true);
         }}
         className={btn(false)}
@@ -339,7 +343,6 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
       <button
         type="button"
         onClick={() => {
-          setUploadError(null);
           setVideoDialogOpen(true);
         }}
         className={btn(false)}
@@ -413,31 +416,6 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
               onKeyDown={(e) => { if (e.key === 'Enter') applyImage(); }}
               autoFocus
             />
-            <div className="pt-1 border-t border-gray-200 dark:border-gray-700">
-              <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Or upload image file</p>
-              <input
-                ref={imageFileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    void handleUploadFile(file, 'image');
-                  }
-                  e.target.value = '';
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => imageFileInputRef.current?.click()}
-                disabled={!canUploadMedia || isUploading}
-                className="px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isUploading ? 'Uploading...' : 'Upload image'}
-              </button>
-            </div>
-            {uploadError && <p className="text-[11px] text-red-500">{uploadError}</p>}
           </div>
         }
         footer={
@@ -471,38 +449,12 @@ function Toolbar({ editor, uploadMediaFile }: Readonly<ToolbarProps>) {
             <input
               type="url"
               className="w-full text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-              placeholder="https://www.youtube.com/watch?v=..."
+              placeholder="YouTube, Vimeo, or Loom URL"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') applyVideo(); }}
               autoFocus
             />
-            <p className="text-[11px] text-gray-500 dark:text-gray-400">Supports YouTube links.</p>
-            <div className="pt-1 border-t border-gray-200 dark:border-gray-700">
-              <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Or upload video file</p>
-              <input
-                ref={videoFileInputRef}
-                type="file"
-                accept="video/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    void handleUploadFile(file, 'video');
-                  }
-                  e.target.value = '';
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => videoFileInputRef.current?.click()}
-                disabled={!canUploadMedia || isUploading}
-                className="px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isUploading ? 'Uploading...' : 'Upload video'}
-              </button>
-            </div>
-            {uploadError && <p className="text-[11px] text-red-500">{uploadError}</p>}
           </div>
         }
         footer={
@@ -555,43 +507,7 @@ export default function RichText({
   editable = true,
   placeholder,
   className = '',
-  uploadEndpoint = '/api/upload',
-  uploadFieldName = 'file',
-  uploadHeaders,
-  uploadMedia,
-  resolveUploadUrl,
 }: Readonly<RichTextProps>) {
-  const uploadMediaFile = useCallback(
-    async (file: File, type: 'image' | 'video'): Promise<string> => {
-      if (uploadMedia) {
-        return uploadMedia(file, type);
-      }
-
-      const formData = new FormData();
-      formData.append(uploadFieldName, file);
-      formData.append('mediaType', type);
-
-      const response = await fetch(uploadEndpoint, {
-        method: 'POST',
-        headers: uploadHeaders,
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Upload failed (${response.status})`);
-      }
-
-      const data = await response.json().catch(() => null);
-      const url = resolveUploadUrl?.(data, type) ?? extractUrlFromResponse(data);
-      if (!url) {
-        throw new Error('Upload succeeded but no URL was returned');
-      }
-
-      return url;
-    },
-    [uploadEndpoint, uploadFieldName, uploadHeaders, uploadMedia, resolveUploadUrl]
-  );
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -602,6 +518,7 @@ export default function RichText({
           class: 'max-w-full h-auto rounded',
         },
       }),
+      EmbedIframe,
       Youtube.configure({
         controls: true,
         nocookie: true,
@@ -629,7 +546,7 @@ export default function RichText({
     <div
       className={`rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden ${className}`}
     >
-      {editable && <Toolbar editor={editor} uploadMediaFile={uploadMediaFile} />}
+      {editable && <Toolbar editor={editor} />}
       <EditorContent editor={editor} />
     </div>
   );
