@@ -45,8 +45,16 @@ jest.mock('@tiptap/react', () => {
   };
 });
 
-jest.mock('@tiptap/starter-kit', () => ({ __esModule: true, default: {} }));
+jest.mock('@tiptap/starter-kit', () => ({
+  __esModule: true,
+  default: { configure: () => ({}) },
+}));
+jest.mock('@tiptap/extension-italic', () => ({ __esModule: true, default: {} }));
 jest.mock('@tiptap/extension-underline', () => ({ __esModule: true, default: {} }));
+jest.mock('@tiptap/extension-text-align', () => ({
+  __esModule: true,
+  default: { configure: () => ({}) },
+}));
 jest.mock('@tiptap/extension-link', () => ({
   __esModule: true,
   default: { configure: () => ({}) },
@@ -54,6 +62,10 @@ jest.mock('@tiptap/extension-link', () => ({
 jest.mock('@tiptap/extension-image', () => ({
   __esModule: true,
   default: { configure: () => ({}) },
+}));
+jest.mock('@tiptap/extension-text-style', () => ({
+  __esModule: true,
+  TextStyle: {},
 }));
 jest.mock('@tiptap/extension-youtube', () => ({
   __esModule: true,
@@ -93,12 +105,14 @@ describe('RichText', () => {
     expect(screen.getByLabelText('Italic')).toBeTruthy();
     expect(screen.getByLabelText('Underline')).toBeTruthy();
     expect(screen.getByLabelText('Strikethrough')).toBeTruthy();
-    expect(screen.getByLabelText('Heading 1')).toBeTruthy();
-    expect(screen.getByLabelText('Heading 2')).toBeTruthy();
-    expect(screen.getByLabelText('Heading 3')).toBeTruthy();
+    expect(screen.getByLabelText('Font family')).toBeTruthy();
+    expect(screen.getByLabelText('Font size')).toBeTruthy();
     expect(screen.getByLabelText('Bullet list')).toBeTruthy();
     expect(screen.getByLabelText('Ordered list')).toBeTruthy();
     expect(screen.getByLabelText('Blockquote')).toBeTruthy();
+    expect(screen.getByLabelText('Align left')).toBeTruthy();
+    expect(screen.getByLabelText('Align center')).toBeTruthy();
+    expect(screen.getByLabelText('Align right')).toBeTruthy();
     expect(screen.getByLabelText('Link')).toBeTruthy();
     expect(screen.getByLabelText('Image')).toBeTruthy();
     expect(screen.getByLabelText('Video')).toBeTruthy();

@@ -1,10 +1,13 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Italic from '@tiptap/extension-italic';
 import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import Youtube from '@tiptap/extension-youtube';
-import { Node } from '@tiptap/core';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Node, Extension } from '@tiptap/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dialog } from '../../../../../components/Dialog';
 
@@ -19,6 +22,85 @@ interface RichTextProps {
 interface ToolbarProps {
   editor: ReturnType<typeof useEditor>;
 }
+
+const FONT_FAMILY_OPTIONS = [
+  { label: 'Default Font', value: '' },
+  { label: 'Inter', value: 'Inter, sans-serif' },
+  { label: 'Roboto', value: 'Roboto, sans-serif' },
+  { label: 'Arial', value: 'Arial, Helvetica, sans-serif' },
+  { label: 'Helvetica', value: 'Helvetica, Arial, sans-serif' },
+  { label: 'Verdana', value: 'Verdana, Geneva, sans-serif' },
+  { label: 'Tahoma', value: 'Tahoma, Geneva, sans-serif' },
+  { label: 'Trebuchet MS', value: '"Trebuchet MS", Helvetica, sans-serif' },
+  { label: 'Georgia', value: 'Georgia, "Times New Roman", serif' },
+  { label: 'Times New Roman', value: '"Times New Roman", Times, serif' },
+  { label: 'Courier New', value: '"Courier New", Courier, monospace' },
+  { label: 'Sans Serif', value: 'sans-serif' },
+  { label: 'Serif', value: 'serif' },
+  { label: 'Monospace', value: 'monospace' },
+];
+
+const FONT_SIZE_OPTIONS = [
+  { label: 'Default Size', value: '' },
+  { label: '10px', value: '10px' },
+  { label: '11px', value: '11px' },
+  { label: '12px', value: '12px' },
+  { label: '13px', value: '13px' },
+  { label: '14px', value: '14px' },
+  { label: '15px', value: '15px' },
+  { label: '16px', value: '16px' },
+  { label: '18px', value: '18px' },
+  { label: '20px', value: '20px' },
+  { label: '22px', value: '22px' },
+  { label: '24px', value: '24px' },
+  { label: '28px', value: '28px' },
+  { label: '30px', value: '30px' },
+  { label: '36px', value: '36px' },
+  { label: '48px', value: '48px' },
+  { label: '64px', value: '64px' },
+];
+
+const FontFamilyExtension = Extension.create({
+  name: 'fontFamilyExtension',
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['textStyle'],
+        attributes: {
+          fontFamily: {
+            default: null,
+            parseHTML: (element) => element.style.fontFamily || null,
+            renderHTML: (attributes) => {
+              if (!attributes.fontFamily) return {};
+              return { style: `font-family: ${attributes.fontFamily}` };
+            },
+          },
+        },
+      },
+    ];
+  },
+});
+
+const FontSizeExtension = Extension.create({
+  name: 'fontSizeExtension',
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['textStyle'],
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: (element) => element.style.fontSize || null,
+            renderHTML: (attributes) => {
+              if (!attributes.fontSize) return {};
+              return { style: `font-size: ${attributes.fontSize}` };
+            },
+          },
+        },
+      },
+    ];
+  },
+});
 
 const EmbedIframe = Node.create({
   name: 'embedIframe',
@@ -127,6 +209,9 @@ function Toolbar({ editor }: Readonly<ToolbarProps>) {
   const hasTextSelection = !editor.state.selection.empty;
   const isOnLink = editor.isActive('link');
   const canLink = hasTextSelection || isOnLink;
+  const textStyleAttributes = editor.getAttributes('textStyle') as { fontFamily?: string; fontSize?: string };
+  const currentFontFamily = textStyleAttributes.fontFamily ?? '';
+  const currentFontSize = textStyleAttributes.fontSize ?? '';
 
   const btnBase =
     'p-1 rounded text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
@@ -233,6 +318,48 @@ function Toolbar({ editor }: Readonly<ToolbarProps>) {
       >
         <span className="italic">I</span>
       </button>
+
+      <span className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
+
+      <select
+        value={currentFontFamily}
+        onChange={(e) => {
+          const nextFontFamily = e.target.value;
+          const nextAttrs = {
+            fontFamily: nextFontFamily || null,
+            fontSize: currentFontSize || null,
+          };
+          editor.chain().focus().setMark('textStyle', nextAttrs).run();
+        }}
+        className="h-7 rounded border border-gray-300 bg-white px-2 text-xs text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+        aria-label="Font family"
+      >
+        {FONT_FAMILY_OPTIONS.map((option) => (
+          <option key={option.label} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+
+      <select
+        value={currentFontSize}
+        onChange={(e) => {
+          const nextFontSize = e.target.value;
+          const nextAttrs = {
+            fontFamily: currentFontFamily || null,
+            fontSize: nextFontSize || null,
+          };
+          editor.chain().focus().setMark('textStyle', nextAttrs).run();
+        }}
+        className="h-7 rounded border border-gray-300 bg-white px-2 text-xs text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+        aria-label="Font size"
+      >
+        {FONT_SIZE_OPTIONS.map((option) => (
+          <option key={option.label} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -250,42 +377,6 @@ function Toolbar({ editor }: Readonly<ToolbarProps>) {
         aria-pressed={editor.isActive('strike')}
       >
         <span className="line-through">S</span>
-      </button>
-
-      <span className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
-
-      <button
-        type="button"
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 1 }).run()
-        }
-        className={btn(editor.isActive('heading', { level: 1 }))}
-        aria-label="Heading 1"
-        aria-pressed={editor.isActive('heading', { level: 1 })}
-      >
-        H1
-      </button>
-      <button
-        type="button"
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()
-        }
-        className={btn(editor.isActive('heading', { level: 2 }))}
-        aria-label="Heading 2"
-        aria-pressed={editor.isActive('heading', { level: 2 })}
-      >
-        H2
-      </button>
-      <button
-        type="button"
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 3 }).run()
-        }
-        className={btn(editor.isActive('heading', { level: 3 }))}
-        aria-label="Heading 3"
-        aria-pressed={editor.isActive('heading', { level: 3 })}
-      >
-        H3
       </button>
 
       <span className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
@@ -316,6 +407,34 @@ function Toolbar({ editor }: Readonly<ToolbarProps>) {
         aria-pressed={editor.isActive('blockquote')}
       >
         &ldquo; Quote
+      </button>
+
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        className={btn(editor.isActive({ textAlign: 'left' }))}
+        aria-label="Align left"
+        aria-pressed={editor.isActive({ textAlign: 'left' })}
+      >
+        Left
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        className={btn(editor.isActive({ textAlign: 'center' }))}
+        aria-label="Align center"
+        aria-pressed={editor.isActive({ textAlign: 'center' })}
+      >
+        Center
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        className={btn(editor.isActive({ textAlign: 'right' }))}
+        aria-label="Align right"
+        aria-pressed={editor.isActive({ textAlign: 'right' })}
+      >
+        Right
       </button>
 
       <span className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
@@ -510,8 +629,17 @@ export default function RichText({
 }: Readonly<RichTextProps>) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        italic: false,
+      }),
+      Italic,
+      TextStyle,
+      FontFamilyExtension,
+      FontSizeExtension,
       Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
       Link.configure({ openOnClick: false }),
       Image.configure({
         HTMLAttributes: {
@@ -544,7 +672,7 @@ export default function RichText({
 
   return (
     <div
-      className={`rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden ${className}`}
+      className={`rich-text rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden ${className}`}
     >
       {editable && <Toolbar editor={editor} />}
       <EditorContent editor={editor} />
