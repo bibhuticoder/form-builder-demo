@@ -60,45 +60,28 @@ export default function FormRenderer({ formData, dragOverId, selectedFieldId, on
     }
   }
 
-  // const getAlignmentClass = (field: (typeof fields)[0]): string => {
-  //   const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
-  //   const alignment = resolvedStyle.alignment || "left"
+  const getAlignmentClass = (field: (typeof fields)[0]): string => {
+    const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
+    const alignment = resolvedStyle.alignment || "left"
 
-  //   const isSmallScreen = canvasWidth < DEF_CANVAS_WIDTH
+    switch (alignment) {
+      case "left":
+        return "col-start-1"
+      case "center":
+        return "col-start-5"
+      case "right":
+        return "col-start-10"
+      case "auto":
+        return ""
+      default:
+        return ""
+    }
+  }
 
-  //   const span = isSmallScreen ? 12 : resolvedStyle.width === "three-quarters" ? 9 : resolvedStyle.width === "half" ? 6 : resolvedStyle.width === "third" ? 4 : resolvedStyle.width === "quarter" ? 3 : 12
-
-  //   const startCol = alignment === "center" ? Math.floor((12 - span) / 2) + 1 : alignment === "right" ? 12 - span + 1 : 1
-
-  //   switch (startCol) {
-  //     case 1:
-  //       return "col-start-1"
-  //     case 2:
-  //       return "col-start-2"
-  //     case 3:
-  //       return "col-start-3"
-  //     case 4:
-  //       return "col-start-4"
-  //     case 5:
-  //       return "col-start-5"
-  //     case 6:
-  //       return "col-start-6"
-  //     case 7:
-  //       return "col-start-7"
-  //     case 8:
-  //       return "col-start-8"
-  //     case 9:
-  //       return "col-start-9"
-  //     case 10:
-  //       return "col-start-10"
-  //     case 11:
-  //       return "col-start-11"
-  //     case 12:
-  //       return "col-start-12"
-  //     default:
-  //       return "col-start-1"
-  //   }
-  // }
+  const allowAlignment = (field: (typeof fields)[0]): boolean => {
+    const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
+    return field.type === "button" && resolvedStyle.width === "quarter"
+  }
 
   return (
     <SortableList items={fields}>
@@ -110,7 +93,7 @@ export default function FormRenderer({ formData, dragOverId, selectedFieldId, on
               {/* Show drop indicator when hovering over this field (inserts before) */}
               {dragOverId === field.id && <DropIndicator width={getWidthClass(field)} />}
 
-              <SortableItem id={field.id} dragData={{ kind: "canvas-field", fieldId: field.id } as DragData} className={`${getWidthClass(field)}`}>
+              <SortableItem id={field.id} dragData={{ kind: "canvas-field", fieldId: field.id } as DragData} className={`${getWidthClass(field)} ${allowAlignment(field) ? getAlignmentClass(field) : ""}`}>
                 {(dragHandleProps) => (
                   <BuilderFieldControls field={field} onDelete={onDelete} dragHandleProps={dragHandleProps} selected={selectedFieldId === field.id} onSelect={onSelectField}>
                     <FieldRenderer field={field} isSelected={selectedFieldId === field.id} activeSubElement={activeSubElement} />

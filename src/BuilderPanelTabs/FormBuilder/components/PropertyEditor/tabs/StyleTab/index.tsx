@@ -37,6 +37,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ field }) => {
             {/* Layout Section */}
             <LayoutSection
                 field={field}
+                capabilities={capabilities}
                 getStyleValue={getStyleValue}
                 handleStyleUpdate={handleStyleUpdate}
                 activeBreakpoint={activeBreakpoint}

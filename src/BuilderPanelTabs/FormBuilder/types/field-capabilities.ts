@@ -12,6 +12,7 @@ export interface FieldStyleCapabilities {
     supportsLabelStyles: boolean;
     supportsPlaceholderStyles: boolean;
     supportsHelpStyles: boolean;
+    supportsAllignment?: boolean;
 
     // Content capabilities
     hasLabel: boolean;
@@ -49,7 +50,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasPlaceholder: false,
         hasRequired: false,
         hasHelpText: false,
-        hasOptions: false,
+        hasOptions: false
     },
     [FieldType.DIVIDER]: {
         supportsInputStyles: true,
@@ -61,7 +62,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasPlaceholder: false,
         hasRequired: false,
         hasHelpText: false,
-        hasOptions: false,
+        hasOptions: false
     },
     [FieldType.IMAGE]: {
         supportsInputStyles: true,
@@ -73,7 +74,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasPlaceholder: false,
         hasRequired: false,
         hasHelpText: false,
-        hasOptions: false,
+        hasOptions: false
     },
     [FieldType.VIDEO]: {
         supportsInputStyles: true,
@@ -85,7 +86,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasPlaceholder: false,
         hasRequired: true,
         hasHelpText: true,
-        hasOptions: false,
+        hasOptions: false
     },
     [FieldType.BUTTON]: {
         supportsInputStyles: false,
@@ -98,6 +99,7 @@ export const FIELD_CAPABILITIES: Record<FieldType, FieldStyleCapabilities> = {
         hasRequired: false,
         hasHelpText: false,
         hasOptions: false,
+        supportsAllignment: true
     },
     [FieldType.CAPTCHA]: {
         supportsInputStyles: false,

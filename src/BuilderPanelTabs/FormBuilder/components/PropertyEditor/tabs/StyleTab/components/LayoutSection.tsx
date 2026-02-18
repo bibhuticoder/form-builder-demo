@@ -1,17 +1,21 @@
 import React from "react"
 import { Field, BreakpointId } from "../../../../../types"
 import { StyleSwitcher } from "./StyleSwitcher"
+import { resolveBreakpointStyle } from "../../../../../utils/styleUtils"
 
 interface LayoutSectionProps {
   field: Field
+  capabilities: any
   activeBreakpoint: BreakpointId
   updateField: (fieldId: string, updates: Partial<Field>) => void
   getStyleValue: (key: string, defaultValue?: string | number) => string | number
   handleStyleUpdate: (key: string, value: string | number | undefined) => void
 }
 
-export const LayoutSection: React.FC<LayoutSectionProps> = ({ field, getStyleValue, handleStyleUpdate, activeBreakpoint, updateField }) => {
+export const LayoutSection: React.FC<LayoutSectionProps> = ({ field, capabilities, getStyleValue, handleStyleUpdate, activeBreakpoint, updateField }) => {
   const alignment = String(getStyleValue("alignment", "left"))
+
+  const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint)
 
   return (
     <div className="space-y-4">
@@ -35,18 +39,20 @@ export const LayoutSection: React.FC<LayoutSectionProps> = ({ field, getStyleVal
         </select>
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="alignment-select" className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">
-          Alignment
-        </label>
-        <div id="alignment-select" className="grid grid-cols-3 gap-1">
-          {["left", "center", "right"].map((value) => (
-            <button key={value} type="button" onClick={() => handleStyleUpdate("alignment", value)} className={`px-2 py-1.5 rounded-md border text-xs font-medium transition-colors ${alignment === value ? "bg-gray-400 text-white" : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"}`}>
-              {value.charAt(0).toUpperCase() + value.slice(1)}
-            </button>
-          ))}
+      {capabilities.supportsAllignment && resolvedStyle.width === "quarter" && (
+        <div className="space-y-1">
+          <label htmlFor="alignment-select" className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block">
+            Alignment
+          </label>
+          <div id="alignment-select" className="grid grid-cols-3 gap-1">
+            {["left", "center", "right"].map((value) => (
+              <button key={value} type="button" onClick={() => handleStyleUpdate("alignment", value)} className={`px-2 py-1.5 rounded-md border text-xs font-medium transition-colors ${alignment === value ? "bg-gray-400 text-white" : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"}`}>
+                {value.charAt(0).toUpperCase() + value.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
