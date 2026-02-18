@@ -10,6 +10,27 @@ interface StyleSwitcherProps {
 }
 
 export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreakpoint, updateField }) => {
+    const getCopiedFromBreakpoint = useCallback((): BreakpointId | null => {
+        let current = field.style?.[activeBreakpoint];
+        const visited = new Set<BreakpointId>([activeBreakpoint]);
+
+        while (typeof current === 'string') {
+            const ref = current as BreakpointId;
+            if (visited.has(ref)) return null;
+            visited.add(ref);
+            const next = field.style?.[ref];
+            if (typeof next !== 'string') return ref;
+            current = next;
+        }
+
+        return null;
+    }, [field.style, activeBreakpoint]);
+
+    const copiedFromBreakpoint = getCopiedFromBreakpoint();
+    const copiedFromLabel = copiedFromBreakpoint
+        ? (SCREEN_SIZES.find((size) => size.id === copiedFromBreakpoint)?.label ?? copiedFromBreakpoint.toUpperCase())
+        : null;
+
     // Compute which breakpoints currently reference the active breakpoint (or ARE the active)
     const getSelectedFromField = useCallback((): Set<BreakpointId> => {
         const selected = new Set<BreakpointId>();
@@ -130,16 +151,20 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ field, activeBreak
                 })}
             </div>
 
-            {isDirty && (
-                <div className="flex justify-end">
+            <div className="flex items-end justify-between">
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 text-left">
+                    {copiedFromLabel ? `Copied from: ${copiedFromLabel}` : ''}
+                </div>
+
+                {isDirty && (
                     <button
                         onClick={handleSave}
                         className="px-4 py-1.5 bg-primary text-white text-xs font-semibold rounded-md hover:opacity-90 transition-opacity"
                     >
                         Save
                     </button>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };

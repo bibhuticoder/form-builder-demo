@@ -64,107 +64,47 @@ export const SpacingControl: React.FC<SpacingControlProps> = ({
     onChange(key, value);
   };
 
+  const sides = [
+    { key: "Top", short: "T", value: values.top },
+    { key: "Right", short: "R", value: values.right },
+    { key: "Bottom", short: "B", value: values.bottom },
+    { key: "Left", short: "L", value: values.left },
+  ] as const;
+
+  const controlWrapperClass = "shadow h-6 grid grid-cols-[1.5rem_1fr] rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:z-20";
+  const copyButtonClass = "h-full w-6 flex items-center justify-center border-r border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors";
+  const inputClass = "block w-full h-full px-2 pl-5 py-0 bg-transparent text-xs leading-none text-gray-900 dark:text-white focus:outline-none text-center";
+
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between">
         <label className="text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{label}</label>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {/* Top */}
-        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
-          <button
-            type="button"
-            onClick={() => handleCopyValue(values.top)}
-            title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
-          >
-            <DocumentDuplicateIcon className="h-3 w-3" />
-          </button>
-          <div className="relative flex-1">
-            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
-              T
+        {sides.map((side) => (
+          <div key={side.key} className={controlWrapperClass}>
+            <button
+              type="button"
+              onClick={() => handleCopyValue(side.value)}
+              title="Copy to all sides"
+              className={copyButtonClass}
+            >
+              <DocumentDuplicateIcon className="h-3 w-3" />
+            </button>
+            <div className="relative h-full">
+              <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
+                {side.short}
+              </div>
+              <input
+                type={allowAuto ? "text" : "number"}
+                value={side.value || ""}
+                onChange={(e) => handleInputChange(side.key, e.target.value)}
+                className={inputClass}
+                placeholder="0"
+              />
             </div>
-            <input
-              type={allowAuto ? "text" : "number"}
-              value={values.top || ""}
-              onChange={(e) => handleInputChange("Top", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
-              placeholder="0"
-            />
           </div>
-        </div>
-
-        {/* Right */}
-        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
-          <button
-            type="button"
-            onClick={() => handleCopyValue(values.right)}
-            title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
-          >
-            <DocumentDuplicateIcon className="h-3 w-3" />
-          </button>
-          <div className="relative flex-1">
-            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
-              R
-            </div>
-            <input
-              type={allowAuto ? "text" : "number"}
-              value={values.right || ""}
-              onChange={(e) => handleInputChange("Right", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
-          <button
-            type="button"
-            onClick={() => handleCopyValue(values.bottom)}
-            title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
-          >
-            <DocumentDuplicateIcon className="h-3 w-3" />
-          </button>
-          <div className="relative flex-1">
-            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
-              B
-            </div>
-            <input
-              type={allowAuto ? "text" : "number"}
-              value={values.bottom || ""}
-              onChange={(e) => handleInputChange("Bottom", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        {/* Left */}
-        <div className="shadow flex items-center relative group rounded-md focus-within:ring-2 focus-within:ring-primary focus-within:z-20">
-          <button
-            type="button"
-            onClick={() => handleCopyValue(values.left)}
-            title="Copy to all sides"
-            className="h-6 w-6 flex items-center justify-center rounded rounded-r-none border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0 transition-colors"
-          >
-            <DocumentDuplicateIcon className="h-3 w-3" />
-          </button>
-          <div className="relative flex-1">
-            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-medium pointer-events-none text-gray-500 dark:text-gray-400">
-              L
-            </div>
-            <input
-              type={allowAuto ? "text" : "number"}
-              value={values.left || ""}
-              onChange={(e) => handleInputChange("Left", e.target.value)}
-              className="w-full h-6 px-2 pl-5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md rounded-l-none text-xs text-gray-900 dark:text-white focus:outline-none text-center"
-              placeholder="0"
-            />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
