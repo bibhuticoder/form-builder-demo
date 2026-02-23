@@ -1,5 +1,5 @@
 import React from "react"
-import { type FormDefinition } from "./foundation"
+import { type FormDefinition } from "../../foundation"
 
 
 export interface JsonEditorProps {

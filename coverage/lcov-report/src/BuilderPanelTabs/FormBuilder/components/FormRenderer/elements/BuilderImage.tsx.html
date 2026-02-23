@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.66% </span>
+                <span class="strong">36.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/15</span>
+                <span class='fraction'>8/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -101,13 +101,24 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,6 +130,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,7 +167,8 @@
 &nbsp;
 import { ImageField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
-import { getLabelStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
+import { getLabelStyles, getHelpTextStyles, getInputStyles } from "../../../utils/styleUtils";
 &nbsp;
 interface BuilderImageProps {
   field: ImageField;
@@ -156,13 +177,14 @@ interface BuilderImageProps {
 }
 &nbsp;
 export default function BuilderImage({ field, isSelected, activeSubElement }: Readonly&lt;BuilderImageProps&gt;) {
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
   return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;div className="space-y-2"&gt;
         {field.label &amp;&amp; (
           &lt;label
             className={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1 rounded px-1' </span>: ''}`}
-            style={getLabelStyles(field.style)}
+            style={getLabelStyles(field.style, activeBreakpoint)}
           &gt;
             {field.label}
           &lt;/label&gt;
@@ -170,9 +192,17 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
         &lt;img
           src={field.url}
           alt={field.altText || <span class="branch-1 cbranch-no" title="branch not covered" >field.label </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >"Image"}</span>
-          style={field.style}
+          style={getInputStyles(field.style, activeBreakpoint)}
           className={`w-full h-auto rounded-lg ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'url'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}
         /&gt;
+        {field.caption &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;p</span>
+            className={`text-[9px] text-gray-500 ${isSelected &amp;&amp; (activeSubElement === 'caption' || activeSubElement === 'help') ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
+          &gt;
+            {field.caption}
+          &lt;/p&gt;
+        )}
       &lt;/div&gt;
     &lt;/BuilderFieldWrapper&gt;
   );
@@ -184,7 +214,7 @@ export default function BuilderImage({ field, isSelected, activeSubElement }: Re
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

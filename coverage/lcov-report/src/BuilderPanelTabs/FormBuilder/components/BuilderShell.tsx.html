@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -114,7 +114,18 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -132,7 +143,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,18 +198,29 @@
 <span class="cstat-no" title="statement not covered" >import { useFormBuilder } from "../context";</span>
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >BuilderShell: React.FC = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>) =</span>&gt; {</span>
-  const { jsonContent, addField, reorderFields } = <span class="cstat-no" title="statement not covered" >useFormBuilder();</span>
+  const { jsonContent, addField, reorderFields, activeBreakpoint } = <span class="cstat-no" title="statement not covered" >useFormBuilder();</span>
   const [selectedFieldId, setSelectedFieldId] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;(null);</span>
 &nbsp;
   const handleClearSelection = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedFieldId(null);</span>
   };
 &nbsp;
+  // Reset selection if the selected field is deleted
+<span class="cstat-no" title="statement not covered" >  React.useEffect(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedFieldId &amp;&amp; jsonContent.fields) {</span>
+      const fieldExists = <span class="cstat-no" title="statement not covered" >jsonContent.fields.some(<span class="fstat-no" title="function not covered" >(f</span>ield) =&gt; <span class="cstat-no" title="statement not covered" >field.id === selectedFieldId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      if (!fieldExists) {</span>
+<span class="cstat-no" title="statement not covered" >        setSelectedFieldId(null);</span>
+      }
+    }
+  }, [jsonContent.fields, selectedFieldId]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DndProvider
       onFieldAdd={addField}
       onFieldReorder={reorderFields}
       fields={jsonContent.fields ?? []}
+      activeBreakpoint={activeBreakpoint}
       renderPreview={<span class="fstat-no" title="function not covered" >(f</span>ield) =&gt; (
 <span class="cstat-no" title="statement not covered" >        &lt;BuilderFieldControls field={field} forceHover={true}&gt;</span>
           &lt;FieldRenderer field={field} /&gt;
@@ -223,7 +256,7 @@ export const <span class="cstat-no" title="statement not covered" >BuilderShell:
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

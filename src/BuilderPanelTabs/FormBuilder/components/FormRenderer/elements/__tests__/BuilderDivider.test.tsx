@@ -7,7 +7,7 @@ import { FieldType } from '../../../../types/enums';
 import { MockFormBuilderProvider } from './MockFormBuilderProvider';
 
 describe('BuilderDivider', () => {
-  it('renders a divider (hr)', () => {
+  it('renders a divider (div)', () => {
     const { container } = render(
       <MockFormBuilderProvider>
         <BuilderDivider
@@ -18,6 +18,6 @@ describe('BuilderDivider', () => {
         />
       </MockFormBuilderProvider>
     );
-    expect(container.querySelector('hr')).toBeTruthy();
+    expect(container.querySelector('.h-0\\.5')).toBeTruthy();
   });
 });

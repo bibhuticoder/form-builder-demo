@@ -26,7 +26,7 @@ describe('ContentSection', () => {
         );
 
         expect(screen.getByText('Label')).toBeTruthy();
-        expect(screen.getByDisplayValue('Test Label')).toBeTruthy();
+        expect(screen.getByDisplayValue('My Field')).toBeTruthy();
     });
 
     it('hides label input when capability disabled', () => {
@@ -50,7 +50,7 @@ describe('ContentSection', () => {
             />
         );
 
-        const input = screen.getByDisplayValue('Test Label');
+        const input = screen.getByDisplayValue('My Field');
         fireEvent.change(input, { target: { value: 'New Label' } });
 
         expect(mockHandleUpdate).toHaveBeenCalledWith('label', 'New Label');
@@ -66,6 +66,6 @@ describe('ContentSection', () => {
         );
 
         expect(screen.getByText('Placeholder')).toBeTruthy();
-        expect(screen.getByDisplayValue('Test Placeholder')).toBeTruthy();
+        expect(screen.getByDisplayValue('Enter text')).toBeTruthy();
     });
 });

@@ -45,7 +45,7 @@ describe('styleUtils', () => {
             const result = getInputStyles(style);
             expect(result.fontFamily).toBe('Roboto');
             expect(result.fontSize).toBe('16rem');
-            expect(result.fontWeight).toBe('bold');
+            expect(result.fontWeight).toBe(700);
             expect(result.textAlign).toBe('center');
         });
 
@@ -107,7 +107,7 @@ describe('styleUtils', () => {
             });
             const result = getPlaceholderStyles(style);
             expect(result.color).toBe('#ccc');
-            expect(result.fontWeight).toBe('light');
+            expect(result.fontWeight).toBe(300);
         });
     });
 });

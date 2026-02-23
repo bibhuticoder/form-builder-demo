@@ -215,10 +215,10 @@ describe('FormSettings', () => {
 
     // Update Font Body (Select)
     const bodyFontSelect = screen.getByLabelText('Body Font');
-    fireEvent.change(bodyFontSelect, { target: { value: 'Arial' } });
+    fireEvent.change(bodyFontSelect, { target: { value: 'inter' } });
 
     expect(mockOnChangeRealTime).toHaveBeenCalledWith(expect.objectContaining({
-      settings: expect.objectContaining({ fontFamilyBody: 'Arial' })
+      settings: expect.objectContaining({ fontFamilyBody: 'inter' })
     }));
   });
 });

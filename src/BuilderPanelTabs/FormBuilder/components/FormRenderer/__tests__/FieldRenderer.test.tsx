@@ -289,7 +289,7 @@ describe('FieldRenderer', () => {
         />
       </MockFormBuilderProvider>
     );
-    expect(container.querySelector('hr')).toBeTruthy();
+    expect(container.querySelector('.h-0\\.5')).toBeTruthy();
   });
 
   it('should render captcha field component', () => {

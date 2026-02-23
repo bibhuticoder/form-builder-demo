@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -146,13 +146,7 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,20 +168,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -241,7 +226,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useState, useRef, useEffect } from "react";</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useRef } from "react";</span>
 <span class="cstat-no" title="statement not covered" >import { useDroppable } from "@dnd-kit/core";</span>
 <span class="cstat-no" title="statement not covered" >import { CanvasResizer } from "./CanvasResizer";</span>
 &nbsp;
@@ -261,8 +249,7 @@ export interface CanvasProps {
 }
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >Canvas: React.FC&lt;CanvasProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>{</span> dragOverId, selectedFieldId, onSelectField }) =&gt; {</span>
-  const { jsonContent, updateCanvasWidth } = <span class="cstat-no" title="statement not covered" >useFormBuilder();</span>
-  const [canvasWidth, setCanvasWidth] = <span class="cstat-no" title="statement not covered" >useState(768);</span>
+  const { jsonContent, canvasWidth, setCanvasWidth } = <span class="cstat-no" title="statement not covered" >useFormBuilder();</span>
   const canvasRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLDivElement | null&gt;(null);</span>
 &nbsp;
   // Make canvas a droppable target for palette fields
@@ -270,18 +257,10 @@ export const <span class="cstat-no" title="statement not covered" >Canvas: React
 &nbsp;
   const isEmpty = <span class="cstat-no" title="statement not covered" >jsonContent.fields.length === 0;</span>
 &nbsp;
-  const handleCanvasWidthChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    updateCanvasWidth(canvasWidth);</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    handleCanvasWidthChange()</span>
-  }, [canvasWidth])
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="flex-1 pt-2 flex flex-col gap-2"&gt;
       {/* Canvas Toolbar */}
-      &lt;CanvasToolbar canvasWidth={jsonContent.formSettings.settings.width} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} /&gt;
+      &lt;CanvasToolbar canvasWidth={canvasWidth} onCanvasWidthChange={setCanvasWidth} selectedFieldId={selectedFieldId} /&gt;
 &nbsp;
       {/* Canvas Content Area */}
       &lt;div
@@ -293,30 +272,33 @@ export const <span class="cstat-no" title="statement not covered" >Canvas: React
 <span class="cstat-no" title="statement not covered" >            canvasRef.current = node</span>
 <span class="cstat-no" title="statement not covered" >            setNodeRef(node)</span>
           }}
-          className={`rounded-lg relative bg-transparent mx-auto`}
+          className="relative mx-auto h-full"
           style={{
-            ...jsonContent.formSettings.settings,
             width: canvasWidth,
             minWidth: `${MIN_CANVAS_WIDTH}px`,
             maxWidth: `${MAX_CANVAS_WIDTH}px`,
             minHeight: "600px",
           }}
         &gt;
-          {isEmpty ? (
-            &lt;div className="h-full flex items-center justify-center p-8"&gt;
-              &lt;EmptyState isOver={isOver} /&gt;
-            &lt;/div&gt;
-          ) : (
-            &lt;div className="canvas-content"&gt;
-              {/* Form Renderer */}
-              &lt;FormRenderer
-                formData={jsonContent}
-                dragOverId={dragOverId}
-                selectedFieldId={selectedFieldId}
-                onSelectField={onSelectField}
-              /&gt;
-            &lt;/div&gt;
-          )}
+          {/* Visual Canvas (Scrollable) */}
+          &lt;div className="h-full rounded-lg bg-white dark:bg-gray-800 overflow-auto shadow-md"&gt;
+            {isEmpty ? (
+              &lt;div className="h-full flex items-center justify-center p-8"&gt;
+                &lt;EmptyState isOver={isOver} /&gt;
+              &lt;/div&gt;
+            ) : (
+              &lt;div className="canvas-content h-full"&gt;
+                {/* Form Renderer */}
+                &lt;FormRenderer
+                  formData={jsonContent}
+                  dragOverId={dragOverId}
+                  selectedFieldId={selectedFieldId}
+                  onSelectField={onSelectField}
+                  canvasWidth={canvasWidth}
+                /&gt;
+              &lt;/div&gt;
+            )}
+          &lt;/div&gt;
 &nbsp;
           {/* Resize Handle */}
           &lt;CanvasResizer
@@ -337,7 +319,7 @@ export const <span class="cstat-no" title="statement not covered" >Canvas: React
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

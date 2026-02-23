@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12% </span>
+                <span class="strong">11.32% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/50</span>
+                <span class='fraction'>6/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.63% </span>
+                <span class="strong">13.04% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/44</span>
+                <span class='fraction'>6/46</span>
             </div>
         
             
@@ -206,7 +206,17 @@
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
 <a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,6 +250,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,16 +259,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -267,10 +275,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -357,7 +377,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent, type DragOverEvent } from "@dnd-kit/core";
 import type { DragData } from "../../types/dnd";
-import type { Field } from "../../types";
+import type { Field, BreakpointId } from "../../types";
 import { createFieldFromType } from "../../utils/dnd/utils";
 &nbsp;
 /** Width of the drag preview overlay */
@@ -368,13 +388,15 @@ const DRAG_PREVIEW_OPACITY = 0.9;
 interface DndProviderProps {
   children: (dragOverId: string | null) =&gt; React.ReactNode;
   /** Callback when a new field is added from the palette */
-  onFieldAdd: (field: Field, afterId?: string) =&gt; void;
+  onFieldAdd: (field: Field, position?: string | number) =&gt; void;
   /** Callback when fields are reordered */
   onFieldReorder: (oldIndex: number, newIndex: number) =&gt; void;
   /** Current list of fields for finding active field during drag */
   fields: Field[];
   /** Custom render function for drag preview */
   renderPreview?: (field: Field) =&gt; React.ReactNode;
+  /** Active breakpoint for initializing new field styles */
+  activeBreakpoint: BreakpointId;
 }
 &nbsp;
 /**
@@ -388,7 +410,8 @@ export function <span class="fstat-no" title="function not covered" >DndProvider
   onFieldAdd,
   onFieldReorder,
   fields,
-  renderPreview
+  renderPreview,
+  activeBreakpoint
 }: DndProviderProps) {
   const [activeDrag, setActiveDrag] = <span class="cstat-no" title="statement not covered" >useState&lt;{ id?: string; data?: DragData }&gt;({});</span>
   const [overId, setOverId] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;(null);</span>
@@ -416,8 +439,15 @@ export function <span class="fstat-no" title="function not covered" >DndProvider
   const handlePaletteFieldDrop = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(o</span>verId: string, activeData: DragData) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeData.fieldType) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
-    const newField = <span class="cstat-no" title="statement not covered" >createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields);</span>
-<span class="cstat-no" title="statement not covered" >    onFieldAdd(newField, overId);</span>
+    // Find index of the drop target
+    const overIndex = <span class="cstat-no" title="statement not covered" >fields.findIndex(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f.id === overId)</span>;</span>
+&nbsp;
+    // If dropping over a valid field, insert at that index (before the item)
+    // If overIndex is -1 (shouldn't happen with valid overId), default to end
+    const insertIndex = <span class="cstat-no" title="statement not covered" >overIndex &gt;= 0 ? overIndex : undefined;</span>
+&nbsp;
+    const newField = <span class="cstat-no" title="statement not covered" >createFieldFromType(activeData.fieldType, activeData.label || activeData.fieldType, fields, activeBreakpoint);</span>
+<span class="cstat-no" title="statement not covered" >    onFieldAdd(newField, insertIndex);</span>
   }, [onFieldAdd, fields]);
 &nbsp;
   /**
@@ -464,7 +494,7 @@ export function <span class="fstat-no" title="function not covered" >DndProvider
   /** Creates a preview field instance when dragging from the palette */
   const activePalettePreview = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activeDrag.data?.kind === "palette-field" &amp;&amp; activeDrag.data.fieldType &amp;&amp; activeDrag.data.label) {</span>
-<span class="cstat-no" title="statement not covered" >      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label, fields);</span>
+<span class="cstat-no" title="statement not covered" >      return createFieldFromType(activeDrag.data.fieldType, activeDrag.data.label, fields, activeBreakpoint);</span>
     }
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }, [activeDrag.data, fields]);
@@ -499,7 +529,7 @@ export function <span class="fstat-no" title="function not covered" >DndProvider
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

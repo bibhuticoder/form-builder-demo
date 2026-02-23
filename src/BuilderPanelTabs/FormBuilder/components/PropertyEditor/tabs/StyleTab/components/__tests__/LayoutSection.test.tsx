@@ -26,7 +26,8 @@ describe("LayoutSection", () => {
   })
 
   it("renders alignment control", () => {
-    render(<LayoutSection {...props} />)
+    const alignProps = { ...props, capabilities: { supportsAllignment: true }, field: { ...props.field, style: { md: { width: "quarter" } } } as any }
+    render(<LayoutSection {...alignProps} />)
     expect(screen.getByText("Alignment")).toBeTruthy()
     expect(screen.getByText("Left")).toBeTruthy()
     expect(screen.getByText("Center")).toBeTruthy()
@@ -47,15 +48,16 @@ describe("LayoutSection", () => {
   })
 
   it("calls handleStyleUpdate when alignment changes", () => {
-    render(<LayoutSection {...props} />)
-    const select = screen.getByLabelText("Alignment")
-    fireEvent.change(select, { target: { value: "center" } })
+    const alignProps = { ...props, capabilities: { supportsAllignment: true }, field: { ...props.field, style: { md: { width: "quarter" } } } as any }
+    render(<LayoutSection {...alignProps} />)
+    const btn = screen.getByText("Center")
+    fireEvent.click(btn)
     expect(mockHandleStyleUpdate).toHaveBeenCalledWith("alignment", "center")
   })
 
   it("renders StyleSwitcher inside LayoutSection", () => {
     render(<LayoutSection {...props} />)
-    expect(screen.getByText("Apply All")).toBeTruthy()
+    expect(screen.getByText("Apply all")).toBeTruthy()
     expect(screen.getByText("XS")).toBeTruthy()
     expect(screen.getByText("MD")).toBeTruthy()
   })

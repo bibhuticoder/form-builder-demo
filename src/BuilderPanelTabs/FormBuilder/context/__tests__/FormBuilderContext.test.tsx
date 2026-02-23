@@ -143,7 +143,7 @@ describe('FormBuilderContext', () => {
             context.updateFieldStyleBatch('f1', { color: 'blue', fontSize: 12 });
         });
 
-        expect(context.jsonContent.fields[0].style).toEqual({ color: 'blue', fontSize: 12 });
+        expect(context.jsonContent.fields[0].style).toEqual({ color: 'red', md: { color: 'blue', fontSize: 12 } });
     });
 
     it('deletes a field', () => {

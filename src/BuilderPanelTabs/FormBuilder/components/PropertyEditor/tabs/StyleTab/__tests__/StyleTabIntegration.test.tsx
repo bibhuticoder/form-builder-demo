@@ -64,9 +64,7 @@ describe('StyleTab Integration', () => {
         const alignSelect = screen.getByDisplayValue('Left');
         fireEvent.change(alignSelect, { target: { value: 'center' } });
 
-        expect(mockUpdateField).toHaveBeenCalledWith('f1', {
-            style: expect.objectContaining({ textAlign: 'center' })
-        });
+        expect(mockUpdateFieldStyleBatch).toHaveBeenCalledWith('f1', { textAlign: 'center' });
     });
 
     it('updates width via LayoutSection', () => {
@@ -75,8 +73,6 @@ describe('StyleTab Integration', () => {
         const widthSelect = screen.getByDisplayValue('Full Width (100%)');
         fireEvent.change(widthSelect, { target: { value: 'half' } });
 
-        expect(mockUpdateField).toHaveBeenCalledWith('f1', {
-            style: expect.objectContaining({ width: 'half' })
-        });
+        expect(mockUpdateFieldStyleBatch).toHaveBeenCalledWith('f1', { width: 'half' });
     });
 });

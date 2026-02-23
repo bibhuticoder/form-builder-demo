@@ -14,7 +14,6 @@ import {
   TextField,
   LogicEvent,
   LogicComparison,
-  LogicOperation,
   LogicEffect,
   LogicRule,
   FormDefinition,
@@ -57,9 +56,9 @@ const createValidLogicRule = (overrides?: any): LogicRule => ({
     fieldId: 'test_field',
   },
   if: {
-    operation: LogicOperation.AND,
-    args: [
+    conditions: [
       {
+        id: 'cond_1',
         comparison: LogicComparison.EQ,
         left: { var: 'test_field' },
         right: { str: 'value' },
@@ -159,9 +158,9 @@ describe('validateLogicFieldReferences', () => {
         rules: [
           createValidLogicRule({
             if: {
-              operation: LogicOperation.AND,
-              args: [
+              conditions: [
                 {
+                  id: 'cond_2',
                   comparison: LogicComparison.EQ,
                   left: { var: 'nonexistent_field' },
                   right: { str: 'value' },

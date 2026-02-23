@@ -8,7 +8,10 @@ describe('OptionsSection', () => {
         id: '1',
         type: FieldType.CHECKBOX,
         label: 'Options Field',
-        options: ['Option 1', 'Option 2']
+        options: [
+            { id: '1', label: 'Option 1', value: 'Option 1' },
+            { id: '2', label: 'Option 2', value: 'Option 2' }
+        ]
     } as any;
 
     beforeEach(() => {
@@ -34,8 +37,8 @@ describe('OptionsSection', () => {
                 handleUpdate={mockHandleUpdate}
             />
         );
-        expect(screen.getByDisplayValue('Option 1')).toBeTruthy();
-        expect(screen.getByDisplayValue('Option 2')).toBeTruthy();
+        expect(screen.getAllByDisplayValue('Option 1')[0]).toBeTruthy();
+        expect(screen.getAllByDisplayValue('Option 2')[0]).toBeTruthy();
     });
 
     it('adds a new option', () => {
@@ -65,7 +68,7 @@ describe('OptionsSection', () => {
             />
         );
 
-        const input = screen.getByDisplayValue('Option 1');
+        const input = screen.getAllByDisplayValue('Option 1')[0];
         fireEvent.change(input, { target: { value: 'Updated 1' } });
 
         expect(mockHandleUpdate).toHaveBeenCalledWith('options', [

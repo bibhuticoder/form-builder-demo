@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
-import { JsonEditor } from "../../JsonEditor";
+import { JsonEditor } from "./JsonEditor";
 import { useFormBuilder } from "../../context";
 
 export const JsonEditorPanel: React.FC = () => {

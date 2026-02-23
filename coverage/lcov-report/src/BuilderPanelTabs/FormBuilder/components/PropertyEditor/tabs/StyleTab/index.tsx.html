@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.44% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/18</span>
+                <span class='fraction'>19/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/16</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -131,7 +131,11 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -148,10 +152,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -159,7 +162,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -205,21 +211,21 @@ import { useFormBuilder } from "../../../../context";
 import { LayoutSection } from "./components/LayoutSection";
 import { TypographySection } from "./components/TypographySection";
 import { DecorationSection } from "./components/DecorationSection";
+import { resolveBreakpointStyle } from "../../../../utils/styleUtils";
 &nbsp;
 interface StyleTabProps {
     field: Field;
 }
 &nbsp;
 export const StyleTab: React.FC&lt;StyleTabProps&gt; = ({ field }) =&gt; {
-    const { updateField, updateFieldStyleBatch, setActiveSubElement } = useFormBuilder();
+    const { updateField, updateFieldStyleBatch, setActiveSubElement, activeBreakpoint } = useFormBuilder();
 &nbsp;
     // Get field capabilities
     const capabilities = useMemo(() =&gt; getFieldCapabilities(field.type), [field.type]);
 &nbsp;
+    // Use updateFieldStyleBatch for individual updates too, as it handles responsive nesting correctly
     const handleStyleUpdate = (key: string, value: string | number | undefined) =&gt; {
-        updateField(field.id, {
-            style: { ...field.style, [key]: value },
-        });
+        updateFieldStyleBatch(field.id, { [key]: value });
     };
 &nbsp;
     const handleStyleBatchUpdate = <span class="fstat-no" title="function not covered" >(u</span>pdates: Record&lt;string, string | number | undefined&gt;) =&gt; {
@@ -227,8 +233,11 @@ export const StyleTab: React.FC&lt;StyleTabProps&gt; = ({ field }) =&gt; {
     };
 &nbsp;
     const getStyleValue = (key: string, defaultValue: string | number | undefined = "") =&gt; {
-        return (field.style as Record&lt;string, string | number | undefined&gt;)?.[key] ?? defaultValue;
+        const resolvedStyle = resolveBreakpointStyle(field.style, activeBreakpoint);
+        return (resolvedStyle as Record&lt;string, string | number | undefined&gt;)?.[key] ?? defaultValue;
     };
+&nbsp;
+&nbsp;
 &nbsp;
     return (
         &lt;div className="space-y-6"&gt;
@@ -238,8 +247,8 @@ export const StyleTab: React.FC&lt;StyleTabProps&gt; = ({ field }) =&gt; {
                 capabilities={capabilities}
                 getStyleValue={getStyleValue}
                 handleStyleUpdate={handleStyleUpdate}
-                handleStyleBatchUpdate={handleStyleBatchUpdate}
-                setActiveSubElement={setActiveSubElement}
+                activeBreakpoint={activeBreakpoint}
+                updateField={updateField}
             /&gt;
 &nbsp;
             &lt;div className="border-t border-gray-200 dark:border-gray-700" /&gt;
@@ -274,7 +283,7 @@ export const StyleTab: React.FC&lt;StyleTabProps&gt; = ({ field }) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../../../prettify.js"></script>
         <script>

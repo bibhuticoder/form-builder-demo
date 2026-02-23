@@ -2,7 +2,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LogicTab } from '../index';
 import { FormBuilderContext } from '../../../../../context/FormBuilderContext';
-import { FieldType, FormStatus, LogicEffect, LogicEvent, LogicOperation, LogicComparison } from '../../../../../types';
+import { FieldType, FormStatus, LogicEffect, LogicEvent, LogicComparison } from '../../../../../types';
 
 // Mock Dialog as it relies on Portal which can be tricky in tests, 
 // BUT LogicDialog imports Dialog from components/Dialog.
@@ -85,10 +85,10 @@ describe('LogicTab Integration', () => {
         // LogicDialog: matchType select, then conditions map...
 
         // Select Field: Name
-        fireEvent.change(fieldSelects[1], { target: { value: 'Name' } }); // LogicDialog uses label as value if present
+        fireEvent.change(fieldSelects[0], { target: { value: 'field_1' } });
 
         // Select Condition: Equals (default, but verify)
-        fireEvent.change(fieldSelects[2], { target: { value: 'equals' } });
+        fireEvent.change(fieldSelects[1], { target: { value: LogicComparison.EQ } });
 
         // Enter Value
         const valueInput = screen.getByPlaceholderText('Value...');
@@ -101,7 +101,7 @@ describe('LogicTab Integration', () => {
         const actionSelect = screen.getByDisplayValue('Select Action...');
         fireEvent.change(actionSelect, { target: { value: 'hide' } });
 
-        const targetSelect = screen.getByDisplayValue('Select Field...');
+        const targetSelect = screen.getAllByDisplayValue('Select Field...').pop() as HTMLElement;
         fireEvent.change(targetSelect, { target: { value: 'field_2' } });
 
         // Click Add Rule
@@ -112,7 +112,7 @@ describe('LogicTab Integration', () => {
         // Verify addLogicRule called
         expect(mockAddLogicRule).toHaveBeenCalledTimes(1);
         const calledArg = mockAddLogicRule.mock.calls[0][0];
-        expect(calledArg.if.args[0].right.str).toBe('John');
+        expect(calledArg.if.conditions[0].right.str).toBe('John');
         expect(calledArg.then[0].effect).toBe(LogicEffect.FIELD_VISIBILITY_SET);
         expect(calledArg.then[0].value).toBe(false); // hide -> value false
     });
@@ -123,10 +123,10 @@ describe('LogicTab Integration', () => {
             enabled: true,
             trigger: { event: LogicEvent.FIELD_CHANGE, fieldId: 'Name' },
             if: {
-                operation: LogicOperation.AND,
-                args: [{
+                conditions: [{
+                    id: 'cond_1',
                     comparison: LogicComparison.EQ,
-                    left: { var: 'Name' },
+                    left: { var: 'field_1' },
                     right: { str: 'Alice' }
                 }]
             },
@@ -161,7 +161,7 @@ describe('LogicTab Integration', () => {
         expect(mockUpdateLogicRule).toHaveBeenCalledTimes(1);
         expect(mockUpdateLogicRule).toHaveBeenCalledWith('logic_1', expect.objectContaining({
             if: expect.objectContaining({
-                args: expect.arrayContaining([
+                conditions: expect.arrayContaining([
                     expect.objectContaining({ right: { str: 'Bob' } })
                 ])
             })

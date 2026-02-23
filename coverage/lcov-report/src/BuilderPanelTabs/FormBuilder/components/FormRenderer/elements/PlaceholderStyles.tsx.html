@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.57% </span>
+                <span class="strong">81.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/14</span>
+                <span class='fraction'>13/16</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.72% </span>
+                <span class="strong">76.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/11</span>
+                <span class='fraction'>10/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,7 +107,14 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">12x</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,14 +125,19 @@
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,6 +165,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { getPlaceholderStyles } from "../../../utils/styleUtils";
+import { useFormBuilder } from "../../../context";
 &nbsp;
 interface PlaceholderStylesProps {
   fieldId: string;
@@ -160,16 +173,21 @@ interface PlaceholderStylesProps {
 }
 &nbsp;
 export const PlaceholderStyles: React.FC&lt;PlaceholderStylesProps&gt; = ({ fieldId, style }) =&gt; {
+  const { activeBreakpoint } = useFormBuilder();
+&nbsp;
   if (!style) return null;
 &nbsp;
-  const styles = getPlaceholderStyles(style);
-  
+  const styles = getPlaceholderStyles(style, activeBreakpoint);
+&nbsp;
   // Convert React style object to CSS string
   const cssRules = Object.entries(styles)
     .filter(([_, value]) =&gt; value !== undefined &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >value !== null </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >value !== "")</span>
     .map(<span class="fstat-no" title="function not covered" >([</span>key, value]) =&gt; {
-      // Convert camelCase to kebab-case
+      // Convert camelCase to kebab-case (e.g. fontSize -&gt; font-size)
+      // handling special cases if any? No, standard convert
       const cssKey = <span class="cstat-no" title="statement not covered" >key.replace(/([A-Z])/g, "-$1").toLowerCase();</span>
+      // Add !important to ensure override (though inline styles on element might need handling differently)
+      // Placeholder styles are pseudo-elements so cannot be inline.
 <span class="cstat-no" title="statement not covered" >      return `${cssKey}: ${value} !important;`;</span>
     })
     .join(" ");
@@ -202,7 +220,7 @@ export const PlaceholderStyles: React.FC&lt;PlaceholderStylesProps&gt; = ({ fiel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

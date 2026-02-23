@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/20</span>
+                <span class='fraction'>10/22</span>
             </div>
         
             
@@ -120,7 +120,19 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,6 +153,18 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,7 +210,7 @@
 import { DateField } from "../../../types";
 import BuilderFieldWrapper from "./BuilderFieldWrapper";
 import { useFormBuilder } from "../../../context";
-import { getInputStyles, getLabelStyles, getHelpTextStyles } from "../../../utils/styleUtils";
+import { getInputStyles, getLabelStyles, getHelpTextStyles, getPlaceholderStyles } from "../../../utils/styleUtils";
 import { PlaceholderStyles } from "./PlaceholderStyles";
 &nbsp;
 interface BuilderDateProps {
@@ -196,7 +220,7 @@ interface BuilderDateProps {
 }
 &nbsp;
 export default function BuilderDate({ field, isSelected, activeSubElement }: Readonly&lt;BuilderDateProps&gt;) {
-  const { jsonContent } = useFormBuilder();
+  const { jsonContent, activeBreakpoint } = useFormBuilder();
   return (
     &lt;BuilderFieldWrapper field={field} isSelected={isSelected} activeSubElement={activeSubElement}&gt;
       &lt;PlaceholderStyles fieldId={field.id} style={field.style} /&gt;
@@ -205,27 +229,39 @@ export default function BuilderDate({ field, isSelected, activeSubElement }: Rea
           &lt;label
             htmlFor={field.id}
             className={`block text-xs font-medium text-gray-700 ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >activeSubElement === 'label' </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}
-            style={getLabelStyles(field.style)}
+            style={getLabelStyles(field.style, activeBreakpoint)}
           &gt;
             {field.label}
             {field.required &amp;&amp; &lt;span className="text-red-500 ml-1"&gt;*&lt;/span&gt;}
           &lt;/label&gt;
         )}
-        &lt;input
-          type="date"
-          id={field.id}
-          name={field.name}
-          required={field.required}
-          readOnly
-          min={field.min}
-          max={field.max}
-          className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 pointer-events-none outline-none ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'placeholder'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}
-          style={getInputStyles(field.style)}
-        /&gt;
+        &lt;div className="relative w-full"&gt;
+          &lt;div
+            className={`w-full px-2 py-1 text-xs border border-gray-300 rounded-md bg-white text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap min-h-[26px] ${isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >['input', 'placeholder'].includes(activeSubElement || '') </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'ring-1 ring-primary ring-offset-1' </span>: ''}`}
+            style={getInputStyles(field.style, activeBreakpoint)}
+          &gt;
+            &lt;span
+              className={field.placeholder ? <span class="branch-0 cbranch-no" title="branch not covered" >"text-gray-500" </span>: "text-gray-400"}
+              style={getPlaceholderStyles(field.style)}
+            &gt;
+              {field.placeholder}
+            &lt;/span&gt;
+          &lt;/div&gt;
+          &lt;input
+            type="date"
+            id={field.id}
+            name={field.name}
+            required={field.required}
+            readOnly
+            min={field.min}
+            max={field.max}
+            className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+          /&gt;
+        &lt;/div&gt;
         {field.helpText &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >          &lt;p</span>
             className={`text-[9px] text-gray-500 ${isSelected &amp;&amp; activeSubElement === 'help' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
-            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings)}
+            style={getHelpTextStyles(field.style, jsonContent.formSettings.settings, activeBreakpoint)}
           &gt;
             {field.helpText}
           &lt;/p&gt;
@@ -241,7 +277,7 @@ export default function BuilderDate({ field, isSelected, activeSubElement }: Rea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-01T05:11:21.151Z
+                at 2026-02-23T00:27:22.037Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
