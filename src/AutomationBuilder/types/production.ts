@@ -9,51 +9,51 @@
 import type { AutomationStatus } from './status';
 
 export type AutomationProductionPayload = {
-  automation: AutomationProductionDefinition;
+    automation: AutomationProductionDefinition;
 };
 
 export type AutomationProductionDefinition = {
-  id: string;
-  name: string;
-  status: AutomationStatus;
-  version: number;
-  createdAt?: string;
-  updatedAt?: string;
-  nodes: AutomationProductionNode[];
-  edges: AutomationProductionEdge[];
+    id: string;
+    name: string;
+    status: AutomationStatus;
+    version: number;
+    createdAt?: string;
+    updatedAt?: string;
+    nodes: AutomationProductionNode[];
+    edges: AutomationProductionEdge[];
 };
 
 export type AutomationProductionNode = {
-  id: string;
+    id: string;
 
-  /**
-   * PRD examples include: trigger, delay, end, loop_back, logic_if_else, action_notification, action_send_email, ...
-   */
-  type: string;
+    /**
+     * PRD examples include: trigger, delay, end, loop_back, logic_if_else, action_notification, action_send_email, ...
+     */
+    type: string;
 
-  position: { x: number; y: number };
+    position: { x: number; y: number };
 
-  data: {
-    ui: {
-      label: string;
-      subtitle?: string;
-      icon?: string;
-      color?: string;
+    data: {
+        ui: {
+            label: string;
+            subtitle?: string;
+            icon?: string;
+            color?: string;
+        };
+
+        /** Type-specific configuration; kept flexible by design. */
+        config: Record<string, unknown>;
     };
-
-    /** Type-specific configuration; kept flexible by design. */
-    config: Record<string, unknown>;
-  };
 };
 
 export type AutomationProductionEdge = {
-  id: string;
-  source: string;
-  target: string;
-  data?: {
-    label?: string;
-    branchId?: string;
-    isLoopBack?: boolean;
-    isSplitTest?: boolean;
-  };
+    id: string;
+    source: string;
+    target: string;
+    data?: {
+        label?: string;
+        branchId?: string;
+        isLoopBack?: boolean;
+        isSplitTest?: boolean;
+    };
 };

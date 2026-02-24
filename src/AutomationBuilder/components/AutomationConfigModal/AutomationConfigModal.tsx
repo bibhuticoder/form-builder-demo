@@ -1,46 +1,44 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { Edge, Node } from 'reactflow';
-import { Dialog } from '@/components/Dialog';
-import { Button } from '@/components/Button';
-import { Input } from '@/components/input';
-import { Label } from '@/components/label';
+import { useEffect, useMemo, useState } from "react"
+import type { Edge, Node } from "reactflow"
+import { Dialog } from "@/components/Dialog"
+import { Button } from "@/components/Button"
+import { Input } from "@/components/input"
+import { Label } from "@/components/label"
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  node: Node | null;
-  edges: Edge[];
-  onSave: (nodeId: string, newData: any) => void;
-};
+  isOpen: boolean
+  onClose: () => void
+  node: Node | null
+  edges: Edge[]
+  onSave: (nodeId: string, newData: any) => void
+}
 
 export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: Props) {
-  const isSplitTest = node?.data?.label === 'Split Test (A/B)';
+  const isSplitTest = node?.data?.label === "Split Test (A/B)"
 
   const outgoingEdges = useMemo(() => {
-    if (!node) return [];
-    return edges
-      .filter((e) => e.source === node.id && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack)
-      .sort((a, b) => a.id.localeCompare(b.id));
-  }, [edges, node]);
+    if (!node) return []
+    return edges.filter((e) => e.source === node.id && e.sourceHandle !== "right-source" && !e.data?.isLoopBack).sort((a, b) => a.id.localeCompare(b.id))
+  }, [edges, node])
 
-  const [label, setLabel] = useState('');
-  const [subtitle, setSubtitle] = useState('');
-  const [weights, setWeights] = useState<number[]>([]);
+  const [label, setLabel] = useState("")
+  const [subtitle, setSubtitle] = useState("")
+  const [weights, setWeights] = useState<number[]>([])
 
   useEffect(() => {
-    setLabel(node?.data?.label || '');
-    setSubtitle(node?.data?.subtitle || '');
+    setLabel(node?.data?.label || "")
+    setSubtitle(node?.data?.subtitle || "")
     if (isSplitTest) {
       const existing = outgoingEdges.map((e) => {
-        const raw = (e.label as string) || '50%';
-        const n = Number(String(raw).replace('%', ''));
-        return Number.isFinite(n) ? n : 50;
-      });
-      setWeights(existing.length ? existing : [50, 50]);
+        const raw = (e.label as string) || "50%"
+        const n = Number(String(raw).replace("%", ""))
+        return Number.isFinite(n) ? n : 50
+      })
+      setWeights(existing.length ? existing : [50, 50])
     } else {
-      setWeights([]);
+      setWeights([])
     }
-  }, [node, isSplitTest, outgoingEdges]);
+  }, [node, isSplitTest, outgoingEdges])
 
   const body = (
     <div className="space-y-4">
@@ -65,9 +63,9 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
                 max={100}
                 value={w}
                 onChange={(e) => {
-                  const next = [...weights];
-                  next[idx] = Number(e.target.value);
-                  setWeights(next);
+                  const next = [...weights]
+                  next[idx] = Number(e.target.value)
+                  setWeights(next)
                 }}
               />
             ))}
@@ -76,35 +74,27 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
         </div>
       )}
     </div>
-  );
+  )
 
   const footer = (
     <div className="flex justify-end gap-2">
-      <Button variant="outline" onClick={onClose}>Cancel</Button>
+      <Button variant="outline" onClick={onClose}>
+        Cancel
+      </Button>
       <Button
         variant="primary"
         onClick={() => {
-          if (!node) return;
-          const newData: any = { label, subtitle };
-          if (isSplitTest) newData.weights = weights;
-          onSave(node.id, newData);
-          onClose();
+          if (!node) return
+          const newData: any = { label, subtitle }
+          if (isSplitTest) newData.weights = weights
+          onSave(node.id, newData)
+          onClose()
         }}
       >
         Save
       </Button>
     </div>
-  );
+  )
 
-  return (
-    <Dialog
-      isOpen={isOpen}
-      onClose={onClose}
-      header={node?.data?.label || 'Step settings'}
-      subtitle={node ? 'Configure this step' : undefined}
-      body={body}
-      footer={footer}
-      className="max-w-xl"
-    />
-  );
+  return <Dialog isOpen={isOpen} onClose={onClose} header={node?.data?.label || "Step settings"} subtitle={node ? "Configure this step" : undefined} body={body} footer={footer} className="max-w-xl" />
 }

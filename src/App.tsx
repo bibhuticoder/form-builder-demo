@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import SidebarLayout from './SidebarLayout'
-import Home from './pages/Home'
-import Forms from './pages/Forms'
-import Automations from './pages/Automations'
-import FormBuilder from './pages/FormBuilder'
-import AutomationBuilderPage from './pages/AutomationBuilder'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import SidebarLayout from "./SidebarLayout"
+import Home from "./pages/Home"
+import Forms from "./pages/Forms"
+import Automations from "./pages/Automations"
+import FormBuilder from "./pages/FormBuilder"
+import AutomationBuilderPage from "./pages/AutomationBuilder"
 
 function App() {
   return (

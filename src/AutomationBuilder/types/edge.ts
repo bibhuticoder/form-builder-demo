@@ -1,4 +1,4 @@
 export type AutomationEdgeData = {
-  isLoopBack?: boolean;
-  isSplitTest?: boolean;
+    isLoopBack?: boolean;
+    isSplitTest?: boolean;
 };

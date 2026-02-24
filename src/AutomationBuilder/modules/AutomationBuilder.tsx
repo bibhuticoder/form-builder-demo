@@ -1,6 +1,6 @@
-import { ReactFlowProvider } from 'reactflow';
-import { FlowBuilder } from '../components/FlowBuilder/FlowBuilder';
-import { AutomationBuilderProvider } from '../context/AutomationBuilderContext';
+import { ReactFlowProvider } from "reactflow"
+import { FlowBuilder } from "../components/FlowBuilder/FlowBuilder"
+import { AutomationBuilderProvider } from "../context/AutomationBuilderContext"
 
 export function AutomationBuilder({ automationId }: { automationId: string }) {
   return (
@@ -9,5 +9,5 @@ export function AutomationBuilder({ automationId }: { automationId: string }) {
         <FlowBuilder automationId={automationId} />
       </ReactFlowProvider>
     </AutomationBuilderProvider>
-  );
+  )
 }
