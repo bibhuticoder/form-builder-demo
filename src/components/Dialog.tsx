@@ -142,13 +142,9 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
               {/* Optional subtitle */}
               {subtitle && (
                 <div className="mt-1">
-                  {typeof subtitle === "string" ? (
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {subtitle}
-                    </p>
-                  ) : (
-                    subtitle
-                  )}
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {subtitle}
+                  </p>
                 </div>
               )}
             </div>

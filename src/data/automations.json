@@ -1,0 +1,142 @@
+[
+    {
+        "id": "f1",
+        "type": "folder",
+        "name": "Lead Nurturing",
+        "children": [
+            {
+                "id": "f4",
+                "type": "folder",
+                "name": "Webinar Campaigns",
+                "children": [
+                    {
+                        "id": "f5",
+                        "type": "folder",
+                        "name": "Q1 Webinars",
+                        "children": [
+                            {
+                                "id": "a6",
+                                "type": "form",
+                                "name": "Q1 Webinar Invite Sequence",
+                                "status": "active",
+                                "lastUpdated": "5 hours ago"
+                            },
+                            {
+                                "id": "a7",
+                                "type": "form",
+                                "name": "Q1 Webinar Replay Follow-up",
+                                "status": "inactive",
+                                "lastUpdated": "1 day ago"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "a8",
+                        "type": "automation",
+                        "name": "Previous Webinars Nurture",
+                        "status": "active",
+                        "lastUpdated": "4 days ago"
+                    },
+                    {
+                        "id": "a9",
+                        "type": "email",
+                        "name": "Q2 Webinar Teaser",
+                        "status": "inactive",
+                        "lastUpdated": "1 week ago"
+                    }
+                ]
+            },
+            {
+                "id": "a1",
+                "type": "automation",
+                "name": "Website Contact Form Follow-up",
+                "status": "active",
+                "lastUpdated": "2 hours ago"
+            },
+            {
+                "id": "a10",
+                "type": "automation",
+                "name": "Black Friday Promotion",
+                "status": "inactive",
+                "lastUpdated": "2 months ago"
+            },
+            {
+                "id": "a11",
+                "type": "email",
+                "name": "Cyber Monday Deals",
+                "status": "inactive",
+                "lastUpdated": "2 months ago"
+            },
+            {
+                "id": "a12",
+                "type": "automation",
+                "name": "Christmas Special",
+                "status": "inactive",
+                "lastUpdated": "1 month ago"
+            },
+            {
+                "id": "a13",
+                "type": "email",
+                "name": "New Year Resolution",
+                "status": "active",
+                "lastUpdated": "1 month ago"
+            },
+            {
+                "id": "a14",
+                "type": "form",
+                "name": "Valentine's Day Offer",
+                "status": "active",
+                "lastUpdated": "2 days ago"
+            }
+        ]
+    },
+    {
+        "id": "f2",
+        "type": "folder",
+        "name": "Customer Onboarding",
+        "children": [
+            {
+                "id": "a2",
+                "type": "automation",
+                "name": "New User Welcome Series",
+                "status": "active",
+                "lastUpdated": "1 day ago"
+            },
+            {
+                "id": "a3",
+                "type": "automation",
+                "name": "Trial Expiration Warning",
+                "status": "active",
+                "lastUpdated": "3 days ago"
+            },
+            {
+                "id": "a15",
+                "type": "form",
+                "name": "Customer Satisfaction Survey",
+                "status": "active",
+                "lastUpdated": "3 days ago"
+            }
+        ]
+    },
+    {
+        "id": "f3",
+        "type": "folder",
+        "name": "Internal Processes",
+        "children": [
+            {
+                "id": "a4",
+                "type": "automation",
+                "name": "Employee Onboarding Task List",
+                "status": "inactive",
+                "lastUpdated": "1 week ago"
+            }
+        ]
+    },
+    {
+        "id": "a5",
+        "type": "automation",
+        "name": "Generic Catch-all",
+        "status": "inactive",
+        "lastUpdated": "2 weeks ago"
+    }
+]

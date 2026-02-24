@@ -34,3 +34,59 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+input[type="checkbox"] {
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="checkbox"].editor-checkbox:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  border: 1px solid #99afc1;
+  border-radius: 3px;
+  padding: 1px;
+  background-color: #ffffff;
+}
+
+input[type="checkbox"].editor-checkbox:checked:before {
+  background-color: #525df8;
+}
+
+input[type="checkbox"].editor-checkbox:checked:after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+
+.rich-text em {
+  font-style: italic;
+}
