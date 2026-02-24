@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Forms from './pages/Forms'
 import Automations from './pages/Automations'
 import FormBuilder from './pages/FormBuilder'
+import AutomationBuilderPage from './pages/AutomationBuilder'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="forms" element={<Forms />} />
           <Route path="automations" element={<Automations />} />
           <Route path="forms/:id" element={<FormBuilder />} />
+          <Route path="automations/:id" element={<AutomationBuilderPage />} />
         </Route>
       </Routes>
     </Router>
