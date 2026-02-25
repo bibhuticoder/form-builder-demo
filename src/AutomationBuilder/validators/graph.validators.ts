@@ -19,7 +19,7 @@ function isTriggerNode(node: Node) {
 function isLogicNode(node: Node) {
     // Builder uses `condition` for both If/Else and Split Test cards.
     const label = node.data?.label;
-    return node.type === 'condition' || node.type === 'logic_if_else' || node.type === 'logic_split_test' || label === 'If / Else' || label === 'Split Test (A/B)';
+    return node.type === 'condition' || node.type === 'logic_if_else' || node.type === 'logic_split_test' || node.type === 'split_test' || label === 'If / Else' || label === 'Split Test (A/B)';
 }
 
 function isAddStepOrPlaceholder(node: Node) {
@@ -46,15 +46,15 @@ export function validateAutomationGraph(nodes: Node[], edges: Edge[]) {
         if (isFlowEdge(e)) (outgoingFlow[e.source] ||= []).push(e);
     });
 
-    // Trigger rules
+    // Trigger rules (multiple triggers are allowed)
     nodes.filter((n) => isTriggerNode(n) && !isAddStepOrPlaceholder(n)).forEach((trigger) => {
         const inEdges = (incoming[trigger.id] || []).filter((e) => isFlowEdge(e));
         if (inEdges.length > 0) {
             issues.push({ level: 'error', nodeId: trigger.id, message: 'Trigger nodes cannot have incoming edges.' });
         }
         const outEdges = outgoingFlow[trigger.id] || [];
-        if (outEdges.length !== 1) {
-            issues.push({ level: 'error', nodeId: trigger.id, message: 'Trigger nodes must have exactly 1 outgoing path.' });
+        if (outEdges.length < 1) {
+            issues.push({ level: 'error', nodeId: trigger.id, message: 'Trigger nodes must have at least 1 outgoing path.' });
         }
     });
 
@@ -73,7 +73,7 @@ export function validateAutomationGraph(nodes: Node[], edges: Edge[]) {
     nodes.filter((n) => isLoopBackNode(n) && !isAddStepOrPlaceholder(n)).forEach((loopNode) => {
         const maxLoops = (loopNode.data as any)?.config?.maxLoops ?? (loopNode.data as any)?.maxLoops;
         if (!(Number.isInteger(maxLoops) && maxLoops > 0)) {
-            issues.push({ level: 'error', nodeId: loopNode.id, message: 'Loop Back must define a positive integer maxLoops safety limit.' });
+            issues.push({ level: 'error', nodeId: loopNode.id, message: 'Loop Back must define maxLoops as a positive integer.' });
         }
         const loopEdges = (outgoingAll[loopNode.id] || []).filter((e) => e.data?.isLoopBack);
         if (loopEdges.length === 0) {
@@ -116,7 +116,7 @@ export function validateAutomationGraph(nodes: Node[], edges: Edge[]) {
 
     const anyCycle = nodes.some((n) => !isAddStepOrPlaceholder(n) && hasCycleFrom(n.id));
     if (anyCycle) {
-        issues.push({ level: 'error', message: 'Cycles without explicit loopback edges are not allowed.' });
+        issues.push({ level: 'error', message: 'Cycles without loop limits are not allowed.' });
     }
 
     return issues;

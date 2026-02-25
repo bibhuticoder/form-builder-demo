@@ -8,6 +8,11 @@ describe('node-config.validators', () => {
             expect(errors).toHaveLength(0);
         });
 
+        it('accepts PRD-style triggerType', () => {
+            const errors = validateTriggerConfig({ triggerType: 'FORM_SUBMITTED' }, 'node.data.config');
+            expect(errors).toHaveLength(0);
+        });
+
         it('rejects invalid trigger kind', () => {
             const errors = validateTriggerConfig({ triggerKind: 'invalid' }, 'node.data.config');
             expect(errors.some((e) => e.path.endsWith('.triggerKind'))).toBe(true);
@@ -17,6 +22,11 @@ describe('node-config.validators', () => {
     describe('validateActionConfig', () => {
         it('accepts valid action config', () => {
             const errors = validateActionConfig({ actionKind: 'send_email' }, 'node.data.config');
+            expect(errors).toHaveLength(0);
+        });
+
+        it('accepts flexible action config without explicit action kind', () => {
+            const errors = validateActionConfig({ recipientType: 'contact', message: 'hi' }, 'node.data.config');
             expect(errors).toHaveLength(0);
         });
 
@@ -79,7 +89,22 @@ describe('node-config.validators', () => {
             };
 
             const errors = validateNodeInteractiveData(node, 'nodes[0]');
-            expect(errors.some((e) => e.path === 'nodes[0].data.label')).toBe(true);
+            expect(errors.some((e) => e.path === 'nodes[0].data.ui.label')).toBe(true);
+        });
+
+        it('accepts PRD-style node label under data.ui.label', () => {
+            const node: Node = {
+                id: 'n1',
+                type: 'action_send_email',
+                position: { x: 0, y: 0 },
+                data: {
+                    ui: { label: 'Send Follow-Up Email' },
+                    config: { fromEmail: 'support@cleavecrm.com' },
+                },
+            };
+
+            const errors = validateNodeInteractiveData(node, 'nodes[0]');
+            expect(errors).toHaveLength(0);
         });
     });
 });

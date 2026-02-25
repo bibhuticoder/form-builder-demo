@@ -1,5 +1,5 @@
 import type { Node } from 'reactflow';
-import type { AutomationNodeData, AutomationValidationError } from '../types';
+import type { AutomationValidationError } from '../types';
 
 const TRIGGER_KINDS = new Set([
     'form_submitted',
@@ -38,6 +38,42 @@ function asRecord(value: unknown): Record<string, unknown> | null {
     return value as Record<string, unknown>;
 }
 
+function getDataRecord(node: Node): Record<string, unknown> {
+    return asRecord(node.data) || {};
+}
+
+function getConfigRecord(node: Node): Record<string, unknown> | null {
+    const data = getDataRecord(node);
+    return asRecord(data.config);
+}
+
+function getNodeLabel(node: Node): string | undefined {
+    const data = getDataRecord(node);
+    const directLabel = data.label;
+    if (typeof directLabel === 'string' && directLabel.trim()) return directLabel;
+
+    const ui = asRecord(data.ui);
+    const uiLabel = ui?.label;
+    if (typeof uiLabel === 'string' && uiLabel.trim()) return uiLabel;
+
+    return undefined;
+}
+
+function isActionType(nodeType?: string): boolean {
+    return typeof nodeType === 'string' && (nodeType === 'action' || nodeType.startsWith('action_'));
+}
+
+function isLogicType(nodeType?: string): boolean {
+    return (
+        nodeType === 'condition' ||
+        nodeType === 'loopBack' ||
+        nodeType === 'loop_back' ||
+        nodeType === 'logic_if_else' ||
+        nodeType === 'logic_split_test' ||
+        nodeType === 'split_test'
+    );
+}
+
 export function validateTriggerConfig(config: unknown, path: string): AutomationValidationError[] {
     const errors: AutomationValidationError[] = [];
     const obj = asRecord(config);
@@ -46,9 +82,10 @@ export function validateTriggerConfig(config: unknown, path: string): Automation
         return errors;
     }
 
-    const triggerKind = obj.triggerKind;
-    if (typeof triggerKind !== 'string' || !TRIGGER_KINDS.has(triggerKind)) {
-        errors.push({ path: `${path}.triggerKind`, message: 'Trigger must define a valid triggerKind.', type: 'invalid_value' });
+    const triggerKind = typeof obj.triggerKind === 'string' ? obj.triggerKind : obj.triggerType;
+    const normalized = typeof triggerKind === 'string' ? triggerKind.toLowerCase() : undefined;
+    if (typeof triggerKind !== 'string' || (!TRIGGER_KINDS.has(normalized || '') && typeof obj.triggerType !== 'string')) {
+        errors.push({ path: `${path}.triggerKind`, message: 'Trigger must define a valid trigger kind/type.', type: 'invalid_value' });
     }
 
     const filters = obj.filters;
@@ -67,9 +104,17 @@ export function validateActionConfig(config: unknown, path: string): AutomationV
         return errors;
     }
 
-    const actionKind = obj.actionKind;
-    if (typeof actionKind !== 'string' || !ACTION_KINDS.has(actionKind)) {
-        errors.push({ path: `${path}.actionKind`, message: 'Action must define a valid actionKind.', type: 'invalid_value' });
+    const actionKind =
+        typeof obj.actionKind === 'string'
+            ? obj.actionKind
+            : typeof obj.actionType === 'string'
+                ? obj.actionType
+                : undefined;
+    if (typeof actionKind === 'string') {
+        const normalized = actionKind.toLowerCase();
+        if (!ACTION_KINDS.has(normalized)) {
+            errors.push({ path: `${path}.actionKind`, message: 'Action kind/type is invalid.', type: 'invalid_value' });
+        }
     }
 
     return errors;
@@ -134,24 +179,35 @@ export function validateDelayConfig(config: unknown, path: string): AutomationVa
 
 export function validateNodeInteractiveData(node: Node, path: string): AutomationValidationError[] {
     const errors: AutomationValidationError[] = [];
-    const data = (node.data || {}) as AutomationNodeData;
+    const label = getNodeLabel(node);
 
-    if (!data.label || typeof data.label !== 'string') {
-        errors.push({ path: `${path}.data.label`, message: 'Node must have a non-empty label.', type: 'required' });
+    if (!label) {
+        errors.push({ path: `${path}.data.ui.label`, message: 'Node must have a non-empty label.', type: 'required' });
     }
 
-    if (!data.config) {
+    const config = getConfigRecord(node);
+    if (!config) {
         return errors;
     }
 
     if (node.type === 'trigger') {
-        errors.push(...validateTriggerConfig(data.config, `${path}.data.config`));
-    } else if (node.type === 'action') {
-        errors.push(...validateActionConfig(data.config, `${path}.data.config`));
-    } else if (node.type === 'condition' || node.type === 'loopBack') {
-        errors.push(...validateLogicConfig(data.config, `${path}.data.config`));
+        errors.push(...validateTriggerConfig(config, `${path}.data.config`));
+    } else if (isActionType(node.type)) {
+        errors.push(...validateActionConfig(config, `${path}.data.config`));
+    } else if (isLogicType(node.type)) {
+        if (node.type === 'loop_back') {
+            errors.push(...validateLogicConfig({ ...config, logicKind: 'loop_back' }, `${path}.data.config`));
+        } else if (node.type === 'logic_if_else') {
+            errors.push(...validateLogicConfig({ ...config, logicKind: 'if_else' }, `${path}.data.config`));
+        } else if (node.type === 'logic_split_test' || node.type === 'split_test') {
+            errors.push(...validateLogicConfig({ ...config, logicKind: 'split_test' }, `${path}.data.config`));
+        } else {
+            errors.push(...validateLogicConfig(config, `${path}.data.config`));
+        }
     } else if (node.type === 'delay') {
-        errors.push(...validateDelayConfig(data.config, `${path}.data.config`));
+        const amount = config.amount ?? config.durationValue;
+        const unit = config.unit ?? config.durationUnit;
+        errors.push(...validateDelayConfig({ amount, unit }, `${path}.data.config`));
     }
 
     return errors;
