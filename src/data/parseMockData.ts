@@ -1,21 +1,30 @@
 import mockDataRaw from './automations.json';
+import formsDataRaw from './forms.json';
 import { Folder, FileItem, FileType } from '../FileExplorer/types';
 
 export const mockFolders: Folder[] = [];
 export const mockFiles: FileItem[] = [];
 
-const processNode = (node: any, parentId: string | null = null) => {
+export const mockFormFolders: Folder[] = [];
+export const mockFormFiles: FileItem[] = [];
+
+const processNode = (
+    node: any,
+    targetFolders: Folder[],
+    targetFiles: FileItem[],
+    parentId: string | null = null
+) => {
     if (node.type === 'folder') {
-        mockFolders.push({
+        targetFolders.push({
             id: node.id,
             name: node.name,
             parentId
         });
         if (node.children) {
-            node.children.forEach((child: any) => processNode(child, node.id));
+            node.children.forEach((child: any) => processNode(child, targetFolders, targetFiles, node.id));
         }
     } else {
-        mockFiles.push({
+        targetFiles.push({
             id: node.id,
             name: node.name,
             type: node.type as FileType,
@@ -27,4 +36,6 @@ const processNode = (node: any, parentId: string | null = null) => {
 };
 
 // @ts-ignore
-mockDataRaw.forEach((node: any) => processNode(node, null));
+mockDataRaw.forEach((node: any) => processNode(node, mockFolders, mockFiles, null));
+// @ts-ignore
+formsDataRaw.forEach((node: any) => processNode(node, mockFormFolders, mockFormFiles, null));

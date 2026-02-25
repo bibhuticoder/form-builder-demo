@@ -10,7 +10,7 @@ export enum FileType {
     Email = 'email'
 }
 
-export type FileStatusType = 'active' | 'inactive';
+export type FileStatusType = 'active' | 'inactive' | 'published' | 'draft' | string;
 
 export type FileItem = {
     id: string;

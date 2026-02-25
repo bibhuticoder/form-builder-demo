@@ -10,7 +10,7 @@ import { Badge } from '@/components/badge';
 import { Folder as FolderType } from '../types';
 import { useFileExplorerContext } from '../context/FileExplorerContext';
 import { BaseExplorerRow, RowAction } from './BaseExplorerRow';
-import { getFolderStats } from '../utils/helpers';
+import { getFolderStats, getStatusVariant } from '../utils/helpers';
 
 interface FolderRowProps {
     folder: FolderType;
@@ -81,18 +81,13 @@ export const FolderRow: React.FC<FolderRowProps> = ({ folder, openRenameModal, o
             }
             nameNode={folder.name}
             statusNode={
-                (stats.activeCount > 0 || stats.inactiveCount > 0) ? (
-                    <div className="flex items-center gap-1.5">
-                        {stats.activeCount > 0 && (
-                            <Badge variant="success" className="font-medium tracking-wide text-[10px] uppercase">
-                                {stats.activeCount} Active
+                Object.keys(stats.statusCounts).length > 0 ? (
+                    <div className="flex items-center gap-1.5 overflow-x-auto max-w-[200px] hide-scrollbar">
+                        {Object.entries(stats.statusCounts).map(([statusName, count]) => (
+                            <Badge key={statusName} variant={getStatusVariant(statusName)} className="font-medium tracking-wide text-[10px] uppercase whitespace-nowrap">
+                                {count} {statusName}
                             </Badge>
-                        )}
-                        {stats.inactiveCount > 0 && (
-                            <Badge variant="muted" className="font-medium tracking-wide text-[10px] uppercase">
-                                {stats.inactiveCount} Inactive
-                            </Badge>
-                        )}
+                        ))}
                     </div>
                 ) : null
             }

@@ -4,17 +4,18 @@ import { FileExplorerHeader } from './components/FileExplorerHeader';
 import { FileExplorerToolbar } from './components/FileExplorerToolbar';
 import { FileExplorerTable } from './components/FileExplorerTable';
 import { FileExplorerModals } from './components/FileExplorerModals';
-import { Folder, FileItem } from './types';
+import { Folder, FileItem, FileType } from './types';
 
 interface FileExplorerProps {
     title: string;
+    fileType: FileType;
     createButtonText: string;
     initialFolders?: Folder[];
     initialFiles?: FileItem[];
     onCreateFile: () => void;
 }
 
-const FileExplorerContent: React.FC<FileExplorerProps> = ({ title, createButtonText, onCreateFile }) => {
+const FileExplorerContent: React.FC<FileExplorerProps> = ({ title, createButtonText, onCreateFile, fileType }) => {
     const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
     const [isRenameFolderOpen, setIsRenameFolderOpen] = useState(false);
     const [isMoveFolderModalOpen, setIsMoveFolderModalOpen] = useState(false);
@@ -42,6 +43,7 @@ const FileExplorerContent: React.FC<FileExplorerProps> = ({ title, createButtonT
             </main>
 
             <FileExplorerModals
+                fileType={fileType}
                 isCreateFolderOpen={isCreateFolderOpen}
                 setIsCreateFolderOpen={setIsCreateFolderOpen}
                 isRenameFolderOpen={isRenameFolderOpen}

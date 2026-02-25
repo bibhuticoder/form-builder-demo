@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import FileExplorer from '../FileExplorer';
-import { FileItem } from '../FileExplorer/types';
+import { FileItem, FileType } from '../FileExplorer/types';
 import { mockFolders, mockFiles } from '../data/parseMockData';
 
 export default function Automations() {
@@ -21,6 +21,7 @@ export default function Automations() {
         <div className="h-full w-full">
             <FileExplorer
                 title="Automations"
+                fileType={FileType.Automation}
                 createButtonText="Create Automation"
                 initialFiles={files}
                 initialFolders={folders}
