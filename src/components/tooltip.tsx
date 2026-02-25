@@ -1,9 +1,12 @@
 import * as React from "react"
+import { createPortal } from "react-dom"
 import { cn } from "@/lib/utils"
 
 type TooltipContextValue = {
   open: boolean
   setOpen: (v: boolean) => void
+  anchorEl: HTMLElement | null
+  setAnchorEl: (el: HTMLElement | null) => void
 }
 
 const TooltipContext = React.createContext<TooltipContextValue | null>(null)
@@ -14,8 +17,9 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
 
 export function Tooltip({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   return (
-    <TooltipContext.Provider value={{ open, setOpen }}>
+    <TooltipContext.Provider value={{ open, setOpen, anchorEl, setAnchorEl }}>
       <span className="relative inline-flex">{children}</span>
     </TooltipContext.Provider>
   )
@@ -27,6 +31,7 @@ export function TooltipTrigger({ asChild, children }: { asChild?: boolean; child
 
   const props = {
     onMouseEnter: (e: any) => {
+      ctx.setAnchorEl(e.currentTarget as HTMLElement)
       ctx.setOpen(true)
       children.props.onMouseEnter?.(e)
     },
@@ -35,6 +40,7 @@ export function TooltipTrigger({ asChild, children }: { asChild?: boolean; child
       children.props.onMouseLeave?.(e)
     },
     onFocus: (e: any) => {
+      ctx.setAnchorEl(e.currentTarget as HTMLElement)
       ctx.setOpen(true)
       children.props.onFocus?.(e)
     },
@@ -51,14 +57,38 @@ export function TooltipTrigger({ asChild, children }: { asChild?: boolean; child
 export function TooltipContent({ side = "top", className, children }: { side?: "top" | "bottom" | "left" | "right"; className?: string; children: React.ReactNode }) {
   const ctx = React.useContext(TooltipContext)
   if (!ctx) throw new Error("TooltipContent must be used within Tooltip")
-  if (!ctx.open) return null
+  if (!ctx.open || !ctx.anchorEl) return null
 
-  const sideClasses: Record<string, string> = {
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    left: "right-full top-1/2 -translate-y-1/2 mr-2",
-    right: "left-full top-1/2 -translate-y-1/2 ml-2",
+  const rect = ctx.anchorEl.getBoundingClientRect()
+  const sideStyles: Record<"top" | "bottom" | "left" | "right", { top: number; left: number; transform: string }> = {
+    top: {
+      top: rect.top - 8,
+      left: rect.left + rect.width / 2,
+      transform: "translate(-50%, -100%)",
+    },
+    bottom: {
+      top: rect.bottom + 8,
+      left: rect.left + rect.width / 2,
+      transform: "translate(-50%, 0)",
+    },
+    left: {
+      top: rect.top + rect.height / 2,
+      left: rect.left - 8,
+      transform: "translate(-100%, -50%)",
+    },
+    right: {
+      top: rect.top + rect.height / 2,
+      left: rect.right + 8,
+      transform: "translate(0, -50%)",
+    },
   }
 
-  return <span className={cn("absolute z-50 rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-gray-100 shadow-md whitespace-nowrap", sideClasses[side], className)}>{children}</span>
+  const s = sideStyles[side]
+
+  return createPortal(
+    <span className={cn("fixed z-[9999] rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-gray-100 shadow-md whitespace-nowrap pointer-events-none", className)} style={{ top: s.top, left: s.left, transform: s.transform }}>
+      {children}
+    </span>,
+    document.body,
+  )
 }

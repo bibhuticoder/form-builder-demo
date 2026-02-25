@@ -1,30 +1,7 @@
 import type { ComponentType } from "react"
-import { ArrowPathIcon, ArrowTrendingUpIcon, BellIcon, BoltIcon, BuildingOffice2Icon, CakeIcon, CalendarIcon, ChartBarIcon, CheckCircleIcon, ClipboardDocumentIcon, DocumentTextIcon, EnvelopeIcon, FunnelIcon, LinkIcon, PaperAirplaneIcon, PhoneIcon, ShareIcon, Square2StackIcon, StarIcon, TagIcon, UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/outline"
+import { ArrowPathIcon, ArrowTrendingUpIcon, BellIcon, BoltIcon, BuildingOffice2Icon, CakeIcon, CalendarIcon, ChartBarIcon, ChatBubbleLeftRightIcon, CheckCircleIcon, ClipboardDocumentIcon, DocumentTextIcon, EnvelopeIcon, FunnelIcon, LinkIcon, PaperAirplaneIcon, PhoneIcon, ShareIcon, Square2StackIcon, StarIcon, TagIcon, UserCircleIcon, UserGroupIcon, UserPlusIcon } from "@heroicons/react/24/outline"
 import { BriefcaseIcon, CalculatorIcon, ClockIcon, ShieldCheckIcon, StopCircleIcon } from "@heroicons/react/24/solid"
 import type { Edge, Node } from "reactflow"
-
-export const SlackIcon = (props: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <rect width="3" height="8" x="13" y="2" rx="1.5" />
-    <path d="M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5" />
-    <rect width="3" height="8" x="8" y="14" rx="1.5" />
-    <path d="M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5" />
-    <rect width="8" height="3" x="14" y="13" rx="1.5" />
-    <path d="M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5" />
-    <rect width="8" height="3" x="2" y="8" rx="1.5" />
-    <path d="M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5" />
-  </svg>
-)
-
-export const TeamsIcon = (props: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M7 15.5a3.5 3.5 0 0 1 3.5-3.5h.5" />
-    <rect width="13" height="13" x="8" y="7" rx="2" />
-    <path d="M11 11.5v3" />
-    <path d="M14 11.5v3" />
-    <path d="M3 17.5V6.5a1.5 1.5 0 0 1 1.5-1.5H8" />
-  </svg>
-)
 
 export type ToolboxItem = {
   type: string
@@ -71,8 +48,8 @@ export const TOOLBOX_ITEMS: Array<{ category: string; value: string; items: Tool
       { type: "action", label: "Add Note", icon: ClipboardDocumentIcon, iconName: "ClipboardDocumentIcon", color: "text-emerald-500" },
       { type: "action", label: "Add / Remove Tag", icon: TagIcon, iconName: "TagIcon", color: "text-emerald-500" },
       { type: "action", label: "Add to Review Autopilot", icon: StarIcon, iconName: "StarIcon", color: "text-emerald-500" },
-      { type: "action", label: "Send To Slack", icon: SlackIcon as any, iconName: "SlackIcon", color: "text-emerald-500" },
-      { type: "action", label: "Send To Teams", icon: TeamsIcon as any, iconName: "TeamsIcon", color: "text-emerald-500" },
+      { type: "action", label: "Send To Slack", icon: ChatBubbleLeftRightIcon, iconName: "ChatBubbleLeftRightIcon", color: "text-emerald-500" },
+      { type: "action", label: "Send To Teams", icon: UserGroupIcon, iconName: "UserGroupIcon", color: "text-emerald-500" },
       { type: "action", label: "End Automation", icon: StopCircleIcon as any, iconName: "StopCircleIcon", color: "text-emerald-500" },
       { type: "action", label: "Send To Automation", icon: ShareIcon, iconName: "ShareIcon", color: "text-emerald-500" },
 

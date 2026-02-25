@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react"
 import ReactFlow, { Background, BaseEdge, EdgeLabelRenderer, MarkerType, Panel, Position, ReactFlowInstance, applyEdgeChanges, applyNodeChanges, addEdge, getSmoothStepPath, Handle, useReactFlow } from "reactflow"
 import type { Edge, EdgeChange, EdgeProps, Node, NodeChange } from "reactflow"
 import "reactflow/dist/style.css"
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowPathIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, MagnifyingGlassIcon, PlusIcon, Squares2X2Icon, TrashIcon } from "@heroicons/react/24/outline"
+import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowsPointingOutIcon, ArrowPathIcon, BoltIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, MinusIcon, PlusIcon, Squares2X2Icon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
 import { Card } from "@/components/Card"
 import { Input } from "@/components/input"
@@ -17,9 +17,6 @@ import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../../data/
 import { useFlowHistory } from "../../hooks/useFlowHistory"
 import { performAutoLayout, restoreNodeIcons, ensureBranchAdders } from "../../utils/layout"
 import { deleteNodeAndDescendants } from "../../utils/nodeActions"
-
-// Small icon adapters (so we can keep existing `size` usage patterns)
-const IconMinus = ({ className }: { className?: string }) => <div className={className ? `${className} bg-current` : "h-0.5 w-4 bg-current"} />
 
 const AddStepNode = ({ data }: any) => {
   if (data?.isBranchAdder) return null
@@ -275,15 +272,10 @@ function CustomControls({ canUndo, canRedo, onUndo, onRedo }: { canUndo: boolean
           <PlusIcon className="h-4 w-4" />
         </Button>
         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => zoomOut()} title="Zoom Out">
-          <IconMinus className="h-0.5 w-4" />
+          <MinusIcon className="h-4 w-4" />
         </Button>
         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => fitView()} title="Fit View">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-            <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-            <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-            <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-          </svg>
+          <ArrowsPointingOutIcon className="h-4 w-4" />
         </Button>
       </div>
       <div className="bg-white p-1 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1">
@@ -914,7 +906,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                 </div>
                 <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 hover:text-blue-700 hover:bg-blue-100 ml-1" onClick={() => setShowProTips(false)}>
                   <span className="sr-only">Dismiss</span>
-                  <span className="text-lg leading-none">×</span>
+                  <XMarkIcon className="h-4 w-4" />
                 </Button>
               </div>
             </Card>
@@ -944,41 +936,37 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
           )}
 
           {isSidebarCollapsed && (
-            <div className="flex flex-col items-center py-2 space-y-2 border-b">
+            <div className="flex flex-col items-center py-2 space-y-2 border-b overflow-visible">
               <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600" onClick={() => setIsSidebarCollapsed(false)}>
                 <ChevronLeftIcon className="h-4 w-4" />
               </Button>
               <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <TabsList className="flex flex-col h-auto bg-transparent gap-2 p-0">
-                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-                        <Squares2X2Icon className="h-5 w-5" />
+                <div className="flex flex-col items-center justify-center gap-2 w-full">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+                        <BoltIcon className="h-5 w-5" />
                       </TabsTrigger>
-                    </TabsList>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Triggers</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <TabsList className="flex flex-col h-auto bg-transparent gap-2 p-0">
-                      <TabsTrigger value="actions" className="w-10 h-10 p-0 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600">
-                        <Squares2X2Icon className="h-5 w-5" />
+                    </TooltipTrigger>
+                    <TooltipContent side="left">Triggers</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="actions" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600">
+                        <EnvelopeIcon className="h-5 w-5" />
                       </TabsTrigger>
-                    </TabsList>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Actions</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <TabsList className="flex flex-col h-auto bg-transparent gap-2 p-0">
-                      <TabsTrigger value="logic" className="w-10 h-10 p-0 data-[state=active]:bg-amber-50 data-[state=active]:text-amber-600">
-                        <Squares2X2Icon className="h-5 w-5" />
+                    </TooltipTrigger>
+                    <TooltipContent side="left">Actions</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="logic" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-amber-50 data-[state=active]:text-amber-600">
+                        <FunnelIcon className="h-5 w-5" />
                       </TabsTrigger>
-                    </TabsList>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Logic</TooltipContent>
-                </Tooltip>
+                    </TooltipTrigger>
+                    <TooltipContent side="left">Logic</TooltipContent>
+                  </Tooltip>
+                </div>
               </TooltipProvider>
             </div>
           )}
