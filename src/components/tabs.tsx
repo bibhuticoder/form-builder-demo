@@ -18,7 +18,7 @@ export function Tabs({ defaultValue, className, children }: { defaultValue: stri
 }
 
 export function TabsList({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("bg-slate-100 rounded-lg p-1", className)} {...props} />
+  return <div className={cn("bg-slate-100 dark:bg-slate-800 rounded-lg p-1", className)} {...props} />
 }
 
 export function TabsTrigger({ value, className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { value: string }) {
@@ -26,7 +26,7 @@ export function TabsTrigger({ value, className, children, ...props }: React.Butt
   if (!ctx) throw new Error("TabsTrigger must be used within Tabs")
   const active = ctx.value === value
   return (
-    <button type="button" data-state={active ? "active" : "inactive"} onClick={() => ctx.setValue(value)} className={cn("text-xs font-medium rounded-md px-3 py-1.5 transition-colors", active ? "bg-white shadow text-slate-900" : "text-slate-600 hover:text-slate-900", className)} {...props}>
+    <button type="button" data-state={active ? "active" : "inactive"} onClick={() => ctx.setValue(value)} className={cn("text-xs font-medium rounded-md px-3 py-1.5 transition-colors", active ? "bg-white dark:bg-slate-700 shadow text-slate-900 dark:text-slate-100" : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100", className)} {...props}>
       {children}
     </button>
   )

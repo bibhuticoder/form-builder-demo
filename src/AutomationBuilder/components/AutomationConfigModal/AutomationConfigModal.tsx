@@ -43,17 +43,17 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
   const body = (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Label</Label>
-        <Input value={label} onChange={(e) => setLabel(e.target.value)} />
+        <Label className="text-slate-700 dark:text-slate-200">Label</Label>
+        <Input value={label} onChange={(e) => setLabel(e.target.value)} className="bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:ring-primary" />
       </div>
       <div className="space-y-2">
-        <Label>Subtitle</Label>
-        <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Optional" />
+        <Label className="text-slate-700 dark:text-slate-200">Subtitle</Label>
+        <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="Optional" className="bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:ring-primary" />
       </div>
 
       {isSplitTest && (
-        <div className="space-y-2">
-          <Label>Branch weights (%)</Label>
+        <div className="space-y-2 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 p-3">
+          <Label className="text-slate-700 dark:text-slate-200">Branch weights (%)</Label>
           <div className="grid grid-cols-2 gap-2">
             {weights.map((w, idx) => (
               <Input
@@ -62,6 +62,7 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
                 min={0}
                 max={100}
                 value={w}
+                className="bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:ring-primary"
                 onChange={(e) => {
                   const next = [...weights]
                   next[idx] = Number(e.target.value)
@@ -70,7 +71,7 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
               />
             ))}
           </div>
-          <p className="text-xs text-slate-500">This updates the edge labels (e.g. 50%).</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">This updates the edge labels (e.g. 50%).</p>
         </div>
       )}
     </div>
@@ -78,11 +79,13 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
 
   const footer = (
     <div className="flex justify-end gap-2">
-      <Button variant="outline" onClick={onClose}>
+      <Button variant="outline" className="dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700" onClick={onClose} size={"sm"}>
         Cancel
       </Button>
       <Button
         variant="primary"
+        className="shadow-sm dark:shadow-none"
+        size={"sm"}
         onClick={() => {
           if (!node) return
           const newData: any = { label, subtitle }

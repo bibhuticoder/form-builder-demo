@@ -23,25 +23,25 @@ const AddStepNode = ({ data }: any) => {
   const isDragging = !!data?.isDragging
   return (
     <div className="w-[280px] flex flex-col items-center justify-center relative">
-      <div className={`w-10 h-10 rounded-full bg-slate-50 border-2 border-dashed flex items-center justify-center transition-colors cursor-pointer group ${isDragging ? "border-primary text-primary" : "border-slate-300 hover:border-primary hover:text-primary"}`}>
-        <PlusIcon className={`w-5 h-5 ${isDragging ? "text-primary" : "text-slate-400"} group-hover:text-primary`} />
+      <div className={`w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 border-2 border-dashed flex items-center justify-center transition-colors cursor-pointer group ${isDragging ? "border-primary text-primary" : "border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary"}`}>
+        <PlusIcon className={`w-5 h-5 ${isDragging ? "text-primary" : "text-slate-400 dark:text-slate-500"} group-hover:text-primary`} />
       </div>
-      <span className="text-[10px] font-medium text-slate-400 mt-2 text-center w-32">Drag your next Action or Logic</span>
+      <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 mt-2 text-center w-32">Drag your next Action or Logic</span>
       <Handle type="target" position={Position.Top} className="!w-2 !h-2 !bg-slate-300 !border-2 !border-white transition-colors opacity-0 !mt-[1.5px]" />
     </div>
   )
 }
 
 const PlaceholderNode = () => (
-  <div className="w-[280px] border-b-2 border-l-2 border-r-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 flex flex-col">
-    <div className="h-1.5 w-full rounded-t-sm bg-slate-300" />
+  <div className="w-[280px] border-b-2 border-l-2 border-r-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-900/60 flex flex-col">
+    <div className="h-1.5 w-full rounded-t-sm bg-slate-300 dark:bg-slate-700" />
     <div className="flex items-center p-4">
-      <div className="p-2 rounded-md bg-white border border-dashed border-slate-300 shadow-sm shrink-0 text-slate-400 mr-3">
+      <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 shadow-sm shrink-0 text-slate-400 dark:text-slate-500 mr-3">
         <Squares2X2Icon className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold text-slate-400 truncate">Start your automation</h3>
-        <p className="text-xs text-slate-400">Drag a Trigger, Action or Logic Here to Begin...</p>
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 truncate">Start your automation</h3>
+        <p className="text-xs text-slate-400 dark:text-slate-500">Drag a Trigger, Action or Logic Here to Begin...</p>
       </div>
     </div>
   </div>
@@ -52,11 +52,11 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
 
   return (
     <div className="relative w-[280px]">
-      <div className={`w-full bg-white rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+      <div className={`w-full bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
         <div className={`h-1.5 w-full rounded-t-sm ${colorClass}`} />
         <div className="p-4">
           <div className="flex items-start gap-3">
-            <div className={`p-2 rounded-md bg-white border shadow-sm shrink-0 ${String(colorClass).replace("bg-", "text-")}`}>
+            <div className={`p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 ${String(colorClass).replace("bg-", "text-")}`}>
               <Icon className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -105,7 +105,7 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
             <div className="absolute right-0 top-1/2 -translate-y-[calc(50%+0.5px)] translate-x-[1px] w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-slate-300" />
           </div>
           <Handle type="source" position={Position.Right} id="right-source" className={`!w-auto !h-auto !bg-transparent !border-none !rounded-none !left-[330px] !right-auto !top-1/2 !-translate-y-1/2 !transform-none !mt-3 !flex !flex-col !items-center !justify-center !gap-2 group/adder !opacity-100 !pointer-events-auto`}>
-            <div className={`w-10 h-10 rounded-full bg-white border-2 border-dashed flex items-center justify-center transition-colors shadow-sm ${isDragging ? "border-primary text-primary" : "border-slate-300 text-slate-400 group-hover/adder:border-primary group-hover/adder:text-primary"}`}>
+            <div className={`w-10 h-10 rounded-full bg-white dark:bg-slate-900 border-2 border-dashed flex items-center justify-center transition-colors shadow-sm ${isDragging ? "border-primary text-primary" : "border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 group-hover/adder:border-primary group-hover/adder:text-primary"}`}>
               <PlusIcon className="w-5 h-5" />
             </div>
             <span className={`text-[10px] font-medium whitespace-nowrap transition-colors ${isDragging ? "text-primary" : "text-slate-400 group-hover/adder:text-primary"}`}>Add Branch</span>
@@ -121,11 +121,11 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
 const TriggerNode = ({ id, data, selected }: any) => {
   const { deleteElements } = useReactFlow()
   return (
-    <div className={`w-[280px] bg-white rounded-lg shadow-sm border-2 transition-all duration-200 group ${selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+    <div className={`w-[280px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-sm bg-blue-500" />
       <div className="p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-md bg-white border shadow-sm shrink-0 text-blue-500">{data.icon ? <data.icon className="w-5 h-5" /> : <Squares2X2Icon className="w-5 h-5" />}</div>
+          <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-blue-500">{data.icon ? <data.icon className="w-5 h-5" /> : <Squares2X2Icon className="w-5 h-5" />}</div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{data.label}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{data.subtitle || "When this happens..."}</p>
@@ -191,11 +191,11 @@ const LoopBackNode = ({ id, data, selected }: any) => {
   const targetLabel = targetNode?.data?.label
 
   return (
-    <div className={`w-[280px] bg-white rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+    <div className={`w-[280px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-sm bg-amber-500" />
       <div className="p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-md bg-white border shadow-sm shrink-0 text-amber-500">
+          <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-amber-500">
             <ArrowPathIcon className={`w-5 h-5 ${data.isConnecting ? "animate-spin" : ""}`} />
           </div>
           <div className="flex-1 min-w-0">
@@ -239,8 +239,8 @@ const CustomEdge = memo(({ sourceX, sourceY, targetX, targetY, sourcePosition, t
             }}
             className="nodrag nopan"
           >
-            <div className="bg-white rounded-full border border-slate-200 shadow-sm px-3 py-1 flex items-center justify-center min-w-[40px]">
-              <span className="text-[10px] font-semibold text-slate-500">{(label as string) || "50%"}</span>
+            <div className="bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm px-3 py-1 flex items-center justify-center min-w-[40px]">
+              <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{(label as string) || "50%"}</span>
             </div>
           </div>
         </EdgeLabelRenderer>
@@ -267,7 +267,7 @@ function CustomControls({ canUndo, canRedo, onUndo, onRedo }: { canUndo: boolean
   const { zoomIn, zoomOut, fitView } = useReactFlow()
   return (
     <Panel position="bottom-left" className="flex gap-2 items-end">
-      <div className="bg-white p-1 rounded-lg border border-slate-200 shadow-sm flex flex-col items-center gap-1">
+      <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center gap-1">
         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => zoomIn()} title="Zoom In">
           <PlusIcon className="h-4 w-4" />
         </Button>
@@ -278,7 +278,7 @@ function CustomControls({ canUndo, canRedo, onUndo, onRedo }: { canUndo: boolean
           <ArrowsPointingOutIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div className="bg-white p-1 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1">
+      <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-1">
         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onUndo} disabled={!canUndo} title="Undo">
           <ArrowUturnLeftIcon className="h-4 w-4" />
         </Button>
@@ -305,8 +305,18 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
   const [selectedNodeForConfig, setSelectedNodeForConfig] = useState<Node | null>(null)
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(() => document.documentElement.classList.contains("dark"))
 
   const { project } = useReactFlow()
+
+  useEffect(() => {
+    const root = document.documentElement
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(root.classList.contains("dark"))
+    })
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] })
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     // Until persistence is wired, switching files resets the canvas.
@@ -874,37 +884,37 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const prevTip = () => setCurrentTipIndex((p) => (p - 1 + PRO_TIPS.length) % PRO_TIPS.length)
 
   return (
-    <div className="flex h-full w-full bg-slate-50 relative">
+    <div className="flex h-full w-full bg-slate-50 dark:bg-slate-950 relative">
       <AutomationConfigModal isOpen={isConfigModalOpen} onClose={() => setIsConfigModalOpen(false)} node={selectedNodeForConfig} onSave={onSaveConfig} edges={edges} />
       <JsonViewerPanel automationId={automationId} nodes={nodes} edges={edges} />
 
       <div className="flex-1 h-full relative" onDragEnter={onDragEnter} onDragLeave={onDragLeave}>
-        <ReactFlow nodes={nodesWithData} edges={edgesWithData} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} onNodeClick={onNodeClick} onDragOver={onDragOver} onDrop={onDrop} onInit={onInit} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} elementsSelectable defaultEdgeOptions={{ type: "custom", markerEnd: { type: MarkerType.ArrowClosed } }} proOptions={{ hideAttribution: true }} className="bg-slate-50">
-          <Background color="#94a3b8" gap={20} size={1} />
+        <ReactFlow nodes={nodesWithData} edges={edgesWithData} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} onNodeClick={onNodeClick} onDragOver={onDragOver} onDrop={onDrop} onInit={onInit} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} elementsSelectable defaultEdgeOptions={{ type: "custom", markerEnd: { type: MarkerType.ArrowClosed } }} proOptions={{ hideAttribution: true }} className="bg-slate-50 dark:bg-slate-950">
+          <Background color={isDarkMode ? "#475569" : "#94a3b8"} gap={20} size={1} />
           <CustomControls canUndo={past.length > 0} canRedo={future.length > 0} onUndo={onUndo} onRedo={onRedo} />
         </ReactFlow>
 
         {showProTips && (
           <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-end pointer-events-none">
-            <Card className="p-3 bg-blue-50 border-blue-100 shadow-lg pointer-events-auto max-w-2xl w-full mr-4">
+            <Card className="p-3 bg-blue-50 border-blue-100 dark:bg-slate-900 dark:border-slate-700 shadow-lg pointer-events-auto max-w-2xl w-full mr-4">
               <div className="flex gap-3 items-center">
-                <ExclamationCircleIcon className="w-5 h-5 text-blue-600 shrink-0" />
-                <div className="flex-1 text-xs text-blue-900 flex items-center gap-2">
+                <ExclamationCircleIcon className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
+                <div className="flex-1 text-xs text-blue-900 dark:text-slate-100 flex items-center gap-2">
                   <span className="font-semibold">Pro Tip:</span>
-                  <span className="text-blue-700">{PRO_TIPS[currentTipIndex]}</span>
+                  <span className="text-blue-700 dark:text-slate-300">{PRO_TIPS[currentTipIndex]}</span>
                 </div>
-                <div className="flex items-center gap-1 border-l border-blue-200 pl-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 hover:text-blue-700 hover:bg-blue-100" onClick={prevTip}>
+                <div className="flex items-center gap-1 border-l border-blue-200 dark:border-slate-700 pl-2">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800" onClick={prevTip}>
                     <ChevronLeftIcon className="h-3 w-3" />
                   </Button>
-                  <span className="text-[10px] text-blue-500 font-medium w-8 text-center">
+                  <span className="text-[10px] text-blue-500 dark:text-slate-400 font-medium w-8 text-center">
                     {currentTipIndex + 1} / {PRO_TIPS.length}
                   </span>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 hover:text-blue-700 hover:bg-blue-100" onClick={nextTip}>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800" onClick={nextTip}>
                     <ChevronRightIcon className="h-3 w-3" />
                   </Button>
                 </div>
-                <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 hover:text-blue-700 hover:bg-blue-100 ml-1" onClick={() => setShowProTips(false)}>
+                <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800 ml-1" onClick={() => setShowProTips(false)}>
                   <span className="sr-only">Dismiss</span>
                   <XMarkIcon className="h-4 w-4" />
                 </Button>
@@ -914,29 +924,35 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         )}
       </div>
 
-      <div className={`bg-white border-l h-full flex flex-col shadow-xl z-20 transition-all duration-300 ${isSidebarCollapsed ? "w-16" : "w-80"}`}>
+      <div className={`bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 h-full flex flex-col shadow-xl z-20 transition-all duration-300 ${isSidebarCollapsed ? "w-16" : "w-80"}`}>
         <Tabs defaultValue="triggers" className="flex flex-col h-full">
           {!isSidebarCollapsed && (
-            <div className="px-4 py-3 border-b bg-white space-y-3">
+            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 space-y-3">
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600 shrink-0" onClick={() => setIsSidebarCollapsed(true)}>
                   <ChevronRightIcon className="h-4 w-4" />
                 </Button>
                 <div className="relative flex-1">
                   <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
-                  <Input placeholder="Search..." className="pl-9 bg-slate-50" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  <Input placeholder="Search..." className="pl-9 bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
               </div>
               <TabsList className="w-full grid grid-cols-3">
-                <TabsTrigger value="triggers">Triggers</TabsTrigger>
-                <TabsTrigger value="actions">Actions</TabsTrigger>
-                <TabsTrigger value="logic">Logic</TabsTrigger>
+                <TabsTrigger value="triggers" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-500/20 dark:data-[state=active]:text-blue-300">
+                  Triggers
+                </TabsTrigger>
+                <TabsTrigger value="actions" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-500/20 dark:data-[state=active]:text-emerald-300">
+                  Actions
+                </TabsTrigger>
+                <TabsTrigger value="logic" className="data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 dark:data-[state=active]:bg-amber-500/20 dark:data-[state=active]:text-amber-300">
+                  Logic
+                </TabsTrigger>
               </TabsList>
             </div>
           )}
 
           {isSidebarCollapsed && (
-            <div className="flex flex-col items-center py-2 space-y-2 border-b overflow-visible">
+            <div className="flex flex-col items-center py-2 space-y-2 border-b border-slate-200 dark:border-slate-700 overflow-visible">
               <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600" onClick={() => setIsSidebarCollapsed(false)}>
                 <ChevronLeftIcon className="h-4 w-4" />
               </Button>
@@ -944,7 +960,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                 <div className="flex flex-col items-center justify-center gap-2 w-full">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-500/20 dark:data-[state=active]:text-blue-300">
                         <BoltIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>
@@ -952,7 +968,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="actions" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600">
+                      <TabsTrigger value="actions" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-500/20 dark:data-[state=active]:text-emerald-300">
                         <EnvelopeIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>
@@ -960,7 +976,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="logic" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-amber-50 data-[state=active]:text-amber-600">
+                      <TabsTrigger value="logic" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 dark:data-[state=active]:bg-amber-500/20 dark:data-[state=active]:text-amber-300">
                         <FunnelIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>
@@ -971,7 +987,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             </div>
           )}
 
-          <div className="flex-1 overflow-hidden bg-slate-50/50">
+          <div className="flex-1 overflow-hidden bg-slate-50/50 dark:bg-slate-950/60">
             <ScrollArea className="h-full">
               {TOOLBOX_ITEMS.map((section) => {
                 const filtered = section.items.filter((item) => (isSidebarCollapsed ? true : item.label.toLowerCase().includes(searchQuery.toLowerCase())))
@@ -983,7 +999,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                       <div
                         key={`avail-${idx}`}
                         draggable
-                        className={`flex items-center gap-2 p-1.5 rounded-md border border-transparent hover:border-slate-200 hover:bg-slate-50 cursor-grab active:cursor-grabbing transition-all group ${isSidebarCollapsed ? "justify-center" : ""}`}
+                        className={`flex items-center gap-2 p-1.5 rounded-md border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-grab active:cursor-grabbing transition-all group ${isSidebarCollapsed ? "justify-center" : ""}`}
                         onDragStart={(event) => {
                           event.dataTransfer.setData("application/reactflow/type", item.type)
                           event.dataTransfer.setData("application/reactflow/label", item.label)
@@ -994,7 +1010,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <div className={`p-1 rounded bg-white border shadow-sm group-hover:shadow-md transition-shadow ${item.color}`} title={isSidebarCollapsed ? item.label : undefined}>
+                              <div className={`p-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm group-hover:shadow-md transition-shadow ${item.color}`} title={isSidebarCollapsed ? item.label : undefined}>
                                 <item.icon className="w-4 h-4" />
                               </div>
                             </TooltipTrigger>
@@ -1006,7 +1022,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                             <div className="flex-1">
                               <span className="text-xs font-medium text-slate-900 dark:text-slate-100">{item.label}</span>
                             </div>
-                            <EllipsisVerticalIcon className="w-3 h-3 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <EllipsisVerticalIcon className="w-3 h-3 text-slate-300 dark:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </>
                         )}
                       </div>
@@ -1016,20 +1032,20 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                       <>
                         {!isSidebarCollapsed && (
                           <div className="flex items-center gap-2 mt-6 mb-2 px-1">
-                            <div className="h-px bg-slate-200 flex-1" />
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Coming Soon</span>
-                            <div className="h-px bg-slate-200 flex-1" />
+                            <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1" />
+                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Coming Soon</span>
+                            <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1" />
                           </div>
                         )}
-                        {isSidebarCollapsed && <div className="h-px w-8 mx-auto bg-slate-200 my-2" />}
+                        {isSidebarCollapsed && <div className="h-px w-8 mx-auto bg-slate-200 dark:bg-slate-700 my-2" />}
                         {comingSoon.map((item, idx) => (
                           <div key={`soon-${idx}`} draggable={false} className={`flex items-center gap-2 p-1.5 rounded-md border border-transparent opacity-75 cursor-not-allowed group select-none ${isSidebarCollapsed ? "justify-center" : ""}`}>
-                            <div className="p-1 rounded bg-slate-100 border shadow-none grayscale">
-                              <item.icon className="w-4 h-4 text-slate-400" />
+                            <div className="p-1 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-none grayscale">
+                              <item.icon className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                             </div>
                             {!isSidebarCollapsed && (
                               <div className="flex-1">
-                                <span className="text-xs font-medium text-slate-400">{item.label}</span>
+                                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{item.label}</span>
                               </div>
                             )}
                           </div>
