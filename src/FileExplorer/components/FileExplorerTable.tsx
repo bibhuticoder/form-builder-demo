@@ -37,8 +37,8 @@ export const FileExplorerTable: React.FC<FileExplorerTableProps> = ({
     } = useFileExplorerContext();
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-visible min-h-[500px] flex flex-col justify-between">
-            <Table>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-visible min-h-[500px] h-full flex flex-col justify-between">
+            <Table className="min-w-[800px]">
                 <TableHeader>
                     <TableRow className="bg-slate-50/50 dark:bg-gray-800/50 hover:bg-slate-50/50 dark:hover:bg-gray-800 border-slate-200 dark:border-gray-700">
                         <TableHead className="w-[50px]"></TableHead>

@@ -37,7 +37,7 @@ export const BaseExplorerRow: React.FC<BaseExplorerRowProps> = ({
     actions
 }) => {
     return (
-        <TableRow className="group cursor-pointer hover:bg-slate-50/50 dark:hover:bg-gray-800 border-slate-200 dark:border-gray-700" onClick={onClick}>
+        <TableRow className="group cursor-pointer hover:bg-slate-100/50 dark:hover:bg-gray-800 border-slate-200 dark:border-gray-700" onClick={onClick}>
             <TableCell>
                 {icon}
             </TableCell>

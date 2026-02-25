@@ -76,7 +76,7 @@ export const FolderRow: React.FC<FolderRowProps> = ({ folder, openRenameModal, o
             onClick={handleClick}
             icon={
                 <div className="w-8 h-8 rounded flex items-center justify-center">
-                    <Folder className="w-5 h-5 text-blue-500 fill-blue-50 dark:text-primary dark:fill-primary/20" />
+                    <Folder className="w-5 h-5 text-primary fill-primary/20" />
                 </div>
             }
             nameNode={folder.name}

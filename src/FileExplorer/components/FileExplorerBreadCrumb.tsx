@@ -10,7 +10,8 @@ export const FileExplorerBreadCrumb: React.FC = () => {
         viewMode,
         currentFolderId,
         setCurrentFolderId,
-        currentPath
+        currentPath,
+        fileType
     } = useFileExplorerContext();
 
     if (viewMode !== 'folder' || !currentFolderId) {
@@ -25,22 +26,26 @@ export const FileExplorerBreadCrumb: React.FC = () => {
                 className="h-6 px-2 text-slate-500 hover:text-slate-900 dark:hover:text-gray-100"
                 onClick={() => setCurrentFolderId(null)}
             >
-                <Home className="w-4 h-4" />
+                <Home className="w-4 h-4 mr-1" /> All {fileType}s
             </Button>
 
-            {currentPath.map((folder, idx) => (
-                <div key={folder.id} className="flex items-center gap-1">
-                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-gray-600" />
-                    <Button
-                        variant="ghost"
-                        className={cn("h-6 px-1.5 gap-1.5 hover:text-slate-900 dark:hover:text-gray-100", idx === currentPath.length - 1 && "text-primary dark:text-primary font-bold")}
-                        onClick={() => setCurrentFolderId(folder.id)}
-                    >
-                        <Folder className="w-3.5 h-3.5 text-blue-500 dark:text-primary fill-blue-50 dark:fill-primary/20" />
-                        {folder.name}
-                    </Button>
-                </div>
-            ))}
-        </div>
+            {
+                currentPath.map((folder, idx) => (
+                    <div key={folder.id} className="flex items-center gap-1">
+                        <ChevronRight className="w-3 h-3 text-slate-300 dark:text-gray-600" />
+                        <Button
+                            variant="ghost"
+                            className={cn("h-6 px-1.5 gap-1.5 hover:text-slate-900 dark:hover:text-gray-100", idx === currentPath.length - 1 && "text-primary dark:text-primary font-bold")}
+                            onClick={() => setCurrentFolderId(folder.id)}
+                        >
+
+
+                            <Folder className="w-3.5 h-3.5 text-primary fill-primary/20" />
+                            {folder.name}
+                        </Button>
+                    </div>
+                ))
+            }
+        </div >
     );
 };

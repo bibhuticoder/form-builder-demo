@@ -5,10 +5,12 @@ import {
     SortConfig,
     ViewMode,
     DisplayItem,
+    FileType,
 } from '../types';
 import { getFolderPath, getAllSubfolderIds, getFullPathName, getFolderStats, parseRelativeDate } from '../utils/helpers';
 
 interface FileExplorerContextProps {
+    fileType: FileType;
     folders: Folder[];
     files: FileItem[];
     currentFolderId: string | null;
@@ -61,11 +63,12 @@ const FileExplorerContext = createContext<FileExplorerContextProps | undefined>(
 
 interface FileExplorerProviderProps {
     children: ReactNode;
+    fileType: FileType;
     initialFolders?: Folder[];
     initialFiles?: FileItem[];
 }
 
-export const FileExplorerProvider = ({ children, initialFolders = [], initialFiles = [] }: FileExplorerProviderProps) => {
+export const FileExplorerProvider = ({ children, fileType, initialFolders = [], initialFiles = [] }: FileExplorerProviderProps) => {
     const [folders, setFolders] = useState<Folder[]>(initialFolders);
     const [files, setFiles] = useState<FileItem[]>(initialFiles);
     const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
@@ -99,11 +102,7 @@ export const FileExplorerProvider = ({ children, initialFolders = [], initialFil
             const path = getFolderPath(currentFolderId, folders);
             depth = path.length;
         }
-
-        if (depth >= 4) {
-            alert("Maximum folder depth of 4 reached. Cannot create nested folder here.");
-            return;
-        }
+        if (depth >= 4) return;
 
         const newFolder: Folder = {
             id: `f${Date.now()}`,
@@ -215,13 +214,11 @@ export const FileExplorerProvider = ({ children, initialFolders = [], initialFil
     const sortedCombinedItems = useMemo(() => {
         let items: DisplayItem[] = [];
 
-        // Include folders only in folder view without active search (or if you want them in search, adjust the logic)
-        const currentFolders = folders.filter(f => {
-            if (searchQuery) return f.name.toLowerCase().includes(searchQuery.toLowerCase());
-            return f.parentId === currentFolderId;
-        });
-
-        if (viewMode === 'folder' && !searchQuery) {
+        if (viewMode === 'folder') {
+            const currentFolders = folders.filter(f => {
+                if (searchQuery) return f.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return f.parentId === currentFolderId;
+            });
             items.push(...currentFolders.map(f => ({ ...f, itemType: 'folder' as const })));
         }
 
@@ -278,6 +275,7 @@ export const FileExplorerProvider = ({ children, initialFolders = [], initialFil
 
     return (
         <FileExplorerContext.Provider value={{
+            fileType,
             folders, files, currentFolderId, setCurrentFolderId, searchQuery, setSearchQuery, viewMode, setViewMode, sortConfig, handleSort, currentPage, setCurrentPage, itemsPerPage, setItemsPerPage,
             newFolderName, setNewFolderName, selectedFile, setSelectedFile, selectedFolderToRename, setSelectedFolderToRename, selectedFolderToMove, setSelectedFolderToMove, targetMoveFolderId, setTargetMoveFolderId,
             handleCreateFolder, handleRenameFolder, handleDeleteFolder, handleDuplicateFolder, handleMoveFolder, handleDuplicateFile, handleDeleteFile, handleMoveFile, handleToggleFileStatus,
