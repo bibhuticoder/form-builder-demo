@@ -31,7 +31,6 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
         setSelectedFile,
         setTargetMoveFolderId,
         handleDuplicateFile,
-        handleToggleFileStatus,
         handleDeleteFile
     } = useFileExplorerContext();
     const navigate = useNavigate();
