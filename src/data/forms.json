@@ -1,0 +1,135 @@
+[
+    {
+        "id": "form_folder_1",
+        "type": "folder",
+        "name": "Lead Capture",
+        "children": [
+            {
+                "id": "form_item_1",
+                "type": "form",
+                "name": "Website Contact Us",
+                "status": "published",
+                "lastUpdated": "2 hours ago"
+            },
+            {
+                "id": "form_item_2",
+                "type": "form",
+                "name": "Newsletter Subscription",
+                "status": "published",
+                "lastUpdated": "1 week ago"
+            },
+            {
+                "id": "form_item_3",
+                "type": "form",
+                "name": "Free Trial Request",
+                "status": "published",
+                "lastUpdated": "3 days ago"
+            },
+            {
+                "id": "form_folder_2",
+                "type": "folder",
+                "name": "Landing Pages",
+                "children": [
+                    {
+                        "id": "form_item_4",
+                        "type": "form",
+                        "name": "Q1 Ebook Download",
+                        "status": "draft",
+                        "lastUpdated": "2 months ago"
+                    },
+                    {
+                        "id": "form_item_5",
+                        "type": "form",
+                        "name": "Webinar Registration",
+                        "status": "published",
+                        "lastUpdated": "1 day ago"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "form_folder_3",
+        "type": "folder",
+        "name": "Client Onboarding",
+        "children": [
+            {
+                "id": "form_item_6",
+                "type": "form",
+                "name": "New Client Intake Form",
+                "status": "published",
+                "lastUpdated": "7 hours ago"
+            },
+            {
+                "id": "form_item_7",
+                "type": "form",
+                "name": "Business Profile Questionnaire",
+                "status": "published",
+                "lastUpdated": "4 days ago"
+            },
+            {
+                "id": "form_item_8",
+                "type": "form",
+                "name": "Billing Setup Details",
+                "status": "draft",
+                "lastUpdated": "1 month ago"
+            }
+        ]
+    },
+    {
+        "id": "form_folder_4",
+        "type": "folder",
+        "name": "Feedback & Surveys",
+        "children": [
+            {
+                "id": "form_item_9",
+                "type": "form",
+                "name": "Net Promoter Score (NPS)",
+                "status": "published",
+                "lastUpdated": "2 weeks ago"
+            },
+            {
+                "id": "form_item_10",
+                "type": "form",
+                "name": "Customer Satisfaction Survey",
+                "status": "published",
+                "lastUpdated": "1 month ago"
+            },
+            {
+                "id": "form_item_11",
+                "type": "form",
+                "name": "Feature Request Intake",
+                "status": "draft",
+                "lastUpdated": "3 months ago"
+            }
+        ]
+    },
+    {
+        "id": "form_folder_5",
+        "type": "folder",
+        "name": "Internal Forms",
+        "children": [
+            {
+                "id": "form_item_12",
+                "type": "form",
+                "name": "Employee Expense Report",
+                "status": "published",
+                "lastUpdated": "1 year ago"
+            },
+            {
+                "id": "form_item_13",
+                "type": "form",
+                "name": "Leave Request",
+                "status": "published",
+                "lastUpdated": "5 months ago"
+            }
+        ]
+    },
+    {
+        "id": "form_item_14",
+        "type": "form",
+        "name": "Uncategorized Event RSVP",
+        "status": "draft",
+        "lastUpdated": "2 days ago"
+    }
+]

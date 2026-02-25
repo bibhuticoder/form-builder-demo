@@ -50,15 +50,17 @@ export const parseRelativeDate = (dateStr: string): number => {
 
 export const getFolderStats = (folderId: string, folders: Folder[], files: FileItem[]) => {
     const subfolderIds = getAllSubfolderIds(folderId, folders);
-    let activeCount = 0;
-    let inactiveCount = 0;
+    const statusCounts: Record<string, number> = {};
     let latestUpdateStr = 'Never';
     let latestUpdateMs = Number.MAX_SAFE_INTEGER;
 
     files.forEach(file => {
         if (file.folderId && subfolderIds.includes(file.folderId)) {
-            if (file.status === 'active') activeCount++;
-            if (file.status === 'inactive') inactiveCount++;
+            const currentStatus = file.status;
+            if (!statusCounts[currentStatus]) {
+                statusCounts[currentStatus] = 0;
+            }
+            statusCounts[currentStatus]++;
 
             const fileMs = parseRelativeDate(file.lastUpdated);
             if (fileMs < latestUpdateMs) {
@@ -69,9 +71,19 @@ export const getFolderStats = (folderId: string, folders: Folder[], files: FileI
     });
 
     return {
-        activeCount,
-        inactiveCount,
+        statusCounts,
         latestUpdateStr: latestUpdateMs === Number.MAX_SAFE_INTEGER ? '--' : latestUpdateStr,
         latestUpdateMs
     };
+};
+
+export const getStatusVariant = (status: string): 'success' | 'muted' | 'default' => {
+    const lowerStatus = status.toLowerCase();
+    if (['active', 'published', 'success'].includes(lowerStatus)) {
+        return 'success';
+    }
+    if (['inactive', 'draft', 'archived'].includes(lowerStatus)) {
+        return 'muted';
+    }
+    return 'default';
 };

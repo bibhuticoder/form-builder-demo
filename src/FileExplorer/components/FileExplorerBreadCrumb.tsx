@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRightIcon as ChevronRight, FolderIcon as Folder } from '@heroicons/react/24/outline';
+import { HomeIcon as Home } from '@heroicons/react/24/solid';
 import { Button } from '@/components/Button';
 import { cn } from '@/lib/utils';
 import { useFileExplorerContext } from '../context/FileExplorerContext';
@@ -24,7 +25,7 @@ export const FileExplorerBreadCrumb: React.FC = () => {
                 className="h-6 px-2 text-slate-500 hover:text-slate-900 dark:hover:text-gray-100"
                 onClick={() => setCurrentFolderId(null)}
             >
-                All
+                <Home className="w-4 h-4" />
             </Button>
 
             {currentPath.map((folder, idx) => (

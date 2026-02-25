@@ -11,7 +11,7 @@ import { Badge } from '@/components/badge';
 import { cn } from '@/lib/utils';
 import { FileItem, FileType } from '../types';
 import { useFileExplorerContext } from '../context/FileExplorerContext';
-import { getFullPathName } from '../utils/helpers';
+import { getFullPathName, getStatusVariant } from '../utils/helpers';
 import { BaseExplorerRow, RowAction } from './BaseExplorerRow';
 
 interface FileItemRowProps {
@@ -73,11 +73,6 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
             }
         },
         {
-            icon: null, // No icon for status toggle
-            label: file.status === 'active' ? "Pause" : "Activate",
-            onClick: () => handleToggleFileStatus(file.id)
-        },
-        {
             icon: <Trash2 className="h-4 w-4" />,
             label: "Delete",
             className: "text-red-600 focus:text-red-500 dark:text-red-400 dark:focus:text-red-300",
@@ -118,7 +113,7 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
             icon={
                 <div className={cn(
                     "w-8 h-8 rounded flex items-center justify-center",
-                    file.status === 'active' ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400"
+                    getStatusVariant(file.status) === 'success' ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400"
                 )}>
                     {getIcon()}
                 </div>
@@ -127,10 +122,10 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
             pathNode={PathNode}
             statusNode={
                 <Badge
-                    variant={file.status === 'active' ? 'success' : 'muted'}
+                    variant={getStatusVariant(file.status)}
                     className="font-medium tracking-wide text-[10px] uppercase transition-colors"
                 >
-                    {file.status === 'active' ? 'Active' : 'Inactive'}
+                    {file.status}
                 </Badge>
             }
             dateNode={file.lastUpdated}

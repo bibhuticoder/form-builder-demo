@@ -58,7 +58,7 @@ export const FileExplorerToolbar: React.FC<FileExplorerToolbarProps> = ({ openCr
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={openCreateFolderModal}>
+                    <Button variant="outline" size="sm" className='text-sm' onClick={openCreateFolderModal}>
                         <Plus className="w-4 h-4" /> New Folder
                     </Button>
                 </div>
