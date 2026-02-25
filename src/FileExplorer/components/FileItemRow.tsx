@@ -13,6 +13,7 @@ import { FileItem, FileType } from '../types';
 import { useFileExplorerContext } from '../context/FileExplorerContext';
 import { getFullPathName, getStatusVariant } from '../utils/helpers';
 import { BaseExplorerRow, RowAction } from './BaseExplorerRow';
+import { HomeIcon as Home } from '@heroicons/react/24/solid';
 
 interface FileItemRowProps {
     file: FileItem;
@@ -28,6 +29,7 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
     const {
         folders,
         searchQuery,
+        fileType,
         setSelectedFile,
         setTargetMoveFolderId,
         handleDuplicateFile,
@@ -102,7 +104,8 @@ export const FileItemRow: React.FC<FileItemRowProps> = ({
                 {getFullPathName(file.folderId, folders)}
             </span>
         ) : (
-            <span className="text-slate-400 dark:text-gray-500 italic">Root</span>
+            <div className='flex gap-1 items-center'>
+                <Home className="w-4 h-4 mr-1" /> All {fileType}s  </div>
         )
     ) : undefined;
 

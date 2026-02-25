@@ -59,7 +59,7 @@ const FileExplorerContent: React.FC<FileExplorerProps> = ({ title, createButtonT
 
 export const FileExplorer: React.FC<FileExplorerProps> = (props) => {
     return (
-        <FileExplorerProvider initialFolders={props.initialFolders} initialFiles={props.initialFiles}>
+        <FileExplorerProvider fileType={props.fileType} initialFolders={props.initialFolders} initialFiles={props.initialFiles}>
             <FileExplorerContent {...props} />
         </FileExplorerProvider>
     );
