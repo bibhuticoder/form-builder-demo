@@ -7,7 +7,7 @@ export function AutomationBuilder({ automationId }: { automationId: string }) {
   return (
     <AutomationBuilderProvider automationId={automationId}>
       <ReactFlowProvider>
-        <BuilderShell>
+        <BuilderShell automationId={automationId}>
           <FlowBuilder automationId={automationId} />
         </BuilderShell>
       </ReactFlowProvider>
