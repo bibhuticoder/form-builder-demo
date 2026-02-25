@@ -9,4 +9,6 @@ export * from './node';
 export * from './edge';
 export * from './status';
 export * from './production';
+export * from './components';
+export * from './validation';
 

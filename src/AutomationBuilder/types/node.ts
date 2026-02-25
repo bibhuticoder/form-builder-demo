@@ -1,9 +1,12 @@
+import type { ComponentType } from 'react';
+import type { NodeConfig } from './components';
+
 export type AutomationNodeData = {
     label: string;
     subtitle?: string;
-    icon?: any;
+    icon?: ComponentType<{ className?: string }>;
     /** PRD-style flexible config payload (type-specific). */
-    config?: Record<string, unknown>;
+    config?: NodeConfig;
 
     isRoot?: boolean;
     isDragging?: boolean;
