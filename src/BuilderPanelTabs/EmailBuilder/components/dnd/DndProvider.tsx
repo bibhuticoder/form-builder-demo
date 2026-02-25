@@ -1,0 +1,118 @@
+/**
+ * Main DND provider for the email builder.
+ */
+
+import React, { useState, useCallback, useMemo } from "react";
+import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent, type DragOverEvent } from "@dnd-kit/core";
+import type { DragData } from "../../types/dnd";
+import type { EmailBlock, EmailBreakpointId } from "../../types";
+import { createBlockFromType } from "../../utils/dnd/utils";
+
+const DRAG_PREVIEW_WIDTH = "400px";
+const DRAG_PREVIEW_OPACITY = 0.9;
+
+interface DndProviderProps {
+  children: (dragOverId: string | null) => React.ReactNode;
+  onBlockAdd: (block: EmailBlock, position?: string | number) => void;
+  onBlockReorder: (oldIndex: number, newIndex: number) => void;
+  blocks: EmailBlock[];
+  renderPreview?: (block: EmailBlock) => React.ReactNode;
+  activeBreakpoint: EmailBreakpointId;
+}
+
+export function DndProvider({
+  children,
+  onBlockAdd,
+  onBlockReorder,
+  blocks,
+  renderPreview,
+  activeBreakpoint
+}: DndProviderProps) {
+  const [activeDrag, setActiveDrag] = useState<{ id?: string; data?: DragData }>({});
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const resetDragState = useCallback(() => {
+    setActiveDrag({});
+    setOverId(null);
+  }, []);
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveDrag({ id: String(event.active.id), data: event.active.data.current as DragData | undefined });
+  }, []);
+
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    setOverId(event.over ? String(event.over.id) : null);
+  }, []);
+
+  const handlePaletteBlockDrop = useCallback((overId: string, activeData: DragData) => {
+    if (!activeData.blockType) return;
+
+    const overIndex = blocks.findIndex((b) => b.id === overId);
+    const insertIndex = overIndex >= 0 ? overIndex : undefined;
+
+    const newBlock = createBlockFromType(activeData.blockType, activeData.label || activeData.blockType, blocks, activeBreakpoint);
+    onBlockAdd(newBlock, insertIndex);
+  }, [onBlockAdd, blocks, activeBreakpoint]);
+
+  const handleCanvasBlockReorder = useCallback((activeId: string, overId: string) => {
+    const oldIndex = blocks.findIndex((block) => block.id === activeId);
+    const newIndex = blocks.findIndex((block) => block.id === overId);
+
+    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+
+    onBlockReorder(oldIndex, newIndex);
+  }, [blocks, onBlockReorder]);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    resetDragState();
+
+    if (!over) return;
+
+    const activeData = active.data.current as DragData | undefined;
+    const overId = String(over.id);
+
+    if (activeData?.kind === "palette-block") {
+      handlePaletteBlockDrop(overId, activeData);
+    } else if (activeData?.kind === "canvas-block") {
+      handleCanvasBlockReorder(String(active.id), overId);
+    }
+  }, [resetDragState, handlePaletteBlockDrop, handleCanvasBlockReorder]);
+
+  const handleDragCancel = useCallback(() => {
+    resetDragState();
+  }, [resetDragState]);
+
+  const activeCanvasBlock = useMemo(
+    () => blocks?.find((b) => b.id === activeDrag.id),
+    [activeDrag.id, blocks]
+  );
+
+  const activePalettePreview = useMemo(() => {
+    if (activeDrag.data?.kind === "palette-block" && activeDrag.data.blockType && activeDrag.data.label) {
+      return createBlockFromType(activeDrag.data.blockType, activeDrag.data.label, blocks, activeBreakpoint);
+    }
+    return null;
+  }, [activeDrag.data, blocks, activeBreakpoint]);
+
+  const previewBlock = activePalettePreview || activeCanvasBlock;
+
+  return (
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+    >
+      {children(overId)}
+
+      <DragOverlay dropAnimation={null}>
+        {(activePalettePreview || (activeDrag.data?.kind === "canvas-block" && activeCanvasBlock)) && (
+          <div style={{ width: DRAG_PREVIEW_WIDTH, pointerEvents: "none", opacity: DRAG_PREVIEW_OPACITY }}>
+            {renderPreview && previewBlock ? renderPreview(previewBlock) : null}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
+  );
+}

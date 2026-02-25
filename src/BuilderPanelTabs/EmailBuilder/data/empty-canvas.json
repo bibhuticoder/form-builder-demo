@@ -1,0 +1,23 @@
+{
+  "templateSettings": {
+    "name": "Untitled Email",
+    "subject": "",
+    "preheader": "",
+    "status": "draft",
+    "settings": {
+      "contentWidth": 600,
+      "fontFamily": "Arial, sans-serif",
+      "backgroundColor": "#f4f4f4",
+      "contentBackgroundColor": "#ffffff",
+      "paddingTop": 20,
+      "paddingRight": 20,
+      "paddingBottom": 20,
+      "paddingLeft": 20,
+      "borderStyle": "none",
+      "borderWidth": 0,
+      "borderColor": "#E5E5E5",
+      "borderRadius": 0
+    }
+  },
+  "blocks": []
+}

@@ -1,8 +1,9 @@
 import { SubNav } from "./components";
-import { DocumentTextIcon, GlobeAltIcon, SparklesIcon } from "@heroicons/react/24/solid";
+import { DocumentTextIcon, GlobeAltIcon, SparklesIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import ComponentShowcase from "./ComponentShowcase";
 import FormBuilder from "./BuilderPanelTabs/FormBuilder/FormBuilder";
+import EmailBuilder from "./BuilderPanelTabs/EmailBuilder/EmailBuilder";
 
 
 export default function BuilderPanel() {
@@ -17,6 +18,11 @@ export default function BuilderPanel() {
       label: "Form Builder",
       value: "form-builder",
       icon: <DocumentTextIcon className="w-5 h-5" />
+    },
+    {
+      label: "Email Builder",
+      value: "email-builder",
+      icon: <EnvelopeIcon className="w-5 h-5" />
     },
     {
       label: "Website Builder",
@@ -41,6 +47,8 @@ export default function BuilderPanel() {
       </div>
 
       {activeTab === "form-builder" && <FormBuilder />}
+
+      {activeTab === "email-builder" && <EmailBuilder />}
 
       {activeTab === "website-builder" && (
         <div className="p-6">
