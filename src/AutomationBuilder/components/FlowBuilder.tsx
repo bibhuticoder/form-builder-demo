@@ -3,7 +3,7 @@ import ReactFlow, { Background, BaseEdge, EdgeLabelRenderer, MarkerType, Panel, 
 import type { Edge, EdgeChange, EdgeProps, Node, NodeChange } from "reactflow"
 import "reactflow/dist/style.css"
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowsPointingOutIcon, ArrowPathIcon, BoltIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, MinusIcon, PlusIcon, Squares2X2Icon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline"
-import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { AutomationCard } from "./AutomationCard"
 import { Input } from "@/components/input"
 import { Button } from "@/components/Button"

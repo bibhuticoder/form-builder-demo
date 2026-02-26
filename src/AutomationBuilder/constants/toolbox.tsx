@@ -1,6 +1,5 @@
 import type { ComponentType } from "react"
-import { ArrowPathIcon, ArrowTrendingUpIcon, BellIcon, BoltIcon, BuildingOffice2Icon, CakeIcon, CalendarIcon, ChartBarIcon, ChatBubbleLeftRightIcon, CheckCircleIcon, ClipboardDocumentIcon, DocumentTextIcon, EnvelopeIcon, FunnelIcon, LinkIcon, PaperAirplaneIcon, PhoneIcon, ShareIcon, Square2StackIcon, StarIcon, TagIcon, UserCircleIcon, UserGroupIcon, UserPlusIcon } from "@heroicons/react/24/outline"
-import { BriefcaseIcon, CalculatorIcon, ClockIcon, ShieldCheckIcon, StopCircleIcon } from "@heroicons/react/24/solid"
+import { ArrowPathIcon, ArrowTrendingUpIcon, BellIcon, BoltIcon, BriefcaseIcon, BuildingOffice2Icon, CalculatorIcon, CakeIcon, CalendarIcon, ChartBarIcon, ChatBubbleLeftRightIcon, CheckCircleIcon, ClipboardDocumentIcon, ClockIcon, DocumentTextIcon, EnvelopeIcon, FunnelIcon, LinkIcon, PaperAirplaneIcon, PhoneIcon, ShareIcon, ShieldCheckIcon, Square2StackIcon, StarIcon, StopCircleIcon, TagIcon, UserCircleIcon, UserGroupIcon, UserPlusIcon } from "@heroicons/react/24/outline"
 import type { Edge, Node } from "reactflow"
 
 export type ToolboxItem = {
