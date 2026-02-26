@@ -19,7 +19,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
       <div className="h-16 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center px-4 md:px-6 justify-between shrink-0 z-20">
         <div className="flex items-center gap-3 md:gap-4 min-w-0">
           <Link to="/automations">
-            <Button variant="ghost" size="sm" className="inline-flex items-center gap-2">
+            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 inline-flex items-center justify-center">
               <ArrowLeftIcon className="w-4 h-4" />
             </Button>
           </Link>
@@ -28,7 +28,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
 
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
 
-          <button type="button" onClick={() => setStatus((prev) => (prev === "active" ? "inactive" : "active"))} className={`text-sm font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-24 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
+          <button type="button" onClick={() => setStatus((prev) => (prev === "active" ? "inactive" : "active"))} className={`text-[11px] font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-20 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
             <span className={`h-1.5 w-1.5 rounded-full ${status === "active" ? "bg-primary" : "bg-slate-400"}`} />
             {status === "active" ? "Active" : "Inactive"}
           </button>
@@ -36,7 +36,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
 
         <div className="flex items-center gap-3 md:gap-4">
           <div className="text-sm text-slate-500 dark:text-slate-400">Not saved</div>
-          <Button size="sm" className="bg-primary text-white hover:bg-primary/90">
+          <Button size="sm" className="h-8 px-3 text-xs bg-primary text-white hover:bg-primary/90">
             Save Automation
           </Button>
         </div>

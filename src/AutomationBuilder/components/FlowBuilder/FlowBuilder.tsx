@@ -22,7 +22,7 @@ const AddStepNode = ({ data }: any) => {
   if (data?.isBranchAdder) return null
   const isDragging = !!data?.isDragging
   return (
-    <div className="w-[280px] flex flex-col items-center justify-center relative">
+    <div className="w-[256px] flex flex-col items-center justify-center relative">
       <div className={`w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 border-2 border-dashed flex items-center justify-center transition-colors cursor-pointer group ${isDragging ? "border-primary text-primary" : "border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary"}`}>
         <PlusIcon className={`w-5 h-5 ${isDragging ? "text-primary" : "text-slate-400 dark:text-slate-500"} group-hover:text-primary`} />
       </div>
@@ -33,7 +33,7 @@ const AddStepNode = ({ data }: any) => {
 }
 
 const PlaceholderNode = () => (
-  <div className="w-[280px] border-b-2 border-l-2 border-r-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-900/60 flex flex-col">
+  <div className="w-[256px] border-b-2 border-l-2 border-r-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-900/60 flex flex-col">
     <div className="h-1.5 w-full rounded-t-sm bg-slate-300 dark:bg-slate-700" />
     <div className="flex items-center p-4">
       <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 shadow-sm shrink-0 text-slate-400 dark:text-slate-500 mr-3">
@@ -51,10 +51,10 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
   const { deleteElements, getEdges } = useReactFlow()
 
   return (
-    <div className="relative w-[280px]">
+    <div className="relative w-[256px]">
       <div className={`w-full bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
         <div className={`h-1.5 w-full rounded-t-sm ${colorClass}`} />
-        <div className="p-4">
+        <div className="p-3">
           <div className="flex items-start gap-3">
             <div className={`p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 ${String(colorClass).replace("bg-", "text-")}`}>
               <Icon className="w-5 h-5" />
@@ -101,10 +101,10 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
       {isLastBranchNode && !isTargetable && !hideSourceHandle && (
         <>
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 bg-slate-300 border-2 border-white rounded-full z-20" />
-          <div className="absolute left-[280px] top-1/2 -translate-y-1/2 w-[50px] h-[2px] bg-slate-300 pointer-events-none flex items-center z-0">
+          <div className="absolute left-[256px] top-1/2 -translate-y-1/2 w-[46px] h-[2px] bg-slate-300 pointer-events-none flex items-center z-0">
             <div className="absolute right-0 top-1/2 -translate-y-[calc(50%+0.5px)] translate-x-[1px] w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-slate-300" />
           </div>
-          <Handle type="source" position={Position.Right} id="right-source" className={`!w-auto !h-auto !bg-transparent !border-none !rounded-none !left-[330px] !right-auto !top-1/2 !-translate-y-1/2 !transform-none !mt-3 !flex !flex-col !items-center !justify-center !gap-2 group/adder !opacity-100 !pointer-events-auto`}>
+          <Handle type="source" position={Position.Right} id="right-source" className={`!w-auto !h-auto !bg-transparent !border-none !rounded-none !left-[302px] !right-auto !top-1/2 !-translate-y-1/2 !transform-none !mt-3 !flex !flex-col !items-center !justify-center !gap-2 group/adder !opacity-100 !pointer-events-auto`}>
             <div className={`w-10 h-10 rounded-full bg-white dark:bg-slate-900 border-2 border-dashed flex items-center justify-center transition-colors shadow-sm ${isDragging ? "border-primary text-primary" : "border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 group-hover/adder:border-primary group-hover/adder:text-primary"}`}>
               <PlusIcon className="w-5 h-5" />
             </div>
@@ -121,9 +121,9 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
 const TriggerNode = ({ id, data, selected }: any) => {
   const { deleteElements } = useReactFlow()
   return (
-    <div className={`w-[280px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+    <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-sm bg-blue-500" />
-      <div className="p-4">
+      <div className="p-3">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-blue-500">{data.icon ? <data.icon className="w-5 h-5" /> : <Squares2X2Icon className="w-5 h-5" />}</div>
           <div className="flex-1 min-w-0">
@@ -173,7 +173,7 @@ const ConditionNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={d
 const DelayNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Wait for..."} colorClass="bg-amber-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} />
 
 const EndNode = ({ data, selected }: any) => (
-  <div className="w-[280px] flex flex-col items-center">
+  <div className="w-[256px] flex flex-col items-center">
     <div className={`w-6 h-6 rounded-full bg-slate-200 border-2 flex items-center justify-center mb-1 ${selected ? "border-slate-400 ring-2 ring-slate-200" : "border-slate-300"}`}>
       <div className="w-2 h-2 rounded-full bg-slate-400" />
       <Handle type="target" position={Position.Top} className="!w-2 !h-2 !bg-slate-300 !border-2 !border-white transition-colors opacity-0" />
@@ -191,9 +191,9 @@ const LoopBackNode = ({ id, data, selected }: any) => {
   const targetLabel = targetNode?.data?.label
 
   return (
-    <div className={`w-[280px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+    <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-sm bg-amber-500" />
-      <div className="p-4">
+      <div className="p-3">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-amber-500">
             <ArrowPathIcon className={`w-5 h-5 ${data.isConnecting ? "animate-spin" : ""}`} />
@@ -268,21 +268,21 @@ function CustomControls({ canUndo, canRedo, onUndo, onRedo }: { canUndo: boolean
   return (
     <Panel position="bottom-left" className="flex gap-2 items-end">
       <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center gap-1">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => zoomIn()} title="Zoom In">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => zoomIn()} title="Zoom In">
           <PlusIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => zoomOut()} title="Zoom Out">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => zoomOut()} title="Zoom Out">
           <MinusIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => fitView()} title="Fit View">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => fitView()} title="Fit View">
           <ArrowsPointingOutIcon className="h-4 w-4" />
         </Button>
       </div>
       <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-1">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onUndo} disabled={!canUndo} title="Undo">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onUndo} disabled={!canUndo} title="Undo">
           <ArrowUturnLeftIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onRedo} disabled={!canRedo} title="Redo">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onRedo} disabled={!canRedo} title="Redo">
           <ArrowUturnRightIcon className="h-4 w-4" />
         </Button>
       </div>
@@ -548,7 +548,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         type,
         position,
         data: { label },
-        width: 280,
+        width: 256,
       }
 
       let foundItem: any
@@ -575,8 +575,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         if (isBranching) {
           const branchY = newNode.position.y + 150
           const startX = newNode.position.x + 140 - (280 * 2 + 60) / 2
-          const addStepA: Node = { id: `add-step-${Date.now()}-A`, type: "addStep", position: { x: startX, y: branchY }, data: { label: "Add Step" }, draggable: false, width: 280, height: 100 }
-          const addStepB: Node = { id: `add-step-${Date.now()}-B`, type: "addStep", position: { x: startX + 280 + 60, y: branchY }, data: { label: "Add Step", isLastBranchNode: true }, draggable: false, width: 280, height: 100 }
+          const addStepA: Node = { id: `add-step-${Date.now()}-A`, type: "addStep", position: { x: startX, y: branchY }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
+          const addStepB: Node = { id: `add-step-${Date.now()}-B`, type: "addStep", position: { x: startX + 256 + 56, y: branchY }, data: { label: "Add Step", isLastBranchNode: true }, draggable: false, width: 256, height: 92 }
           const addBranchNode: Node = { id: `add-branch-${Date.now()}`, type: "addStep", position: { x: addStepB.position.x + 300, y: branchY + 20 }, data: { label: "Add Branch", isBranchAdder: true, siblingId: addStepB.id }, draggable: false, width: 60, height: 60 }
 
           const isSplitTest = (foundItem?.label || label) === "Split Test (A/B)"
@@ -592,7 +592,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         }
 
         if (!isTerminal) {
-          const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 280, height: 100 }
+          const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
           const newEdge: Edge = { id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }
           const layouted = performAutoLayout([newNode, addStepNode], [newEdge])
           setNodes(layouted)
@@ -829,7 +829,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             position: { x: newNode.position.x, y: newNode.position.y + 150 },
             data: { label: "Add Step" },
             draggable: false,
-            width: 280,
+            width: 256,
             height: 100,
           }
           nextNodes = nextNodes.concat(addStepNode)
@@ -859,7 +859,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const newNodes = nodes.filter((n) => n.id !== closestAddStepNode!.id).concat(newNode)
 
       if (!isTerminal) {
-        const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 280, height: 100 }
+        const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
         newNodes.push(addStepNode)
         updatedEdges.push({ id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } })
       }
@@ -924,27 +924,27 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         )}
       </div>
 
-      <div className={`bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 h-full flex flex-col shadow-xl z-20 transition-all duration-300 ${isSidebarCollapsed ? "w-16" : "w-80"}`}>
+      <div className={`bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 h-full flex flex-col shadow-xl z-20 transition-all duration-300 ${isSidebarCollapsed ? "w-14" : "w-72"}`}>
         <Tabs defaultValue="triggers" className="flex flex-col h-full">
           {!isSidebarCollapsed && (
             <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 space-y-3">
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600 shrink-0" onClick={() => setIsSidebarCollapsed(true)}>
+                <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-slate-600 shrink-0" onClick={() => setIsSidebarCollapsed(true)}>
                   <ChevronRightIcon className="h-4 w-4" />
                 </Button>
                 <div className="relative flex-1">
                   <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
-                  <Input placeholder="Search..." className="pl-9 bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  <Input placeholder="Search..." className="pl-9 bg-slate-50 text-slate-900 placeholder:text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-500" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
               </div>
               <TabsList className="w-full grid grid-cols-3">
-                <TabsTrigger value="triggers" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-500/20 dark:data-[state=active]:text-blue-300">
+                <TabsTrigger value="triggers" className="text-slate-600 dark:text-slate-300 data-[state=active]:bg-slate-50 data-[state=active]:text-slate-900 data-[state=active]:border-slate-200 dark:data-[state=active]:bg-slate-700">
                   Triggers
                 </TabsTrigger>
-                <TabsTrigger value="actions" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-500/20 dark:data-[state=active]:text-emerald-300">
+                <TabsTrigger value="actions" className="text-slate-600 dark:text-slate-300 data-[state=active]:bg-slate-50 data-[state=active]:text-slate-900 data-[state=active]:border-slate-200 dark:data-[state=active]:bg-slate-700">
                   Actions
                 </TabsTrigger>
-                <TabsTrigger value="logic" className="data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 dark:data-[state=active]:bg-amber-500/20 dark:data-[state=active]:text-amber-300">
+                <TabsTrigger value="logic" className="text-slate-600 dark:text-slate-300 data-[state=active]:bg-slate-50 data-[state=active]:text-slate-900 data-[state=active]:border-slate-200 dark:data-[state=active]:bg-slate-700">
                   Logic
                 </TabsTrigger>
               </TabsList>
@@ -953,14 +953,14 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
           {isSidebarCollapsed && (
             <div className="flex flex-col items-center py-2 space-y-2 border-b border-slate-200 dark:border-slate-700 overflow-visible">
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600" onClick={() => setIsSidebarCollapsed(false)}>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-slate-600" onClick={() => setIsSidebarCollapsed(false)}>
                 <ChevronLeftIcon className="h-4 w-4" />
               </Button>
               <TooltipProvider>
                 <div className="flex flex-col items-center justify-center gap-2 w-full">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-500/20 dark:data-[state=active]:text-blue-300">
+                      <TabsTrigger value="triggers" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto text-slate-500 dark:text-slate-300 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-500/30 dark:data-[state=active]:text-blue-200 dark:data-[state=active]:ring-1 dark:data-[state=active]:ring-blue-300/40">
                         <BoltIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>
@@ -968,7 +968,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="actions" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-500/20 dark:data-[state=active]:text-emerald-300">
+                      <TabsTrigger value="actions" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto text-slate-500 dark:text-slate-300 data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-500/30 dark:data-[state=active]:text-emerald-200 dark:data-[state=active]:ring-1 dark:data-[state=active]:ring-emerald-300/40">
                         <EnvelopeIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>
@@ -976,7 +976,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <TabsTrigger value="logic" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 dark:data-[state=active]:bg-amber-500/20 dark:data-[state=active]:text-amber-300">
+                      <TabsTrigger value="logic" className="w-10 h-10 p-0 !inline-flex !items-center !justify-center mx-auto text-slate-500 dark:text-slate-300 data-[state=active]:bg-amber-100 data-[state=active]:text-amber-700 dark:data-[state=active]:bg-amber-500/30 dark:data-[state=active]:text-amber-200 dark:data-[state=active]:ring-1 dark:data-[state=active]:ring-amber-300/40">
                         <FunnelIcon className="h-5 w-5" />
                       </TabsTrigger>
                     </TooltipTrigger>

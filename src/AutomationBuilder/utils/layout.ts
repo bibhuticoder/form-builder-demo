@@ -3,7 +3,7 @@ import { MarkerType } from 'reactflow';
 
 const X_GAP = 60;
 const Y_GAP = 150;
-const NODE_WIDTH = 280;
+const NODE_WIDTH = 256;
 const BRANCH_BUTTON_WIDTH = 100;
 const BRANCH_BUTTON_SPACING = 120;
 
@@ -11,7 +11,7 @@ function getNodeDimensions(node: Node) {
     if (node.type === 'addStep' && node.data?.isBranchAdder) {
         return { width: 0, height: 0 };
     }
-    return { width: 280, height: 100 };
+    return { width: 256, height: 92 };
 }
 
 export function restoreNodeIcons(nodes: Node[], toolboxItems: Array<{ items: Array<{ label: string; icon: any }> }>) {

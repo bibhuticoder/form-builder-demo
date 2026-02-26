@@ -43,8 +43,8 @@ export const JsonViewerPanel: React.FC<JsonViewerPanelProps> = ({ automationId, 
           </div>
         </div>
       ) : (
-        <button onClick={() => setIsExpanded(true)} className="bg-primary hover:bg-primary-hover text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all flex items-center gap-2" title="Open JSON Viewer" type="button">
-          <CodeBracketIcon className="w-5 h-5" />
+        <button onClick={() => setIsExpanded(true)} className="bg-primary hover:bg-primary-hover text-white rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all flex items-center gap-1.5" title="Open JSON Viewer" type="button">
+          <CodeBracketIcon className="w-4 h-4" />
           <ChevronUpIcon className="w-4 h-4" />
         </button>
       )}
