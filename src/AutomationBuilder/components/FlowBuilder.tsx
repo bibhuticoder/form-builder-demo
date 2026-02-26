@@ -4,19 +4,19 @@ import type { Edge, EdgeChange, EdgeProps, Node, NodeChange } from "reactflow"
 import "reactflow/dist/style.css"
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowsPointingOutIcon, ArrowPathIcon, BoltIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, MinusIcon, PlusIcon, Squares2X2Icon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
-import { Card } from "@/components/Card"
+import { AutomationCard } from "./shared/AutomationCard"
 import { Input } from "@/components/input"
 import { Button } from "@/components/Button"
 import { ScrollArea } from "@/components/scroll-area"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
-import { AutomationConfigModal } from "../AutomationConfigModal/AutomationConfigModal"
-import { JsonViewerPanel } from "../JsonViewerPanel"
-import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../../data/toolbox"
-import { useFlowHistory } from "../../hooks/useFlowHistory"
-import { performAutoLayout, restoreNodeIcons, ensureBranchAdders } from "../../utils/layout"
-import { deleteNodeAndDescendants } from "../../utils/nodeActions"
+import { AutomationConfigModal } from "./AutomationConfigModal"
+import { JsonViewerPanel } from "./JsonViewerPanel"
+import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../data/toolbox"
+import { useFlowHistory } from "../hooks/useFlowHistory"
+import { performAutoLayout, restoreNodeIcons, ensureBranchAdders } from "../utils/layout"
+import { deleteNodeAndDescendants } from "../utils/nodeActions"
 
 const AddStepNode = ({ data }: any) => {
   if (data?.isBranchAdder) return null
@@ -896,30 +896,32 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
         {showProTips && (
           <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-end pointer-events-none">
-            <Card className="p-3 bg-blue-50 border-blue-100 dark:bg-slate-900 dark:border-slate-700 shadow-lg pointer-events-auto max-w-2xl w-full mr-4">
+            <AutomationCard className="p-3 shadow-lg pointer-events-auto max-w-2xl w-full mr-4">
               <div className="flex gap-3 items-center">
-                <ExclamationCircleIcon className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
-                <div className="flex-1 text-xs text-blue-900 dark:text-slate-100 flex items-center gap-2">
+                <ExclamationCircleIcon className="w-5 h-5 text-primary shrink-0" />
+                <div className="flex-1 text-xs text-slate-900 dark:text-slate-100 flex items-center gap-2">
                   <span className="font-semibold">Pro Tip:</span>
-                  <span className="text-blue-700 dark:text-slate-300">{PRO_TIPS[currentTipIndex]}</span>
+                  <span className="text-slate-700 dark:text-slate-300">{PRO_TIPS[currentTipIndex]}</span>
                 </div>
-                <div className="flex items-center gap-1 border-l border-blue-200 dark:border-slate-700 pl-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800" onClick={prevTip}>
+
+                <div className="flex items-center gap-1 border-l border-slate-200 dark:border-slate-700 pl-2">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 border-0 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0" onClick={prevTip}>
                     <ChevronLeftIcon className="h-3 w-3" />
                   </Button>
-                  <span className="text-[10px] text-blue-500 dark:text-slate-400 font-medium w-8 text-center">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium w-8 text-center">
                     {currentTipIndex + 1} / {PRO_TIPS.length}
                   </span>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800" onClick={nextTip}>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 border-0 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0" onClick={nextTip}>
                     <ChevronRightIcon className="h-3 w-3" />
                   </Button>
                 </div>
-                <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-slate-200 hover:bg-blue-100 dark:hover:bg-slate-800 ml-1" onClick={() => setShowProTips(false)}>
+
+                <Button variant="ghost" size="icon" className="h-6 w-6 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 ml-1" onClick={() => setShowProTips(false)}>
                   <span className="sr-only">Dismiss</span>
                   <XMarkIcon className="h-4 w-4" />
                 </Button>
               </div>
-            </Card>
+            </AutomationCard>
           </div>
         )}
       </div>
