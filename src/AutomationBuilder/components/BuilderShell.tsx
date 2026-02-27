@@ -1,13 +1,14 @@
 import type { ReactNode } from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { ArrowLeftIcon, CalendarDaysIcon, ClockIcon, Cog6ToothIcon } from "@heroicons/react/24/outline"
+import { ArrowLeftIcon, CalendarDaysIcon, ClockIcon, Cog6ToothIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/input"
 import { Label } from "@/components/label"
 import { Switch } from "@/components/switch"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
 
 type BuilderShellProps = {
   automationId: string
@@ -72,17 +73,53 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                 <div className="text-base font-semibold text-slate-900 dark:text-slate-100">Automation Settings</div>
 
                 <div className="flex items-center justify-between py-1">
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Enable Automation</Label>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Enable Automation</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[300px] whitespace-normal">
+                          <p className="text-xs">When <strong>Inactive</strong>, this automation is paused. No contacts will enter or be processed by this automation, even if triggers occur.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <Switch checked={status === "active"} onCheckedChange={(checked) => setStatus(checked ? "active" : "inactive")} />
                 </div>
 
                 <div className="flex items-center justify-between py-1">
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Allow Re-entry</Label>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Allow Re-entry</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[300px] whitespace-normal">
+                          <p className="text-xs">If enabled, contacts can enter this automation multiple times. If disabled, contacts can only enter this automation once.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <Switch checked={allowReEntry} onCheckedChange={setAllowReEntry} />
                 </div>
 
                 <div className="flex items-center justify-between py-1">
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Stop on Response</Label>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-slate-200">Stop on Response</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[300px] whitespace-normal">
+                          <p className="text-xs">If enabled, the automation will stop for a contact if they reply to a message.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <Switch checked={stopOnResponse} onCheckedChange={setStopOnResponse} />
                 </div>
 
@@ -90,10 +127,22 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                      <ClockIcon className="h-3.5 w-3.5 text-slate-500" />
-                      Execution Timezone
-                    </Label>
+                    <div className="flex items-center gap-2">
+                      <Label className="text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                        <ClockIcon className="h-3.5 w-3.5 text-slate-500" />
+                        Execution Timezone
+                      </Label>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-[300px] whitespace-normal">
+                            <p className="text-xs">If enabled, this automation will only trigger during the set times relative to this timezone. If disabled, it will default to your account timezone set in your settings.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     <Switch checked={executionTimezoneEnabled} onCheckedChange={setExecutionTimezoneEnabled} />
                   </div>
                   <div className={executionTimezoneEnabled ? "" : "opacity-50 pointer-events-none"}>
@@ -114,10 +163,22 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                      <CalendarDaysIcon className="h-3.5 w-3.5 text-slate-500" />
-                      Send Window
-                    </Label>
+                    <div className="flex items-center gap-2">
+                      <Label className="text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                        <CalendarDaysIcon className="h-3.5 w-3.5 text-slate-500" />
+                        Send Window
+                      </Label>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-[300px] whitespace-normal">
+                            <p className="text-xs">Automations will only trigger during the set days and hours. Actions will wait until the next available day before triggering.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     <Switch checked={sendWindowEnabled} onCheckedChange={setSendWindowEnabled} />
                   </div>
 
