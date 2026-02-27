@@ -1,4 +1,4 @@
-import type { AutomationDefinition } from '../types';
+import type { AutomationDefinition } from '../types/automation';
 
 export function asRecord(value: unknown): Record<string, unknown> | null {
     if (!value || typeof value !== 'object') return null;

@@ -1,4 +1,4 @@
-import type { AutomationValidationError, AutomationValidationResult } from '../types';
+import type { AutomationValidationError, AutomationValidationResult } from '../types/automation';
 
 export class AutomationValidationResultBuilder {
     private errors: AutomationValidationError[] = [];

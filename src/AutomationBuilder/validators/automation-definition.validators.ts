@@ -1,5 +1,5 @@
-import type { AutomationDefinition } from '../types';
-import type { AutomationValidationResult } from '../types';
+import type { AutomationDefinition } from '../types/automation';
+import type { AutomationValidationResult } from '../types/automation';
 import { AutomationValidationResultBuilder } from './validation-result-builder';
 import { hasAutomationDefinitionShape, unwrapAutomationDefinition } from './automation-definition.payload';
 import { validateDefinitionGraph } from './automation-definition.graph';

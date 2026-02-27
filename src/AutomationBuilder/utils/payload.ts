@@ -5,7 +5,7 @@ import type {
     AutomationProductionNode,
     AutomationProductionEdge,
     AutomationStatus,
-} from '../types';
+} from '../types/automation';
 import { TOOLBOX_ITEMS } from '../constants/toolbox';
 
 function isBuilderOnlyNode(node: Node) {

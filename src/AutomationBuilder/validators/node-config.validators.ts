@@ -1,5 +1,5 @@
 import type { Node } from 'reactflow';
-import type { AutomationValidationError } from '../types';
+import type { AutomationValidationError } from '../types/automation';
 
 const TRIGGER_KINDS = new Set([
     'form_submitted',

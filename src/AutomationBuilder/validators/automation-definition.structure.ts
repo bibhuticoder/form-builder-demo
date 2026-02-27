@@ -1,4 +1,4 @@
-import type { AutomationDefinition } from '../types';
+import type { AutomationDefinition } from '../types/automation';
 import { AutomationValidationResultBuilder } from './validation-result-builder';
 import { validateNodeInteractiveData } from './node-config.validators';
 
