@@ -1,0 +1,64 @@
+import React, { useRef } from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { CanvasToolbar } from "./CanvasToolbar";
+import { EmptyState } from "./EmptyState";
+import EmailRenderer from "../EmailRenderer/EmailRenderer";
+import { CANVAS_DROPPABLE_ID } from "../../types/dnd";
+import { useEmailBuilder } from "../../context";
+
+export interface CanvasProps {
+  dragOverId?: string | null;
+  selectedBlockId?: string | null;
+  onSelectBlock?: (id: string | null) => void;
+}
+
+export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedBlockId, onSelectBlock }) => {
+  const { jsonContent, canvasWidth, setCanvasWidth } = useEmailBuilder();
+  const canvasRef = useRef<HTMLDivElement | null>(null);
+
+  const { setNodeRef, isOver } = useDroppable({ id: CANVAS_DROPPABLE_ID });
+
+  const isEmpty = jsonContent.blocks.length === 0;
+
+  return (
+    <div className="flex-1 pt-2 flex flex-col gap-2">
+      <CanvasToolbar canvasWidth={canvasWidth} onCanvasWidthChange={setCanvasWidth} />
+
+      <div
+        className="flex-1 overflow-auto h-full p-16"
+        style={{ backgroundColor: jsonContent.templateSettings.settings.backgroundColor || '#f4f4f4' }}
+        onClick={() => onSelectBlock?.(null)}
+      >
+        <div
+          ref={(node) => {
+            canvasRef.current = node;
+            setNodeRef(node);
+          }}
+          className="relative mx-auto h-full"
+          style={{
+            width: canvasWidth,
+            minHeight: "400px",
+          }}
+        >
+          <div className="h-full rounded bg-white dark:bg-gray-800 overflow-auto shadow-md">
+            {isEmpty ? (
+              <div className="h-full flex items-center justify-center p-8">
+                <EmptyState isOver={isOver} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <EmailRenderer
+                  templateData={jsonContent}
+                  dragOverId={dragOverId}
+                  selectedBlockId={selectedBlockId}
+                  onSelectBlock={onSelectBlock}
+                  canvasWidth={canvasWidth}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
