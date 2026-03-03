@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { EmailTemplate, EmailBlock, TemplateSettings, EmailBreakpointId, ResponsiveBlockStyle, BlockStyleObject } from "../types";
+import { EditorView } from "../types/enums";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useHistory } from "../hooks/useHistory";
 import { resolveBreakpointStyle, getActiveBreakpoint } from "../utils/styleUtils";
@@ -10,11 +11,13 @@ interface EmailBuilderContextType {
   activeSubElement: string | null;
   canvasWidth: number;
   activeBreakpoint: EmailBreakpointId;
+  activeView: EditorView;
 
   // Core setters
   setJsonContent: (content: EmailTemplate) => void;
   setActiveSubElement: (subElement: string | null) => void;
   setCanvasWidth: (width: number) => void;
+  setActiveView: (view: EditorView) => void;
 
   // Template-level operations
   updateTemplateName: (name: string) => void;
@@ -63,6 +66,7 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
 
   const [activeSubElement, setActiveSubElement] = useState<string | null>(null);
   const [canvasWidth, setCanvasWidth] = useState<number>(600);
+  const [activeView, setActiveView] = useState<EditorView>(EditorView.DESIGN);
 
   const activeBreakpoint = useMemo<EmailBreakpointId>(() => getActiveBreakpoint(canvasWidth), [canvasWidth]);
 
@@ -113,24 +117,31 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
     });
   }, [setJsonContentState]);
 
-  const updateBlock = useCallback((blockId: string, updates: Partial<EmailBlock>) => {
-    setJsonContentState((old) => ({
-      ...old,
-      blocks: old.blocks.map((block) =>
-        block.id === blockId ? ({ ...block, ...updates } as EmailBlock) : block
-      ),
-    }));
-  }, [setJsonContentState]);
+  // Recursive helpers
+  const recursiveUpdate = (blocks: EmailBlock[], blockId: string, updates: Partial<EmailBlock>): EmailBlock[] => {
+    return blocks.map((block) => {
+      if (block.id === blockId) {
+        return { ...block, ...updates } as EmailBlock;
+      }
+      if (block.type === 'columns') {
+        const columnsBlock = block as any;
+        return {
+          ...block,
+          columns: columnsBlock.columns.map((col: any) => ({
+            ...col,
+            blocks: recursiveUpdate(col.blocks, blockId, updates)
+          }))
+        } as EmailBlock;
+      }
+      return block;
+    });
+  };
 
-  const updateBlockStyleBatch = useCallback((blockId: string, styleUpdates: Record<string, unknown>) => {
-    setJsonContentState((old) => ({
-      ...old,
-      blocks: old.blocks.map((block) => {
-        if (block.id !== blockId) return block;
-
+  const recursiveStyleUpdate = (blocks: EmailBlock[], blockId: string, activeBreakpoint: EmailBreakpointId, styleUpdates: Record<string, unknown>): EmailBlock[] => {
+    return blocks.map((block) => {
+      if (block.id === blockId) {
         const currentStyle: ResponsiveBlockStyle = block.style || {};
         const currentBreakpointStyleOrRef = currentStyle[activeBreakpoint];
-
         let newBreakpointStyle: BlockStyleObject;
 
         if (typeof currentBreakpointStyleOrRef === 'string') {
@@ -147,14 +158,57 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
             [activeBreakpoint]: newBreakpointStyle
           }
         } as EmailBlock;
-      }),
+      }
+      if (block.type === 'columns') {
+        const columnsBlock = block as any;
+        return {
+          ...block,
+          columns: columnsBlock.columns.map((col: any) => ({
+            ...col,
+            blocks: recursiveStyleUpdate(col.blocks, blockId, activeBreakpoint, styleUpdates)
+          }))
+        } as EmailBlock;
+      }
+      return block;
+    });
+  };
+
+  const recursiveDelete = (blocks: EmailBlock[], blockId: string): EmailBlock[] => {
+    return blocks
+      .filter((block) => block.id !== blockId)
+      .map((block) => {
+        if (block.type === 'columns') {
+          const columnsBlock = block as any;
+          return {
+            ...block,
+            columns: columnsBlock.columns.map((col: any) => ({
+              ...col,
+              blocks: recursiveDelete(col.blocks, blockId)
+            }))
+          } as EmailBlock;
+        }
+        return block;
+      });
+  };
+
+  const updateBlock = useCallback((blockId: string, updates: Partial<EmailBlock>) => {
+    setJsonContentState((old) => ({
+      ...old,
+      blocks: recursiveUpdate(old.blocks, blockId, updates),
+    }));
+  }, [setJsonContentState]);
+
+  const updateBlockStyleBatch = useCallback((blockId: string, styleUpdates: Record<string, unknown>) => {
+    setJsonContentState((old) => ({
+      ...old,
+      blocks: recursiveStyleUpdate(old.blocks, blockId, activeBreakpoint, styleUpdates),
     }));
   }, [activeBreakpoint, setJsonContentState]);
 
   const deleteBlock = useCallback((blockId: string) => {
     setJsonContentState((old) => ({
       ...old,
-      blocks: old.blocks.filter((block) => block.id !== blockId),
+      blocks: recursiveDelete(old.blocks, blockId),
     }));
 
     if (activeSubElement === blockId) {
@@ -190,6 +244,8 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
       canUndo,
       canRedo,
       historyPointer: pointer,
+      activeView,
+      setActiveView,
     }),
     [
       jsonContent,
@@ -197,6 +253,8 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
       canvasWidth,
       activeBreakpoint,
       setJsonContent,
+      setActiveSubElement,
+      setCanvasWidth,
       updateTemplateName,
       updateTemplateSettings,
       addBlock,
@@ -208,7 +266,8 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
       redo,
       canUndo,
       canRedo,
-      pointer
+      pointer,
+      activeView,
     ]
   );
 

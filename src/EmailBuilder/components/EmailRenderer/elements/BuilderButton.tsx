@@ -18,7 +18,7 @@ export default function BuilderButton({ block, isSelected, activeSubElement }: R
         <button
           type="button"
           style={getBlockContentStyles(block.style, activeBreakpoint)}
-          className={`px-6 py-3 bg-primary text-white rounded font-medium text-sm transition-colors focus:outline-none inline-block ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+          className={`px-6 py-3 bg-primary text-white rounded font-medium text-xs transition-colors focus:outline-none inline-block ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
         >
           {block.label}
         </button>

@@ -1,0 +1,79 @@
+/**
+ * Canvas Styles
+ * Dedicated styles for the email builder canvas to ensure proper visual hierarchy
+ * and consistent rendering of email elements
+ */
+
+/* ============================================================================
+   HEADING STYLES
+   ============================================================================ */
+
+/* H1 - Largest heading */
+.canvas-content h1 {
+    font-size: 2.25rem;
+    /* 36px */
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+/* H2 - Second level heading */
+.canvas-content h2 {
+    font-size: 1.875rem;
+    /* 30px */
+    font-weight: 700;
+    line-height: 2.25rem;
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+/* H3 - Third level heading */
+.canvas-content h3 {
+    font-size: 1.5rem;
+    /* 24px */
+    font-weight: 600;
+    line-height: 2rem;
+    margin: 0;
+}
+
+/* H4 - Fourth level heading */
+.canvas-content h4 {
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 600;
+    line-height: 1.75rem;
+    margin: 0;
+}
+
+/* H5 - Fifth level heading */
+.canvas-content h5 {
+    font-size: 1.125rem;
+    /* 18px */
+    font-weight: 600;
+    line-height: 1.75rem;
+    margin: 0;
+}
+
+/* H6 - Smallest heading */
+.canvas-content h6 {
+    font-size: 1rem;
+    /* 16px */
+    font-weight: 600;
+    line-height: 1.5rem;
+    margin: 0;
+}
+
+/* Base resets for elements inside canvas to prevent tailwind preflight from flattening headings */
+.canvas-content p {
+    margin: 0;
+}
+
+.canvas-content hr {
+    margin: 1rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .canvas-content hr {
+    border-color: rgba(255, 255, 255, 0.1);
+}

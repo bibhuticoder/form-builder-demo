@@ -11,7 +11,7 @@ export default function BuilderHtml({ block, isSelected, activeSubElement }: Rea
   return (
     <BuilderBlockWrapper block={block} isSelected={isSelected} activeSubElement={activeSubElement}>
       <div
-        className={`text-sm ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1 rounded' : ''}`}
+        className={`text-xs ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1 rounded' : ''}`}
         dangerouslySetInnerHTML={{ __html: block.content }}
       />
     </BuilderBlockWrapper>
