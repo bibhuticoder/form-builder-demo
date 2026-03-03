@@ -2,9 +2,8 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react"
 import ReactFlow, { Background, BaseEdge, EdgeLabelRenderer, MarkerType, Panel, Position, ReactFlowInstance, applyEdgeChanges, applyNodeChanges, addEdge, getSmoothStepPath, Handle, useReactFlow } from "reactflow"
 import type { Edge, EdgeChange, EdgeProps, Node, NodeChange } from "reactflow"
 import "reactflow/dist/style.css"
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowsPointingOutIcon, ArrowPathIcon, BoltIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, MinusIcon, PlusIcon, Squares2X2Icon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline"
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { AutomationCard } from "./AutomationCard"
+import { ArrowUturnLeftIcon, ArrowUturnRightIcon, ArrowsPointingOutIcon, ArrowPathIcon, BoltIcon, ChevronLeftIcon, ChevronRightIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, MinusIcon, PlusIcon, Squares2X2Icon, TrashIcon } from "@heroicons/react/24/outline"
+import { ProTipBanner } from "./ProTipBanner"
 import { Input } from "@/components/input"
 import { Button } from "@/components/Button"
 import { ScrollArea } from "@/components/scroll-area"
@@ -65,7 +64,7 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
             </div>
             {!isTargetable && (
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger asChild onMouseDown={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()} onClick={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()}>
                   <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 text-slate-500 dark:text-slate-400 transition-opacity">
                     <EllipsisVerticalIcon className="h-5 w-5" />
                   </Button>
@@ -132,7 +131,7 @@ const TriggerNode = ({ id, data, selected }: any) => {
           </div>
           {!data.isTargetable && (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild onMouseDown={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()} onClick={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()}>
                 <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 text-slate-500 dark:text-slate-400 transition-opacity">
                   <EllipsisVerticalIcon className="h-5 w-5" />
                 </Button>
@@ -894,36 +893,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
           <CustomControls canUndo={past.length > 0} canRedo={future.length > 0} onUndo={onUndo} onRedo={onRedo} />
         </ReactFlow>
 
-        {showProTips && (
-          <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-end pointer-events-none">
-            <AutomationCard className="p-3 shadow-lg pointer-events-auto max-w-2xl w-full mr-4">
-              <div className="flex gap-3 items-center">
-                <ExclamationCircleIcon className="w-5 h-5 text-primary shrink-0" />
-                <div className="flex-1 text-xs text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                  <span className="font-semibold">Pro Tip:</span>
-                  <span className="text-slate-700 dark:text-slate-300">{PRO_TIPS[currentTipIndex]}</span>
-                </div>
-
-                <div className="flex items-center gap-1 border-l border-slate-200 dark:border-slate-700 pl-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 border-0 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0" onClick={prevTip}>
-                    <ChevronLeftIcon className="h-3 w-3" />
-                  </Button>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium w-8 text-center">
-                    {currentTipIndex + 1} / {PRO_TIPS.length}
-                  </span>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 border-0 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0" onClick={nextTip}>
-                    <ChevronRightIcon className="h-3 w-3" />
-                  </Button>
-                </div>
-
-                <Button variant="ghost" size="icon" className="h-6 w-6 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 ml-1" onClick={() => setShowProTips(false)}>
-                  <span className="sr-only">Dismiss</span>
-                  <XMarkIcon className="h-4 w-4" />
-                </Button>
-              </div>
-            </AutomationCard>
-          </div>
-        )}
+        {showProTips && <ProTipBanner tip={PRO_TIPS[currentTipIndex]} currentIndex={currentTipIndex} total={PRO_TIPS.length} onPrev={prevTip} onNext={nextTip} onDismiss={() => setShowProTips(false)} />}
       </div>
 
       <div className={`bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 h-full flex flex-col shadow-xl z-20 transition-all duration-300 ${isSidebarCollapsed ? "w-14" : "w-72"}`}>

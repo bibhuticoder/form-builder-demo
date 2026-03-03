@@ -81,7 +81,9 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                           <QuestionMarkCircleIcon className="h-3.5 w-3.5 text-slate-400 cursor-help" />
                         </TooltipTrigger>
                         <TooltipContent className="max-w-[300px] whitespace-normal">
-                          <p className="text-xs">When <strong>Inactive</strong>, this automation is paused. No contacts will enter or be processed by this automation, even if triggers occur.</p>
+                          <p className="text-xs">
+                            When <strong>Inactive</strong>, this automation is paused. No contacts will enter or be processed by this automation, even if triggers occur.
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
