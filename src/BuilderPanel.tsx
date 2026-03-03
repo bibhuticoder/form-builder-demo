@@ -5,9 +5,12 @@ import ComponentShowcase from "./ComponentShowcase";
 import FormBuilder from "./BuilderPanelTabs/FormBuilder/FormBuilder";
 import EmailBuilder from "./BuilderPanelTabs/EmailBuilder/EmailBuilder";
 
+interface BuilderPanelProps {
+  initialTab?: string;
+}
 
-export default function BuilderPanel() {
-  const [activeTab, setActiveTab] = useState<string>("form-builder");
+export default function BuilderPanel({ initialTab = "form-builder" }: BuilderPanelProps) {
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
 
   const handleTabClick = (value: string) => {
     setActiveTab(value);

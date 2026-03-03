@@ -1,0 +1,51 @@
+[
+    {
+        "id": "email_folder_1",
+        "type": "folder",
+        "name": "Onboarding Emails",
+        "children": [
+            {
+                "id": "email_item_1",
+                "type": "email",
+                "name": "Welcome to Cleave",
+                "status": "published",
+                "lastUpdated": "2 hours ago"
+            },
+            {
+                "id": "email_item_2",
+                "type": "email",
+                "name": "Getting Started Guide",
+                "status": "published",
+                "lastUpdated": "1 week ago"
+            }
+        ]
+    },
+    {
+        "id": "email_folder_2",
+        "type": "folder",
+        "name": "Marketing Campaigns",
+        "children": [
+            {
+                "id": "email_item_3",
+                "type": "email",
+                "name": "Q1 Newsletter",
+                "status": "draft",
+                "lastUpdated": "2 months ago"
+            },
+            {
+                "id": "email_item_4",
+                "type": "email",
+                "name": "Black Friday Sale",
+                "status": "published",
+                "lastUpdated": "1 day ago"
+            }
+        ]
+    },
+    {
+        "id": "email_item_5",
+        "type": "email",
+        "name": "Password Reset Template",
+        "status": "published",
+        "lastUpdated": "3 days ago"
+    }
+]

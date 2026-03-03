@@ -1,5 +1,6 @@
 import mockDataRaw from './automations.json';
 import formsDataRaw from './forms.json';
+import emailsDataRaw from './emails.json';
 import { Folder, FileItem, FileType } from '../FileExplorer/types';
 
 export const mockFolders: Folder[] = [];
@@ -7,6 +8,9 @@ export const mockFiles: FileItem[] = [];
 
 export const mockFormFolders: Folder[] = [];
 export const mockFormFiles: FileItem[] = [];
+
+export const mockEmailFolders: Folder[] = [];
+export const mockEmailFiles: FileItem[] = [];
 
 const processNode = (
     node: any,
@@ -39,3 +43,5 @@ const processNode = (
 mockDataRaw.forEach((node: any) => processNode(node, mockFolders, mockFiles, null));
 // @ts-ignore
 formsDataRaw.forEach((node: any) => processNode(node, mockFormFolders, mockFormFiles, null));
+// @ts-ignore
+emailsDataRaw.forEach((node: any) => processNode(node, mockEmailFolders, mockEmailFiles, null));

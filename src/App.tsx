@@ -4,6 +4,8 @@ import Home from './pages/Home'
 import Forms from './pages/Forms'
 import Automations from './pages/Automations'
 import FormBuilder from './pages/FormBuilder'
+import Emails from './pages/Emails'
+import EmailBuilder from './pages/EmailBuilder'
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="forms" element={<Forms />} />
           <Route path="automations" element={<Automations />} />
+          <Route path="emails" element={<Emails />} />
           <Route path="forms/:id" element={<FormBuilder />} />
+          <Route path="emails/:id" element={<EmailBuilder />} />
         </Route>
       </Routes>
     </Router>
