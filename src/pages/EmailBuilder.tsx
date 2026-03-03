@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import BuilderPanel from '../BuilderPanel'
+import EmailBuilderComponent from '../EmailBuilder/EmailBuilder'
 
 export default function EmailBuilder() {
     const { id } = useParams()
@@ -16,7 +16,7 @@ export default function EmailBuilder() {
                 </h2>
             </div>
             <div className="flex-1 overflow-hidden relative">
-                <BuilderPanel initialTab="email-builder" />
+                <EmailBuilderComponent />
             </div>
         </div>
     )

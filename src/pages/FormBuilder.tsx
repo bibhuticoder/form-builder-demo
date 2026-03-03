@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import BuilderPanel from '../BuilderPanel'
+import FormBuilderComponent from '../FormBuilder/FormBuilder'
 
 export default function FormBuilder() {
     const { id } = useParams()
@@ -16,7 +16,7 @@ export default function FormBuilder() {
                 </h2>
             </div>
             <div className="flex-1 overflow-hidden relative">
-                <BuilderPanel />
+                <FormBuilderComponent />
             </div>
         </div>
     )

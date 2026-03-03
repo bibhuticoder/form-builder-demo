@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { HomeIcon, DocumentTextIcon, BoltIcon, EnvelopeIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, DocumentTextIcon, EnvelopeIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { ThemeToggle } from './components'
 
 const navItems = [
     { name: 'Home', href: '/', icon: HomeIcon },
     { name: 'Forms', href: '/forms', icon: DocumentTextIcon },
-    { name: 'Automations', href: '/automations', icon: BoltIcon },
+    // { name: 'Automations', href: '/automations', icon: BoltIcon },
     { name: 'Emails', href: '/emails', icon: EnvelopeIcon },
 ]
 
