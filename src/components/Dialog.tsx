@@ -1,6 +1,8 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+
+const DIALOG_CLOSE_ANIMATION_MS = 200;
 
 /**
  * Props for the Dialog component
@@ -62,12 +64,30 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
   className = "",
   closeOnBackdropClick = true,
 }) => {
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isVisible, setIsVisible] = useState(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      requestAnimationFrame(() => setIsVisible(true));
+      return;
+    }
+
+    setIsVisible(false);
+    const timeout = setTimeout(() => {
+      setShouldRender(false);
+    }, DIALOG_CLOSE_ANIMATION_MS);
+
+    return () => clearTimeout(timeout);
+  }, [isOpen]);
+
   /**
    * Prevent background scroll when dialog is open
    * Adds 'overflow-hidden' to body element
    */
   useEffect(() => {
-    if (isOpen) {
+    if (shouldRender) {
       // Store original overflow value
       const originalOverflow = document.body.style.overflow;
       // Prevent scrolling
@@ -78,10 +98,10 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
         document.body.style.overflow = originalOverflow;
       };
     }
-  }, [isOpen]);
+  }, [shouldRender]);
 
   // If dialog is not open, don't render anything
-  if (!isOpen) {
+  if (!shouldRender) {
     return null;
   }
 
@@ -89,7 +109,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
    * Handle backdrop click to close dialog
    * Only triggers if closeOnBackdropClick is true
    */
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // Ensure the click is on the backdrop itself, not the dialog content
     if (e.target === e.currentTarget && closeOnBackdropClick && onClose) {
       onClose();
@@ -109,21 +129,23 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
     <>
       {/* Backdrop overlay - semi-transparent background */}
       <div
-        className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-200"
-        onClick={handleBackdropClick}
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-200 ${isVisible ? "bg-opacity-50" : "bg-opacity-0"}`}
         role="presentation"
       />
 
       {/* Dialog container - centered on screen */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={handleOutsideClick}>
         {/* Dialog panel - the actual popup */}
         <div
           className={`
             bg-white dark:bg-gray-800 rounded-lg shadow-lg
             max-w-lg w-full max-h-[90vh] overflow-y-auto
             border border-gray-200 dark:border-gray-700
+            transition-all duration-200 ease-out
+            ${isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"}
             ${className}
           `}
+          onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
         >

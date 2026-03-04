@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Dialog } from "@/components";
+import { Button } from "@/components/Button";
+import { Dialog } from "@/components/Dialog";
 import { CodeBracketIcon, PaperAirplaneIcon, QuestionMarkCircleIcon, PaintBrushIcon } from "@heroicons/react/24/outline";
 import { useEmailBuilder } from "../../context";
 import { EmailSettingsTrigger } from "../EmailSettings/EmailSettingsTrigger";
@@ -60,7 +61,7 @@ export const TopBar: React.FC = () => {
             <div className="relative flex items-center" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
               <QuestionMarkCircleIcon className="w-4 h-4 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 cursor-help transition-colors" />
               {showTooltip && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-2 bg-gray-900 text-white text-xs rounded shadow-lg z-50">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-2 bg-primary text-white text-xs rounded shadow-lg ring-1 ring-primary/60 z-50">
                   Sending your first email as plain text can significantly improve deliverability rates. It feels more personal and is less likely to be flagged as promotion or spam by email providers.
                 </div>
               )}
@@ -104,8 +105,8 @@ export const TopBar: React.FC = () => {
             }
             footer={
               <div className="flex justify-end gap-2">
-                <Button variant="secondary" onClick={() => setIsTestSendOpen(false)}>Cancel</Button>
-                <Button variant="primary" onClick={() => setIsTestSendOpen(false)}>Send Test</Button>
+                <Button variant="secondary" className="h-8 text-xs" onClick={() => setIsTestSendOpen(false)}>Cancel</Button>
+                <Button variant="primary" className="h-8 text-xs" onClick={() => setIsTestSendOpen(false)}>Send Test</Button>
               </div>
             }
           />
