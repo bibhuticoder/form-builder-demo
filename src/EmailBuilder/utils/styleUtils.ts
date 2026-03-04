@@ -88,6 +88,10 @@ export const getBlockContainerStyles = (style: ResponsiveBlockStyle | undefined,
     borderWidth: formatUnit(resolvedStyle.borderWidth),
     borderColor: resolvedStyle.borderColor,
     borderRadius: formatUnit(resolvedStyle.borderRadius),
+    borderTopLeftRadius: formatUnit(resolvedStyle.borderTopLeftRadius),
+    borderTopRightRadius: formatUnit(resolvedStyle.borderTopRightRadius),
+    borderBottomRightRadius: formatUnit(resolvedStyle.borderBottomRightRadius),
+    borderBottomLeftRadius: formatUnit(resolvedStyle.borderBottomLeftRadius),
     textAlign: resolvedStyle.textAlign,
   };
 };

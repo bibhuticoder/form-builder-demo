@@ -52,6 +52,10 @@ export type BlockStyleObject = {
   borderWidth?: string | number;
   borderColor?: string;
   borderRadius?: string | number;
+  borderTopLeftRadius?: string | number;
+  borderTopRightRadius?: string | number;
+  borderBottomRightRadius?: string | number;
+  borderBottomLeftRadius?: string | number;
 
   // Display
   display?: 'block' | 'inline' | 'inline-block' | 'none';

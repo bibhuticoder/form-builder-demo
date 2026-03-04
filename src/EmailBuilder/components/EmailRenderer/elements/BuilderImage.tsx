@@ -19,6 +19,7 @@ export default function BuilderImage({ block, isSelected, activeSubElement }: Re
           src={block.src}
           alt={block.alt || "Image"}
           className={`w-full h-auto ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1' : ''}`}
+          style={{ borderRadius: 'inherit', display: 'block' }}
         />
       ) : (
         <div className={`w-full h-40 bg-gray-100 dark:bg-gray-700 flex flex-col items-center justify-center rounded ${isSelected && activeSubElement === 'content' ? 'ring-1 ring-primary ring-offset-1' : ''}`}>
