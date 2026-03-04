@@ -1,36 +1,36 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import React, { ReactNode, useEffect, useState } from "react"
+import { createPortal } from "react-dom"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 
-const DIALOG_CLOSE_ANIMATION_MS = 200;
+const DIALOG_CLOSE_ANIMATION_MS = 200
 
 /**
  * Props for the Dialog component
  */
 interface DialogProps {
   /** The title/header text displayed at the top of the dialog */
-  header: string | ReactNode;
+  header: string | ReactNode
 
   /** Optional: Subtitle/description displayed below the header */
-  subtitle?: string | ReactNode;
+  subtitle?: string | ReactNode
 
   /** The main content/body of the dialog */
-  body: ReactNode;
+  body: ReactNode
 
   /** Optional: Custom footer content (e.g., action buttons) */
-  footer?: ReactNode;
+  footer?: ReactNode
 
   /** Optional: Callback when the dialog is closed */
-  onClose?: () => void;
+  onClose?: () => void
 
   /** Optional: Whether the dialog should be closable via the X button */
-  isCloseable?: boolean;
+  isCloseable?: boolean
 
   /** Optional: CSS class for custom styling */
-  className?: string;
+  className?: string
 
   /** Optional: Whether clicking outside the dialog closes it */
-  closeOnBackdropClick?: boolean;
+  closeOnBackdropClick?: boolean
 }
 
 /**
@@ -53,34 +53,24 @@ interface DialogProps {
  *   </>
  * );
  */
-export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
-  header,
-  subtitle,
-  body,
-  footer,
-  isOpen,
-  onClose,
-  isCloseable = true,
-  className = "",
-  closeOnBackdropClick = true,
-}) => {
-  const [shouldRender, setShouldRender] = useState(isOpen);
-  const [isVisible, setIsVisible] = useState(isOpen);
+export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, subtitle, body, footer, isOpen, onClose, isCloseable = true, className = "", closeOnBackdropClick = true }) => {
+  const [shouldRender, setShouldRender] = useState(isOpen)
+  const [isVisible, setIsVisible] = useState(isOpen)
 
   useEffect(() => {
     if (isOpen) {
-      setShouldRender(true);
-      requestAnimationFrame(() => setIsVisible(true));
-      return;
+      setShouldRender(true)
+      requestAnimationFrame(() => setIsVisible(true))
+      return
     }
 
-    setIsVisible(false);
+    setIsVisible(false)
     const timeout = setTimeout(() => {
-      setShouldRender(false);
-    }, DIALOG_CLOSE_ANIMATION_MS);
+      setShouldRender(false)
+    }, DIALOG_CLOSE_ANIMATION_MS)
 
-    return () => clearTimeout(timeout);
-  }, [isOpen]);
+    return () => clearTimeout(timeout)
+  }, [isOpen])
 
   /**
    * Prevent background scroll when dialog is open
@@ -89,20 +79,20 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
   useEffect(() => {
     if (shouldRender) {
       // Store original overflow value
-      const originalOverflow = document.body.style.overflow;
+      const originalOverflow = document.body.style.overflow
       // Prevent scrolling
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "hidden"
 
       // Cleanup: restore original overflow when dialog closes
       return () => {
-        document.body.style.overflow = originalOverflow;
-      };
+        document.body.style.overflow = originalOverflow
+      }
     }
-  }, [shouldRender]);
+  }, [shouldRender])
 
   // If dialog is not open, don't render anything
   if (!shouldRender) {
-    return null;
+    return null
   }
 
   /**
@@ -112,26 +102,23 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // Ensure the click is on the backdrop itself, not the dialog content
     if (e.target === e.currentTarget && closeOnBackdropClick && onClose) {
-      onClose();
+      onClose()
     }
-  };
+  }
 
   /**
    * Handle close button click
    */
   const handleClose = () => {
     if (isCloseable && onClose) {
-      onClose();
+      onClose()
     }
-  };
+  }
 
   return createPortal(
     <>
       {/* Backdrop overlay - semi-transparent background */}
-      <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-200 ${isVisible ? "bg-opacity-50" : "bg-opacity-0"}`}
-        role="presentation"
-      />
+      <div className={`fixed inset-0 z-40 bg-black transition-opacity duration-200 ${isVisible ? "bg-opacity-50" : "bg-opacity-0"}`} role="presentation" />
 
       {/* Dialog container - centered on screen */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={handleOutsideClick}>
@@ -153,50 +140,32 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({
           <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
             {/* Header content */}
             <div className="flex-1">
-              {typeof header === "string" ? (
-                <h2 className="text-md font-semibold text-gray-900 dark:text-white">
-                  {header}
-                </h2>
-              ) : (
-                header
-              )}
+              {typeof header === "string" ? <h2 className="text-md font-semibold text-gray-900 dark:text-white">{header}</h2> : header}
 
               {/* Optional subtitle */}
               {subtitle && (
                 <div className="mt-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {subtitle}
-                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{subtitle}</p>
                 </div>
               )}
             </div>
 
             {/* Close button */}
             {isCloseable && (
-              <button
-                onClick={handleClose}
-                className="ml-4 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                aria-label="Close dialog"
-              >
+              <button onClick={handleClose} className="ml-4 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" aria-label="Close dialog">
                 <XMarkIcon className="w-6 h-6" />
               </button>
             )}
           </div>
 
           {/* Body section - main content */}
-          <div className="px-3 py-4 text-gray-700 dark:text-gray-300">
-            {body}
-          </div>
+          <div className="px-3 py-4 text-gray-700 dark:text-gray-300">{body}</div>
 
           {/* Footer section - optional actions */}
-          {footer && (
-            <div className="px-3 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-              {footer}
-            </div>
-          )}
+          {footer && <div className="px-3 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">{footer}</div>}
         </div>
       </div>
     </>,
-    document.body
-  );
-};
+    document.body,
+  )
+}
