@@ -18,6 +18,8 @@ export interface BlockComponentProps {
   block: EmailBlock;
   isSelected?: boolean;
   activeSubElement?: string | null;
+  selectedBlockId?: string | null;
+  onSelectBlock?: (id: string) => void;
 }
 
 export const blockRegistry: Record<EmailBlock["type"], React.FC<BlockComponentProps>> = {

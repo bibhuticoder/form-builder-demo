@@ -48,7 +48,7 @@ describe('BuilderColumns', () => {
         expect(placeholders).toHaveLength(3);
     });
 
-    it('shows block type labels for nested blocks', () => {
+    it('renders nested block content inside columns', () => {
         render(
             <MockEmailBuilderProvider>
                 <BuilderColumns
@@ -70,7 +70,7 @@ describe('BuilderColumns', () => {
                 />
             </MockEmailBuilderProvider>
         );
-        expect(screen.getByText('text')).toBeTruthy();
+        expect(screen.getByText('Hello')).toBeTruthy();
         expect(screen.getByText('Drop blocks here')).toBeTruthy();
     });
 });

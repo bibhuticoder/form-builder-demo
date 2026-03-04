@@ -103,6 +103,28 @@ export const EmailBuilderProvider: React.FC<EmailBuilderProviderProps> = ({ init
       }
 
       if (typeof position === "string") {
+        if (position.startsWith("email-column:")) {
+          const [, parentBlockId, columnId] = position.split(":");
+          if (!parentBlockId || !columnId) return old;
+
+          const updatedBlocks = blocks.map((existingBlock) => {
+            if (existingBlock.id !== parentBlockId || existingBlock.type !== "columns") {
+              return existingBlock;
+            }
+
+            const columnsBlock = existingBlock as any;
+            return {
+              ...existingBlock,
+              columns: columnsBlock.columns.map((col: any) => {
+                if (col.id !== columnId) return col;
+                return { ...col, blocks: [...(col.blocks ?? []), block] };
+              }),
+            } as EmailBlock;
+          });
+
+          return { ...old, blocks: updatedBlocks };
+        }
+
         const insertAfterIndex = blocks.findIndex((b) => b.id === position);
         const insertIndex = insertAfterIndex >= 0 ? insertAfterIndex + 1 : blocks.length;
         return { ...old, blocks: [...blocks.slice(0, insertIndex), block, ...blocks.slice(insertIndex)] };

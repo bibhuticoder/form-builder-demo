@@ -3,7 +3,16 @@
  */
 
 import React, { useState, useCallback, useMemo } from "react";
-import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent, type DragOverEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragOverlay,
+  pointerWithin,
+  rectIntersection,
+  type CollisionDetection,
+  type DragEndEvent,
+  type DragStartEvent,
+  type DragOverEvent,
+} from "@dnd-kit/core";
 import type { DragData } from "../../types/dnd";
 import type { EmailBlock, EmailBreakpointId } from "../../types";
 import { createBlockFromType } from "../../utils/dnd/utils";
@@ -48,10 +57,11 @@ export function DndProvider({
     if (!activeData.blockType) return;
 
     const overIndex = blocks.findIndex((b) => b.id === overId);
-    const insertIndex = overIndex >= 0 ? overIndex : undefined;
+    const isColumnTarget = overId.startsWith("email-column:");
+    const insertPosition = isColumnTarget ? overId : overIndex >= 0 ? overIndex : undefined;
 
     const newBlock = createBlockFromType(activeData.blockType, activeData.label || activeData.blockType, blocks, activeBreakpoint);
-    onBlockAdd(newBlock, insertIndex);
+    onBlockAdd(newBlock, insertPosition);
   }, [onBlockAdd, blocks, activeBreakpoint]);
 
   const handleCanvasBlockReorder = useCallback((activeId: string, overId: string) => {
@@ -83,6 +93,26 @@ export function DndProvider({
     resetDragState();
   }, [resetDragState]);
 
+  const collisionDetection = useCallback<CollisionDetection>((args) => {
+    const pointerCollisions = pointerWithin(args);
+    const activeData = args.active.data.current as DragData | undefined;
+
+    if (activeData?.kind === "palette-block") {
+      const columnCollisions = pointerCollisions.filter((collision) =>
+        String(collision.id).startsWith("email-column:")
+      );
+      if (columnCollisions.length > 0) {
+        return columnCollisions;
+      }
+    }
+
+    if (pointerCollisions.length > 0) {
+      return pointerCollisions;
+    }
+
+    return rectIntersection(args);
+  }, []);
+
   const activeCanvasBlock = useMemo(
     () => blocks?.find((b) => b.id === activeDrag.id),
     [activeDrag.id, blocks]
@@ -99,6 +129,7 @@ export function DndProvider({
 
   return (
     <DndContext
+      collisionDetection={collisionDetection}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}

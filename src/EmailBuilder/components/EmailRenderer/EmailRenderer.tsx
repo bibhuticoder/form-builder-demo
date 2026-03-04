@@ -43,7 +43,13 @@ export default function EmailRenderer({ templateData, dragOverId, selectedBlockI
               <SortableItem id={block.id} dragData={{ kind: "canvas-block", blockId: block.id } as DragData}>
                 {(dragHandleProps) => (
                   <BuilderBlockControls block={block} onDelete={onDelete} dragHandleProps={dragHandleProps} selected={selectedBlockId === block.id} onSelect={onSelectBlock}>
-                    <BlockRenderer block={block} isSelected={selectedBlockId === block.id} activeSubElement={activeSubElement} />
+                    <BlockRenderer
+                      block={block}
+                      isSelected={selectedBlockId === block.id}
+                      activeSubElement={activeSubElement}
+                      selectedBlockId={selectedBlockId}
+                      onSelectBlock={onSelectBlock}
+                    />
                   </BuilderBlockControls>
                 )}
               </SortableItem>

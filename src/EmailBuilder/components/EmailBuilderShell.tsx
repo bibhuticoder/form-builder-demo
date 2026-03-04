@@ -11,6 +11,7 @@ import { useEmailBuilder } from "../context";
 import { EditorView } from "../types/enums";
 import { JsonEditorPanel } from "./JsonEditorPanel/JsonEditorPanel";
 import { jsonToHtml } from "../utils/json-to-html";
+import { findBlockById } from "../utils/blockUtils";
 
 export const EmailBuilderShell: React.FC = () => {
   const { jsonContent, addBlock, reorderBlocks, activeBreakpoint, activeView } = useEmailBuilder();
@@ -22,7 +23,7 @@ export const EmailBuilderShell: React.FC = () => {
 
   React.useEffect(() => {
     if (selectedBlockId && jsonContent.blocks) {
-      const blockExists = jsonContent.blocks.some((block) => block.id === selectedBlockId);
+      const blockExists = !!findBlockById(jsonContent.blocks, selectedBlockId);
       if (!blockExists) {
         setSelectedBlockId(null);
       }
