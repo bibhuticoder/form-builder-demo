@@ -87,7 +87,7 @@ describe('dnd/utils', () => {
             const block = createBlockFromType(EmailBlockType.HTML, 'HTML') as HtmlBlock;
 
             expect(block.type).toBe(EmailBlockType.HTML);
-            expect(block.content).toBe('<p>Custom HTML</p>');
+            expect(block.content).toBe('<p style="font-size: 16px; color: #333;">Custom HTML</p>');
         });
 
         it('should create a discount code block with defaults', () => {
@@ -103,7 +103,9 @@ describe('dnd/utils', () => {
 
             expect(block.type).toBe(EmailBlockType.MENU);
             expect(block.items).toHaveLength(3);
-            expect(block.items[0].label).toBe('Home');
+            expect(block.items[0].label).toBe('Menu 1');
+            expect(block.items[1].label).toBe('Menu 2');
+            expect(block.items[2].label).toBe('Menu 3');
             expect(block.items[0].url).toBe('#');
             // Each item should have a unique ID
             const ids = block.items.map((i) => i.id);

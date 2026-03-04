@@ -188,9 +188,9 @@ export function createBlockFromType(
         id,
         type: EmailBlockType.MENU,
         items: [
-          { id: makeId(), label: 'Home', url: '#' },
-          { id: makeId(), label: 'About', url: '#' },
-          { id: makeId(), label: 'Contact', url: '#' },
+          { id: makeId(), label: 'Menu 1', url: '#' },
+          { id: makeId(), label: 'Menu 2', url: '#' },
+          { id: makeId(), label: 'Menu 3', url: '#' },
         ],
         style: createResponsiveStyle(defaultStyles, activeBreakpoint),
       };
