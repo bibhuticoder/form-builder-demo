@@ -122,8 +122,8 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Blocks..."
-              containerStyles="!bg-gray-50 dark:!bg-gray-900 !min-h-[2.25rem] !rounded-md"
-              inputStyles="!text-sm !bg-transparent !text-gray-900 dark:!text-white placeholder:!text-gray-400 dark:placeholder:!text-gray-500 focus:!ring-1"
+              containerStyles="!bg-gray-50 dark:!bg-gray-900 !rounded-md"
+              inputStyles="!text-xs !bg-transparent !text-gray-900 dark:!text-white placeholder:!text-gray-400 dark:placeholder:!text-gray-500 focus:!ring-1 !min-h-[2.25rem]"
             />
           </div>
 
@@ -143,7 +143,7 @@ export const ElementPalette: React.FC<ElementPaletteProps> = ({ isCollapsed }) =
               ) : (
                 <div className="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
                   <MagnifyingGlassIcon className="w-8 h-8 mb-2 text-gray-400 dark:text-gray-500" />
-                  <p className="text-sm">No elements found</p>
+                  <p className="text-xs">No elements found</p>
                 </div>
               )}
             </div>

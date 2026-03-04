@@ -25,10 +25,17 @@ export default function EmailRenderer({ templateData, dragOverId, selectedBlockI
     deleteBlock(blockId);
   };
 
+  const templateSettingsStyles = getTemplateSettingsStyles(templateSettings.settings as unknown as Record<string, unknown>);
+  const backgroundColor = (templateSettings.settings as any)?.backgroundColor || '#ffffff';
+  const fontFamily = (templateSettings.settings as any)?.fontFamily;
+
   return (
     <SortableList items={blocks}>
-      <div className="mx-auto w-full h-full" style={{ maxWidth: getTemplateSettingsStyles(templateSettings.settings as unknown as Record<string, unknown>).maxWidth }}>
-        <div className="flex flex-col gap-0 mx-auto overflow-auto" style={getTemplateSettingsStyles(templateSettings.settings as unknown as Record<string, unknown>)}>
+      <div className="mx-auto w-full h-full" style={{ maxWidth: templateSettingsStyles.maxWidth }}>
+        <div
+          className="flex flex-col gap-0 mx-auto overflow-auto h-full"
+          style={{ ...templateSettingsStyles, backgroundColor, fontFamily }}
+        >
           {blocks.map((block) => (
             <React.Fragment key={block.id}>
               {dragOverId === block.id && <DropIndicator />}

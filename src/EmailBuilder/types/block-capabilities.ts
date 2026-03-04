@@ -11,6 +11,7 @@ export interface BlockStyleCapabilities {
   supportsLink: boolean;
   supportsAlignment: boolean;
   supportsPadding: boolean;
+  supportsMargin: boolean;
   supportsBackgroundColor: boolean;
   supportsBorder: boolean;
   supportsTypography: boolean;
@@ -23,6 +24,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: true,
@@ -33,6 +35,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: true,
@@ -43,6 +46,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: true,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: false,
     supportsBorder: true,
     supportsTypography: false,
@@ -53,6 +57,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: true,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: false,
     supportsBorder: false,
     supportsTypography: false,
@@ -63,6 +68,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: true,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: true,
     supportsTypography: true,
@@ -73,6 +79,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: false,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: false,
@@ -83,6 +90,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: false,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: false,
     supportsBorder: true,
     supportsTypography: false,
@@ -93,6 +101,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: false,
     supportsPadding: false,
+    supportsMargin: false,
     supportsBackgroundColor: false,
     supportsBorder: false,
     supportsTypography: false,
@@ -103,6 +112,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: false,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: false,
@@ -113,6 +123,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: false,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: true,
     supportsTypography: true,
@@ -123,6 +134,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: true,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: true,
@@ -133,6 +145,7 @@ export const BLOCK_CAPABILITIES: Record<EmailBlockType, BlockStyleCapabilities> 
     supportsLink: true,
     supportsAlignment: true,
     supportsPadding: true,
+    supportsMargin: true,
     supportsBackgroundColor: true,
     supportsBorder: false,
     supportsTypography: false,

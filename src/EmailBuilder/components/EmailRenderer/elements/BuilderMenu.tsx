@@ -18,7 +18,7 @@ export default function BuilderMenu({ block, isSelected, activeSubElement }: Rea
         {block.items.map((item) => (
           <span
             key={item.id}
-            className="text-sm text-primary hover:underline cursor-pointer"
+            className="text-xs text-primary hover:underline cursor-pointer"
             style={getBlockContentStyles(block.style, activeBreakpoint)}
           >
             {item.label}

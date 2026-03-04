@@ -31,6 +31,8 @@ export enum HeadingLevel {
   H2 = 'h2',
   H3 = 'h3',
   H4 = 'h4',
+  H5 = 'h5',
+  H6 = 'h6',
 }
 
 export enum TextAlign {
@@ -53,4 +55,9 @@ export enum SocialPlatform {
   YOUTUBE = 'youtube',
   TIKTOK = 'tiktok',
   PINTEREST = 'pinterest',
+}
+
+export enum EditorView {
+  DESIGN = 'DESIGN',
+  HTML = 'HTML',
 }

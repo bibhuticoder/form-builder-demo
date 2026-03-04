@@ -110,6 +110,7 @@ export const getTemplateSettingsStyles = (settings: Record<string, unknown> = {}
     maxWidth: settings.contentWidth ? `${settings.contentWidth}px` : '600px',
     fontFamily: settings.fontFamily as string | undefined,
     backgroundColor: settings.contentBackgroundColor as string | undefined,
+    color: settings.color as string | undefined,
     paddingTop: formatUnit(settings.paddingTop as string | number | undefined),
     paddingRight: formatUnit(settings.paddingRight as string | number | undefined),
     paddingBottom: formatUnit(settings.paddingBottom as string | number | undefined),

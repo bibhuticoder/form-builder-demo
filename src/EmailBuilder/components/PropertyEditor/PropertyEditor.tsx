@@ -5,6 +5,8 @@ import { useEmailBuilder } from "../../context";
 import { ContentTab } from "./tabs/ContentTab/index";
 import { StyleTab } from "./tabs/StyleTab/index";
 
+import { findBlockById } from "../../utils/blockUtils";
+
 interface PropertyEditorProps {
   selectedBlockId: string;
   onBack: () => void;
@@ -14,12 +16,12 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedBlockId,
   const { jsonContent } = useEmailBuilder();
   const [activeTab, setActiveTab] = React.useState("content");
 
-  const selectedBlock = jsonContent.blocks.find((b) => b.id === selectedBlockId);
+  const selectedBlock = findBlockById(jsonContent.blocks, selectedBlockId);
 
   if (!selectedBlock) {
     return (
       <div className="flex items-center justify-center h-full p-4 text-gray-500 dark:text-gray-400">
-        <p className="text-sm">Block not found</p>
+        <p className="text-xs">Block not found</p>
       </div>
     );
   }

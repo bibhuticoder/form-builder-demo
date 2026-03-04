@@ -170,7 +170,7 @@ export function createBlockFromType(
       return {
         id,
         type: EmailBlockType.HTML,
-        content: '<p>Custom HTML</p>',
+        content: '<p style="font-size: 16px; color: #333;">Custom HTML</p>',
         style: createResponsiveStyle(defaultStyles, activeBreakpoint),
       };
 
