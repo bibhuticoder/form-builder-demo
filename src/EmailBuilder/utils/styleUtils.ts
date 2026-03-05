@@ -103,6 +103,8 @@ export const getBlockContentStyles = (style: ResponsiveBlockStyle | undefined, b
     fontFamily: getFontFamily(resolvedStyle.fontFamily),
     fontSize: resolvedStyle.fontSize ? `${resolvedStyle.fontSize}${resolvedStyle.fontSizeUnit || 'px'}` : undefined,
     fontWeight: getFontWeight(resolvedStyle.fontWeight),
+    fontStyle: resolvedStyle.fontStyle,
+    textDecoration: resolvedStyle.textDecoration,
     textAlign: resolvedStyle.textAlign,
     color: resolvedStyle.color,
     lineHeight: resolvedStyle.lineHeight ? String(resolvedStyle.lineHeight) : undefined,

@@ -41,6 +41,8 @@ export type BlockStyleObject = {
   fontSize?: string | number;
   fontSizeUnit?: string;
   fontWeight?: string | number;
+  fontStyle?: 'normal' | 'italic';
+  textDecoration?: 'none' | 'underline';
   fontFamily?: string;
   color?: string;
   textAlign?: 'left' | 'center' | 'right';
