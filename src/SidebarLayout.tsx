@@ -41,11 +41,7 @@ export default function SidebarLayout() {
           </div>
         </header>
 
-<<<<<<< HEAD
-        <main className="flex-1 overflow-hidden px-4 pb-4 h-full relative">
-=======
         <main className="flex-1 overflow-hidden px-4 h-full relative">
->>>>>>> b6edd87a625d77b0bc80bf3a63178f95692eff5b
           <Outlet />
         </main>
       </div>
