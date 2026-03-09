@@ -24,7 +24,7 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ block, activeBreak
         }
 
         return null;
-    }, [block.style, activeBreakpoint]);
+    }, [block.id, block.style, activeBreakpoint]);
 
     const copiedFromBreakpoint = getCopiedFromBreakpoint();
     const copiedFromLabel = copiedFromBreakpoint
@@ -45,7 +45,7 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ block, activeBreak
         });
 
         return selected;
-    }, [block.style, activeBreakpoint]);
+    }, [block.id, block.style, activeBreakpoint]);
 
     const [selectedSizes, setSelectedSizes] = useState<Set<EmailBreakpointId>>(getSelectedFromEmailBlock);
     const [isDirty, setIsDirty] = useState(false);
@@ -54,7 +54,7 @@ export const StyleSwitcher: React.FC<StyleSwitcherProps> = ({ block, activeBreak
     useEffect(() => {
         setSelectedSizes(getSelectedFromEmailBlock());
         setIsDirty(false);
-    }, [getSelectedFromEmailBlock]);
+    }, [block.id, getSelectedFromEmailBlock]);
 
     const isApplyAll = EMAIL_BREAKPOINT_IDS.every(id => selectedSizes.has(id));
 

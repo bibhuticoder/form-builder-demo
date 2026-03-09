@@ -150,5 +150,17 @@ describe('dnd/utils', () => {
             const block3 = createBlockFromType(EmailBlockType.HEADING, 'Heading', [block1, block2]);
             expect(block3.id).toBe('heading_1');
         });
+
+        it('should avoid ID collisions between column-nested and root blocks', () => {
+            const nestedText = createBlockFromType(EmailBlockType.TEXT, 'Text');
+            const columns = createBlockFromType(EmailBlockType.COLUMNS, 'Columns') as ColumnsBlock;
+
+            columns.columns[0].blocks = [nestedText];
+
+            const rootText = createBlockFromType(EmailBlockType.TEXT, 'Text', [columns]);
+
+            expect(rootText.id).toBe('text_2');
+            expect(rootText.id).not.toBe(nestedText.id);
+        });
     });
 });
