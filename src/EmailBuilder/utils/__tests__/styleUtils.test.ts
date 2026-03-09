@@ -123,12 +123,16 @@ describe('styleUtils', () => {
                 fontSize: 16,
                 fontSizeUnit: 'rem',
                 fontWeight: 'bold',
+                fontStyle: 'italic',
+                textDecoration: 'underline',
                 textAlign: 'center',
                 color: '#111',
             });
             const result = getBlockContentStyles(style);
             expect(result.fontSize).toBe('16rem');
             expect(result.fontWeight).toBe(700);
+            expect(result.fontStyle).toBe('italic');
+            expect(result.textDecoration).toBe('underline');
             expect(result.textAlign).toBe('center');
             expect(result.color).toBe('#111');
         });

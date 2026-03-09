@@ -16,6 +16,10 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedBlockId,
   const { jsonContent } = useEmailBuilder();
   const [activeTab, setActiveTab] = React.useState("content");
 
+  React.useEffect(() => {
+    setActiveTab("content");
+  }, [selectedBlockId]);
+
   const selectedBlock = findBlockById(jsonContent.blocks, selectedBlockId);
 
   if (!selectedBlock) {

@@ -81,9 +81,39 @@ const createResponsiveStyle = (baseStyle: Record<string, unknown>, initialBreakp
   return style;
 };
 
+const collectAllBlocks = (blocks: EmailBlock[]): EmailBlock[] => {
+  const all: EmailBlock[] = [];
+
+  const walk = (items: EmailBlock[]) => {
+    items.forEach((block) => {
+      all.push(block);
+
+      if (block.type === EmailBlockType.COLUMNS) {
+        block.columns.forEach((column) => {
+          walk(column.blocks ?? []);
+        });
+      }
+    });
+  };
+
+  walk(blocks);
+  return all;
+};
+
 const generateBlockId = (blockType: EmailBlockType, existingBlocks: EmailBlock[] = []): string => {
-  const count = existingBlocks.filter(b => b.type === blockType).length + 1;
-  return `${blockType}_${count}`;
+  const allBlocks = collectAllBlocks(existingBlocks);
+  const prefix = `${blockType}_`;
+
+  const maxSuffix = allBlocks.reduce((max, block) => {
+    if (!block.id.startsWith(prefix)) return max;
+
+    const suffix = Number(block.id.slice(prefix.length));
+    if (!Number.isInteger(suffix) || suffix < 1) return max;
+
+    return Math.max(max, suffix);
+  }, 0);
+
+  return `${blockType}_${maxSuffix + 1}`;
 };
 
 export function createBlockFromType(
@@ -188,9 +218,9 @@ export function createBlockFromType(
         id,
         type: EmailBlockType.MENU,
         items: [
-          { id: makeId(), label: 'Home', url: '#' },
-          { id: makeId(), label: 'About', url: '#' },
-          { id: makeId(), label: 'Contact', url: '#' },
+          { id: makeId(), label: 'Menu 1', url: '#' },
+          { id: makeId(), label: 'Menu 2', url: '#' },
+          { id: makeId(), label: 'Menu 3', url: '#' },
         ],
         style: createResponsiveStyle(defaultStyles, activeBreakpoint),
       };

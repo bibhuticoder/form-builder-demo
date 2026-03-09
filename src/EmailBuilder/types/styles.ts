@@ -41,6 +41,8 @@ export type BlockStyleObject = {
   fontSize?: string | number;
   fontSizeUnit?: string;
   fontWeight?: string | number;
+  fontStyle?: 'normal' | 'italic';
+  textDecoration?: 'none' | 'underline';
   fontFamily?: string;
   color?: string;
   textAlign?: 'left' | 'center' | 'right';
@@ -52,6 +54,10 @@ export type BlockStyleObject = {
   borderWidth?: string | number;
   borderColor?: string;
   borderRadius?: string | number;
+  borderTopLeftRadius?: string | number;
+  borderTopRightRadius?: string | number;
+  borderBottomRightRadius?: string | number;
+  borderBottomLeftRadius?: string | number;
 
   // Display
   display?: 'block' | 'inline' | 'inline-block' | 'none';
