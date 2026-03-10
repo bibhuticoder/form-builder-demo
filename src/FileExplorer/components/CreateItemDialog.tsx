@@ -56,8 +56,8 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
   const lowerType = itemType.toLowerCase();
 
   const bodyContent = (
-    <div className="flex flex-col -mx-3 -my-4 h-[550px]">
-      <div className="p-4 shrink-0 border-b border-gray-100 dark:border-gray-800">
+    <div className="flex flex-col h-[450px]">
+      <div className="shrink-0 border-b border-gray-100 dark:border-gray-800 pb-4">
         <div className="grid grid-cols-3 gap-4">
           <div
             className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'scratch' ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50"
@@ -107,7 +107,7 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
       </div>
 
       <div className="flex-1 overflow-y-auto bg-slate-50/50">
-        <div className="p-6">
+        <div className="p-2">
           {createMode === 'scratch' && (
             <div className="h-full flex flex-col items-center justify-center text-center py-12 text-slate-500">
               <DocumentIcon className="w-12 h-12 text-slate-200 mb-4" />
