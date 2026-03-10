@@ -30,6 +30,14 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedBlockId,
     );
   }
 
+  const formatBlockType = (type: string) => {
+    if (type === "html") return "HTML";
+    return type
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="p-2 flex items-center justify-between bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -37,7 +45,9 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ selectedBlockId,
           <ArrowLeftIcon className="w-4 h-4" />
           Back
         </Button>
-        <span className="font-semibold text-gray-900 dark:text-white text-xs">Edit Block</span>
+        <span className="font-semibold text-gray-900 dark:text-white text-xs">
+          {formatBlockType(selectedBlock.type)}
+        </span>
       </div>
 
       <div className="px-2 pt-2 border-b border-gray-200 dark:border-gray-700">

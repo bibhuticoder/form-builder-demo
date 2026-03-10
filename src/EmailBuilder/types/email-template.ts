@@ -31,4 +31,5 @@ export interface TemplateSettings {
   sendAsPlainText?: boolean;
   status: EmailStatus;
   settings: EmailStyleSettings;
+  updatedAt?: number;
 }

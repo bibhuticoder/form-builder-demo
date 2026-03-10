@@ -32,10 +32,10 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/components/pagination";
-import { Button } from "@/components/Button";
-import { Input } from "@/components/input";
-import { Textarea } from "@/components/textarea";
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -43,7 +43,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from "@/components/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
     Dialog,
     DialogContent,
@@ -52,7 +52,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "@/components/dialog";
+} from "@/components/ui/dialog";
 import {
     Table,
     TableBody,
@@ -60,13 +60,13 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/table";
-import { Badge } from "@/components/badge";
-import { ScrollArea } from "@/components/scroll-area";
-import { Label } from "@/components/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/card";
+import { Card } from "@/components/ui/card";
 
 // --- Mock Data Types ---
 

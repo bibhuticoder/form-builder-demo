@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "@/components/Button"
 import { Dialog } from "@/components/Dialog"
 import { CodeBracketIcon, PaperAirplaneIcon, QuestionMarkCircleIcon, PaintBrushIcon } from "@heroicons/react/24/outline"
@@ -13,12 +13,45 @@ const Switch = ({ checked, onChange, id }: { checked: boolean; onChange: (checke
 )
 
 export const TopBar: React.FC = () => {
-  const { jsonContent, updateTemplateName, updateTemplateSettings, activeView, setActiveView } = useEmailBuilder()
+  const { jsonContent, updateTemplateName, updateTemplateSettings, activeView, setActiveView, historyPointer } = useEmailBuilder()
   const templateName = jsonContent?.templateSettings?.name || "Untitled Email"
   const sendAsPlainText = jsonContent?.templateSettings?.sendAsPlainText || false
+  const updatedAt = jsonContent?.templateSettings?.updatedAt
 
   const [isTestSendOpen, setIsTestSendOpen] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
+
+  // Initialize lastSavedPointer to 0 initially, assuming loaded content is an unsaved state until loaded from DB 
+  // For this local builder, we consider the initial load as "not changed yet". 
+  const [lastSavedPointer, setLastSavedPointer] = useState<number>(0)
+  const isDraft = historyPointer !== lastSavedPointer
+
+  const [timeAgoStr, setTimeAgoStr] = useState<string>("Never saved")
+
+  useEffect(() => {
+    const update = () => {
+      if (!updatedAt) {
+        setTimeAgoStr("Never saved")
+        return
+      }
+      const mins = Math.floor((Date.now() - updatedAt) / 60000)
+      if (mins < 1) setTimeAgoStr("Just now")
+      else if (mins < 60) setTimeAgoStr(`${mins}m ago`)
+      else {
+        const hours = Math.floor(mins / 60)
+        if (hours < 24) setTimeAgoStr(`${hours}h ago`)
+        else setTimeAgoStr(`${Math.floor(hours / 24)}d ago`)
+      }
+    }
+    update()
+    const interval = setInterval(update, 60000)
+    return () => clearInterval(interval)
+  }, [updatedAt])
+
+  const handleSaveAndExit = () => {
+    updateTemplateSettings({ updatedAt: Date.now() })
+    setLastSavedPointer(historyPointer + 1)
+  }
 
   return (
     <div className="sticky top-0 z-20">
@@ -28,7 +61,10 @@ export const TopBar: React.FC = () => {
             <input value={templateName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateTemplateName(e.target.value)} className="shadow border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:border-primary dark:focus:border-primary focus:outline-none font-semibold w-[200px] px-2 h-7 text-xs text-gray-900 dark:text-white bg-white dark:bg-gray-700 rounded-md transition-colors" placeholder="Email Name" />
             <EmailSettingsTrigger />
           </div>
-          <span className="text-[10px] text-slate-500 ml-1 mt-0.5">Draft - Last saved 2m ago</span>
+          <span className="text-[10px] text-slate-500 ml-1 mt-0.5">
+            {isDraft ? "Draft - " : ""}
+            {updatedAt ? `Last saved ${timeAgoStr}` : timeAgoStr}
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -85,7 +121,7 @@ export const TopBar: React.FC = () => {
             }
           />
 
-          <Button variant="primary" className="h-8 text-xs ml-2">
+          <Button variant="primary" className="h-8 text-xs ml-2" onClick={handleSaveAndExit}>
             Save & Exit
           </Button>
         </div>

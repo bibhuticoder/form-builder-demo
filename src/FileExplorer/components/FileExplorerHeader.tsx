@@ -17,7 +17,7 @@ export const FileExplorerHeader: React.FC<FileExplorerHeaderProps> = ({ title, c
                 </h1>
             </div>
             <div className="flex items-center gap-3">
-                <Button className="gap-2" onClick={openCreateFileModal}>
+                <Button className="gap-2 text-sm" onClick={openCreateFileModal}>
                     <Plus className="w-4 h-4" /> {createButtonText}
                 </Button>
             </div>
