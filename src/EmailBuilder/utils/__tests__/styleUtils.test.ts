@@ -184,7 +184,7 @@ describe('styleUtils', () => {
 
         it('applies background and padding', () => {
             const result = getTemplateSettingsStyles({
-                contentBackgroundColor: '#fff',
+                backgroundColor: '#fff',
                 paddingTop: 20,
                 paddingRight: 20,
                 paddingBottom: 20,

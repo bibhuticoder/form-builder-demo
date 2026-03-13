@@ -107,7 +107,7 @@ export const getBlockContentStyles = (style: ResponsiveBlockStyle | undefined, b
     textDecoration: resolvedStyle.textDecoration,
     textAlign: resolvedStyle.textAlign,
     color: resolvedStyle.color,
-    lineHeight: resolvedStyle.lineHeight ? String(resolvedStyle.lineHeight) : undefined,
+    lineHeight: resolvedStyle.lineHeight ? `${resolvedStyle.lineHeight}${resolvedStyle.lineHeightUnit || ''}` : undefined,
   };
 };
 
@@ -115,7 +115,7 @@ export const getTemplateSettingsStyles = (settings: Record<string, unknown> = {}
   return {
     maxWidth: settings.contentWidth ? `${settings.contentWidth}px` : '600px',
     fontFamily: settings.fontFamily as string | undefined,
-    backgroundColor: settings.contentBackgroundColor as string | undefined,
+    backgroundColor: settings.backgroundColor as string | undefined,
     color: settings.color as string | undefined,
     paddingTop: formatUnit(settings.paddingTop as string | number | undefined),
     paddingRight: formatUnit(settings.paddingRight as string | number | undefined),

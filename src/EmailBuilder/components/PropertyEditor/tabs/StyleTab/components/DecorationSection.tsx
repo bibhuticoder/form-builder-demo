@@ -11,6 +11,7 @@ interface DecorationSectionProps {
     handleStyleUpdate: (key: string, value: string | number | undefined) => void;
     handleStyleBatchUpdate: (updates: Record<string, string | number | undefined>) => void;
     setActiveSubElement: (element: string | null) => void;
+    defaultBgColor?: string;
 }
 
 export const DecorationSection: React.FC<DecorationSectionProps> = ({
@@ -19,7 +20,8 @@ export const DecorationSection: React.FC<DecorationSectionProps> = ({
     getStyleValue,
     handleStyleUpdate,
     handleStyleBatchUpdate,
-    setActiveSubElement: _setActiveSubElement
+    setActiveSubElement: _setActiveSubElement,
+    defaultBgColor
 }) => {
     return (
         <div className="space-y-4">
@@ -32,6 +34,7 @@ export const DecorationSection: React.FC<DecorationSectionProps> = ({
                         label="Background Color"
                         value={String(getStyleValue("backgroundColor", ""))}
                         onChange={(c) => handleStyleUpdate("backgroundColor", c)}
+                        defaultColor={defaultBgColor}
                     />
                 )}
 

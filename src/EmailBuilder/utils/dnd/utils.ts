@@ -4,68 +4,38 @@
 
 import { EmailBlockType, SocialPlatform, HeadingLevel } from "../../types/enums";
 import { EmailBlock, EmailBreakpointId } from "../../types";
-import { EMAIL_BREAKPOINT_IDS } from "../../constants";
+import { EMAIL_BREAKPOINT_IDS, DEFAULT_HEADING_CONFIG, DEFAULT_TEXT_CONFIG, DEFAULT_BUTTON_CONFIG, DEFAULT_DIVIDER_CONFIG, BASE_BLOCK_STYLES, DEFAULT_IMAGE_CONFIG, DEFAULT_VIDEO_CONFIG, DEFAULT_COLUMNS_CONFIG, DEFAULT_SPACER_CONFIG, DEFAULT_HTML_CONFIG, DEFAULT_DISCOUNT_CODE_CONFIG, DEFAULT_MENU_CONFIG, DEFAULT_SOCIAL_LINKS_CONFIG } from "../../constants";
 
 const makeId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-
-const BASE_STYLES = {
-  width: "full",
-  paddingTop: 10,
-  paddingRight: 10,
-  paddingBottom: 10,
-  paddingLeft: 10,
-};
-
-const TEXT_BLOCK_STYLES = {
-  ...BASE_STYLES,
-  fontSize: 14,
-  fontSizeUnit: "px",
-  fontWeight: "normal",
-  fontFamily: "default",
-  color: "#333333",
-};
-
-const HEADING_BLOCK_STYLES = {
-  ...BASE_STYLES,
-  fontWeight: "bold",
-  fontFamily: "default",
-  color: "#111827",
-};
-
-const BUTTON_BLOCK_STYLES = {
-  ...BASE_STYLES,
-  fontSize: 16,
-  fontSizeUnit: "px",
-  fontWeight: "bold",
-  color: "#ffffff",
-  backgroundColor: "#525df8",
-  borderRadius: 4,
-  textAlign: "center" as const,
-  paddingTop: 12,
-  paddingRight: 24,
-  paddingBottom: 12,
-  paddingLeft: 24,
-};
-
-const DIVIDER_BLOCK_STYLES = {
-  ...BASE_STYLES,
-  borderColor: "#cccccc",
-  borderWidth: 1,
-  borderStyle: "solid" as const,
-};
 
 const getDefaultStylesForType = (blockType: EmailBlockType) => {
   switch (blockType) {
     case EmailBlockType.HEADING:
-      return HEADING_BLOCK_STYLES;
+      return DEFAULT_HEADING_CONFIG;
     case EmailBlockType.TEXT:
-      return TEXT_BLOCK_STYLES;
+      return DEFAULT_TEXT_CONFIG;
+    case EmailBlockType.IMAGE:
+      return DEFAULT_IMAGE_CONFIG;
+    case EmailBlockType.VIDEO:
+      return DEFAULT_VIDEO_CONFIG;
     case EmailBlockType.BUTTON:
-      return BUTTON_BLOCK_STYLES;
+      return DEFAULT_BUTTON_CONFIG;
+    case EmailBlockType.COLUMNS:
+      return DEFAULT_COLUMNS_CONFIG;
     case EmailBlockType.DIVIDER:
-      return DIVIDER_BLOCK_STYLES;
+      return DEFAULT_DIVIDER_CONFIG;
+    case EmailBlockType.SPACER:
+      return DEFAULT_SPACER_CONFIG;
+    case EmailBlockType.HTML:
+      return DEFAULT_HTML_CONFIG;
+    case EmailBlockType.DISCOUNT_CODE:
+      return DEFAULT_DISCOUNT_CODE_CONFIG;
+    case EmailBlockType.MENU:
+      return DEFAULT_MENU_CONFIG;
+    case EmailBlockType.SOCIAL_LINKS:
+      return DEFAULT_SOCIAL_LINKS_CONFIG;
     default:
-      return BASE_STYLES;
+      return BASE_BLOCK_STYLES;
   }
 };
 
@@ -120,20 +90,24 @@ export function createBlockFromType(
   blockType: EmailBlockType,
   label: string,
   existingBlocks: EmailBlock[] = [],
-  activeBreakpoint: EmailBreakpointId = 'desktop'
+  activeBreakpoint: EmailBreakpointId = 'desktop',
+  defaultBgColor?: string
 ): EmailBlock {
   const id = generateBlockId(blockType, existingBlocks);
-  const defaultStyles = getDefaultStylesForType(blockType);
+  const baseDefaults = getDefaultStylesForType(blockType);
+  const defaultStyles = defaultBgColor ? { ...baseDefaults, backgroundColor: defaultBgColor } : baseDefaults;
 
   switch (blockType) {
-    case EmailBlockType.HEADING:
+    case EmailBlockType.HEADING: {
+      const { headingLevel, ...headingStyles } = defaultStyles as Record<string, any>;
       return {
         id,
         type: EmailBlockType.HEADING,
         content: label,
-        headingLevel: HeadingLevel.H2,
-        style: createResponsiveStyle(defaultStyles, activeBreakpoint),
+        headingLevel: (headingLevel as HeadingLevel) || HeadingLevel.H2,
+        style: createResponsiveStyle(headingStyles, activeBreakpoint),
       };
+    }
 
     case EmailBlockType.TEXT:
       return {
@@ -230,9 +204,9 @@ export function createBlockFromType(
         id,
         type: EmailBlockType.SOCIAL_LINKS,
         links: [
-          { id: makeId(), platform: SocialPlatform.FACEBOOK, url: '#' },
-          { id: makeId(), platform: SocialPlatform.TWITTER, url: '#' },
-          { id: makeId(), platform: SocialPlatform.INSTAGRAM, url: '#' },
+          { id: makeId(), platform: SocialPlatform.FACEBOOK, url: '' },
+          { id: makeId(), platform: SocialPlatform.TWITTER, url: '' },
+          { id: makeId(), platform: SocialPlatform.INSTAGRAM, url: '' },
         ],
         style: createResponsiveStyle(defaultStyles, activeBreakpoint),
       };

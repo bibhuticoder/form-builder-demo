@@ -210,14 +210,23 @@ export const ContentTab: React.FC<ContentTabProps> = ({ block }) => {
                     handleUpdate("links", newLinks)
                   }}
                   className={inputClass}
-                  placeholder="URL"
+                  placeholder={
+                    link.platform === SocialPlatform.FACEBOOK ? "https://facebook.com/XXXX" :
+                    link.platform === SocialPlatform.TWITTER ? "https://twitter.com/XXXX" :
+                    link.platform === SocialPlatform.INSTAGRAM ? "https://instagram.com/XXXX" :
+                    link.platform === SocialPlatform.LINKEDIN ? "https://linkedin.com/company/XXXX" :
+                    link.platform === SocialPlatform.YOUTUBE ? "https://youtube.com/c/XXXX" :
+                    link.platform === SocialPlatform.TIKTOK ? "https://tiktok.com/@XXXX" :
+                    link.platform === SocialPlatform.PINTEREST ? "https://pinterest.com/XXXX" :
+                    "https://www.example.com"
+                  }
                 />
               </div>
             ))}
             <button
               type="button"
               onClick={() => {
-                const newLinks = [...(block as SocialLinksBlock).links, { id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`, platform: SocialPlatform.FACEBOOK, url: "#" }]
+                const newLinks = [...(block as SocialLinksBlock).links, { id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`, platform: SocialPlatform.FACEBOOK, url: "" }]
                 handleUpdate("links", newLinks)
               }}
               className="text-xs text-primary hover:underline"

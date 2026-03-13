@@ -30,12 +30,15 @@ export const EmailBuilderShell: React.FC = () => {
     }
   }, [jsonContent.blocks, selectedBlockId])
 
+  const defaultBgColor = jsonContent.templateSettings?.settings?.backgroundColor || "#f4f4f4"
+
   return (
     <DndProvider
       onBlockAdd={addBlock}
       onBlockReorder={reorderBlocks}
       blocks={jsonContent.blocks ?? []}
       activeBreakpoint={activeBreakpoint}
+      defaultBgColor={defaultBgColor}
       renderPreview={(block) => (
         <BuilderBlockControls block={block} forceHover={true}>
           <BlockRenderer block={block} />

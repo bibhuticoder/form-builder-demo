@@ -10,7 +10,6 @@ export type EmailBreakpointId = typeof EMAIL_BREAKPOINT_IDS[number];
 export type EmailStyleSettings = {
   fontFamily: string;
   backgroundColor?: string;
-  contentBackgroundColor?: string;
   contentWidth?: number;
   color?: string;
   padding?: string | number;
@@ -47,6 +46,7 @@ export type BlockStyleObject = {
   color?: string;
   textAlign?: 'left' | 'center' | 'right';
   lineHeight?: string | number;
+  lineHeightUnit?: string;
 
   // Decoration
   backgroundColor?: string;

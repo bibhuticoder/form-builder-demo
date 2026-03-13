@@ -5,13 +5,15 @@ interface ColorControlProps {
   value?: string;
   onChange: (value: string) => void;
   className?: string;
+  defaultColor?: string;
 }
 
 export const ColorControl: React.FC<ColorControlProps> = ({
   label,
   value,
   onChange,
-  className = ""
+  className = "",
+  defaultColor = "#ffffff"
 }) => {
   const uniqueId = useId();
   const displayValue = value || "";
@@ -19,7 +21,7 @@ export const ColorControl: React.FC<ColorControlProps> = ({
   // Fallback for the native color input (must be valid hex)
   const safeColorValue = /^#[0-9A-F]{6}$/i.test(displayValue)
     ? displayValue
-    : "#000000";
+    : defaultColor;
 
   return (
     <div className={`space-y-1 ${className}`}>

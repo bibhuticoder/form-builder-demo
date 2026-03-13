@@ -12,7 +12,7 @@ interface StyleTabProps {
 }
 
 export const StyleTab: React.FC<StyleTabProps> = ({ block }) => {
-  const { updateBlock, updateBlockStyleBatch, setActiveSubElement, activeBreakpoint } = useEmailBuilder()
+  const { updateBlock, updateBlockStyleBatch, setActiveSubElement, activeBreakpoint, jsonContent } = useEmailBuilder()
 
   const capabilities = useMemo(() => getBlockCapabilities(block.type), [block.type])
 
@@ -29,6 +29,8 @@ export const StyleTab: React.FC<StyleTabProps> = ({ block }) => {
     return (resolvedStyle as Record<string, string | number | undefined>)?.[key] ?? defaultValue
   }
 
+  const defaultBgColor = jsonContent.templateSettings?.settings?.backgroundColor || "#f4f4f4"
+
   return (
     <div className="space-y-6 pb-5">
       {/* Layout Section */}
@@ -37,12 +39,12 @@ export const StyleTab: React.FC<StyleTabProps> = ({ block }) => {
       <div className="border-t border-gray-200 dark:border-gray-700" />
 
       {/* Typography Section */}
-      <TypographySection block={block} capabilities={capabilities} getStyleValue={getStyleValue} handleStyleUpdate={handleStyleUpdate} setActiveSubElement={setActiveSubElement} />
+      <TypographySection block={block} capabilities={capabilities} getStyleValue={getStyleValue} handleStyleUpdate={handleStyleUpdate} handleStyleBatchUpdate={handleStyleBatchUpdate} setActiveSubElement={setActiveSubElement} />
 
       {capabilities.supportsTypography && <div className="border-t border-gray-200 dark:border-gray-700" />}
 
       {/* Decoration Section */}
-      <DecorationSection block={block} capabilities={capabilities} getStyleValue={getStyleValue} handleStyleUpdate={handleStyleUpdate} handleStyleBatchUpdate={handleStyleBatchUpdate} setActiveSubElement={setActiveSubElement} />
+      <DecorationSection block={block} capabilities={capabilities} getStyleValue={getStyleValue} handleStyleUpdate={handleStyleUpdate} handleStyleBatchUpdate={handleStyleBatchUpdate} setActiveSubElement={setActiveSubElement} defaultBgColor={defaultBgColor} />
     </div>
   )
 }

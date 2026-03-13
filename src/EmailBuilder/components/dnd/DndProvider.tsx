@@ -18,9 +18,10 @@ interface DndProviderProps {
   blocks: EmailBlock[]
   renderPreview?: (block: EmailBlock) => React.ReactNode
   activeBreakpoint: EmailBreakpointId
+  defaultBgColor?: string
 }
 
-export function DndProvider({ children, onBlockAdd, onBlockReorder, blocks, renderPreview, activeBreakpoint }: DndProviderProps) {
+export function DndProvider({ children, onBlockAdd, onBlockReorder, blocks, renderPreview, activeBreakpoint, defaultBgColor }: DndProviderProps) {
   const [activeDrag, setActiveDrag] = useState<{ id?: string; data?: DragData }>({})
   const [overId, setOverId] = useState<string | null>(null)
 
@@ -45,10 +46,10 @@ export function DndProvider({ children, onBlockAdd, onBlockReorder, blocks, rend
       const isColumnTarget = overId.startsWith("email-column:")
       const insertPosition = isColumnTarget ? overId : overIndex >= 0 ? overIndex : undefined
 
-      const newBlock = createBlockFromType(activeData.blockType, activeData.label || activeData.blockType, blocks, activeBreakpoint)
+      const newBlock = createBlockFromType(activeData.blockType, activeData.label || activeData.blockType, blocks, activeBreakpoint, defaultBgColor)
       onBlockAdd(newBlock, insertPosition)
     },
-    [onBlockAdd, blocks, activeBreakpoint],
+    [onBlockAdd, blocks, activeBreakpoint, defaultBgColor],
   )
 
   const handleCanvasBlockReorder = useCallback(
@@ -108,10 +109,10 @@ export function DndProvider({ children, onBlockAdd, onBlockReorder, blocks, rend
 
   const activePalettePreview = useMemo(() => {
     if (activeDrag.data?.kind === "palette-block" && activeDrag.data.blockType && activeDrag.data.label) {
-      return createBlockFromType(activeDrag.data.blockType, activeDrag.data.label, blocks, activeBreakpoint)
+      return createBlockFromType(activeDrag.data.blockType, activeDrag.data.label, blocks, activeBreakpoint, defaultBgColor)
     }
     return null
-  }, [activeDrag.data, blocks, activeBreakpoint])
+  }, [activeDrag.data, blocks, activeBreakpoint, defaultBgColor])
 
   const previewBlock = activePalettePreview || activeCanvasBlock
 

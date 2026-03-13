@@ -26,16 +26,16 @@ const TemplateCard = ({ template, selected, onClick }: { template: TemplateItem,
   const Icon = template.icon;
   return (
     <div
-      className={`p-3 rounded-lg border cursor-pointer transition-all hover:border-primary/50 hover:bg-slate-50 flex items-start gap-3 ${selected ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-slate-200 bg-white'
+      className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${selected ? 'border-primary bg-primary/5 ring-1 ring-primary/20 dark:bg-primary/10' : 'border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:hover:border-primary/50'
         }`}
       onClick={onClick}
     >
-      <div className={`p-2 rounded-md shrink-0 ${selected ? 'bg-white text-primary' : 'bg-slate-100 text-slate-500'}`}>
+      <div className={`p-2 rounded-md shrink-0 ${selected ? 'bg-white text-primary dark:bg-gray-800' : 'bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400'}`}>
         <Icon className="w-5 h-5" />
       </div>
       <div>
-        <h4 className="font-medium text-sm text-slate-900">{template.title}</h4>
-        <p className="text-xs text-slate-500 mt-1 line-clamp-2">{template.subtitle}</p>
+        <h4 className="font-medium text-sm text-slate-900 dark:text-white">{template.title}</h4>
+        <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 line-clamp-2">{template.subtitle}</p>
       </div>
     </div>
   );
@@ -60,57 +60,57 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
       <div className="shrink-0 border-b border-gray-100 dark:border-gray-800 pb-4">
         <div className="grid grid-cols-3 gap-4">
           <div
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'scratch' ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50"
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'scratch' ? "border-primary bg-primary/5 ring-1 ring-primary/20 dark:bg-primary/10" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
               }`}
             onClick={() => setCreateMode('scratch')}
           >
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'scratch' ? "bg-white text-primary shadow-sm" : "bg-slate-100 text-slate-500"
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'scratch' ? "bg-white text-primary shadow-sm dark:bg-gray-800" : "bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400"
               }`}>
               <DocumentIcon className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-semibold text-xs">Start From Scratch</h3>
-              <p className="text-[10px] text-slate-500 mt-1">Build your {lowerType} from a blank canvas.</p>
+              <h3 className="font-semibold text-xs dark:text-gray-200">Start From Scratch</h3>
+              <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1">Build your {lowerType} from a blank canvas.</p>
             </div>
           </div>
 
           <div
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'template' ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50"
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'template' ? "border-primary bg-primary/5 ring-1 ring-primary/20 dark:bg-primary/10" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
               }`}
             onClick={() => setCreateMode('template')}
           >
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'template' ? "bg-white text-primary shadow-sm" : "bg-slate-100 text-slate-500"
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'template' ? "bg-white text-primary shadow-sm dark:bg-gray-800" : "bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400"
               }`}>
               <ViewColumnsIcon className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-semibold text-xs">Use a Template</h3>
-              <p className="text-[10px] text-slate-500 mt-1">Choose from pre-built layout patterns.</p>
+              <h3 className="font-semibold text-xs dark:text-gray-200">Use a Template</h3>
+              <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1">Choose from pre-built layout patterns.</p>
             </div>
           </div>
 
           <div
-            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'ai' ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50"
+            className={`p-4 rounded-xl cursor-pointer transition-all flex flex-col items-center text-center gap-3 border ${createMode === 'ai' ? "border-primary bg-primary/5 ring-1 ring-primary/20 dark:bg-primary/10" : "border-slate-200 hover:border-primary/50 hover:bg-slate-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
               }`}
             onClick={() => setCreateMode('ai')}
           >
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'ai' ? "bg-white text-primary shadow-sm" : "bg-slate-100 text-slate-500"
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${createMode === 'ai' ? "bg-white text-primary shadow-sm dark:bg-gray-800" : "bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400"
               }`}>
               <SparklesIcon className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-semibold text-xs">Create with AI</h3>
-              <p className="text-[10px] text-slate-500 mt-1">Describe what you need and let AI build it.</p>
+              <h3 className="font-semibold text-xs dark:text-gray-200">Create with AI</h3>
+              <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1">Describe what you need and let AI build it.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto bg-slate-50/50">
+      <div className="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-gray-900/50">
         <div className="p-2">
           {createMode === 'scratch' && (
-            <div className="h-full flex flex-col items-center justify-center text-center py-12 text-slate-500">
-              <DocumentIcon className="w-12 h-12 text-slate-200 mb-4" />
+            <div className="h-full flex flex-col items-center justify-center text-center py-12 text-slate-500 dark:text-gray-400">
+              <DocumentIcon className="w-12 h-12 text-slate-200 dark:text-gray-700 mb-4" />
               <p className="max-w-xs text-sm">You are ready to start with a blank canvas. Click "Create {itemType}" to begin.</p>
             </div>
           )}
@@ -125,7 +125,7 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
                   onClick={() => setSelectedTemplateId(t.id)}
                 />
               )) : (
-                <div className="text-center py-12 text-slate-500 text-sm">
+                <div className="text-center py-12 text-slate-500 dark:text-gray-400 text-sm">
                   No templates available for {lowerType} yet.
                 </div>
               )}
@@ -134,7 +134,7 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
 
           {createMode === 'ai' && (
             <div className="space-y-4">
-              <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg flex gap-3">
+              <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 rounded-lg flex gap-3">
                 <SparklesIcon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <div className="text-sm text-primary">
                   <p className="font-medium">What should this {lowerType} do?</p>
@@ -145,7 +145,7 @@ export const CreateItemDialog: React.FC<CreateItemDialogProps> = ({ isOpen, onCl
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
                 placeholder={`e.g. Create a holiday promotion ${lowerType} with a hero image and a discount code.`}
-                className="w-full min-h-[120px] resize-none bg-white border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-sm"
+                className="w-full min-h-[120px] resize-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md p-3 text-sm text-gray-900 dark:text-white dark:placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-sm"
               />
             </div>
           )}
