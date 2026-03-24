@@ -1,15 +1,18 @@
 import React, { useMemo } from "react"
-import { EmailBlock } from "../../../../types"
+import { EmailBlock, EmailBlockType, HeadingBlock } from "../../../../types"
 import { getBlockCapabilities } from "../../../../types/block-capabilities"
 import { useEmailBuilder } from "../../../../context"
 import { resolveBreakpointStyle } from "../../../../utils/styleUtils"
+import { HEADING_LEVEL_STYLE_DEFAULTS } from "../../../../constants"
 import { LayoutSection } from "./components/LayoutSection"
 import { TypographySection } from "./components/TypographySection"
 import { DecorationSection } from "./components/DecorationSection"
 
+
 interface StyleTabProps {
   block: EmailBlock
 }
+
 
 export const StyleTab: React.FC<StyleTabProps> = ({ block }) => {
   const { updateBlock, updateBlockStyleBatch, setActiveSubElement, activeBreakpoint, jsonContent } = useEmailBuilder()
@@ -26,8 +29,19 @@ export const StyleTab: React.FC<StyleTabProps> = ({ block }) => {
 
   const getStyleValue = (key: string, defaultValue: string | number | undefined = "") => {
     const resolvedStyle = resolveBreakpointStyle(block.style, activeBreakpoint)
-    return (resolvedStyle as Record<string, string | number | undefined>)?.[key] ?? defaultValue
+    const storedValue = (resolvedStyle as Record<string, string | number | undefined>)?.[key]
+    if (storedValue !== undefined && storedValue !== null && storedValue !== "") return storedValue
+
+    // For heading blocks, fall back to level-specific defaults before the generic default
+    if (block.type === EmailBlockType.HEADING) {
+      const level = (block as HeadingBlock).headingLevel || "h2"
+      const levelDefaults = HEADING_LEVEL_STYLE_DEFAULTS[level]
+      if (levelDefaults?.[key as keyof typeof levelDefaults] !== undefined) return levelDefaults[key as keyof typeof levelDefaults]
+    }
+
+    return defaultValue
   }
+
 
   const defaultBgColor = jsonContent.templateSettings?.settings?.backgroundColor || "#f4f4f4"
 

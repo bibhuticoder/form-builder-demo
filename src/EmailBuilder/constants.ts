@@ -91,16 +91,23 @@ export const BASE_BLOCK_STYLES = {
   fontFamily: FONT_OPTIONS[0].value,
 };
 
+/** Single source of truth for per-level typography defaults — mirrors canvas.css. */
+export const HEADING_LEVEL_STYLE_DEFAULTS: Record<string, { fontSize: number; fontSizeUnit: string; fontWeight: number; lineHeight: number; lineHeightUnit: string }> = {
+  h1: { fontSize: 36, fontSizeUnit: "px", fontWeight: 700, lineHeight: 40, lineHeightUnit: "px" },
+  h2: { fontSize: 30, fontSizeUnit: "px", fontWeight: 700, lineHeight: 36, lineHeightUnit: "px" },
+  h3: { fontSize: 24, fontSizeUnit: "px", fontWeight: 600, lineHeight: 32, lineHeightUnit: "px" },
+  h4: { fontSize: 20, fontSizeUnit: "px", fontWeight: 600, lineHeight: 28, lineHeightUnit: "px" },
+  h5: { fontSize: 18, fontSizeUnit: "px", fontWeight: 600, lineHeight: 28, lineHeightUnit: "px" },
+  h6: { fontSize: 16, fontSizeUnit: "px", fontWeight: 600, lineHeight: 24, lineHeightUnit: "px" },
+};
+
 export const DEFAULT_HEADING_CONFIG = {
   headingLevel: "h2",
   ...BASE_BLOCK_STYLES,
-  fontSize: 30,
-  fontSizeUnit: "px",
-  fontWeight: "bold",
+  ...HEADING_LEVEL_STYLE_DEFAULTS["h2"],
   color: "#111827",
-  lineHeight: 36,
-  lineHeightUnit: "px",
 };
+
 
 export const DEFAULT_TEXT_CONFIG = {
   ...BASE_BLOCK_STYLES,

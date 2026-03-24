@@ -1,16 +1,25 @@
 import React from "react"
 import { EmailBlock, EmailBlockType, HeadingBlock, TextBlock, ImageBlock, VideoBlock, ButtonBlock, SpacerBlock, HtmlBlock, DiscountCodeBlock, MenuBlock, SocialLinksBlock, SocialPlatform, HeadingLevel } from "../../../../types"
 import { useEmailBuilder } from "../../../../context"
+import { HEADING_LEVEL_STYLE_DEFAULTS } from "../../../../constants"
 
 interface ContentTabProps {
   block: EmailBlock
 }
 
 export const ContentTab: React.FC<ContentTabProps> = ({ block }) => {
-  const { updateBlock } = useEmailBuilder()
+  const { updateBlock, updateBlockStyleBatch } = useEmailBuilder()
 
   const handleUpdate = (key: string, value: unknown) => {
     updateBlock(block.id, { [key]: value } as Partial<EmailBlock>)
+  }
+
+  const handleHeadingLevelChange = (newLevel: string) => {
+    updateBlock(block.id, { headingLevel: newLevel } as Partial<EmailBlock>)
+    const levelDefaults = HEADING_LEVEL_STYLE_DEFAULTS[newLevel]
+    if (levelDefaults) {
+      updateBlockStyleBatch(block.id, levelDefaults)
+    }
   }
 
   const labelClass = "text-[10px] font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider block mb-1"
@@ -32,7 +41,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({ block }) => {
             </div>
             <div>
               <label className={labelClass}>Heading Level</label>
-              <select value={(block as HeadingBlock).headingLevel || "h2"} onChange={(e) => handleUpdate("headingLevel", e.target.value)} className={selectClass}>
+              <select value={(block as HeadingBlock).headingLevel || "h2"} onChange={(e) => handleHeadingLevelChange(e.target.value)} className={selectClass}>
                 {Object.values(HeadingLevel).map((level) => (
                   <option key={level} value={level}>
                     {level.toUpperCase()}
