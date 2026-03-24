@@ -64,9 +64,6 @@ export const FONT_OPTIONS: FontOption[] = [
   // Note: Segoe UI Variable (Win 11) supports more, but these are the standard static weights.
   { label: "Segoe UI", value: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", weights: [400, 700] },
 
-  // Modern Cross-Platform Stack: Maps to San Francisco (Apple), Roboto (Android), and Segoe UI (Windows).
-  // These are essentially Variable Fonts now and support the full 100-900 spectrum.
-  { label: "System Default", value: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
 ]
 
 export const FONT_WEIGHT_LABELS: Record<number, string> = {
