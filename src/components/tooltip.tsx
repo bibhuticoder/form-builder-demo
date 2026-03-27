@@ -86,7 +86,7 @@ export function TooltipContent({ side = "top", className, children }: { side?: "
   const s = sideStyles[side]
 
   return createPortal(
-    <span className={cn("fixed z-[9999] rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-900 dark:text-gray-100 shadow-md whitespace-nowrap pointer-events-none", className)} style={{ top: s.top, left: s.left, transform: s.transform }}>
+    <span className={cn("fixed z-[9999] rounded-md border border-primary/30 dark:border-primary/40 bg-primary dark:bg-primary/90 px-2 py-1 text-xs text-white shadow-md whitespace-nowrap pointer-events-none", className)} style={{ top: s.top, left: s.left, transform: s.transform }}>
       {children}
     </span>,
     document.body,

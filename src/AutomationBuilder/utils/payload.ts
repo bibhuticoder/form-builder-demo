@@ -5,8 +5,8 @@ import type {
     AutomationProductionNode,
     AutomationProductionEdge,
     AutomationStatus,
-} from '../types';
-import { TOOLBOX_ITEMS } from '../data/toolbox';
+} from '../types/automation';
+import { TOOLBOX_ITEMS } from '../constants/toolbox';
 
 function isBuilderOnlyNode(node: Node) {
     if (node.type === 'placeholder' || node.type === 'addStep') return true;

@@ -1,4 +1,4 @@
-import type { AutomationDefinition } from '../types';
+import type { AutomationDefinition } from '../types/automation';
 import { validateAutomationGraph } from './graph.validators';
 import { AutomationValidationResultBuilder } from './validation-result-builder';
 

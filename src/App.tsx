@@ -4,9 +4,9 @@ import Home from "./pages/Home"
 import Forms from "./pages/Forms"
 import Automations from "./pages/Automations"
 import FormBuilder from "./pages/FormBuilder"
+import Emails from "./pages/Emails"
+import EmailBuilder from "./pages/EmailBuilder"
 import AutomationBuilderPage from "./pages/AutomationBuilder"
-import Emails from './pages/Emails'
-import EmailBuilder from './pages/EmailBuilder'
 
 function App() {
   return (

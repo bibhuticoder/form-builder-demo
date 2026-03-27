@@ -79,12 +79,12 @@ export function AutomationConfigModal({ isOpen, onClose, node, edges, onSave }: 
 
   const footer = (
     <div className="flex justify-end gap-2">
-      <Button variant="outline" className="dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700" onClick={onClose} size={"sm"}>
+      <Button variant="outline" className="h-8 px-3 text-xs dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700" onClick={onClose} size={"sm"}>
         Cancel
       </Button>
       <Button
         variant="primary"
-        className="shadow-sm dark:shadow-none"
+        className="h-8 px-3 text-xs shadow-sm dark:shadow-none"
         size={"sm"}
         onClick={() => {
           if (!node) return

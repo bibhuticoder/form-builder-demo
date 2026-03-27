@@ -8,6 +8,7 @@ const navItems = [
   { name: "Forms", href: "/forms", icon: DocumentTextIcon },
   { name: 'Automations', href: '/automations', icon: BoltIcon },
   { name: "Emails", href: "/emails", icon: EnvelopeIcon },
+  { name: "Automations", href: "/automations", icon: BoltIcon },
 ]
 
 export default function SidebarLayout() {
