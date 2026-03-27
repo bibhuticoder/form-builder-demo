@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 export const Select = ({ value, onValueChange, children }: { value?: string, onValueChange?: (v: string) => void, children: React.ReactNode }) => {
   return (
     <Listbox value={value} onChange={onValueChange}>
-      <div className="relative inline-block">{children}</div>
+      <div className="relative block w-full">{children}</div>
     </Listbox>
   );
 };
@@ -43,7 +43,7 @@ export const SelectContent = ({ className, children }: { className?: string, chi
   >
     <Listbox.Options
       className={cn(
-        "absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-900 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm border border-gray-200 dark:border-gray-800",
+        "absolute z-[9999] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-900 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm border border-gray-200 dark:border-gray-800",
         className
       )}
     >

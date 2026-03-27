@@ -6,7 +6,6 @@ import { ThemeToggle } from "./components"
 const navItems = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Forms", href: "/forms", icon: DocumentTextIcon },
-  { name: 'Automations', href: '/automations', icon: BoltIcon },
   { name: "Emails", href: "/emails", icon: EnvelopeIcon },
   { name: "Automations", href: "/automations", icon: BoltIcon },
 ]

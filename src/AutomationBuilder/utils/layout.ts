@@ -245,10 +245,85 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
         });
     }
 
+    // 4. Assign positions for all roots (Centered & Clustered)
     if (roots.length > 0) {
+        // Sort roots by X to maintain left-to-right order (if they had prev positions)
         roots.sort((a, b) => a.position.x - b.position.x);
-        const startRootX = 425 - roots.length * 170;
-        roots.forEach((root, idx) => assignPosition(root.id, startRootX + idx * 340, 50));
+
+        // --- ROOT CLUSTERING LOGIC ---
+        // Group roots that share the same first child (Multiplexing Triggers)
+        // This prevents triggers from spreading apart when they feed into the same wide tree.
+        const rootClusters: Node[][] = [];
+        const processedRoots = new Set<string>();
+
+        roots.forEach((root) => {
+            if (processedRoots.has(root.id)) return;
+
+            // Start a new cluster
+            const cluster = [root];
+            processedRoots.add(root.id);
+
+            // Find siblings that share children with this root
+            const rootChildren = childrenMap.get(root.id) || [];
+            roots.forEach((otherRoot) => {
+                if (processedRoots.has(otherRoot.id)) return;
+                const otherChildren = childrenMap.get(otherRoot.id) || [];
+                // Check intersection
+                const sharesChild = rootChildren.some((childId) => otherChildren.includes(childId));
+                if (sharesChild) {
+                    cluster.push(otherRoot);
+                    processedRoots.add(otherRoot.id);
+                }
+            });
+            rootClusters.push(cluster);
+        });
+
+        // Layout Clusters
+        const globalCenterX = 425;
+        const clusterMetrics = rootClusters.map((cluster, i) => {
+            let maxSubtreeWidth = 0;
+            let maxCenterOffset = 0;
+
+            cluster.forEach((root) => {
+                const m = subtreeMetrics.get(root.id) || { width: NODE_WIDTH, centerOffset: NODE_WIDTH / 2 };
+                if (m.width > maxSubtreeWidth) maxSubtreeWidth = m.width;
+                if (m.centerOffset > maxCenterOffset) maxCenterOffset = m.centerOffset;
+            });
+
+            const rootsPackedWidth = cluster.reduce((acc, root, idx) => {
+                const rootWidth = getNodeDimensions(root).width;
+                const gap = idx < cluster.length - 1 ? 60 : 0;
+                return acc + rootWidth + gap;
+            }, 0);
+
+            const clusterTotalWidth = Math.max(maxSubtreeWidth, rootsPackedWidth);
+            const clusterGap = i < rootClusters.length - 1 ? 100 : 0;
+
+            return {
+                cluster,
+                totalWidth: clusterTotalWidth,
+                rootsPackedWidth,
+                maxCenterOffset,
+                clusterGap,
+            };
+        });
+
+        const totalAllClustersWidth = clusterMetrics.reduce((acc, c) => acc + c.totalWidth + c.clusterGap, 0);
+        let clusterStartX = globalCenterX - totalAllClustersWidth / 2;
+
+        clusterMetrics.forEach((cm) => {
+            const { cluster, totalWidth, rootsPackedWidth, maxCenterOffset } = cm;
+            const treeStemX = clusterStartX + maxCenterOffset;
+            let currentRootX = treeStemX - rootsPackedWidth / 2;
+
+            cluster.forEach((root, idx) => {
+                const rootWidth = getNodeDimensions(root).width;
+                assignPosition(root.id, currentRootX, 50);
+                const gap = idx < cluster.length - 1 ? 60 : 0;
+                currentRootX += rootWidth + gap;
+            });
+            clusterStartX += totalWidth + cm.clusterGap;
+        });
     }
 
     const incomingEdgesMap = new Map<string, string[]>();

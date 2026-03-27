@@ -121,14 +121,14 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
       <div className={`fixed inset-0 z-40 bg-black transition-opacity duration-200 ${isVisible ? "bg-opacity-50" : "bg-opacity-0"}`} role="presentation" />
 
       {/* Dialog container - centered on screen */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={handleOutsideClick}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={handleOutsideClick}>
         {/* Dialog panel - the actual popup */}
         <div
           className={`
-            bg-white dark:bg-gray-800 rounded-lg shadow-lg
-            max-w-lg w-full max-h-[90vh] overflow-y-auto
+            bg-white dark:bg-gray-800 rounded-lg shadow-xl
+            max-w-md w-full my-8 overflow-visible
             border border-gray-200 dark:border-gray-700
-            transition-all duration-200 ease-out
+            transition-all duration-200 ease-out flex flex-col
             ${isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"}
             ${className}
           `}
@@ -137,7 +137,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
           aria-modal="true"
         >
           {/* Header section */}
-          <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
             {/* Header content */}
             <div className="flex-1">
               {typeof header === "string" ? <h2 className="text-md font-semibold text-gray-900 dark:text-white">{header}</h2> : header}
@@ -158,11 +158,15 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
             )}
           </div>
 
-          {/* Body section - main content */}
-          <div className="px-3 py-4 text-gray-700 dark:text-gray-300">{body}</div>
+          {/* Body section */}
+          <div className="px-4 py-4 text-gray-700 dark:text-gray-300 overflow-visible min-h-[100px]">{body}</div>
 
-          {/* Footer section - optional actions */}
-          {footer && <div className="px-3 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">{footer}</div>}
+          {/* Footer section */}
+          {footer && (
+            <div className="px-5 pb-5 pt-2 flex items-center justify-end rounded-b-lg">
+              {footer}
+            </div>
+          )}
         </div>
       </div>
     </>,

@@ -3,7 +3,7 @@ import ReactFlow, { Background, MarkerType, ReactFlowInstance, applyEdgeChanges,
 import type { Edge, EdgeChange, Node, NodeChange } from "reactflow"
 import "reactflow/dist/style.css"
 import { ProTipBanner } from "./ProTipBanner"
-import { AutomationConfigModal } from "./AutomationConfigModal"
+import { AutomationConfigModal } from "./AutomationConfig/Modal"
 import { JsonViewerPanel } from "./JsonViewerPanel/JsonViewerPanel"
 import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../constants/toolbox"
 import { useFlowHistory } from "../hooks/useFlowHistory"
