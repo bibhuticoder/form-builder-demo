@@ -16,6 +16,6 @@ export type { TvModalProps } from './TvModal';
 
 export { Dialog } from './Dialog';
 
-export { FormSettings } from '../BuilderPanelTabs/FormBuilder/components/FormSettings/FormSettings';
+export { FormSettings } from '../FormBuilder/components/FormSettings/FormSettings';
 
 export { ThemeToggle } from './ThemeToggle';

@@ -2,6 +2,7 @@ export type Folder = {
     id: string;
     name: string;
     parentId: string | null;
+    duplicateOf?: string;
 };
 
 export enum FileType {
@@ -19,6 +20,7 @@ export type FileItem = {
     status: FileStatusType;
     lastUpdated: string;
     type: FileType;
+    duplicateOf?: string;
 };
 
 export type SortConfig = {

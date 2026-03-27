@@ -130,12 +130,45 @@ export const FileExplorerProvider = ({ children, fileType, initialFolders = [], 
         ));
     };
 
+    const getNextDuplicateName = (sourceItem: { id: string, name: string, duplicateOf?: string }, allItems: any[]) => {
+        const getRootId = (id: string) => {
+            let current = id;
+            const visited = new Set<string>();
+            while (current) {
+                if (visited.has(current)) break;
+                visited.add(current);
+                const parent = allItems.find((i: any) => i.id === current);
+                if (!parent || !parent.duplicateOf) break;
+                current = parent.duplicateOf;
+            }
+            return current;
+        };
+
+        const rootId = getRootId(sourceItem.id);
+        const rootItem = allItems.find((i: any) => i.id === rootId) || sourceItem;
+        const baseName = rootItem.name.replace(/(?:\s*\(duplicate(?: \d+)?\))+$/i, '');
+
+        let max = 0;
+        for (const item of allItems) {
+            if (getRootId(item.id) === rootId) {
+                const match = item.name.match(/\(duplicate (\d+)\)$/i);
+                if (match) {
+                    const num = parseInt(match[1], 10);
+                    if (num > max) max = num;
+                }
+            }
+        }
+
+        return `${baseName} (duplicate ${max + 1})`;
+    };
+
     const handleDuplicateFolder = (folder: Folder) => {
         const newFolderId = `f${Date.now()}`;
         const newFolder: Folder = {
             ...folder,
             id: newFolderId,
-            name: `${folder.name} (Duplicate)`,
+            name: getNextDuplicateName(folder, folders),
+            duplicateOf: folder.id,
         };
 
         const folderFiles = files.filter(a => a.folderId === folder.id);
@@ -143,9 +176,10 @@ export const FileExplorerProvider = ({ children, fileType, initialFolders = [], 
             ...a,
             id: `a${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
             folderId: newFolderId,
-            name: `${a.name} (Copy)`,
+            name: `${a.name.replace(/(?:\s*\(Copy\))+$/i, '')} (Copy)`,
             status: 'inactive' as const,
-            lastUpdated: 'Just now'
+            lastUpdated: 'Just now',
+            duplicateOf: a.id,
         }));
 
         setFolders([...folders, newFolder]);
@@ -172,9 +206,10 @@ export const FileExplorerProvider = ({ children, fileType, initialFolders = [], 
         const copy: FileItem = {
             ...file,
             id: `a${Date.now()}`,
-            name: `${file.name} (2) - Duplicate`,
+            name: getNextDuplicateName(file, files),
             status: 'inactive',
-            lastUpdated: 'Just now'
+            lastUpdated: 'Just now',
+            duplicateOf: file.id,
         };
         setFiles([...files, copy]);
     };
