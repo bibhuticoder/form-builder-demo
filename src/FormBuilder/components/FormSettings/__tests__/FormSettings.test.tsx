@@ -3,7 +3,7 @@ import { FormSettings } from '../FormSettings';
 import { FormStatus } from '../../../types/enums';
 
 // Mock dependencies
-jest.mock('../../../../../components/Dialog', () => ({
+jest.mock('@/components/Dialog', () => ({
   Dialog: ({ isOpen, header, body, footer }: any) => isOpen ? (
     <div role="dialog">
       <h1>{header}</h1>

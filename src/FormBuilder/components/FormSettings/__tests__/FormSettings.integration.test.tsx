@@ -5,7 +5,7 @@ import type { FormSettings as FormSettingsType } from "../../../types/form";
 import { FormStatus } from "../../../types/enums";
 
 // Mock Dialog
-jest.mock("../../../../../components/Dialog", () => ({
+jest.mock("../../../../components/Dialog", () => ({
   Dialog: ({ isOpen, body }: any) =>
     isOpen ? <div data-testid="dialog">{body}</div> : null,
 }));

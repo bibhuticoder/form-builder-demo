@@ -22,19 +22,23 @@ export const Canvas: React.FC<CanvasProps> = ({ dragOverId, selectedBlockId, onS
   return (
     <div className="flex-1 pt-2 flex flex-col gap-2">
       <CanvasToolbar canvasWidth={canvasWidth} onCanvasWidthChange={setCanvasWidth} />
-      <div className="flex-1 overflow-auto h-full p-16" onClick={() => onSelectBlock?.(null)}>
+      <div className="flex-1 overflow-auto h-full p-16" data-testid="canvas-container" onClick={() => onSelectBlock?.(null)}>
         <div
           ref={(node) => {
             canvasRef.current = node
             setNodeRef(node)
           }}
+          data-testid="canvas-width-container"
           className="relative mx-auto h-full transition-[width] duration-300 ease-in-out"
           style={{
             width: canvasWidth,
             minHeight: "400px",
           }}
         >
-          <div className={`h-full overflow-auto shadow-md transition-all duration-300 ${activeBreakpoint === "mobile" ? "rounded-2xl border-4 border-black dark:border-white" : "rounded"}`}>
+          <div 
+            data-testid="canvas-main"
+            className={`h-full overflow-auto shadow-md transition-all duration-300 ${activeBreakpoint === "mobile" ? "rounded-2xl border-4 border-black dark:border-white" : "rounded"}`}
+          >
             {isEmpty ? (
               <div className="h-full flex items-center justify-center p-8 bg-primary/5 dark:bg-primary/10">
                 <EmptyState isOver={isOver} />

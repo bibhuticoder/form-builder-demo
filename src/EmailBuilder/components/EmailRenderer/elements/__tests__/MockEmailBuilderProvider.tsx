@@ -34,6 +34,8 @@ const mockContextValue = {
     canUndo: false,
     canRedo: false,
     historyPointer: 0,
+    activeView: 'DESIGN',
+    setActiveView: jest.fn(),
 };
 
 export const MockEmailBuilderProvider: React.FC<{ children: React.ReactNode; value?: any }> = ({ children, value }) => {

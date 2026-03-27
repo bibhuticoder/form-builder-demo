@@ -33,7 +33,7 @@ const cssToStyleString = (css: CSSProperties): string => {
 /**
  * Truncates text for use in HTML comments
  */
-const truncateText = (text: string, length: number = 30): string => {
+const truncateText = (text: string, length: number = 100): string => {
     if (!text) return "";
     const cleaned = text.replace(/\s+/g, ' ').trim();
     if (cleaned.length <= length) return cleaned;
@@ -169,7 +169,7 @@ export const jsonToHtml = (template: EmailTemplate): string => {
     const { templateSettings, blocks } = template;
 
     // Resolve outer body and inner content styles
-    const bodyBgColor = (templateSettings.settings as any)?.bodyBg || '#ffffff';
+    const bodyBgColor = templateSettings.settings.backgroundColor || '#ffffff';
     const contentStyle = cssToStyleString(getTemplateSettingsStyles(templateSettings.settings as any));
     const fontFamily = (templateSettings.settings as any)?.fontFamily || 'Arial, sans-serif';
 

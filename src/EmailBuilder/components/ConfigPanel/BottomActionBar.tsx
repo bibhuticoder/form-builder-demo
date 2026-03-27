@@ -21,6 +21,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({ isCollapsed, p
                 <div className={`flex flex-${isCollapsed && parent === "element-palette" ? "col gap-4" : "row gap-4"} justify-between`}>
                     <ArrowUturnLeftIcon
                         onClick={undo}
+                        data-testid="undo-icon"
                         className={`w-4 h-4 transition-colors ${canUndo
                             ? "text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white"
                             : "text-gray-200 dark:text-gray-700 cursor-not-allowed"
@@ -30,6 +31,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({ isCollapsed, p
 
                     <ArrowUturnRightIcon
                         onClick={redo}
+                        data-testid="redo-icon"
                         className={`w-4 h-4 transition-colors ${canRedo
                             ? "text-gray-400 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white"
                             : "text-gray-200 dark:text-gray-700 cursor-not-allowed"

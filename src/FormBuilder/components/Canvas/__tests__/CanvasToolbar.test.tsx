@@ -6,7 +6,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { CanvasToolbar } from "../CanvasToolbar";
 
 // Mock components
-jest.mock("../../../../../components", () => ({
+jest.mock("../../../../components", () => ({
   Button: ({ children, onClick, variant, title, disabled }: any) => (
     <button onClick={onClick} data-variant={variant} title={title} disabled={disabled}>
       {children}

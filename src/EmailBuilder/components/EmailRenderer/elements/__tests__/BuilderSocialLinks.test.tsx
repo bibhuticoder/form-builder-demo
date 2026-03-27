@@ -24,9 +24,9 @@ describe('BuilderSocialLinks', () => {
                 />
             </MockEmailBuilderProvider>
         );
-        expect(screen.getByText('FB')).toBeTruthy();
-        expect(screen.getByText('X')).toBeTruthy();
-        expect(screen.getByText('IG')).toBeTruthy();
+        expect(screen.getByTitle('facebook')).toBeTruthy();
+        expect(screen.getByTitle('twitter')).toBeTruthy();
+        expect(screen.getByTitle('instagram')).toBeTruthy();
     });
 
     it('renders linkedin and youtube icons', () => {
@@ -45,8 +45,8 @@ describe('BuilderSocialLinks', () => {
                 />
             </MockEmailBuilderProvider>
         );
-        expect(screen.getByText('IN')).toBeTruthy();
-        expect(screen.getByText('YT')).toBeTruthy();
+        expect(screen.getByTitle('linkedin')).toBeTruthy();
+        expect(screen.getByTitle('youtube')).toBeTruthy();
     });
 
     it('renders correct number of social icons', () => {

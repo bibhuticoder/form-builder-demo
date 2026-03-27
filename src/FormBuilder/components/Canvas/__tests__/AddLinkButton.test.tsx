@@ -37,7 +37,7 @@ jest.mock("../../LinkModal", () => ({
 }));
 
 // Mock components
-jest.mock("../../../../../components", () => ({
+jest.mock("../../../../components", () => ({
   Button: ({ children, onClick, disabled, title }: any) => (
     <button onClick={onClick} disabled={disabled} title={title}>
       {children}

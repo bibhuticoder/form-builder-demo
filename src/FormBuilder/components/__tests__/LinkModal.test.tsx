@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 import { LinkModal } from "../LinkModal";
 
 // Mock Dialog component
-jest.mock("../../../../components/Dialog", () => ({
+jest.mock("@/components/Dialog", () => ({
   Dialog: ({ isOpen, header, subtitle, body, footer, onClose }: any) =>
     isOpen ? (
       <div data-testid="dialog">
@@ -22,7 +22,7 @@ jest.mock("../../../../components/Dialog", () => ({
 }));
 
 // Mock Button component
-jest.mock("../../../../components/Button", () => ({
+jest.mock("@/components/Button", () => ({
   Button: ({ children, onClick, variant }: any) => (
     <button onClick={onClick} data-variant={variant}>
       {children}
