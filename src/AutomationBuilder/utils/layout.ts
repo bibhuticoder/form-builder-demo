@@ -27,52 +27,63 @@ export function restoreNodeIcons(nodes: Node[], toolboxItems: Array<{ items: Arr
     });
 }
 
-export function ensureBranchAdders(nodes: Node[], edges: Edge[]) {
-    const branchParents = nodes.filter((n) => ['If / Else', 'Split Test (A/B)', 'Switch Case', 'Parallel'].includes(n.data?.label));
 
-    branchParents.forEach((parent) => {
-        const childrenEdges = edges.filter((e) => e.source === parent.id && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack);
-        const childrenIds = childrenEdges.map((e) => e.target);
-        const children = nodes.filter((n) => childrenIds.includes(n.id) && !n.data?.isBranchAdder);
-        if (children.length === 0) return;
+export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
+    const nonTerminalNodes = nodes.filter((n) => {
+        if (n.type === 'addStep') return false;
+        if (n.type === 'placeholder') return false;
+        if (['End Automation', 'Send To Automation'].includes(n.data?.label)) return false;
+        return true;
+    });
 
-        children.sort((a, b) => a.position.x - b.position.x);
-        const lastChild = children[children.length - 1];
-
-        const existingAdderEdge = edges.find(
-            (e) => e.source === lastChild.id && nodes.find((n) => n.id === e.target)?.data?.isBranchAdder
-        );
-        if (existingAdderEdge) return;
-
-        const addBranchNodeId = `add-branch-${parent.id}-restored`;
-        let addBranchNode = nodes.find((n) => n.id === addBranchNodeId);
-        if (!addBranchNode) {
-            addBranchNode = {
-                id: addBranchNodeId,
-                type: 'addStep',
-                position: { x: 0, y: 0 },
-                data: { label: 'Add Branch', isBranchAdder: true, siblingId: lastChild.id },
-                draggable: false,
-                width: 60,
-                height: 60,
-            };
-            nodes.push(addBranchNode);
+    nonTerminalNodes.forEach((node) => {
+        const title = node.data?.label;
+        const isIfElse = title === 'If / Else';
+        const isSplitTest = title === 'Split Test (A/B)';
+        const isBranching = isIfElse || isSplitTest || ['Switch Case', 'Parallel'].includes(title);
+        
+        const childrenEdges = edges.filter((e) => e.source === node.id && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack);
+        
+        if (isBranching) {
+            if (isIfElse) {
+                const hasYes = childrenEdges.some(e => e.label === 'YES');
+                const hasNo = childrenEdges.some(e => e.label === 'NO');
+                
+                if (!hasYes) {
+                    const slotId = `add-step-${node.id}-yes`;
+                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x - 140, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
+                    edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: 'YES', data: { isCondition: true } });
+                }
+                if (!hasNo) {
+                    const slotId = `add-step-${node.id}-no`;
+                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x + 140, y: node.position.y + 150 }, data: { label: 'Add Step', isLastBranchNode: true }, draggable: false, width: 256, height: 92 });
+                    edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: 'NO', data: { isCondition: true } });
+                }
+            } else if (isSplitTest) {
+                // For Split Test, we need at least 2 branches.
+                if (childrenEdges.length < 2) {
+                    const missingCount = 2 - childrenEdges.length;
+                    for (let i = 0; i < missingCount; i++) {
+                        const slotId = `add-step-${node.id}-split-${Date.now()}-${i}`;
+                        nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
+                        edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { isSplitTest: true } });
+                    }
+                }
+            }
+        } else {
+            // Standard nodes must have exactly one child edge
+            if (childrenEdges.length === 0) {
+                const slotId = `add-step-${node.id}-auto`;
+                nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
+                edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed } });
+            }
         }
-
-        edges.push({
-            id: `e-${lastChild.id}-${addBranchNode.id}`,
-            source: lastChild.id,
-            sourceHandle: 'right-source',
-            target: addBranchNode.id,
-            type: 'smoothstep',
-            markerEnd: { type: MarkerType.ArrowClosed },
-            style: { strokeDasharray: '5,5', opacity: 0.5 },
-        });
     });
 }
 
 export function performAutoLayout(nodes: Node[], edges: Edge[]) {
-    ensureBranchAdders(nodes, edges);
+    // 1. Ensure minimal structural nodes exist
+    ensureStepSlots(nodes, edges);
 
     const targets = new Set(edges.map((e) => e.target));
     const roots = nodes.filter((n) => !targets.has(n.id));

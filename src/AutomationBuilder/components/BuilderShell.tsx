@@ -43,7 +43,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col">
+    <div className="h-full w-full overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col border">
       <div className="relative overflow-visible h-16 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center px-4 md:px-6 justify-between shrink-0 z-40">
         <div className="flex items-center gap-3 md:gap-4 min-w-0">
           <Link to="/automations">
@@ -52,7 +52,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
             </Button>
           </Link>
 
-          <Input value={automationName} onChange={(e) => setAutomationName(e.target.value)} className="text-lg font-semibold text-slate-800 dark:text-slate-100 border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" />
+          <Input value={automationName} onChange={(e) => setAutomationName(e.target.value)} className="text-sm font-semibold text-slate-800 shadow border dark:text-slate-100 hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" />
 
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
 
@@ -61,6 +61,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
             {status === "active" ? "Active" : "Inactive"}
           </button>
 
+          {/* Settings */}
           <div className="ml-1 border-l pl-3 border-slate-200 dark:border-slate-700">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

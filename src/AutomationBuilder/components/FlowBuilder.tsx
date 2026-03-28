@@ -7,7 +7,7 @@ import { AutomationConfigModal } from "./AutomationConfig/Modal"
 import { JsonViewerPanel } from "./JsonViewerPanel/JsonViewerPanel"
 import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../constants/toolbox"
 import { useFlowHistory } from "../hooks/useFlowHistory"
-import { performAutoLayout, restoreNodeIcons, ensureBranchAdders } from "../utils/layout"
+import { performAutoLayout, restoreNodeIcons } from "../utils/layout"
 import { flowNodeTypes } from "./flow/FlowBuilderNodes"
 import { flowEdgeTypes } from "./flow/FlowBuilderEdge"
 import { FlowBuilderControls } from "./flow/FlowBuilderControls"
@@ -65,7 +65,6 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     const restoredNodes = JSON.parse(JSON.stringify(previousState.nodes))
     const restoredEdges = JSON.parse(JSON.stringify(previousState.edges))
     restoreNodeIcons(restoredNodes, TOOLBOX_ITEMS)
-    ensureBranchAdders(restoredNodes, restoredEdges)
     setNodes(restoredNodes)
     setEdges(restoredEdges)
   }, [undo, nodes, edges])
@@ -76,7 +75,6 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     const restoredNodes = JSON.parse(JSON.stringify(nextState.nodes))
     const restoredEdges = JSON.parse(JSON.stringify(nextState.edges))
     restoreNodeIcons(restoredNodes, TOOLBOX_ITEMS)
-    ensureBranchAdders(restoredNodes, restoredEdges)
     setNodes(restoredNodes)
     setEdges(restoredEdges)
   }, [redo, nodes, edges])
@@ -86,7 +84,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.id === nodeId) return { ...n, data: { ...n.data, isConnecting: true } }
-        if (n.type !== "placeholder" && n.type !== "addStep" && n.type !== "loopBack" && !n.data?.isBranchAdder) {
+        if (n.type !== "placeholder" && n.type !== "addStep" && n.type !== "loopBack") {
           return { ...n, data: { ...n.data, isTargetable: true } }
         }
         return n
@@ -143,6 +141,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       takeSnapshot(nodes, edges)
       setNodes((nds) => nds.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...newData } } : n)))
 
+      // Update edge labels for Split Test
       if (newData.label === "Split Test (A/B)" && newData.weights) {
         setEdges((eds) => {
           const siblings = eds.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
@@ -153,6 +152,21 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             if (idx !== -1 && newData.weights[idx] !== undefined) {
               return { ...e, label: `${newData.weights[idx]}%`, data: { ...(e.data || {}), isSplitTest: true } }
             }
+            return e
+          })
+        })
+      }
+
+      // Update edge labels for If / Else
+      if (newData.label === "If / Else") {
+        setEdges((eds) => {
+          const siblings = eds.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
+          siblings.sort((a, b) => a.id.localeCompare(b.id))
+          return eds.map((e) => {
+            if (e.source !== nodeId || e.sourceHandle === "right-source") return e
+            const idx = siblings.findIndex((s) => s.id === e.id)
+            if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', data: { ...(e.data || {}), isCondition: true } }
+            if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', data: { ...(e.data || {}), isCondition: true } }
             return e
           })
         })
@@ -299,15 +313,30 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
           const startX = newNode.position.x + 140 - (280 * 2 + 60) / 2
           const addStepA: Node = { id: `add-step-${Date.now()}-A`, type: "addStep", position: { x: startX, y: branchY }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
           const addStepB: Node = { id: `add-step-${Date.now()}-B`, type: "addStep", position: { x: startX + 256 + 56, y: branchY }, data: { label: "Add Step", isLastBranchNode: true }, draggable: false, width: 256, height: 92 }
-          const addBranchNode: Node = { id: `add-branch-${Date.now()}`, type: "addStep", position: { x: addStepB.position.x + 300, y: branchY + 20 }, data: { label: "Add Branch", isBranchAdder: true, siblingId: addStepB.id }, draggable: false, width: 60, height: 60 }
-
           const isSplitTest = (foundItem?.label || label) === "Split Test (A/B)"
+          const isIfElse = (foundItem?.label || label) === "If / Else"
+          
           const newEdges: Edge[] = [
-            { id: `e-${newNode.id}-${addStepA.id}`, source: newNode.id, target: addStepA.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed }, label: isSplitTest ? "50%" : undefined, data: isSplitTest ? { isSplitTest: true } : undefined },
-            { id: `e-${newNode.id}-${addStepB.id}`, source: newNode.id, target: addStepB.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed }, label: isSplitTest ? "50%" : undefined, data: isSplitTest ? { isSplitTest: true } : undefined },
-            { id: `e-${addStepB.id}-${addBranchNode.id}`, source: addStepB.id, sourceHandle: "right-source", target: addBranchNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed }, style: { strokeDasharray: "5,5", opacity: 0.5 } },
+            { 
+              id: `e-${newNode.id}-${addStepA.id}`, 
+              source: newNode.id, 
+              target: addStepA.id, 
+              type: "smoothstep", 
+              markerEnd: { type: MarkerType.ArrowClosed }, 
+              label: isSplitTest ? "50%" : isIfElse ? "YES" : undefined, 
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true } : undefined 
+            },
+            { 
+              id: `e-${newNode.id}-${addStepB.id}`, 
+              source: newNode.id, 
+              target: addStepB.id, 
+              type: "smoothstep", 
+              markerEnd: { type: MarkerType.ArrowClosed }, 
+              label: isSplitTest ? "50%" : isIfElse ? "NO" : undefined, 
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true } : undefined 
+            },
           ]
-          const layouted = performAutoLayout([newNode, addStepA, addStepB, addBranchNode], newEdges)
+          const layouted = performAutoLayout([newNode, addStepA, addStepB], newEdges)
           setNodes(layouted)
           setEdges(newEdges)
           return
@@ -398,25 +427,19 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
       const distance = (ax: number, ay: number, bx: number, by: number) => Math.hypot(ax - bx, ay - by)
 
-      // Identify closest drop target: an AddStep slot or a branch "+" button on the last branch card.
+      // Identify closest drop target: an AddStep slot.
       let closestAddStepNode: any = null
       let closestAddStepDist = Infinity
       let nearestAddStepNode: any = null
       let nearestAddStepDist = Infinity
-      let addBranchDropOnNode: any = null
-      let addBranchDropDist = Infinity
 
       nodes.forEach((n) => {
         if (n.type === "addStep") {
-          const isBranchAdder = !!n.data?.isBranchAdder
-          const width = isBranchAdder ? 60 : 280
-          const height = isBranchAdder ? 60 : 100
-          const cx = n.position.x + width / 2
-          const cy = n.position.y + height / 2
+          const cx = n.position.x + 140
+          const cy = n.position.y + 50
           const d = distance(cx, cy, position.x, position.y)
 
-          // Track nearest addStep target (even if not within the strict hit radius)
-          if (!isBranchAdder && d < nearestAddStepDist) {
+          if (d < nearestAddStepDist) {
             nearestAddStepDist = d
             nearestAddStepNode = n
           }
@@ -426,16 +449,6 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             closestAddStepNode = n
           }
         }
-
-        if (n.data?.isLastBranchNode) {
-          const bx = n.position.x + 350
-          const by = n.position.y + 50
-          const d = distance(bx, by, position.x, position.y)
-          if (d < 60 && d < addBranchDropDist) {
-            addBranchDropDist = d
-            addBranchDropOnNode = n
-          }
-        }
       })
 
       // If user drops near-ish the flow but not directly on the slot, still snap to nearest add-step.
@@ -443,132 +456,6 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         closestAddStepNode = nearestAddStepNode
       }
 
-      const isAddBranchDrop = !!addBranchDropOnNode || !!closestAddStepNode?.data?.isBranchAdder
-
-      if (isAddBranchDrop) {
-        // Determine the sibling node that currently owns the branch adder.
-        const referenceNode = addBranchDropOnNode || closestAddStepNode
-        if (!referenceNode) return
-
-        let siblingNode: any
-        if (addBranchDropOnNode) {
-          siblingNode = addBranchDropOnNode
-        } else {
-          // Dropped on the (invisible) branch-adder node.
-          siblingNode = nodes.find((n) => n.id === referenceNode.data?.siblingId)
-        }
-        if (!siblingNode) return
-
-        // Place the new branch node roughly to the right of the current last branch,
-        // so ordering and layout are stable even before auto-layout runs.
-        newNode.position = {
-          x: (siblingNode.position?.x || 0) + 340,
-          y: siblingNode.position?.y || 0,
-        }
-
-        // Find the branching parent via incoming edge.
-        const parentEdge = edges.find((e) => e.target === siblingNode!.id && e.sourceHandle !== "right-source" && !e.data?.isLoopBack)
-        if (!parentEdge) return
-        const parentId = parentEdge.source
-        const parentNode = nodes.find((n) => n.id === parentId)
-        if (!parentNode) return
-
-        const isSplitTestParent = parentNode.data?.label === "Split Test (A/B)"
-
-        // Collect existing branch children.
-        const childEdges = edges.filter((e) => e.source === parentId && e.sourceHandle !== "right-source" && !e.data?.isLoopBack)
-        const childIds = childEdges.map((e) => e.target)
-        const branchChildren = nodes.filter((n) => childIds.includes(n.id) && !n.data?.isBranchAdder)
-
-        // Remove existing branch adder nodes connected to any child in this group.
-        const adderEdges = edges.filter((e) => branchChildren.some((c) => c.id === e.source) && nodes.find((n) => n.id === e.target)?.data?.isBranchAdder)
-        const adderIds = adderEdges.map((e) => e.target)
-
-        let nextNodes = nodes.filter((n) => !adderIds.includes(n.id))
-        let nextEdges = edges.filter((e) => !adderIds.includes(e.target) && !adderIds.includes(e.source))
-
-        // Create new branch node.
-        newNode.data = { ...newNode.data, isBranchChild: true }
-        nextNodes = nextNodes.concat(newNode)
-        nextEdges = nextEdges.concat({
-          id: `e-${parentId}-${newNode.id}`,
-          source: parentId,
-          target: newNode.id,
-          type: "smoothstep",
-          markerEnd: { type: MarkerType.ArrowClosed },
-          label: isSplitTestParent ? "" : undefined,
-          data: isSplitTestParent ? { isSplitTest: true } : undefined,
-        } as any)
-
-        // Update last-branch flags.
-        const updatedChildren = [...branchChildren, newNode].sort((a, b) => (a.position.x || 0) - (b.position.x || 0))
-        updatedChildren.forEach((c) => {
-          if (!c.data) c.data = {}
-          c.data.isLastBranchNode = false
-        })
-        const lastChild = updatedChildren[updatedChildren.length - 1]
-        if (lastChild.data) lastChild.data.isLastBranchNode = true
-
-        // Recreate branch adder connected to the new last child.
-        const addBranchNode: Node = {
-          id: `add-branch-${Date.now()}`,
-          type: "addStep",
-          position: { x: (lastChild.position.x || 0) + 300, y: (lastChild.position.y || 0) + 20 },
-          data: { label: "Add Branch", isBranchAdder: true, siblingId: lastChild.id },
-          draggable: false,
-          width: 60,
-          height: 60,
-        }
-
-        nextNodes = nextNodes.concat(addBranchNode)
-        nextEdges = nextEdges.concat({
-          id: `e-${lastChild.id}-${addBranchNode.id}`,
-          source: lastChild.id,
-          sourceHandle: "right-source",
-          target: addBranchNode.id,
-          type: "smoothstep",
-          markerEnd: { type: MarkerType.ArrowClosed },
-          style: { strokeDasharray: "5,5", opacity: 0.5 },
-        })
-
-        // Split-test: normalize edge labels to equal weights.
-        if (isSplitTestParent) {
-          const count = updatedChildren.length
-          const pct = `${Math.floor(100 / count)}%`
-          nextEdges = nextEdges.map((e) => {
-            if (e.source === parentId && e.sourceHandle !== "right-source") {
-              return { ...e, label: pct, data: { ...(e.data || {}), isSplitTest: true } }
-            }
-            return e
-          })
-        }
-
-        // Ensure new branch has an add-step below if it’s not terminal.
-        if (!isTerminal) {
-          const addStepNode: Node = {
-            id: `add-step-${Date.now()}-local`,
-            type: "addStep",
-            position: { x: newNode.position.x, y: newNode.position.y + 150 },
-            data: { label: "Add Step" },
-            draggable: false,
-            width: 256,
-            height: 100,
-          }
-          nextNodes = nextNodes.concat(addStepNode)
-          nextEdges = nextEdges.concat({
-            id: `e-${newNode.id}-${addStepNode.id}`,
-            source: newNode.id,
-            target: addStepNode.id,
-            type: "smoothstep",
-            markerEnd: { type: MarkerType.ArrowClosed },
-          })
-        }
-
-        const layouted = performAutoLayout(nextNodes, nextEdges)
-        setNodes(layouted)
-        setEdges(nextEdges)
-        return
-      }
 
       if (!closestAddStepNode) return
 
@@ -580,12 +467,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
       const newNodes = nodes.filter((n) => n.id !== closestAddStepNode!.id).concat(newNode)
 
-      if (!isTerminal) {
-        const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
-        newNodes.push(addStepNode)
-        updatedEdges.push({ id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } })
-      }
-
+      // Rely on performAutoLayout to add necessary slots and layout the flow
       const layouted = performAutoLayout(newNodes, updatedEdges)
       setNodes(layouted)
       setEdges(updatedEdges)
