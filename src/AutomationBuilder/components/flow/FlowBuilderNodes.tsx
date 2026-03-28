@@ -34,7 +34,7 @@ const PlaceholderNode = () => (
   </div>
 )
 
-const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLastBranchNode, isDragging, isRoot, isTargetable, hideSourceHandle }: any) => {
+const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoot, isTargetable, hideSourceHandle }: any) => {
   const { deleteElements, getEdges } = useReactFlow()
 
   return (
@@ -83,24 +83,16 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isLas
         </div>
         {!isTargetable && <Handle type="target" position={Position.Top} className={`!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary ${isRoot ? "!opacity-0 !border-0" : ""}`} />}
         {!isTargetable && !hideSourceHandle && <Handle type="source" position={Position.Bottom} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />}
+        {!isTargetable && (
+          <Handle 
+            type="target" 
+            position={Position.Left} 
+            id="loop-target"
+            className="!w-3 !h-3 !bg-transparent !border-0 opacity-0 pointer-events-none" 
+          />
+        )}
       </div>
 
-      {isLastBranchNode && !isTargetable && !hideSourceHandle && (
-        <>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 bg-slate-300 border-2 border-white rounded-full z-20" />
-          <div className="absolute left-[256px] top-1/2 -translate-y-1/2 w-[46px] h-[2px] bg-slate-300 pointer-events-none flex items-center z-0">
-            <div className="absolute right-0 top-1/2 -translate-y-[calc(50%+0.5px)] translate-x-[1px] w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-slate-300" />
-          </div>
-          <Handle type="source" position={Position.Right} id="right-source" className={`!w-auto !h-auto !bg-transparent !border-none !rounded-none !left-[302px] !right-auto !top-1/2 !-translate-y-1/2 !transform-none !mt-3 !flex !flex-col !items-center !justify-center !gap-2 group/adder !opacity-100 !pointer-events-auto`}>
-            <div className={`w-10 h-10 rounded-full bg-white dark:bg-slate-900 border-2 border-dashed flex items-center justify-center transition-colors shadow-sm ${isDragging ? "border-primary text-primary" : "border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 group-hover/adder:border-primary group-hover/adder:text-primary"}`}>
-              <PlusIcon className="w-5 h-5" />
-            </div>
-            <span className={`text-[10px] font-medium whitespace-nowrap transition-colors ${isDragging ? "text-primary" : "text-slate-400 group-hover/adder:text-primary"}`}>Add Branch</span>
-          </Handle>
-        </>
-      )}
-
-      {!isLastBranchNode && !isTargetable && <Handle type="source" position={Position.Right} id="right-source" className="!opacity-0 !pointer-events-none" />}
     </div>
   )
 }
@@ -205,7 +197,12 @@ const LoopBackNode = ({ id, data, selected }: any) => {
         </div>
       </div>
       <Handle type="target" position={Position.Top} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />
-      <Handle type="source" position={Position.Bottom} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white opacity-0 pointer-events-none" />
+      <Handle 
+        type="source" 
+        position={Position.Right} 
+        id="loop-source"
+        className="!w-3 !h-3 !bg-amber-400 !border-2 !border-white transition-colors hover:!bg-amber-500" 
+      />
     </div>
   )
 }

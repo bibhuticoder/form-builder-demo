@@ -4,13 +4,8 @@ import { MarkerType } from 'reactflow';
 const X_GAP = 60;
 const Y_GAP = 150;
 const NODE_WIDTH = 256;
-const BRANCH_BUTTON_WIDTH = 100;
-const BRANCH_BUTTON_SPACING = 120;
 
-function getNodeDimensions(node: Node) {
-    if (node.type === 'addStep' && node.data?.isBranchAdder) {
-        return { width: 0, height: 0 };
-    }
+function getNodeDimensions() {
     return { width: 256, height: 92 };
 }
 
@@ -32,7 +27,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
     const nonTerminalNodes = nodes.filter((n) => {
         if (n.type === 'addStep') return false;
         if (n.type === 'placeholder') return false;
-        if (['End Automation', 'Send To Automation'].includes(n.data?.label)) return false;
+        if (['End Automation', 'Send To Automation', 'Loop Back To'].includes(n.data?.label)) return false;
         return true;
     });
 
@@ -46,19 +41,44 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
         
         if (isBranching) {
             if (isIfElse) {
-                const hasYes = childrenEdges.some(e => e.label === 'YES');
-                const hasNo = childrenEdges.some(e => e.label === 'NO');
+                // If / Else must have exactly two branches.
+                const hasTrueBranch = childrenEdges.some(e => e.data?.conditionType === 'true');
+                const hasFalseBranch = childrenEdges.some(e => e.data?.conditionType === 'false');
                 
-                if (!hasYes) {
-                    const slotId = `add-step-${node.id}-yes`;
-                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x - 140, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
-                    edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: 'YES', data: { isCondition: true } });
+                if (!hasTrueBranch) {
+                    const slotId = `add-step-${node.id}-true-${Date.now()}`;
+                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
+                    edges.push({ 
+                        id: `e-${node.id}-${slotId}`, 
+                        source: node.id, 
+                        target: slotId, 
+                        type: 'custom', 
+                        markerEnd: { type: MarkerType.ArrowClosed }, 
+                        label: node.data?.trueLabel || 'YES',
+                        data: { isCondition: true, conditionType: 'true' } 
+                    });
                 }
-                if (!hasNo) {
-                    const slotId = `add-step-${node.id}-no`;
-                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x + 140, y: node.position.y + 150 }, data: { label: 'Add Step', isLastBranchNode: true }, draggable: false, width: 256, height: 92 });
-                    edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: 'NO', data: { isCondition: true } });
+                if (!hasFalseBranch) {
+                    const slotId = `add-step-${node.id}-false-${Date.now()}`;
+                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
+                    edges.push({ 
+                        id: `e-${node.id}-${slotId}`, 
+                        source: node.id, 
+                        target: slotId, 
+                        type: 'smoothstep', 
+                        markerEnd: { type: MarkerType.ArrowClosed }, 
+                        label: node.data?.falseLabel || 'NO',
+                        data: { isCondition: true, conditionType: 'false' } 
+                    });
                 }
+
+                // Update existing labels if data changed
+                edges.forEach(e => {
+                   if (e.source === node.id && e.data?.isCondition) {
+                      if (e.data?.conditionType === 'true') e.label = node.data?.trueLabel || 'YES';
+                      if (e.data?.conditionType === 'false') e.label = node.data?.falseLabel || 'NO';
+                   }
+                });
             } else if (isSplitTest) {
                 // For Split Test, we need at least 2 branches.
                 if (childrenEdges.length < 2) {
@@ -132,16 +152,9 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             rightAttachmentWidth += m.width + 20;
         });
 
-        const node = nodes.find((n) => n.id === nodeId);
-        const selfWidth = node ? getNodeDimensions(node).width : NODE_WIDTH;
+        const selfWidth = getNodeDimensions().width;
         const effectiveSelfWidth = selfWidth + rightAttachmentWidth;
 
-        const isBranchingParent = !!node && ['If / Else', 'Split Test (A/B)', 'Switch Case', 'Parallel'].includes(node.data?.label);
-        if (isBranchingParent && structuralChildren.length > 0) {
-            structuralChildren.forEach((child, idx) => {
-                if (child.data) child.data.isLastBranchNode = idx === structuralChildren.length - 1;
-            });
-        }
 
         if (structuralChildren.length === 0) {
             const metrics = { width: effectiveSelfWidth, centerOffset: selfWidth / 2 };
@@ -156,21 +169,15 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             childMetricsList.push(m);
             totalChildrenWidth += m.width;
             if (index < structuralChildren.length - 1) {
-                let gap = X_GAP;
-                if (child.data?.isLastBranchNode) gap += BRANCH_BUTTON_SPACING;
-                totalChildrenWidth += gap;
+                totalChildrenWidth += X_GAP;
             }
         });
-        if (isBranchingParent && structuralChildren.length > 0) totalChildrenWidth += BRANCH_BUTTON_WIDTH;
 
         let currentX = 0;
         let sumCenters = 0;
-        childMetricsList.forEach((m, idx) => {
+        childMetricsList.forEach((m) => {
             sumCenters += currentX + m.centerOffset;
-            let gap = X_GAP;
-            const childNode = structuralChildren[idx];
-            if (childNode?.data?.isLastBranchNode && idx < structuralChildren.length - 1) gap += BRANCH_BUTTON_SPACING;
-            currentX += m.width + gap;
+            currentX += m.width + X_GAP;
         });
         const averageChildrenCenter = sumCenters / childMetricsList.length;
 
@@ -205,13 +212,12 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             else standardChildrenIds.push(childId);
         });
 
-        const parentNode = nodes.find((n) => n.id === nodeId);
-        const parentWidth = parentNode ? getNodeDimensions(parentNode).width : NODE_WIDTH;
+        const parentWidth = getNodeDimensions().width;
         let currentRightX = x + parentWidth + 20;
         const rightNodes = rightChildrenIds.map((id) => nodes.find((n) => n.id === id)).filter(Boolean) as Node[];
         rightNodes.forEach((rn) => {
             assignPosition(rn.id, currentRightX, y);
-            const rnWidth = getNodeDimensions(rn).width;
+            const rnWidth = getNodeDimensions().width;
             const m = subtreeMetrics.get(rn.id) || { width: rnWidth, centerOffset: rnWidth / 2 };
             currentRightX += m.width + 20;
         });
@@ -223,36 +229,26 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             return a.id.localeCompare(b.id);
         });
 
-        const isBranchingParent = !!parentNode && ['If / Else', 'Split Test (A/B)', 'Switch Case', 'Parallel'].includes(parentNode.data?.label);
-        if (isBranchingParent) {
-            const lastChild = structuralChildren[structuralChildren.length - 1];
-            if (lastChild.data && !lastChild.data.isLastBranchNode) lastChild.data.isLastBranchNode = true;
-        }
 
         const parentCenter = x + parentWidth / 2;
         let totalW = 0;
         let sumC = 0;
-        structuralChildren.forEach((child, idx) => {
-            const m = subtreeMetrics.get(child.id) || { width: getNodeDimensions(child).width, centerOffset: getNodeDimensions(child).width / 2 };
+        structuralChildren.forEach((child) => {
+            const m = subtreeMetrics.get(child.id) || { width: getNodeDimensions().width, centerOffset: getNodeDimensions().width / 2 };
             sumC += totalW + m.centerOffset;
-            let gap = X_GAP;
-            if (child.data?.isLastBranchNode && idx < structuralChildren.length - 1) gap += BRANCH_BUTTON_SPACING;
-            totalW += m.width;
-            if (idx < structuralChildren.length - 1) totalW += gap;
+            totalW += m.width + (structuralChildren.indexOf(child) < structuralChildren.length - 1 ? X_GAP : 0);
         });
         const avgCenterOffset = sumC / structuralChildren.length;
         let startX = parentCenter - avgCenterOffset;
 
         let currentX = startX;
-        structuralChildren.forEach((child, idx) => {
-            const m = subtreeMetrics.get(child.id) || { width: getNodeDimensions(child).width, centerOffset: getNodeDimensions(child).width / 2 };
+        structuralChildren.forEach((child) => {
+            const m = subtreeMetrics.get(child.id) || { width: getNodeDimensions().width, centerOffset: getNodeDimensions().width / 2 };
             const childCenterX = currentX + m.centerOffset;
-            const childWidth = getNodeDimensions(child).width;
+            const childWidth = getNodeDimensions().width;
             const childTopLeftX = childCenterX - childWidth / 2;
             assignPosition(child.id, childTopLeftX, y + Y_GAP);
-            let gap = X_GAP;
-            if (child.data?.isLastBranchNode && idx < structuralChildren.length - 1) gap += BRANCH_BUTTON_SPACING;
-            currentX += m.width + gap;
+            currentX += m.width + X_GAP;
         });
     }
 
@@ -301,8 +297,8 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
                 if (m.centerOffset > maxCenterOffset) maxCenterOffset = m.centerOffset;
             });
 
-            const rootsPackedWidth = cluster.reduce((acc, root, idx) => {
-                const rootWidth = getNodeDimensions(root).width;
+            const rootsPackedWidth = cluster.reduce((acc, _, idx) => {
+                const rootWidth = getNodeDimensions().width;
                 const gap = idx < cluster.length - 1 ? 60 : 0;
                 return acc + rootWidth + gap;
             }, 0);
@@ -328,7 +324,7 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             let currentRootX = treeStemX - rootsPackedWidth / 2;
 
             cluster.forEach((root, idx) => {
-                const rootWidth = getNodeDimensions(root).width;
+                const rootWidth = getNodeDimensions().width;
                 assignPosition(root.id, currentRootX, 50);
                 const gap = idx < cluster.length - 1 ? 60 : 0;
                 currentRootX += rootWidth + gap;

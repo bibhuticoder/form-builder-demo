@@ -139,38 +139,63 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const onSaveConfig = useCallback(
     (nodeId: string, newData: any) => {
       takeSnapshot(nodes, edges)
-      setNodes((nds) => nds.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...newData } } : n)))
+
+      // 1. Update node data first
+      const nextNodes = nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...newData } } : n))
+
+      // 2. Prepare updated edges
+      let nextEdges = [...edges]
 
       // Update edge labels for Split Test
       if (newData.label === "Split Test (A/B)" && newData.weights) {
-        setEdges((eds) => {
-          const siblings = eds.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
-          siblings.sort((a, b) => a.id.localeCompare(b.id))
-          return eds.map((e) => {
-            if (e.source !== nodeId || e.sourceHandle === "right-source") return e
-            const idx = siblings.findIndex((s) => s.id === e.id)
-            if (idx !== -1 && newData.weights[idx] !== undefined) {
-              return { ...e, label: `${newData.weights[idx]}%`, data: { ...(e.data || {}), isSplitTest: true } }
-            }
-            return e
-          })
+        const siblings = nextEdges.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
+        siblings.sort((a, b) => a.id.localeCompare(b.id))
+        nextEdges = nextEdges.map((e) => {
+          if (e.source !== nodeId || e.sourceHandle === "right-source") return e
+          const idx = siblings.findIndex((s) => s.id === e.id)
+          if (idx !== -1 && newData.weights[idx] !== undefined) {
+            return { ...e, label: `${newData.weights[idx]}%`, data: { ...(e.data || {}), isSplitTest: true } }
+          }
+          return e
         })
       }
 
       // Update edge labels for If / Else
       if (newData.label === "If / Else") {
-        setEdges((eds) => {
-          const siblings = eds.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
-          siblings.sort((a, b) => a.id.localeCompare(b.id))
-          return eds.map((e) => {
-            if (e.source !== nodeId || e.sourceHandle === "right-source") return e
-            const idx = siblings.findIndex((s) => s.id === e.id)
-            if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', data: { ...(e.data || {}), isCondition: true } }
-            if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', data: { ...(e.data || {}), isCondition: true } }
-            return e
-          })
+        const siblings = nextEdges.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
+        siblings.sort((a, b) => a.id.localeCompare(b.id))
+        nextEdges = nextEdges.map((e) => {
+          if (e.source !== nodeId || e.sourceHandle === "right-source") return e
+          const idx = siblings.findIndex((s) => s.id === e.id)
+          if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', data: { ...(e.data || {}), isCondition: true } }
+          if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', data: { ...(e.data || {}), isCondition: true } }
+          return e
         })
       }
+
+      // Update Loop Back connections
+      if (newData.label === "Loop Back To") {
+        nextEdges = nextEdges.filter(e => !(e.source === nodeId && e.data?.isLoopBack));
+        if (newData.targetId) {
+          nextEdges.push({
+            id: `e-${nodeId}-${newData.targetId}-loopback`,
+            source: nodeId,
+            sourceHandle: "loop-source",
+            target: newData.targetId,
+            targetHandle: "loop-target",
+            type: "custom",
+            animated: true,
+            style: { stroke: "#f59e0b", strokeWidth: 2, strokeDasharray: "5,5" },
+            markerEnd: { type: MarkerType.ArrowClosed, color: "#f59e0b" },
+            data: { isLoopBack: true }
+          });
+        }
+      }
+
+      // 3. Apply layout to ensure structure is updated (e.g. labels, slots)
+      const layoutedNodes = performAutoLayout(nextNodes, nextEdges)
+      setNodes(layoutedNodes)
+      setEdges(nextEdges)
     },
     [takeSnapshot, nodes, edges],
   )
@@ -321,19 +346,19 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
               id: `e-${newNode.id}-${addStepA.id}`, 
               source: newNode.id, 
               target: addStepA.id, 
-              type: "smoothstep", 
+              type: "custom", 
               markerEnd: { type: MarkerType.ArrowClosed }, 
-              label: isSplitTest ? "50%" : isIfElse ? "YES" : undefined, 
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true } : undefined 
+              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.trueLabel || 'YES') : undefined, 
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined 
             },
             { 
               id: `e-${newNode.id}-${addStepB.id}`, 
               source: newNode.id, 
               target: addStepB.id, 
-              type: "smoothstep", 
+              type: "custom", 
               markerEnd: { type: MarkerType.ArrowClosed }, 
-              label: isSplitTest ? "50%" : isIfElse ? "NO" : undefined, 
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true } : undefined 
+              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.falseLabel || 'NO') : undefined, 
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined 
             },
           ]
           const layouted = performAutoLayout([newNode, addStepA, addStepB], newEdges)

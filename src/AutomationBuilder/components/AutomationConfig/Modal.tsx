@@ -5,7 +5,7 @@ import { Button } from "@/components/Button"
 import { cn } from "@/lib/utils"
 
 // Helpers
-import { restoreIconIfMissing, ScrollWrapper } from "./helpers"
+import { restoreIconIfMissing } from "./helpers"
 
 // Triggers
 import { FormSubmittedConfig } from "./Triggers/FormSubmittedConfig"
@@ -85,8 +85,8 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
 
     // --- Actions ---
     if (node.type === 'action') {
-      if (label === 'Send Email') return <ScrollWrapper><EmailConfig data={formData} onChange={setFormData} /></ScrollWrapper>
-      if (label === 'Send SMS') return <ScrollWrapper><SMSConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'Send Email') return <EmailConfig data={formData} onChange={setFormData} />
+      if (label === 'Send SMS') return <SMSConfig data={formData} onChange={setFormData} />
       if (label === 'Send Notification') return <NotificationConfig data={formData} onChange={setFormData} />
       if (label === 'Update Contact') return <UpdateContactConfig data={formData} onChange={setFormData} />
       if (label === 'Update Company') return <UpdateCompanyConfig data={formData} onChange={setFormData} />
@@ -94,16 +94,16 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
       if (label === 'Add Note') return <NoteConfig data={formData} onChange={setFormData} />
       if (label === 'Add / Remove Tag') return <TagConfig data={formData} onChange={setFormData} />
       if (label === 'Add to Review Autopilot') return <ReviewAutopilotConfig data={formData} onChange={setFormData} />
-      if (label === 'Send To Slack') return <ScrollWrapper><SlackConfig data={formData} onChange={setFormData} /></ScrollWrapper>
-      if (label === 'Send To Teams') return <ScrollWrapper><TeamsConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'Send To Slack') return <SlackConfig data={formData} onChange={setFormData} />
+      if (label === 'Send To Teams') return <TeamsConfig data={formData} onChange={setFormData} />
       if (label === 'End Automation') return <EndAutomationConfig data={formData} onChange={setFormData} />
       if (label === 'Send To Automation') return <SendToAutomationConfig data={formData} onChange={setFormData} />
     }
 
     // --- Logic ---
     if (label === 'Wait' || label === 'Delay') return <WaitConfig data={formData} onChange={setFormData} />
-    if (label === 'If / Else') return <ScrollWrapper><IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} /></ScrollWrapper>
-    if (label === 'Split Test (A/B)') return <ScrollWrapper><SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} /></ScrollWrapper>
+    if (label === 'If / Else') return <IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} />
+    if (label === 'Split Test (A/B)') return <SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} />
     if (node.type === 'loopBack') return <LoopBackConfig data={formData} onChange={setFormData} />
 
     return <div className="p-4 text-center italic text-slate-500">Generic settings for {label}</div>
