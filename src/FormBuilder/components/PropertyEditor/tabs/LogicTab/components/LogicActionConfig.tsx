@@ -1,7 +1,7 @@
 import React from "react";
 import { Field } from "../../../../../types";
 import { NoSymbolIcon } from "@heroicons/react/24/outline";
-import RichText from "../../../../FormRenderer/elements/RichText";
+import RichText from "../../../../../../components/RichText";
 
 interface LogicActionConfigProps {
     type: 'redirect' | 'message' | 'disqualify' | 'visibility';

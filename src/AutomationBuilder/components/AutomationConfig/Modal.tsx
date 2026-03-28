@@ -19,9 +19,21 @@ import { CallStatusConfig } from "./Triggers/CallStatusConfig"
 import { EngagementScoreConfig } from "./Triggers/EngagementScoreConfig"
 
 // Actions
-import { EmailConfig } from "./Actions/EmailConfig"
-import { NotificationConfig } from "./Actions/NotificationConfig"
-import { SendToAutomationConfig } from "./Actions/SendToAutomationConfig"
+import {
+  EmailConfig,
+  NotificationConfig,
+  SendToAutomationConfig,
+  SMSConfig,
+  UpdateContactConfig,
+  UpdateCompanyConfig,
+  AddRemoveTaskConfig,
+  NoteConfig,
+  TagConfig,
+  ReviewAutopilotConfig,
+  SlackConfig,
+  TeamsConfig,
+  EndAutomationConfig
+} from "./Actions"
 
 // Logic
 import { IfElseConfig } from "./Logic/IfElseConfig"
@@ -49,30 +61,49 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
   if (!node) return null
 
   const label = node.data?.label || 'Step Config'
+  const subTitle = node.data?.subtitle || 'Step Settings'
   const Icon = restoreIconIfMissing(node)
 
   const renderContent = () => {
     if (!node) return null
 
-    if (label === 'Form Submitted') return <FormSubmittedConfig data={formData} onChange={setFormData} />
-    if (label.includes('Tag')) return <TagTriggerConfig data={formData} onChange={setFormData} />
-    if (label.includes('Task')) return <TaskConfig data={formData} onChange={setFormData} />
-    if (label.includes('Contact ') || label === 'Contacts') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Contact" />
-    if (label.includes('Company ') || label === 'Companies') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Company" />
-    if (label.includes('Note ') || label === 'Notes') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Note" />
-    if (label === 'Birthday') return <BirthdayConfig data={formData} onChange={setFormData} />
-    if (label.includes('DND') || label.includes('Do Not Disturb')) return <DNDConfig data={formData} onChange={setFormData} />
-    if (label.includes('DM') || label.includes('Direct Message')) return <SocialMessageConfig data={formData} onChange={setFormData} type="dm" />
-    if (label.includes('Comment')) return <SocialMessageConfig data={formData} onChange={setFormData} type="comment" />
-    if (label === 'Call Status') return <CallStatusConfig data={formData} onChange={setFormData} />
-    if (label === 'Engagement Score') return <EngagementScoreConfig data={formData} onChange={setFormData} />
+    // --- Triggers ---
+    if (node.type === 'trigger') {
+      if (label === 'Form Submitted') return <FormSubmittedConfig data={formData} onChange={setFormData} />
+      if (label.includes('Tag')) return <TagTriggerConfig data={formData} onChange={setFormData} />
+      if (label.includes('Task')) return <TaskConfig data={formData} onChange={setFormData} />
+      if (label.includes('Contact ') || label === 'Contacts') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Contact" />
+      if (label.includes('Company ') || label === 'Companies') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Company" />
+      if (label.includes('Note ') || label === 'Notes') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Note" />
+      if (label === 'Birthday') return <BirthdayConfig data={formData} onChange={setFormData} />
+      if (label.includes('DND') || label.includes('Do Not Disturb')) return <DNDConfig data={formData} onChange={setFormData} />
+      if (label.includes('DM') || label.includes('Direct Message')) return <SocialMessageConfig data={formData} onChange={setFormData} type="dm" />
+      if (label.includes('Comment')) return <SocialMessageConfig data={formData} onChange={setFormData} type="comment" />
+      if (label === 'Call Status') return <CallStatusConfig data={formData} onChange={setFormData} />
+      if (label === 'Engagement Score') return <EngagementScoreConfig data={formData} onChange={setFormData} />
+    }
 
-    if (label === 'Send Email') return <ScrollWrapper><EmailConfig data={formData} onChange={setFormData} /></ScrollWrapper>
-    if (label === 'Send Notification') return <NotificationConfig data={formData} onChange={setFormData} />
+    // --- Actions ---
+    if (node.type === 'action') {
+      if (label === 'Send Email') return <ScrollWrapper><EmailConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'Send SMS') return <ScrollWrapper><SMSConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'Send Notification') return <NotificationConfig data={formData} onChange={setFormData} />
+      if (label === 'Update Contact') return <UpdateContactConfig data={formData} onChange={setFormData} />
+      if (label === 'Update Company') return <UpdateCompanyConfig data={formData} onChange={setFormData} />
+      if (label === 'Add / Remove Task') return <AddRemoveTaskConfig data={formData} onChange={setFormData} />
+      if (label === 'Add Note') return <NoteConfig data={formData} onChange={setFormData} />
+      if (label === 'Add / Remove Tag') return <TagConfig data={formData} onChange={setFormData} />
+      if (label === 'Add to Review Autopilot') return <ReviewAutopilotConfig data={formData} onChange={setFormData} />
+      if (label === 'Send To Slack') return <ScrollWrapper><SlackConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'Send To Teams') return <ScrollWrapper><TeamsConfig data={formData} onChange={setFormData} /></ScrollWrapper>
+      if (label === 'End Automation') return <EndAutomationConfig data={formData} onChange={setFormData} />
+      if (label === 'Send To Automation') return <SendToAutomationConfig data={formData} onChange={setFormData} />
+    }
+
+    // --- Logic ---
     if (label === 'Wait' || label === 'Delay') return <WaitConfig data={formData} onChange={setFormData} />
     if (label === 'If / Else') return <ScrollWrapper><IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} /></ScrollWrapper>
     if (label === 'Split Test (A/B)') return <ScrollWrapper><SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} /></ScrollWrapper>
-    if (label === 'Send To Automation') return <SendToAutomationConfig data={formData} onChange={setFormData} />
     if (node.type === 'loopBack') return <LoopBackConfig data={formData} onChange={setFormData} />
 
     return <div className="p-4 text-center italic text-slate-500">Generic settings for {label}</div>
@@ -102,7 +133,7 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
 
           <div className="overflow-hidden">
             <h3 className="text-[15px] font-bold text-slate-900 dark:text-slate-100 leading-none truncate mb-1">{label}</h3>
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">Step Settings</p>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">{subTitle}</p>
           </div>
         </div>
       }

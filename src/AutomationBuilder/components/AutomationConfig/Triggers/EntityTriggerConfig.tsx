@@ -44,13 +44,13 @@ export const EntityTriggerConfig = ({ data, onChange, entityName }: { data: any,
     <div className="space-y-6">
       <div className="space-y-1.5 flex flex-col items-start w-full">
         <Label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-0.5">Trigger condition</Label>
-        <div className="flex bg-slate-100 dark:bg-slate-900/50 p-1 rounded-lg w-full border border-slate-200 dark:border-slate-800">
+        <div className="flex gap-2 bg-slate-100 dark:bg-slate-900/50 p-1 rounded-lg w-full border border-slate-200 dark:border-slate-800">
           {['added', 'removed', 'updated'].map(t => (
             <Button
               key={t}
               variant={triggerType === t ? 'primary' : 'ghost'}
               size="sm"
-              className={cn("flex-1 h-7 text-[12px] px-2 rounded-md capitalize transition-all", triggerType === t ? "shadow-sm" : "text-slate-500")}
+              className={cn("flex-1 h-7 text-[12px] px-1 rounded-md capitalize transition-all", triggerType === t ? "shadow-sm" : "text-slate-500")}
               onClick={() => onChange({ ...data, triggerType: t, label: `${entityName} ${t.charAt(0).toUpperCase() + t.slice(1)}` })}
             >
               {entityName} {t}

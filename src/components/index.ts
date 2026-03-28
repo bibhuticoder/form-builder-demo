@@ -1,5 +1,6 @@
 // Export all components
 export { Button } from './Button';
+export { Label } from './label';
 export type { ButtonProps } from './Button';
 
 export { Card } from './Card';
@@ -19,3 +20,11 @@ export { Dialog } from './Dialog';
 export { FormSettings } from '../FormBuilder/components/FormSettings/FormSettings';
 
 export { ThemeToggle } from './ThemeToggle';
+export { Input } from './input';
+export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+export { Combobox } from './Combobox';
+export type { ComboboxOption } from './Combobox';
+export { Slider } from './Slider';
+export { Checkbox } from './Checkbox';
+export { Switch } from './switch';
+export { default as RichText } from './RichText';
