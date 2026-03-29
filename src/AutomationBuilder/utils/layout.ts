@@ -51,18 +51,20 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
 
         if (isBranching) {
             if (isIfElse) {
-                // If / Else must have exactly two branches.
+                const trueLabel = (node.data?.trueLabel || 'YES').toUpperCase();
+                const falseLabel = (node.data?.falseLabel || 'NO').toUpperCase();
+
                 const hasTrueBranch = childrenEdges.some(e => {
                     if (e.data?.conditionType === 'true') return true;
-                    const label = e.label || e.data?.label || '';
-                    const l = String(label).toUpperCase();
-                    return l === 'YES' || l === 'TRUE' || l === 'SUCCESS';
+                    if (e.sourceHandle === 'true') return true;
+                    const label = String(e.label || e.data?.label || '').toUpperCase();
+                    return label === 'YES' || label === 'TRUE' || label === 'SUCCESS' || label === trueLabel;
                 });
                 const hasFalseBranch = childrenEdges.some(e => {
                     if (e.data?.conditionType === 'false') return true;
-                    const label = e.label || e.data?.label || '';
-                    const l = String(label).toUpperCase();
-                    return l === 'NO' || l === 'FALSE' || l === 'FAIL';
+                    if (e.sourceHandle === 'false') return true;
+                    const label = String(e.label || e.data?.label || '').toUpperCase();
+                    return label === 'NO' || label === 'FALSE' || label === 'FAIL' || label === falseLabel;
                 });
 
                 if (!hasTrueBranch) {
@@ -92,17 +94,18 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     });
                 }
 
-                // Update existing labels if data changed, and also fix missing conditionType in data
+                // Update existing labels if data changed, and also fix missing conditionType/sourceHandle
                 edges.forEach(e => {
                     if (e.source === node.id) {
-                        const label = e.label || e.data?.label || '';
-                        const l = String(label).toUpperCase();
-                        if (l === 'YES' || l === 'TRUE') {
+                        const label = String(e.label || e.data?.label || '').toUpperCase();
+                        if (e.data?.conditionType === 'true' || e.sourceHandle === 'true' || label === 'YES' || label === 'TRUE' || label === trueLabel) {
                             e.data = { ...(e.data || {}), isCondition: true, conditionType: 'true' };
                             e.label = node.data?.trueLabel || 'YES';
-                        } else if (l === 'NO' || l === 'FALSE') {
+                            e.sourceHandle = 'true';
+                        } else if (e.data?.conditionType === 'false' || e.sourceHandle === 'false' || label === 'NO' || label === 'FALSE' || label === falseLabel) {
                             e.data = { ...(e.data || {}), isCondition: true, conditionType: 'false' };
                             e.label = node.data?.falseLabel || 'NO';
+                            e.sourceHandle = 'false';
                         }
                     }
                 });
@@ -113,7 +116,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     for (let i = 0; i < missingCount; i++) {
                         const slotId = `add-step-${node.id}-split-${Date.now()}-${i}`;
                         nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
-                        edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { isSplitTest: true } });
+                        edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { label: '50%', isSplitTest: true } });
                     }
                 }
             }

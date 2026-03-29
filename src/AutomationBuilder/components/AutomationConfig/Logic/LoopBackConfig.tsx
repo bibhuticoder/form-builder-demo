@@ -5,12 +5,10 @@ import { useReactFlow } from "reactflow"
 export const LoopBackConfig = ({ data, onChange }: { data: any, onChange: (d: any) => void }) => {
   const { getNodes } = useReactFlow();
 
-  // Potential targets: non-terminal nodes, excluding itself and triggers
+  // Potential targets: only action nodes, excluding itself and terminal/special nodes
   const nodes = getNodes().filter(n =>
     n.id !== data.id &&
-    n.type !== 'placeholder' &&
-    n.type !== 'addStep' &&
-    n.type !== 'trigger' &&
+    n.type?.startsWith('action') &&
     !['End Automation', 'Send To Automation', 'Loop Back To'].includes(n.data?.label || '')
   );
 

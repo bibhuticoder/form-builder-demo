@@ -270,8 +270,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         nextEdges = nextEdges.map((e) => {
           if (e.source !== nodeId || e.sourceHandle === "right-source") return e
           const idx = siblings.findIndex((s) => s.id === e.id)
-          if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', data: { ...(e.data || {}), isCondition: true } }
-          if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', data: { ...(e.data || {}), isCondition: true } }
+          if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', sourceHandle: 'true', data: { ...(e.data || {}), isCondition: true, conditionType: 'true' } }
+          if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', sourceHandle: 'false', data: { ...(e.data || {}), isCondition: true, conditionType: 'false' } }
           return e
         })
       }
@@ -373,6 +373,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       return {
         ...e,
         type: 'custom',
+        label: e.data?.label || e.label,
         sourceHandle: isLoop ? 'loop-source' : e.sourceHandle,
         targetHandle: isLoop ? 'loop-target' : e.targetHandle,
         data: {
@@ -393,7 +394,6 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     const { nodes: lNodes, edges: lEdges } = performAutoLayout(bNodes, bEdges);
     setNodes(lNodes);
     setEdges(lEdges);
-    setEdges(bEdges);
 
     if (payload.automation.updatedAt || payload.automation.savedAt) {
       setSavedAt(payload.automation.updatedAt || payload.automation.savedAt);
@@ -566,20 +566,22 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             {
               id: `e-${newNode.id}-${addStepA.id}`,
               source: newNode.id,
+              sourceHandle: isIfElse ? 'true' : undefined,
               target: addStepA.id,
               type: "custom",
               markerEnd: { type: MarkerType.ArrowClosed },
               label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.trueLabel || 'YES') : undefined,
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined
+              data: isSplitTest ? { label: "50%", isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined
             },
             {
               id: `e-${newNode.id}-${addStepB.id}`,
               source: newNode.id,
+              sourceHandle: isIfElse ? 'false' : undefined,
               target: addStepB.id,
               type: "custom",
               markerEnd: { type: MarkerType.ArrowClosed },
               label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.falseLabel || 'NO') : undefined,
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined
+              data: isSplitTest ? { label: "50%", isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined
             },
           ]
 
