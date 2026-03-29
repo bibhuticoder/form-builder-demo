@@ -16,7 +16,7 @@ export function BuilderShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col border">
+    <div className="border w-full h-full bg-slate-50 dark:bg-slate-950 flex flex-col">
 
       {/* Header */}
       <div className="relative overflow-visible h-16 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center px-4 justify-between shrink-0 z-40">

@@ -24,371 +24,211 @@
     "version": 1,
     "nodes": [
       {
-        "id": "trigger-2-1774711845707",
+        "id": "trigger-2-1774779791783",
         "type": "trigger",
         "position": {
-          "x": 178.5,
+          "x": 218,
           "y": 50
         },
         "data": {
           "ui": {
             "label": "Form Submitted",
-            "subtitle": "Form: Webinar Reg Form",
             "icon": "DocumentTextIcon",
             "color": "text-blue-500",
             "nodeType": "form_submitted"
           },
           "config": {
-            "nodeType": "form_submitted",
-            "isRoot": true,
-            "isDragging": false,
-            "isMoving": false,
-            "formType": "facebook",
-            "formId": "fb2"
+            "formType": "cleave",
+            "formId": "c2"
           }
         }
       },
       {
-        "id": "trigger-3-1774711847460",
-        "type": "trigger",
+        "id": "condition-3-1774779793996",
+        "type": "logic_split_test",
         "position": {
-          "x": 494.5,
-          "y": 50
-        },
-        "data": {
-          "ui": {
-            "label": "Tag Added",
-            "subtitle": "Tag: new-lead",
-            "nodeType": "tags"
-          },
-          "config": {
-            "nodeType": "tags",
-            "isRoot": true,
-            "isDragging": false,
-            "isMoving": false,
-            "tagId": "tag1",
-            "tagName": "new-lead",
-            "tags": [
-              {
-                "id": "tag1",
-                "label": "new-lead"
-              }
-            ]
-          }
-        }
-      },
-      {
-        "id": "action-4-1774711850364",
-        "type": "action_send_email",
-        "position": {
-          "x": 336.5,
+          "x": 218,
           "y": 200
         },
         "data": {
           "ui": {
+            "label": "Split Test (A/B)",
+            "icon": "ArrowPathIcon",
+            "color": "text-amber-500",
+            "nodeType": "split_test"
+          },
+          "config": {
+            "weights": [
+              50,
+              50
+            ],
+            "strategy": "even",
+            "winnerCriteria": "clicks",
+            "notifyMe": true,
+            "durationUnit": "months"
+          }
+        }
+      },
+      {
+        "id": "action-5-1774779797598",
+        "type": "action_send_email",
+        "position": {
+          "x": -19,
+          "y": 350
+        },
+        "data": {
+          "ui": {
             "label": "Send Email",
-            "subtitle": "Subject: Hello",
             "icon": "EnvelopeIcon",
             "color": "text-emerald-500",
             "nodeType": "send_email"
           },
           "config": {
-            "nodeType": "send_email",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "fromName": "hello",
-            "fromEmail": "hello@company.com",
-            "subject": "Hello",
-            "message": "<ol><li><p style=\"text-align: left;\">sadasd</p></li><li><p style=\"text-align: left;\">asd</p></li><li><p style=\"text-align: left;\">sdasd</p></li></ol><p style=\"text-align: left;\"></p><p style=\"text-align: center;\"><s>asdasd</s></p><p style=\"text-align: center;\"></p><p style=\"text-align: right;\"><span style=\"font-family: Georgia, &quot;Times New Roman&quot;, serif; font-size: 36px;\">sadasdasd</span></p><p style=\"text-align: right;\"></p><p style=\"text-align: left;\"><u>asdasdasd</u></p><p></p>"
+            "fromName": "asdasd",
+            "fromEmail": "asdas",
+            "subject": "asd",
+            "message": "<p>adasdasd</p>"
           }
         }
       },
       {
-        "id": "condition-5-1774711852691",
+        "id": "condition-6-1774779800164",
         "type": "logic_if_else",
         "position": {
-          "x": 336.5,
+          "x": 455,
           "y": 350
         },
         "data": {
           "ui": {
             "label": "If / Else",
-            "subtitle": "If First Name contains",
             "icon": "FunnelIcon",
             "color": "text-amber-500",
             "nodeType": "if_else"
           },
           "config": {
-            "nodeType": "if_else",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "trueLabel": "--YES--",
             "conditions": [
               {
                 "field": "first_name",
-                "operator": "contains",
-                "value": "John"
+                "operator": "not_equals",
+                "value": "sdasdasdasdasd"
               }
             ],
             "logicalOperator": "and",
-            "falseLabel": "--NO--"
+            "trueLabel": "adasdasd",
+            "falseLabel": "567567567"
           }
         }
       },
       {
-        "id": "action-7-1774711856359",
+        "id": "action-8-1774779822596",
+        "type": "action_send_notification",
+        "position": {
+          "x": 297,
+          "y": 500
+        },
+        "data": {
+          "ui": {
+            "label": "Send Notification",
+            "icon": "BellIcon",
+            "color": "text-emerald-500",
+            "nodeType": "send_notification"
+          },
+          "config": {
+            "message": "<p>asdfasdf</p>",
+            "channels": {
+              "email": true,
+              "inApp": true,
+              "sms": true
+            },
+            "recipientType": "team",
+            "recipientId": "t2"
+          }
+        }
+      },
+      {
+        "id": "action-9-1774779824228",
+        "type": "action_update_contact",
+        "position": {
+          "x": 613,
+          "y": 500
+        },
+        "data": {
+          "ui": {
+            "label": "Update Contact",
+            "icon": "UserCircleIcon",
+            "color": "text-emerald-500",
+            "nodeType": "update_contact"
+          },
+          "config": {
+            "field": "phone",
+            "value": "asdfasdf"
+          }
+        }
+      },
+      {
+        "id": "action-10-1774779826677",
         "type": "action_add_note",
         "position": {
-          "x": -335,
+          "x": -19,
           "y": 500
         },
         "data": {
           "ui": {
             "label": "Add Note",
-            "subtitle": "Note: asxazczczxc...",
             "icon": "ClipboardDocumentIcon",
             "color": "text-emerald-500",
             "nodeType": "add_note"
           },
           "config": {
-            "nodeType": "add_note",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "content": "<p>asxazczczxc</p>"
+            "content": "<p>asdasd</p>"
           }
-        }
-      },
-      {
-        "id": "action-8-1774711858201",
-        "type": "action_update_company",
-        "position": {
-          "x": 139,
-          "y": 500
-        },
-        "data": {
-          "ui": {
-            "label": "Update Company",
-            "subtitle": "Update Website URL",
-            "icon": "BuildingOffice2Icon",
-            "color": "text-emerald-500",
-            "nodeType": "update_company"
-          },
-          "config": {
-            "nodeType": "update_company",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "field": "website",
-            "value": "ghvghvghvh"
-          }
-        }
-      },
-      {
-        "id": "condition-9-1774711861560",
-        "type": "logic_split_test",
-        "position": {
-          "x": 139,
-          "y": 650
-        },
-        "data": {
-          "ui": {
-            "label": "Split Test (A/B)",
-            "subtitle": "Check if...",
-            "icon": "ArrowPathIcon",
-            "color": "text-amber-500",
-            "nodeType": "split_test"
-          },
-          "config": {}
-        }
-      },
-      {
-        "id": "action-11-1774711865277",
-        "type": "action_slack",
-        "position": {
-          "x": -19,
-          "y": 800
-        },
-        "data": {
-          "ui": {
-            "label": "Send To Slack",
-            "subtitle": "Slack: #notifications",
-            "icon": "ChatBubbleLeftRightIcon",
-            "color": "text-emerald-500",
-            "nodeType": "slack"
-          },
-          "config": {
-            "nodeType": "slack",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "channelId": "notifications",
-            "message": "<p>sadadasd</p>"
-          }
-        }
-      },
-      {
-        "id": "delay-12-1774711868785",
-        "type": "delay",
-        "position": {
-          "x": 297,
-          "y": 800
-        },
-        "data": {
-          "ui": {
-            "label": "Wait",
-            "subtitle": "Wait for...",
-            "icon": "ClockIcon",
-            "color": "text-amber-500",
-            "nodeType": "wait"
-          },
-          "config": {}
-        }
-      },
-      {
-        "id": "action-13-1774711873193",
-        "type": "action_add_note",
-        "position": {
-          "x": 297,
-          "y": 950
-        },
-        "data": {
-          "ui": {
-            "label": "Add Note",
-            "subtitle": "Note: asdasdasd...",
-            "icon": "ClipboardDocumentIcon",
-            "color": "text-emerald-500",
-            "nodeType": "add_note"
-          },
-          "config": {
-            "nodeType": "add_note",
-            "isRoot": false,
-            "isDragging": false,
-            "isMoving": false,
-            "content": "<p>asdasdasd</p>"
-          }
-        }
-      },
-      {
-        "id": "loopBack-14-1774711876276",
-        "type": "loop_back",
-        "position": {
-          "x": 297,
-          "y": 1100
-        },
-        "data": {
-          "ui": {
-            "label": "Loop Back To",
-            "subtitle": "Perform action",
-            "icon": "ArrowPathIcon",
-            "color": "text-amber-500",
-            "nodeType": "loop_back"
-          },
-          "config": {
-            "isRoot": false,
-            "isDragging": false,
-            "targetId": "action-7-1774711856359"
-          }
-        }
-      },
-      {
-        "id": "action-14-1774711891975",
-        "type": "end",
-        "position": {
-          "x": -19,
-          "y": 950
-        },
-        "data": {
-          "ui": {
-            "label": "End Automation",
-            "subtitle": "Perform action",
-            "icon": "StopCircleIcon",
-            "color": "text-emerald-500",
-            "nodeType": "end_automation"
-          },
-          "config": {}
         }
       }
     ],
     "edges": [
       {
-        "id": "e-trigger-2-1774711845707-add-step-1774711845707",
-        "source": "trigger-2-1774711845707",
-        "target": "action-4-1774711850364"
+        "id": "e-trigger-2-1774779791783-add-step-1774779791783",
+        "source": "trigger-2-1774779791783",
+        "target": "condition-3-1774779793996"
       },
       {
-        "id": "e-trigger-3-1774711847460-add-step-1774711845707",
-        "source": "trigger-3-1774711847460",
-        "target": "action-4-1774711850364"
-      },
-      {
-        "id": "e-action-4-1774711850364-add-step-action-4-1774711850364-auto",
-        "source": "action-4-1774711850364",
-        "target": "condition-5-1774711852691"
-      },
-      {
-        "id": "e-condition-5-1774711852691-add-step-condition-5-1774711852691-false-1774711852691",
-        "source": "condition-5-1774711852691",
-        "target": "action-7-1774711856359",
+        "id": "e-condition-3-1774779793996-add-step-condition-3-1774779793996-split-1774779793996-0",
+        "source": "condition-3-1774779793996",
+        "target": "action-5-1774779797598",
         "data": {
-          "label": "--YES--"
-        }
-      },
-      {
-        "id": "e-condition-5-1774711852691-add-step-condition-5-1774711852691-true-1774711852691",
-        "source": "condition-5-1774711852691",
-        "target": "action-8-1774711858201",
-        "data": {
-          "label": "--NO--"
-        }
-      },
-      {
-        "id": "e-action-8-1774711858201-add-step-action-8-1774711858201-auto",
-        "source": "action-8-1774711858201",
-        "target": "condition-9-1774711861560"
-      },
-      {
-        "id": "e-condition-9-1774711861560-add-step-condition-9-1774711861560-split-1774711861560-1",
-        "source": "condition-9-1774711861560",
-        "target": "action-11-1774711865277",
-        "data": {
-          "label": "50%",
+          "label": "62%",
           "isSplitTest": true
         }
       },
       {
-        "id": "e-condition-9-1774711861560-add-step-condition-9-1774711861560-split-1774711861560-0",
-        "source": "condition-9-1774711861560",
-        "target": "delay-12-1774711868785",
+        "id": "e-condition-3-1774779793996-add-step-condition-3-1774779793996-split-1774779793996-1",
+        "source": "condition-3-1774779793996",
+        "target": "condition-6-1774779800164",
         "data": {
-          "label": "50%",
+          "label": "38%",
           "isSplitTest": true
         }
       },
       {
-        "id": "e-delay-12-1774711868785-add-step-delay-12-1774711868785-auto",
-        "source": "delay-12-1774711868785",
-        "target": "action-13-1774711873193"
-      },
-      {
-        "id": "e-action-13-1774711873193-add-step-action-13-1774711873193-auto",
-        "source": "action-13-1774711873193",
-        "target": "loopBack-14-1774711876276"
-      },
-      {
-        "id": "e-loopBack-14-1774711876276-action-7-1774711856359-loopback",
-        "source": "loopBack-14-1774711876276",
-        "target": "action-7-1774711856359",
+        "id": "e-condition-6-1774779800164-add-step-condition-6-1774779800164-false-1774779800164",
+        "source": "condition-6-1774779800164",
+        "target": "action-8-1774779822596",
         "data": {
-          "isLoopBack": true
+          "label": "adasdasd"
         }
       },
       {
-        "id": "e-action-11-1774711865277-add-step-action-11-1774711865277-auto",
-        "source": "action-11-1774711865277",
-        "target": "action-14-1774711891975"
+        "id": "e-condition-6-1774779800164-add-step-condition-6-1774779800164-true-1774779800164",
+        "source": "condition-6-1774779800164",
+        "target": "action-9-1774779824228",
+        "data": {
+          "label": "567567567"
+        }
+      },
+      {
+        "id": "e-action-5-1774779797598-add-step-action-5-1774779797598-auto",
+        "source": "action-5-1774779797598",
+        "target": "action-10-1774779826677"
       }
     ]
   }

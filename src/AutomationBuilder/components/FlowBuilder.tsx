@@ -342,13 +342,41 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
     // 2. Transform nodes from production format to builder format
     const bNodes = pNodes.map((n: any) => {
-      let type = n.type;
+      const [category, nodeType] = (n.type || '').split(':');
+      let type = category;
 
       // Map production types to builder types
-      if (type.startsWith('logic_')) type = 'condition';
-      else if (type.startsWith('action_')) type = 'action';
-      else if (type === 'loop_back') type = 'loopBack';
+      if (type === 'logic' || type === 'condition') type = 'condition';
+      else if (type === 'loopBack' || type === 'loop_back') type = 'loopBack';
       else if (type === 'end') type = 'action';
+
+      // Fallback for legacy JSON without colon
+      if (n.type.startsWith('logic_')) type = 'condition';
+      else if (n.type.startsWith('action_')) type = 'action';
+      else if (n.type === 'loop_back') type = 'loopBack';
+
+      const extractedNodeType = nodeType || (n.data?.ui?.nodeType) ||
+        (n.type.startsWith('action_') ? n.type.replace('action_', '') :
+          n.type.startsWith('logic_') ? n.type.replace('logic_', '') :
+            n.type === 'end' ? 'end_automation' :
+              n.type === 'loop_back' ? 'loop_back' : undefined);
+
+      const isLegacy = !!n.data?.ui || Object.keys(n.data || {}).includes('config');
+      const flatConfig = isLegacy ? (n.data?.config || {}) : n.data;
+
+      let label = n.data?.ui?.label || flatConfig?.label;
+      let iconName = n.data?.ui?.icon || flatConfig?.iconName;
+      let color = n.data?.ui?.color || flatConfig?.color;
+
+      // Extract UI state magically from Toolboxes for flat data without UI props
+      if (!isLegacy) {
+        const toolboxMeta = TOOLBOX_ITEMS.flatMap(g => g.items).find(i => i.nodeType === extractedNodeType);
+        if (toolboxMeta) {
+          label = label || toolboxMeta.label;
+          iconName = iconName || toolboxMeta.iconName;
+          color = color || toolboxMeta.color;
+        }
+      }
 
       return {
         id: n.id,
@@ -357,12 +385,13 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         type,
         data: {
           ...(n.data?.ui || {}),
-          nodeType: n.data?.ui?.nodeType || (n.type.startsWith('action_') ? n.type.replace('action_', '') : n.type.startsWith('logic_') ? n.type.replace('logic_', '') : n.type === 'end' ? 'end_automation' : n.type === 'loop_back' ? 'loop_back' : undefined),
-          ...(n.data?.config || {}), // Flatten for builder state accessibility
-          config: n.data?.config || {}, // Keep nested for easy re-extraction
-          label: n.data?.ui?.label || n.id,
-          subtitle: n.data?.ui?.subtitle,
-          iconName: n.data?.ui?.icon,
+          nodeType: extractedNodeType,
+          ...flatConfig,
+          config: flatConfig,
+          label: label || n.id,
+          subtitle: n.data?.ui?.subtitle || flatConfig?.subtitle,
+          iconName,
+          color,
         }
       };
     });
@@ -742,8 +771,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       <div className="flex h-full w-full bg-slate-50 dark:bg-slate-950 relative">
         <AutomationConfigModal isOpen={isConfigModalOpen} onClose={() => setIsConfigModalOpen(false)} node={selectedNodeForConfig} onSave={onSaveConfig} edges={edges} />
         <JsonViewerPanel automationId={automationId} nodes={nodes} edges={edges} />
-
-        <div className="flex-1 h-full relative" onDragEnter={onDragEnter} onDragLeave={onDragLeave}>
+  
+        <div className="flex-1 min-h-0 relative h-full flex flex-col overflow-hidden" onDragEnter={onDragEnter} onDragLeave={onDragLeave}>
           <ReactFlow
             nodes={nodesWithData}
             edges={edgesWithData}

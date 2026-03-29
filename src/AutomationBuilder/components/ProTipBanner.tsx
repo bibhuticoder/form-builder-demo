@@ -13,9 +13,9 @@ type ProTipBannerProps = {
 
 export function ProTipBanner({ tip, currentIndex, total, onPrev, onNext, onDismiss }: ProTipBannerProps) {
   return (
-    <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-end pointer-events-none">
+    <div className="absolute bottom-4 right-4 z-10 flex justify-end pointer-events-none">
       <div className={cn(
-        "rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 p-3 shadow-lg pointer-events-auto max-w-2xl w-full mr-4 bg-primary/10 border-primary/20 dark:bg-primary/20 dark:border-primary/30",
+        "rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 p-3 shadow-lg pointer-events-auto max-w-2xl w-full bg-primary/20 border-primary/20 dark:bg-primary/40 dark:border-primary/30",
       )}>
         <div className="flex gap-3 items-center">
           <ExclamationCircleIcon className="w-5 h-5 text-primary shrink-0" />
