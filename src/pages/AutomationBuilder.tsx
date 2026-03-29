@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { AutomationBuilder } from "@/AutomationBuilder/modules/AutomationBuilder"
+import { AutomationBuilder } from "@/AutomationBuilder/AutomationBuilder"
 
 export default function AutomationBuilderPage() {
   const { id } = useParams()

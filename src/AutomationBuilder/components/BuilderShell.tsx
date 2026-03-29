@@ -1,5 +1,6 @@
+import { useAutomationBuilderContext } from "../context/AutomationBuilderContext"
+import { useEffect, useState } from "react"
 import type { ReactNode } from "react"
-import { useState } from "react"
 import { Link } from "react-router-dom"
 import { ArrowLeftIcon, CalendarDaysIcon, ClockIcon, Cog6ToothIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/Button"
@@ -9,23 +10,43 @@ import { Switch } from "@/components/switch"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
+import { TimezoneCombobox } from "./TimezoneCombobox"
+import SAMPLE_DATA from "../data/sample.json"
+
+function RelativeTime({ date }: { date: string | null }) {
+  const [text, setText] = useState<string>("Not saved")
+
+  useEffect(() => {
+    if (!date) {
+      setText("Not saved")
+      return
+    }
+
+    const update = () => {
+      const diff = Date.now() - new Date(date).getTime()
+      const seconds = Math.floor(diff / 1000)
+      if (seconds < 10) setText("Just now")
+      else if (seconds < 60) setText("Seconds ago")
+      else if (seconds < 3600) setText(`${Math.floor(seconds / 60)}m ago`)
+      else setText(`${Math.floor(seconds / 3600)}h ago`)
+    }
+
+    update()
+    const timer = setInterval(update, 10000)
+    return () => clearInterval(timer)
+  }, [date])
+
+  return <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">{text}</div>
+}
 
 type BuilderShellProps = {
-  automationId: string
   children: ReactNode
 }
 
-export function BuilderShell({ automationId, children }: BuilderShellProps) {
-  const [automationName, setAutomationName] = useState(automationId === "new" ? "New Automation" : automationId)
-  const [status, setStatus] = useState<"active" | "inactive">("active")
-  const [allowReEntry, setAllowReEntry] = useState(false)
-  const [stopOnResponse, setStopOnResponse] = useState(false)
-  const [executionTimezoneEnabled, setExecutionTimezoneEnabled] = useState(true)
-  const [sendWindowEnabled, setSendWindowEnabled] = useState(true)
-  const [timezone, setTimezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
-  const [sendWindowStart, setSendWindowStart] = useState("09:00")
-  const [sendWindowEnd, setSendWindowEnd] = useState("17:00")
-  const [activeDays, setActiveDays] = useState([true, true, true, true, true, false, false])
+
+export function BuilderShell({ children }: BuilderShellProps) {
+  const { name, setName, status, setStatus, settings, setSettings, savedAt, saveRef, loadRef } = useAutomationBuilderContext()
+  const { allowReEntry, stopOnResponse, executionTimezoneEnabled, sendWindowEnabled, timezone, sendWindowStart, sendWindowEnd, activeDays } = settings
 
   const days = ["M", "T", "W", "T", "F", "S", "S"]
   const timeOptions = Array.from({ length: 24 * 2 }).map((_, i) => {
@@ -34,12 +55,19 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
     return `${hour.toString().padStart(2, "0")}:${minute}`
   })
 
-  const timezoneOptions = Array.from(new Set([Intl.DateTimeFormat().resolvedOptions().timeZone, "UTC", "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Berlin", "Asia/Kathmandu", "Asia/Kolkata", "Asia/Singapore", "Australia/Sydney"]))
+
+  const updateSetting = <K extends keyof typeof settings>(key: K, value: typeof settings[K]) => {
+    setSettings(prev => ({ ...prev, [key]: value }))
+  }
 
   const toggleDay = (index: number) => {
     const next = [...activeDays]
     next[index] = !next[index]
-    setActiveDays(next)
+    updateSetting("activeDays", next)
+  }
+
+  const toggleStatus = () => {
+    setStatus(status === "active" ? "draft" : "active")
   }
 
   return (
@@ -52,11 +80,11 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
             </Button>
           </Link>
 
-          <Input value={automationName} onChange={(e) => setAutomationName(e.target.value)} className="text-sm font-semibold text-slate-800 shadow border dark:text-slate-100 hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} className="text-sm font-semibold text-slate-800 shadow border dark:text-slate-100 hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" />
 
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
 
-          <button type="button" onClick={() => setStatus((prev) => (prev === "active" ? "inactive" : "active"))} className={`text-[11px] font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-20 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
+          <button type="button" onClick={toggleStatus} className={`text-[11px] font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-20 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
             <span className={`h-1.5 w-1.5 rounded-full ${status === "active" ? "bg-primary" : "bg-slate-400"}`} />
             {status === "active" ? "Active" : "Inactive"}
           </button>
@@ -89,7 +117,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <Switch checked={status === "active"} onCheckedChange={(checked) => setStatus(checked ? "active" : "inactive")} />
+                  <Switch checked={status === "active"} onCheckedChange={toggleStatus} />
                 </div>
 
                 <div className="flex items-center justify-between py-1">
@@ -106,7 +134,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <Switch checked={allowReEntry} onCheckedChange={setAllowReEntry} />
+                  <Switch checked={allowReEntry} onCheckedChange={(val) => updateSetting("allowReEntry", val)} />
                 </div>
 
                 <div className="flex items-center justify-between py-1">
@@ -123,7 +151,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <Switch checked={stopOnResponse} onCheckedChange={setStopOnResponse} />
+                  <Switch checked={stopOnResponse} onCheckedChange={(val) => updateSetting("stopOnResponse", val)} />
                 </div>
 
                 <div className="h-px bg-slate-200 dark:bg-slate-700" />
@@ -146,21 +174,13 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    <Switch checked={executionTimezoneEnabled} onCheckedChange={setExecutionTimezoneEnabled} />
+                    <Switch checked={executionTimezoneEnabled} onCheckedChange={(val) => updateSetting("executionTimezoneEnabled", val)} />
                   </div>
-                  <div className={executionTimezoneEnabled ? "" : "opacity-50 pointer-events-none"}>
-                    <Select value={timezone} onValueChange={setTimezone}>
-                      <SelectTrigger className="h-8 text-xs w-full">
-                        <SelectValue placeholder={timezone} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timezoneOptions.map((zone) => (
-                          <SelectItem key={zone} value={zone} className="text-xs">
-                            {zone}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <div className={executionTimezoneEnabled ? "" : "opacity-30 pointer-events-none transition-opacity"}>
+                    <TimezoneCombobox 
+                      value={timezone} 
+                      onValueChange={(val: string) => updateSetting("timezone", val)} 
+                    />
                   </div>
                 </div>
 
@@ -182,7 +202,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    <Switch checked={sendWindowEnabled} onCheckedChange={setSendWindowEnabled} />
+                    <Switch checked={sendWindowEnabled} onCheckedChange={(val) => updateSetting("sendWindowEnabled", val)} />
                   </div>
 
                   <div className={sendWindowEnabled ? "space-y-2" : "space-y-2 opacity-50 pointer-events-none"}>
@@ -197,7 +217,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                     <div className="flex items-center gap-2">
                       <div className="flex flex-col gap-1 flex-1">
                         <span className="text-[10px] font-medium text-slate-500 uppercase">Start</span>
-                        <Select value={sendWindowStart} onValueChange={setSendWindowStart}>
+                        <Select value={sendWindowStart} onValueChange={(val) => updateSetting("sendWindowStart", val)}>
                           <SelectTrigger className="h-8 text-xs w-full">
                             <SelectValue placeholder={sendWindowStart} />
                           </SelectTrigger>
@@ -213,7 +233,7 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
                       <span className="text-slate-400 text-xs pt-4">to</span>
                       <div className="flex flex-col gap-1 flex-1">
                         <span className="text-[10px] font-medium text-slate-500 uppercase">Stop</span>
-                        <Select value={sendWindowEnd} onValueChange={setSendWindowEnd}>
+                        <Select value={sendWindowEnd} onValueChange={(val) => updateSetting("sendWindowEnd", val)}>
                           <SelectTrigger className="h-8 text-xs w-full">
                             <SelectValue placeholder={sendWindowEnd} />
                           </SelectTrigger>
@@ -235,8 +255,20 @@ export function BuilderShell({ automationId, children }: BuilderShellProps) {
         </div>
 
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="text-sm text-slate-500 dark:text-slate-400">Not saved</div>
-          <Button size="sm" className="h-8 px-3 text-xs bg-primary text-white hover:bg-primary/90">
+          <RelativeTime date={savedAt} />
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 px-3 text-xs border-primary/20 hover:bg-primary/5 hover:text-primary transition-colors"
+            onClick={() => loadRef.current?.(SAMPLE_DATA)}
+          >
+            Load sample
+          </Button>
+          <Button
+            size="sm"
+            className="h-8 px-3 text-xs bg-primary text-white hover:bg-primary/90"
+            onClick={() => saveRef.current?.()}
+          >
             Save Automation
           </Button>
         </div>

@@ -54,7 +54,8 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
 
   useEffect(() => {
     if (node) {
-      setFormData(node.data || {})
+      const { config, ...rest } = node.data || {}
+      setFormData({ ...rest, ...(config || {}) })
     }
   }, [node])
 

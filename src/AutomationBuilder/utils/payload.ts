@@ -1,12 +1,12 @@
 import type { Edge, Node } from 'reactflow';
 import type {
-    AutomationProductionPayload,
-    AutomationProductionDefinition,
-    AutomationProductionNode,
-    AutomationProductionEdge,
+    AutomationPayload,
+    Automation,
+    AutomationNode,
+    AutomationEdge,
     AutomationStatus,
 } from '../types/automation';
-import { TOOLBOX_ITEMS } from '../constants/toolbox';
+import { TOOLBOX_ITEMS } from '../constants';
 
 function isBuilderOnlyNode(node: Node) {
     if (node.type === 'placeholder' || node.type === 'addStep') return true;
@@ -25,8 +25,7 @@ function isBuilderOnlyEdge(edge: Edge, nodesById: Map<string, Node>) {
     return false;
 }
 
-function guessProductionNodeType(node: Node): string {
-    // Try to use builder node.type when it matches PRD-ish values.
+function guessNodeType(node: Node): string {
     const t = node.type || '';
     if (t === 'trigger') return 'trigger';
     if (t === 'delay') return 'delay';
@@ -57,20 +56,22 @@ function getToolboxMetaByLabel(label: string | undefined) {
     return null;
 }
 
-export function buildProductionPayloadFromBuilder(params: {
+export function buildPayloadFromBuilder(params: {
     automationId: string;
     name: string;
     status: AutomationStatus;
+    settings?: Record<string, any>;
     version: number;
     createdAt?: string;
     updatedAt?: string;
+    savedAt?: string;
     nodes: Node[];
     edges: Edge[];
-}): AutomationProductionPayload {
-    const { automationId, name, status, version, createdAt, updatedAt } = params;
+}): AutomationPayload {
+    const { automationId, name, status, settings, version, createdAt, updatedAt, savedAt } = params;
     const nodesById = new Map(params.nodes.map((n) => [n.id, n] as const));
 
-    const productionNodes: AutomationProductionNode[] = params.nodes
+    const finalNodes: AutomationNode[] = params.nodes
         .filter((n) => !isBuilderOnlyNode(n))
         .map((n) => {
             const label = (n.data as any)?.label as string | undefined;
@@ -83,7 +84,7 @@ export function buildProductionPayloadFromBuilder(params: {
 
             return {
                 id: n.id,
-                type: guessProductionNodeType(n),
+                type: guessNodeType(n),
                 position: { x: n.position.x, y: n.position.y },
                 data: {
                     ui: {
@@ -97,13 +98,13 @@ export function buildProductionPayloadFromBuilder(params: {
             };
         });
 
-    const productionEdges: AutomationProductionEdge[] = params.edges
+    const finalEdges: AutomationEdge[] = params.edges
         .filter((e) => !isBuilderOnlyEdge(e, nodesById))
         .map((e) => {
-            const label = (e.label as string | undefined) || (e.data as any)?.label;
+            const label = (e as any).label || (e.data as any)?.label;
             const isLoopBack = !!(e.data as any)?.isLoopBack;
             const isSplitTest = !!(e.data as any)?.isSplitTest;
-            const edgeData: AutomationProductionEdge['data'] = {};
+            const edgeData: AutomationEdge['data'] = {};
             if (label) edgeData.label = label;
             if (isLoopBack) edgeData.isLoopBack = true;
             if (isSplitTest) edgeData.isSplitTest = true;
@@ -115,15 +116,17 @@ export function buildProductionPayloadFromBuilder(params: {
             };
         });
 
-    const automation: AutomationProductionDefinition = {
+    const automation: Automation = {
         id: automationId,
         name,
         status,
+        settings,
         version,
         createdAt,
         updatedAt,
-        nodes: productionNodes,
-        edges: productionEdges,
+        savedAt,
+        nodes: finalNodes,
+        edges: finalEdges,
     };
 
     return { automation };

@@ -9,14 +9,24 @@ function getNodeDimensions() {
     return { width: 256, height: 92 };
 }
 
-export function restoreNodeIcons(nodes: Node[], toolboxItems: Array<{ items: Array<{ label: string; icon: any }> }>) {
+export function restoreNodeIcons(nodes: Node[], toolboxGroups: Array<{ items: Array<any> }>) {
     nodes.forEach((node) => {
         if (!node.data) return;
-        for (const group of toolboxItems) {
-            const found = group.items.find((i) => i.label === node.data.label);
-            if (found) {
-                node.data.icon = found.icon;
-                break;
+        
+        // Strategy 1: Match iconName explicitly
+        // Strategy 2: Match by label as fallback
+        for (const group of toolboxGroups) {
+            const byName = group.items.find((i) => i.iconName === node.data.iconName);
+            if (byName) {
+                node.data.icon = byName.icon;
+                return;
+            }
+            
+            const byLabel = group.items.find((i) => i.label === node.data.label);
+            if (byLabel) {
+                node.data.icon = byLabel.icon;
+                node.data.iconName = byLabel.iconName;
+                return;
             }
         }
     });
@@ -42,8 +52,18 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
         if (isBranching) {
             if (isIfElse) {
                 // If / Else must have exactly two branches.
-                const hasTrueBranch = childrenEdges.some(e => e.data?.conditionType === 'true');
-                const hasFalseBranch = childrenEdges.some(e => e.data?.conditionType === 'false');
+                const hasTrueBranch = childrenEdges.some(e => {
+                    if (e.data?.conditionType === 'true') return true;
+                    const label = e.label || e.data?.label || '';
+                    const l = String(label).toUpperCase();
+                    return l === 'YES' || l === 'TRUE' || l === 'SUCCESS';
+                });
+                const hasFalseBranch = childrenEdges.some(e => {
+                    if (e.data?.conditionType === 'false') return true;
+                    const label = e.label || e.data?.label || '';
+                    const l = String(label).toUpperCase();
+                    return l === 'NO' || l === 'FALSE' || l === 'FAIL';
+                });
                 
                 if (!hasTrueBranch) {
                     const slotId = `add-step-${node.id}-true-${Date.now()}`;
@@ -65,18 +85,25 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                         id: `e-${node.id}-${slotId}`, 
                         source: node.id, 
                         target: slotId, 
-                        type: 'smoothstep', 
+                        type: 'custom', 
                         markerEnd: { type: MarkerType.ArrowClosed }, 
                         label: node.data?.falseLabel || 'NO',
                         data: { isCondition: true, conditionType: 'false' } 
                     });
                 }
 
-                // Update existing labels if data changed
+                // Update existing labels if data changed, and also fix missing conditionType in data
                 edges.forEach(e => {
-                   if (e.source === node.id && e.data?.isCondition) {
-                      if (e.data?.conditionType === 'true') e.label = node.data?.trueLabel || 'YES';
-                      if (e.data?.conditionType === 'false') e.label = node.data?.falseLabel || 'NO';
+                   if (e.source === node.id) {
+                      const label = e.label || e.data?.label || '';
+                      const l = String(label).toUpperCase();
+                      if (l === 'YES' || l === 'TRUE') {
+                          e.data = { ...(e.data || {}), isCondition: true, conditionType: 'true' };
+                          e.label = node.data?.trueLabel || 'YES';
+                      } else if (l === 'NO' || l === 'FALSE') {
+                          e.data = { ...(e.data || {}), isCondition: true, conditionType: 'false' };
+                          e.label = node.data?.falseLabel || 'NO';
+                      }
                    }
                 });
             } else if (isSplitTest) {
@@ -139,7 +166,19 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
         const structuralChildren = standardChildrenIds
             .map((id) => nodes.find((n) => n.id === id))
             .filter(Boolean) as Node[];
+            
+        const parent = nodes.find(n => n.id === nodeId);
+        const isIfElse = parent?.data?.label === 'If / Else';
+
         structuralChildren.sort((a, b) => {
+            if (isIfElse) {
+                const edgeA = edges.find(e => e.source === nodeId && e.target === a.id);
+                const edgeB = edges.find(e => e.source === nodeId && e.target === b.id);
+                const typeA = edgeA?.data?.conditionType || '';
+                const typeB = edgeB?.data?.conditionType || '';
+                if (typeA === 'true' && typeB === 'false') return -1;
+                if (typeA === 'false' && typeB === 'true') return 1;
+            }
             if (Math.abs(a.position.x - b.position.x) > 10) return a.position.x - b.position.x;
             return a.id.localeCompare(b.id);
         });
@@ -224,7 +263,20 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
 
         const structuralChildren = standardChildrenIds.map((id) => nodes.find((n) => n.id === id)).filter(Boolean) as Node[];
         if (structuralChildren.length === 0) return;
+        
+        const parent = nodes.find(n => n.id === nodeId);
+        const isIfElse = parent?.data?.label === 'If / Else';
+
         structuralChildren.sort((a, b) => {
+            if (isIfElse) {
+                const edgeA = edges.find(e => e.source === nodeId && e.target === a.id);
+                const edgeB = edges.find(e => e.source === nodeId && e.target === b.id);
+                const typeA = edgeA?.data?.conditionType || '';
+                const typeB = edgeB?.data?.conditionType || '';
+                // 'true' first (left), then 'false' (right)
+                if (typeA === 'true' && typeB === 'false') return -1;
+                if (typeA === 'false' && typeB === 'true') return 1;
+            }
             if (Math.abs(a.position.x - b.position.x) > 10) return a.position.x - b.position.x;
             return a.id.localeCompare(b.id);
         });
@@ -335,6 +387,7 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
 
     const incomingEdgesMap = new Map<string, string[]>();
     edges.forEach((e) => {
+        if (e.data?.isLoopBack) return; // Skip loopbacks for horizontal centering math
         if (!incomingEdgesMap.has(e.target)) incomingEdgesMap.set(e.target, []);
         incomingEdgesMap.get(e.target)!.push(e.source);
     });
@@ -379,11 +432,13 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
     });
 
     const rootIds = new Set(roots.map((r) => r.id));
-    return nodes.map((n) => {
+    const finalNodes = nodes.map((n) => {
         const pos = newPositions.get(n.id);
         const isRoot = rootIds.has(n.id);
         const data = { ...n.data, isRoot };
         if (pos) return { ...n, position: pos, data };
         return { ...n, data };
     });
+    
+    return { nodes: finalNodes, edges };
 }

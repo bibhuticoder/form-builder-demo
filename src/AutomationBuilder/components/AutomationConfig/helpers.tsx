@@ -20,7 +20,7 @@ import {
   DocumentTextIcon,
   BoltIcon
 } from "@heroicons/react/24/outline"
-import { TOOLBOX_ITEMS } from "../../constants/toolbox"
+import { TOOLBOX_ITEMS } from "../../constants"
 
 // --- Icons ---
 

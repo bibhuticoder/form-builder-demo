@@ -5,7 +5,7 @@ import { Button } from "@/components/Button"
 import { ScrollArea } from "@/components/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
-import { TOOLBOX_ITEMS } from "../../constants/toolbox"
+import { TOOLBOX_ITEMS } from "../../constants"
 
 export function FlowBuilderSidebar({ isCollapsed, onCollapse, onExpand }: { isCollapsed: boolean; onCollapse: () => void; onExpand: () => void }) {
   const [searchQuery, setSearchQuery] = useState("")

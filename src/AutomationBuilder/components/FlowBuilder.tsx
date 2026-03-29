@@ -5,13 +5,17 @@ import "reactflow/dist/style.css"
 import { ProTipBanner } from "./ProTipBanner"
 import { AutomationConfigModal } from "./AutomationConfig/Modal"
 import { JsonViewerPanel } from "./JsonViewerPanel/JsonViewerPanel"
-import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../constants/toolbox"
+import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../constants"
 import { useFlowHistory } from "../hooks/useFlowHistory"
 import { performAutoLayout, restoreNodeIcons } from "../utils/layout"
 import { flowNodeTypes } from "./flow/FlowBuilderNodes"
 import { flowEdgeTypes } from "./flow/FlowBuilderEdge"
 import { FlowBuilderControls } from "./flow/FlowBuilderControls"
 import { FlowBuilderSidebar } from "./flow/FlowBuilderSidebar"
+import { useAutomationBuilderContext } from "../context/AutomationBuilderContext"
+import { buildPayloadFromBuilder } from "../utils/payload"
+import { NodeActionsContext } from "../context/NodeActionsContext"
+import { deleteNodeAndDescendants } from "../utils/nodeActions"
 
 export function FlowBuilder({ automationId }: { automationId: string }) {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
@@ -58,6 +62,80 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       setEdges(initialEdges)
     }
   }, [nodes])
+
+  const handleDeleteNode = useCallback(
+    (id: string) => {
+      takeSnapshot(nodes, edges)
+      deleteNodeAndDescendants(
+        id,
+        (params) => {
+          const idsToDelete = new Set(params.nodes.map((n) => n.id))
+          setNodes((nds) => nds.filter((n) => !idsToDelete.has(n.id)))
+          setEdges((eds) => eds.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target)))
+        },
+        () => edges,
+      )
+    },
+    [nodes, edges, takeSnapshot],
+  )
+
+  const handleDuplicateNode = useCallback(
+    (id: string) => {
+      const node = nodes.find((n) => n.id === id)
+      if (!node) return
+      takeSnapshot(nodes, edges)
+
+      const newNodeId = `${node.type}-${Date.now()}`
+      const newNode: Node = {
+        ...node,
+        id: newNodeId,
+        position: { x: node.position.x + 40, y: node.position.y + 100 },
+        selected: true,
+        data: {
+          ...node.data,
+          label: `${node.data.label} (Copy)`,
+          isRoot: false,
+        },
+      }
+
+      // Check for direct child (linear) to insert after
+      const outgoingEdge = edges.find((e) => e.source === id && !e.data?.isLoopBack && !e.data?.branchId)
+      let nextEdges = [...edges]
+
+      if (outgoingEdge) {
+        const { target, sourceHandle } = outgoingEdge
+        nextEdges = edges.filter((e) => e.id !== outgoingEdge.id)
+        nextEdges.push({
+          id: `e-${id}-${newNodeId}`,
+          source: id,
+          target: newNodeId,
+          sourceHandle,
+          markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
+        })
+        nextEdges.push({
+          id: `e-${newNodeId}-${target}`,
+          source: newNodeId,
+          target: target,
+          markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
+        })
+      }
+
+      const nextNodes = [...nodes, newNode]
+      const { nodes: lNodes, edges: lEdges } = performAutoLayout(nextNodes, nextEdges)
+      setNodes(lNodes)
+      setEdges(lEdges)
+    },
+    [nodes, edges, takeSnapshot],
+  )
+
+  const nodeActions = useMemo(
+    () => ({
+      onDuplicate: handleDuplicateNode,
+      onDelete: handleDeleteNode,
+      onMove: (_id: string) => {},
+    }),
+    [handleDuplicateNode, handleDeleteNode],
+  )
 
   const onUndo = useCallback(() => {
     const previousState = undo(nodes, edges)
@@ -140,8 +218,28 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     (nodeId: string, newData: any) => {
       takeSnapshot(nodes, edges)
 
-      // 1. Update node data first
-      const nextNodes = nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...newData } } : n))
+      // 1. Update node data with intelligent config mapping
+      const nextNodes = nodes.map((n) => {
+        if (n.id === nodeId) {
+          const { label, subtitle, icon, iconName, color, config, ...formData } = newData;
+          
+          return {
+            ...n,
+            data: {
+              ...n.data,
+              ...formData, // Flatten into root data
+              label: label || n.data.label,
+              subtitle: subtitle || n.data.subtitle,
+              icon: icon || n.data.icon,
+              iconName: iconName || n.data.iconName,
+              color: color || n.data.color,
+              // Move form fields into 'config' sub-object for JSON viewers/production
+              config: { ...(n.data.config || {}), ...(config || {}), ...formData }
+            }
+          }
+        }
+        return n;
+      })
 
       // 2. Prepare updated edges
       let nextEdges = [...edges]
@@ -193,12 +291,116 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       }
 
       // 3. Apply layout to ensure structure is updated (e.g. labels, slots)
-      const layoutedNodes = performAutoLayout(nextNodes, nextEdges)
-      setNodes(layoutedNodes)
+      const { nodes: lNodes, edges: lEdges } = performAutoLayout(nextNodes, nextEdges)
+      setNodes(lNodes)
+      setEdges(lEdges)
       setEdges(nextEdges)
     },
     [takeSnapshot, nodes, edges],
   )
+
+  const { name, setName, status, setStatus, settings, setSettings, setSavedAt, saveRef, loadRef } = useAutomationBuilderContext()
+
+  const handleSave = useCallback(async () => {
+    const timestamp = new Date().toISOString()
+    
+    // Generate the full payload
+    const payload = buildPayloadFromBuilder({
+      automationId,
+      name,
+      status,
+      settings,
+      version: 1,
+      savedAt: timestamp,
+      nodes,
+      edges
+    })
+    
+    console.log("🚀 [API] Saving automation to backend...", payload)
+    
+    // Simulate real API latency
+    await new Promise(resolve => setTimeout(resolve, 800))
+    
+    setSavedAt(timestamp)
+    console.log("✅ [API] Automation saved successfully!")
+  }, [automationId, nodes, edges, name, status, settings, setSavedAt])
+
+  const handleLoadAutomation = useCallback((payload: any) => {
+    if (!payload?.automation) return;
+    const { nodes: pNodes, edges: pEdges, name: pName, status: pStatus, settings: pSettings } = payload.automation;
+    
+    // 1. Restore metadata
+    if (pName) setName(pName);
+    if (pStatus) setStatus(pStatus);
+    if (pSettings) setSettings(pSettings);
+
+    // 2. Transform nodes from production format to builder format
+    const bNodes = pNodes.map((n: any) => {
+      let type = n.type;
+      
+      // Map production types to builder types
+      if (type.startsWith('logic_')) type = 'condition';
+      else if (type.startsWith('action_')) type = 'action';
+      else if (type === 'loop_back') type = 'loopBack';
+      else if (type === 'end') type = 'action';
+      
+      return {
+        id: n.id,
+        // Ignore JSON positions to ensure builder's auto-layout takes full control
+        position: { x: 0, y: 0 },
+        type,
+        data: {
+          ...(n.data?.ui || {}),
+          ...(n.data?.config || {}), // Flatten for builder state accessibility
+          config: n.data?.config || {}, // Keep nested for easy re-extraction
+          label: n.data?.ui?.label || n.id,
+          subtitle: n.data?.ui?.subtitle,
+          iconName: n.data?.ui?.icon,
+        }
+      };
+    });
+
+    // 3. Transform edges
+    const bEdges = (pEdges || []).map((e: any) => {
+      const isLoop = !!e.data?.isLoopBack;
+      return {
+        ...e,
+        type: 'custom',
+        sourceHandle: isLoop ? 'loop-source' : e.sourceHandle,
+        targetHandle: isLoop ? 'loop-target' : e.targetHandle,
+        data: {
+          ...(e.data || {}),
+          isLoopBack: isLoop
+        },
+        style: isLoop ? { stroke: "#f59e0b", strokeWidth: 2, strokeDasharray: "5,5" } : e.style
+      }
+    });
+
+    // 4. Restore functional components (icons) from names
+    restoreNodeIcons(bNodes, TOOLBOX_ITEMS);
+
+    // 5. Clear snapshots
+    takeSnapshot(bNodes, bEdges);
+
+    // 6. Update state (layout happens automatically)
+    const { nodes: lNodes, edges: lEdges } = performAutoLayout(bNodes, bEdges);
+    setNodes(lNodes);
+    setEdges(lEdges);
+    setEdges(bEdges);
+    
+    if (payload.automation.updatedAt || payload.automation.savedAt) {
+      setSavedAt(payload.automation.updatedAt || payload.automation.savedAt);
+    }
+  }, [setNodes, setEdges, setSavedAt, setName, setStatus, setSettings, takeSnapshot]);
+
+  useEffect(() => {
+    saveRef.current = handleSave
+    loadRef.current = handleLoadAutomation
+    return () => {
+      saveRef.current = null
+      loadRef.current = null
+    }
+  }, [handleSave, handleLoadAutomation, saveRef, loadRef])
 
   const nodesWithData = useMemo(
     () =>
@@ -228,11 +430,15 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     (changes: NodeChange[]) => {
       const significant = changes.filter((c) => c.type !== "select" && c.type !== "dimensions")
       if (significant.length > 0) takeSnapshot(nodes, edges)
-      setNodes((currentNodes) => {
-        const updated = applyNodeChanges(changes, currentNodes)
-        if (changes.some((c) => c.type === "remove")) return performAutoLayout(updated, edges)
-        return updated
-      })
+      
+      const updated = applyNodeChanges(changes, nodes)
+      if (changes.some((c) => c.type === "remove")) {
+        const { nodes: lNodes, edges: lEdges } = performAutoLayout(updated, edges)
+        setNodes(lNodes)
+        setEdges(lEdges)
+      } else {
+        setNodes(updated)
+      }
     },
     [takeSnapshot, nodes, edges],
   )
@@ -361,18 +567,19 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
               data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined 
             },
           ]
-          const layouted = performAutoLayout([newNode, addStepA, addStepB], newEdges)
-          setNodes(layouted)
-          setEdges(newEdges)
+          
+          const { nodes: lNodes, edges: lEdges } = performAutoLayout([newNode, addStepA, addStepB], newEdges)
+          setNodes(lNodes)
+          setEdges(lEdges)
           return
         }
-
+  
         if (!isTerminal) {
           const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
           const newEdge: Edge = { id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }
-          const layouted = performAutoLayout([newNode, addStepNode], [newEdge])
-          setNodes(layouted)
-          setEdges([newEdge])
+          const { nodes: lNodes, edges: lEdges } = performAutoLayout([newNode, addStepNode], [newEdge])
+          setNodes(lNodes)
+          setEdges(lEdges)
         } else {
           setNodes([newNode])
           setEdges([])
@@ -444,9 +651,9 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         }
 
         const nextNodes = cleanNodes.concat(newNode)
-        const layouted = performAutoLayout(nextNodes, nextEdges)
-        setNodes(layouted)
-        setEdges(nextEdges)
+        const { nodes: lNodes, edges: lEdges } = performAutoLayout(nextNodes, nextEdges)
+        setNodes(lNodes)
+        setEdges(lEdges)
         return
       }
 
@@ -493,9 +700,9 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const newNodes = nodes.filter((n) => n.id !== closestAddStepNode!.id).concat(newNode)
 
       // Rely on performAutoLayout to add necessary slots and layout the flow
-      const layouted = performAutoLayout(newNodes, updatedEdges)
-      setNodes(layouted)
-      setEdges(updatedEdges)
+      const { nodes: lNodes, edges: lEdges } = performAutoLayout(newNodes, updatedEdges)
+      setNodes(lNodes)
+      setEdges(lEdges)
     },
     [edges, nodes, project, takeSnapshot],
   )
@@ -513,7 +720,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const prevTip = () => setCurrentTipIndex((p) => (p - 1 + PRO_TIPS.length) % PRO_TIPS.length)
 
   return (
-    <div className="flex h-full w-full bg-slate-50 dark:bg-slate-950 relative">
+    <NodeActionsContext.Provider value={nodeActions}>
+      <div className="flex h-full w-full bg-slate-50 dark:bg-slate-950 relative">
       <AutomationConfigModal isOpen={isConfigModalOpen} onClose={() => setIsConfigModalOpen(false)} node={selectedNodeForConfig} onSave={onSaveConfig} edges={edges} />
       <JsonViewerPanel automationId={automationId} nodes={nodes} edges={edges} />
 
@@ -527,6 +735,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       </div>
 
       <FlowBuilderSidebar isCollapsed={isSidebarCollapsed} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)} />
-    </div>
+      </div>
+    </NodeActionsContext.Provider>
   )
 }

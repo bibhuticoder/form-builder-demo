@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon, ExclamationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/Button"
-import { AutomationCard } from "./AutomationCard"
+import { cn } from "@/lib/utils"
 
 type ProTipBannerProps = {
   tip: string
@@ -14,7 +14,9 @@ type ProTipBannerProps = {
 export function ProTipBanner({ tip, currentIndex, total, onPrev, onNext, onDismiss }: ProTipBannerProps) {
   return (
     <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-end pointer-events-none">
-      <AutomationCard className="p-3 shadow-lg pointer-events-auto max-w-2xl w-full mr-4 bg-primary/10 border-primary/20 dark:bg-primary/20 dark:border-primary/30">
+      <div className={cn(
+        "rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 p-3 shadow-lg pointer-events-auto max-w-2xl w-full mr-4 bg-primary/10 border-primary/20 dark:bg-primary/20 dark:border-primary/30",
+      )}>
         <div className="flex gap-3 items-center">
           <ExclamationCircleIcon className="w-5 h-5 text-primary shrink-0" />
           <div className="flex-1 text-xs text-primary dark:text-primary-foreground flex items-center gap-2">
@@ -39,7 +41,7 @@ export function ProTipBanner({ tip, currentIndex, total, onPrev, onNext, onDismi
             <XMarkIcon className="h-4 w-4" />
           </Button>
         </div>
-      </AutomationCard>
+      </div>
     </div>
   )
 }

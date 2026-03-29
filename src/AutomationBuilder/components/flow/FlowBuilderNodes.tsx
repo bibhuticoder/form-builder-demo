@@ -3,7 +3,7 @@ import { ArrowPathIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, PlusIcon, S
 import { Handle, Position, useReactFlow } from "reactflow"
 import { Button } from "@/components/Button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/dropdown-menu"
-import { deleteNodeAndDescendants } from "../../utils/nodeActions"
+import { useNodeActions } from "../../context/NodeActionsContext"
 
 const AddStepNode = ({ data }: any) => {
   if (data?.isBranchAdder) return null
@@ -35,7 +35,7 @@ const PlaceholderNode = () => (
 )
 
 const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoot, isTargetable, hideSourceHandle }: any) => {
-  const { deleteElements, getEdges } = useReactFlow()
+  const { onDuplicate, onDelete } = useNodeActions()
 
   return (
     <div className="relative w-[256px]">
@@ -58,11 +58,21 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onDuplicate(id)
+                    }}
+                  >
                     <DocumentDuplicateIcon className="mr-2 h-4 w-4" />
                     Duplicate
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      // For now, toggle move mode or similar
+                    }}
+                  >
                     <Squares2X2Icon className="mr-2 h-4 w-4" />
                     Move
                   </DropdownMenuItem>
@@ -70,7 +80,7 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
                     className="text-red-600 focus:text-red-600"
                     onClick={(e) => {
                       e.stopPropagation()
-                      deleteNodeAndDescendants(id, deleteElements, getEdges)
+                      onDelete(id)
                     }}
                   >
                     <TrashIcon className="mr-2 h-4 w-4" />
@@ -84,11 +94,11 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
         {!isTargetable && <Handle type="target" position={Position.Top} className={`!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary ${isRoot ? "!opacity-0 !border-0" : ""}`} />}
         {!isTargetable && !hideSourceHandle && <Handle type="source" position={Position.Bottom} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />}
         {!isTargetable && (
-          <Handle 
-            type="target" 
-            position={Position.Left} 
+          <Handle
+            type="target"
+            position={Position.Left}
             id="loop-target"
-            className="!w-3 !h-3 !bg-transparent !border-0 opacity-0 pointer-events-none" 
+            className="!w-3 !h-3 !bg-transparent !border-0 opacity-0 pointer-events-none"
           />
         )}
       </div>
@@ -98,7 +108,7 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
 }
 
 const TriggerNode = ({ id, data, selected }: any) => {
-  const { deleteElements } = useReactFlow()
+  const { onDuplicate, onDelete } = useNodeActions()
   return (
     <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-sm bg-blue-500" />
@@ -117,19 +127,20 @@ const TriggerNode = ({ id, data, selected }: any) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDuplicate(id)
+                  }}
+                >
                   <DocumentDuplicateIcon className="mr-2 h-4 w-4" />
                   Duplicate
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                  <Squares2X2Icon className="mr-2 h-4 w-4" />
-                  Move
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-red-600 focus:text-red-600"
                   onClick={(e) => {
                     e.stopPropagation()
-                    deleteElements({ nodes: [{ id }] })
+                    onDelete(id)
                   }}
                 >
                   <TrashIcon className="mr-2 h-4 w-4" />
@@ -197,11 +208,11 @@ const LoopBackNode = ({ id, data, selected }: any) => {
         </div>
       </div>
       <Handle type="target" position={Position.Top} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />
-      <Handle 
-        type="source" 
-        position={Position.Right} 
+      <Handle
+        type="source"
+        position={Position.Right}
         id="loop-source"
-        className="!w-3 !h-3 !bg-amber-400 !border-2 !border-white transition-colors hover:!bg-amber-500" 
+        className="!w-3 !h-3 !bg-amber-400 !border-2 !border-white transition-colors hover:!bg-amber-500"
       />
     </div>
   )

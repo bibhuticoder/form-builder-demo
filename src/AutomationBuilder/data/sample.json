@@ -1,0 +1,297 @@
+{
+  "automation": {
+    "id": "a5",
+    "name": "Untitled Automation",
+    "status": "draft",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "trigger-2-1774711845707",
+        "type": "trigger",
+        "position": {
+          "x": 60,
+          "y": 50
+        },
+        "data": {
+          "ui": {
+            "label": "Form Submitted",
+            "subtitle": "When this happens...",
+            "icon": "DocumentTextIcon",
+            "color": "text-blue-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "trigger-3-1774711847460",
+        "type": "trigger",
+        "position": {
+          "x": 376,
+          "y": 50
+        },
+        "data": {
+          "ui": {
+            "label": "Tags",
+            "subtitle": "When this happens...",
+            "icon": "TagIcon",
+            "color": "text-blue-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "action-4-1774711850364",
+        "type": "action_send_email",
+        "position": {
+          "x": 218,
+          "y": 200
+        },
+        "data": {
+          "ui": {
+            "label": "Send Email",
+            "subtitle": "Perform action",
+            "icon": "EnvelopeIcon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "condition-5-1774711852691",
+        "type": "logic_if_else",
+        "position": {
+          "x": 218,
+          "y": 350
+        },
+        "data": {
+          "ui": {
+            "label": "If / Else",
+            "subtitle": "Check if...",
+            "icon": "FunnelIcon",
+            "color": "text-amber-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "action-7-1774711856359",
+        "type": "action",
+        "position": {
+          "x": 257.5,
+          "y": 500
+        },
+        "data": {
+          "ui": {
+            "label": "Add Note",
+            "subtitle": "Perform action",
+            "icon": "ClipboardDocumentIcon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "action-8-1774711858201",
+        "type": "action",
+        "position": {
+          "x": 455,
+          "y": 500
+        },
+        "data": {
+          "ui": {
+            "label": "Update Company",
+            "subtitle": "Perform action",
+            "icon": "BuildingOffice2Icon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "condition-9-1774711861560",
+        "type": "logic_split_test",
+        "position": {
+          "x": 455,
+          "y": 650
+        },
+        "data": {
+          "ui": {
+            "label": "Split Test (A/B)",
+            "subtitle": "Check if...",
+            "icon": "ArrowPathIcon",
+            "color": "text-amber-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "action-11-1774711865277",
+        "type": "action",
+        "position": {
+          "x": 613,
+          "y": 800
+        },
+        "data": {
+          "ui": {
+            "label": "Send To Slack",
+            "subtitle": "Perform action",
+            "icon": "ChatBubbleLeftRightIcon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "delay-12-1774711868785",
+        "type": "delay",
+        "position": {
+          "x": 297,
+          "y": 800
+        },
+        "data": {
+          "ui": {
+            "label": "Wait",
+            "subtitle": "Wait for...",
+            "icon": "ClockIcon",
+            "color": "text-amber-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "action-13-1774711873193",
+        "type": "action",
+        "position": {
+          "x": 297,
+          "y": 950
+        },
+        "data": {
+          "ui": {
+            "label": "Add Note",
+            "subtitle": "Perform action",
+            "icon": "ClipboardDocumentIcon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      },
+      {
+        "id": "loopBack-14-1774711876276",
+        "type": "loop_back",
+        "position": {
+          "x": 297,
+          "y": 1100
+        },
+        "data": {
+          "ui": {
+            "label": "Loop Back To",
+            "subtitle": "Perform action",
+            "icon": "ArrowPathIcon",
+            "color": "text-amber-500"
+          },
+          "config": {
+            "isRoot": false,
+            "isDragging": false,
+            "targetId": "action-7-1774711856359"
+          }
+        }
+      },
+      {
+        "id": "action-14-1774711891975",
+        "type": "end",
+        "position": {
+          "x": 613,
+          "y": 950
+        },
+        "data": {
+          "ui": {
+            "label": "End Automation",
+            "subtitle": "Perform action",
+            "icon": "StopCircleIcon",
+            "color": "text-emerald-500"
+          },
+          "config": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-trigger-2-1774711845707-add-step-1774711845707",
+        "source": "trigger-2-1774711845707",
+        "target": "action-4-1774711850364"
+      },
+      {
+        "id": "e-trigger-3-1774711847460-add-step-1774711845707",
+        "source": "trigger-3-1774711847460",
+        "target": "action-4-1774711850364"
+      },
+      {
+        "id": "e-action-4-1774711850364-add-step-action-4-1774711850364-auto",
+        "source": "action-4-1774711850364",
+        "target": "condition-5-1774711852691"
+      },
+      {
+        "id": "e-condition-5-1774711852691-add-step-condition-5-1774711852691-false-1774711852691",
+        "source": "condition-5-1774711852691",
+        "target": "action-7-1774711856359",
+        "data": {
+          "label": "NO"
+        }
+      },
+      {
+        "id": "e-condition-5-1774711852691-add-step-condition-5-1774711852691-true-1774711852691",
+        "source": "condition-5-1774711852691",
+        "target": "action-8-1774711858201",
+        "data": {
+          "label": "YES"
+        }
+      },
+      {
+        "id": "e-action-8-1774711858201-add-step-action-8-1774711858201-auto",
+        "source": "action-8-1774711858201",
+        "target": "condition-9-1774711861560"
+      },
+      {
+        "id": "e-condition-9-1774711861560-add-step-condition-9-1774711861560-split-1774711861560-1",
+        "source": "condition-9-1774711861560",
+        "target": "action-11-1774711865277",
+        "data": {
+          "label": "50%",
+          "isSplitTest": true
+        }
+      },
+      {
+        "id": "e-condition-9-1774711861560-add-step-condition-9-1774711861560-split-1774711861560-0",
+        "source": "condition-9-1774711861560",
+        "target": "delay-12-1774711868785",
+        "data": {
+          "label": "50%",
+          "isSplitTest": true
+        }
+      },
+      {
+        "id": "e-delay-12-1774711868785-add-step-delay-12-1774711868785-auto",
+        "source": "delay-12-1774711868785",
+        "target": "action-13-1774711873193"
+      },
+      {
+        "id": "e-action-13-1774711873193-add-step-action-13-1774711873193-auto",
+        "source": "action-13-1774711873193",
+        "target": "loopBack-14-1774711876276"
+      },
+      {
+        "id": "e-loopBack-14-1774711876276-action-7-1774711856359-loopback",
+        "source": "loopBack-14-1774711876276",
+        "target": "action-7-1774711856359",
+        "data": {
+          "isLoopBack": true
+        }
+      },
+      {
+        "id": "e-action-11-1774711865277-add-step-action-11-1774711865277-auto",
+        "source": "action-11-1774711865277",
+        "target": "action-14-1774711891975"
+      }
+    ]
+  }
+}

@@ -11,6 +11,7 @@ export interface AutomationDefinition {
     id: string;
     name: string;
     status?: AutomationStatus;
+    settings?: Record<string, any>;
     createdAt?: string;
     updatedAt?: string;
     nodes: Node[];
@@ -37,26 +38,28 @@ export type AutomationValidationResult = {
  * - Builder runtime uses React components for icons; conversion happens at the edge of persistence.
  */
 
-export type AutomationProductionPayload = {
-    automation: AutomationProductionDefinition;
+export type AutomationPayload = {
+    automation: Automation;
 };
 
-export type AutomationProductionDefinition = {
+export type Automation = {
     id: string;
     name: string;
     status: AutomationStatus;
+    settings?: Record<string, any>;
     version: number;
     createdAt?: string;
     updatedAt?: string;
-    nodes: AutomationProductionNode[];
-    edges: AutomationProductionEdge[];
+    savedAt?: string;
+    nodes: AutomationNode[];
+    edges: AutomationEdge[];
 };
 
-export type AutomationProductionNode = {
+export type AutomationNode = {
     id: string;
 
     /**
-     * PRD examples include: trigger, delay, end, loop_back, logic_if_else, action_notification, action_send_email, ...
+     * Examples include: trigger, delay, end, loop_back, logic_if_else, action_notification, action_send_email, ...
      */
     type: string;
 
@@ -75,7 +78,7 @@ export type AutomationProductionNode = {
     };
 };
 
-export type AutomationProductionEdge = {
+export type AutomationEdge = {
     id: string;
     source: string;
     target: string;

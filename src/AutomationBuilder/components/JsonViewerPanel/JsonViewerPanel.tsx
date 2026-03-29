@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react"
 import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon } from "@heroicons/react/24/outline"
 import type { Edge, Node } from "reactflow"
-import { buildProductionPayloadFromBuilder } from "../../utils/payload"
+import { buildPayloadFromBuilder } from "../../utils/payload"
 import { JsonViewer } from "./JsonViewer"
+import { useAutomationBuilderContext } from "../../context/AutomationBuilderContext"
 
 export interface JsonViewerPanelProps {
   automationId: string
@@ -13,16 +14,20 @@ export interface JsonViewerPanelProps {
 export const JsonViewerPanel: React.FC<JsonViewerPanelProps> = ({ automationId, nodes, edges }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const { name, status, settings, savedAt } = useAutomationBuilderContext()
+
   const payload = useMemo(() => {
-    return buildProductionPayloadFromBuilder({
+    return buildPayloadFromBuilder({
       automationId,
-      name: "Untitled Automation",
-      status: "draft",
+      name,
+      status,
+      settings,
       version: 1,
       nodes,
       edges,
+      savedAt: savedAt || undefined,
     })
-  }, [automationId, nodes, edges])
+  }, [automationId, nodes, edges, name, status, settings, savedAt])
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">

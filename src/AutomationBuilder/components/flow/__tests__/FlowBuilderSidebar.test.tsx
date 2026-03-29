@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { FlowBuilderSidebar } from "../FlowBuilderSidebar"
-import { TOOLBOX_ITEMS } from "../../../constants/toolbox"
+import { TOOLBOX_ITEMS } from "../../../constants"
 
 describe("FlowBuilderSidebar", () => {
   const firstAvailableItem = TOOLBOX_ITEMS.flatMap((section) => section.items).find((item) => !item.comingSoon)
