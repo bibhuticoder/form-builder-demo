@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input, Checkbox } from "@/components"
 import { cn } from "@/lib/utils"
-import { ClockIcon, SparklesIcon, CalendarDaysIcon, InformationCircleIcon } from "@heroicons/react/24/outline"
+import { ClockIcon, SparklesIcon, InformationCircleIcon } from "@heroicons/react/24/outline"
 
 const WAIT_EVENTS = [
   { id: 'email_opened', label: 'Email Opened' },

@@ -2,7 +2,6 @@ import { Label } from "@/components/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select"
 import { AUTOMATIONS } from "../helpers"
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
-import { cn } from "@/lib/utils"
 
 export const SendToAutomationConfig = ({ data, onChange }: { data: any, onChange: (d: any) => void }) => {
   const updateField = (val: string) => {

@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BottomActionBar } from '../BottomActionBar';
 import { MockEmailBuilderProvider } from '../../EmailRenderer/elements/__tests__/MockEmailBuilderProvider';

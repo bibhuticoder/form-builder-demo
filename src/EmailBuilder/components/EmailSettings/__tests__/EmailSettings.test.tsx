@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { EmailSettings } from '../EmailSettings';
 
@@ -98,7 +97,7 @@ describe('EmailSettings', () => {
         expect(screen.queryByText('No custom headers added')).toBeNull();
         expect(screen.getByPlaceholderText('Name (e.g. X-Custom-ID)')).toBeTruthy();
 
-        const removeBtn = screen.getByRole('button', { name: '' }).closest('button'); // Trash icon button
+        screen.getByRole('button', { name: '' }).closest('button'); // Trash icon button
         // Find by trash icon class or similar if needed, or use tag names
         const trashBtn = screen.getAllByRole('button').find(b => b.querySelector('svg')); 
         if (trashBtn) fireEvent.click(trashBtn);

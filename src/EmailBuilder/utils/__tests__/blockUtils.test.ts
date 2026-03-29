@@ -1,5 +1,5 @@
 import { findBlockById } from "../blockUtils";
-import { EmailBlock, EmailBlockType, ColumnsBlock } from "../../types";
+import { EmailBlock, EmailBlockType, ColumnsBlock, HeadingLevel } from "../../types";
 
 describe("blockUtils", () => {
   describe("findBlockById", () => {
@@ -8,7 +8,7 @@ describe("blockUtils", () => {
         id: "block-1",
         type: EmailBlockType.HEADING,
         style: {},
-        headingLevel: "h1",
+        headingLevel: HeadingLevel.H1,
         content: "Heading 1",
       },
       {

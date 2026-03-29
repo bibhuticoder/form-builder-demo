@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Slider, Checkbox, Input } from "@/components"
-import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline"
 import { cn } from "@/lib/utils"
 
 interface SplitTestData {

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
-import RichText from '../RichText';
+import RichText from '../../../../../components/RichText';
 
 // TipTap relies on DOM APIs not fully available in jsdom.
 // Mock the @tiptap/react module to provide a lightweight substitute.

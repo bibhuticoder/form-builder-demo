@@ -1,5 +1,5 @@
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "@/components"
-import { InformationCircleIcon, ArrowPathIcon } from "@heroicons/react/24/outline"
+import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import { useReactFlow } from "reactflow"
 
 export const LoopBackConfig = ({ data, onChange }: { data: any, onChange: (d: any) => void }) => {

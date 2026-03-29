@@ -6,7 +6,7 @@ describe("BuilderShell component", () => {
   function renderShell() {
     return render(
       <MemoryRouter>
-        <BuilderShell automationId="new">
+        <BuilderShell>
           <div>Canvas</div>
         </BuilderShell>
       </MemoryRouter>,

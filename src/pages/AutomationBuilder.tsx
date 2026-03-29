@@ -6,7 +6,7 @@ export default function AutomationBuilderPage() {
   const automationId = id || "new"
 
   return (
-    <div className="relative flex h-full min-h-0 flex-col h-[90vh] overflow-hidden">
+    <div className="relative flex flex-col h-[90vh] min-h-0 overflow-hidden">
       <AutomationBuilder automationId={automationId} />
     </div>
   )

@@ -24,211 +24,106 @@
     "version": 1,
     "nodes": [
       {
-        "id": "trigger-2-1774779791783",
-        "type": "trigger",
-        "position": {
-          "x": 218,
-          "y": 50
-        },
+        "id": "trigger-1",
+        "type": "trigger:form_submitted",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "Form Submitted",
-            "icon": "DocumentTextIcon",
-            "color": "text-blue-500",
-            "nodeType": "form_submitted"
-          },
-          "config": {
-            "formType": "cleave",
-            "formId": "c2"
-          }
+          "formType": "cleave",
+          "formId": "c2"
         }
       },
       {
-        "id": "condition-3-1774779793996",
-        "type": "logic_split_test",
-        "position": {
-          "x": 218,
-          "y": 200
-        },
+        "id": "split-test-1",
+        "type": "condition:split_test",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "Split Test (A/B)",
-            "icon": "ArrowPathIcon",
-            "color": "text-amber-500",
-            "nodeType": "split_test"
-          },
-          "config": {
-            "weights": [
-              50,
-              50
-            ],
-            "strategy": "even",
-            "winnerCriteria": "clicks",
-            "notifyMe": true,
-            "durationUnit": "months"
-          }
+          "weights": [50, 50],
+          "strategy": "even",
+          "winnerCriteria": "clicks",
+          "notifyMe": true
         }
       },
       {
-        "id": "action-5-1774779797598",
-        "type": "action_send_email",
-        "position": {
-          "x": -19,
-          "y": 350
-        },
+        "id": "action-email-1",
+        "type": "action:send_email",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "Send Email",
-            "icon": "EnvelopeIcon",
-            "color": "text-emerald-500",
-            "nodeType": "send_email"
-          },
-          "config": {
-            "fromName": "asdasd",
-            "fromEmail": "asdas",
-            "subject": "asd",
-            "message": "<p>adasdasd</p>"
-          }
+          "fromName": "Support Team",
+          "fromEmail": "support@example.com",
+          "subject": "Welcome to our platform!",
+          "message": "<p>Hello! Thanks for signing up.</p>"
         }
       },
       {
-        "id": "condition-6-1774779800164",
-        "type": "logic_if_else",
-        "position": {
-          "x": 455,
-          "y": 350
-        },
+        "id": "if-else-1",
+        "type": "condition:if_else",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "If / Else",
-            "icon": "FunnelIcon",
-            "color": "text-amber-500",
-            "nodeType": "if_else"
-          },
-          "config": {
-            "conditions": [
-              {
-                "field": "first_name",
-                "operator": "not_equals",
-                "value": "sdasdasdasdasd"
-              }
-            ],
-            "logicalOperator": "and",
-            "trueLabel": "adasdasd",
-            "falseLabel": "567567567"
-          }
+          "conditions": [
+            {
+              "field": "first_name",
+              "operator": "not_empty"
+            }
+          ],
+          "logicalOperator": "and",
+          "trueLabel": "Has Name",
+          "falseLabel": "No Name"
         }
       },
       {
-        "id": "action-8-1774779822596",
-        "type": "action_send_notification",
-        "position": {
-          "x": 297,
-          "y": 500
-        },
+        "id": "action-notify-1",
+        "type": "action:send_notification",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "Send Notification",
-            "icon": "BellIcon",
-            "color": "text-emerald-500",
-            "nodeType": "send_notification"
+          "message": "<p>New sign up with no name!</p>",
+          "channels": {
+            "email": true,
+            "inApp": true,
+            "sms": false
           },
-          "config": {
-            "message": "<p>asdfasdf</p>",
-            "channels": {
-              "email": true,
-              "inApp": true,
-              "sms": true
-            },
-            "recipientType": "team",
-            "recipientId": "t2"
-          }
+          "recipientType": "team",
+          "recipientId": "t2"
         }
       },
       {
-        "id": "action-9-1774779824228",
-        "type": "action_update_contact",
-        "position": {
-          "x": 613,
-          "y": 500
-        },
+        "id": "action-update-1",
+        "type": "action:update_contact",
+        "position": { "x": 0, "y": 0 },
         "data": {
-          "ui": {
-            "label": "Update Contact",
-            "icon": "UserCircleIcon",
-            "color": "text-emerald-500",
-            "nodeType": "update_contact"
-          },
-          "config": {
-            "field": "phone",
-            "value": "asdfasdf"
-          }
-        }
-      },
-      {
-        "id": "action-10-1774779826677",
-        "type": "action_add_note",
-        "position": {
-          "x": -19,
-          "y": 500
-        },
-        "data": {
-          "ui": {
-            "label": "Add Note",
-            "icon": "ClipboardDocumentIcon",
-            "color": "text-emerald-500",
-            "nodeType": "add_note"
-          },
-          "config": {
-            "content": "<p>asdasd</p>"
-          }
+          "field": "tag",
+          "value": "active_user"
         }
       }
     ],
     "edges": [
       {
-        "id": "e-trigger-2-1774779791783-add-step-1774779791783",
-        "source": "trigger-2-1774779791783",
-        "target": "condition-3-1774779793996"
+        "id": "e1",
+        "source": "trigger-1",
+        "target": "split-test-1"
       },
       {
-        "id": "e-condition-3-1774779793996-add-step-condition-3-1774779793996-split-1774779793996-0",
-        "source": "condition-3-1774779793996",
-        "target": "action-5-1774779797598",
-        "data": {
-          "label": "62%",
-          "isSplitTest": true
-        }
+        "id": "e2",
+        "source": "split-test-1",
+        "target": "action-email-1",
+        "data": { "label": "50%", "isSplitTest": true }
       },
       {
-        "id": "e-condition-3-1774779793996-add-step-condition-3-1774779793996-split-1774779793996-1",
-        "source": "condition-3-1774779793996",
-        "target": "condition-6-1774779800164",
-        "data": {
-          "label": "38%",
-          "isSplitTest": true
-        }
+        "id": "e3",
+        "source": "split-test-1",
+        "target": "if-else-1",
+        "data": { "label": "50%", "isSplitTest": true }
       },
       {
-        "id": "e-condition-6-1774779800164-add-step-condition-6-1774779800164-false-1774779800164",
-        "source": "condition-6-1774779800164",
-        "target": "action-8-1774779822596",
-        "data": {
-          "label": "adasdasd"
-        }
+        "id": "e4",
+        "source": "if-else-1",
+        "target": "action-notify-1",
+        "data": { "label": "No Name" }
       },
       {
-        "id": "e-condition-6-1774779800164-add-step-condition-6-1774779800164-true-1774779800164",
-        "source": "condition-6-1774779800164",
-        "target": "action-9-1774779824228",
-        "data": {
-          "label": "567567567"
-        }
-      },
-      {
-        "id": "e-action-5-1774779797598-add-step-action-5-1774779797598-auto",
-        "source": "action-5-1774779797598",
-        "target": "action-10-1774779826677"
+        "id": "e5",
+        "source": "if-else-1",
+        "target": "action-update-1",
+        "data": { "label": "Has Name" }
       }
     ]
   }
