@@ -670,6 +670,16 @@ export default function RichText({
     },
   });
 
+  // Keep editor content in sync with prop
+  useEffect(() => {
+    if (!editor || content === undefined) return
+    
+    // Only update if content is different to avoid cursor jumps
+    if (content !== editor.getHTML()) {
+      editor.commands.setContent(content)
+    }
+  }, [content, editor])
+
   return (
     <div
       className={`rich-text rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden ${className}`}

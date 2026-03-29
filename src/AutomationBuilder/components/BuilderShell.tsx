@@ -13,11 +13,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { TimezoneCombobox } from "./TimezoneCombobox"
 import SAMPLE_DATA from "../data/sample.json"
 
-function RelativeTime({ date }: { date: string | null }) {
+function RelativeTime({ date, isDirty }: { date: string | null; isDirty: boolean }) {
   const [text, setText] = useState<string>("Not saved")
 
   useEffect(() => {
-    if (!date) {
+    if (isDirty || !date) {
       setText("Not saved")
       return
     }
@@ -45,7 +45,7 @@ type BuilderShellProps = {
 
 
 export function BuilderShell({ children }: BuilderShellProps) {
-  const { name, setName, status, setStatus, settings, setSettings, savedAt, saveRef, loadRef } = useAutomationBuilderContext()
+  const { name, setName, status, setStatus, settings, setSettings, savedAt, isDirty, setIsDirty, saveRef, loadRef } = useAutomationBuilderContext()
   const { allowReEntry, stopOnResponse, executionTimezoneEnabled, sendWindowEnabled, timezone, sendWindowStart, sendWindowEnd, activeDays } = settings
 
   const days = ["M", "T", "W", "T", "F", "S", "S"]
@@ -58,6 +58,7 @@ export function BuilderShell({ children }: BuilderShellProps) {
 
   const updateSetting = <K extends keyof typeof settings>(key: K, value: typeof settings[K]) => {
     setSettings(prev => ({ ...prev, [key]: value }))
+    setIsDirty(true)
   }
 
   const toggleDay = (index: number) => {
@@ -68,6 +69,7 @@ export function BuilderShell({ children }: BuilderShellProps) {
 
   const toggleStatus = () => {
     setStatus(status === "active" ? "draft" : "active")
+    setIsDirty(true)
   }
 
   return (
@@ -80,7 +82,14 @@ export function BuilderShell({ children }: BuilderShellProps) {
             </Button>
           </Link>
 
-          <Input value={name} onChange={(e) => setName(e.target.value)} className="text-sm font-semibold text-slate-800 shadow border dark:text-slate-100 hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" />
+          <Input 
+            value={name} 
+            onChange={(e) => {
+              setName(e.target.value)
+              setIsDirty(true)
+            }} 
+            className="text-sm font-semibold text-slate-800 shadow border dark:text-slate-100 hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary px-2 h-9 w-[280px] md:w-[340px] bg-transparent shadow-none" 
+          />
 
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
 
@@ -255,7 +264,7 @@ export function BuilderShell({ children }: BuilderShellProps) {
         </div>
 
         <div className="flex items-center gap-3 md:gap-4">
-          <RelativeTime date={savedAt} />
+          <RelativeTime date={savedAt} isDirty={isDirty} />
           <Button
             variant="outline"
             size="sm"

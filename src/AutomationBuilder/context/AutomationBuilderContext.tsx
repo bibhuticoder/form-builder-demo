@@ -21,6 +21,8 @@ export type AutomationBuilderContextValue = {
   setSettings: (settings: (prev: AutomationSettings) => AutomationSettings) => void
   savedAt: string | null
   setSavedAt: (date: string | null) => void
+  isDirty: boolean
+  setIsDirty: (dirty: boolean) => void
   saveRef: React.MutableRefObject<(() => void) | null>
   loadRef: React.MutableRefObject<((data: any) => void) | null>
 }
@@ -47,6 +49,7 @@ export function AutomationBuilderProvider({ automationId, children }: { automati
     activeDays: [true, true, true, true, true, false, false]
   })
   const [savedAt, setSavedAt] = useState<string | null>(null)
+  const [isDirty, setIsDirty] = useState(false)
   const saveRef = useRef<(() => void) | null>(null)
   const loadRef = useRef<((data: any) => void) | null>(null)
 
@@ -60,9 +63,11 @@ export function AutomationBuilderProvider({ automationId, children }: { automati
     setSettings,
     savedAt, 
     setSavedAt,
+    isDirty,
+    setIsDirty,
     saveRef,
     loadRef
-  }), [automationId, name, status, settings, savedAt])
+  }), [automationId, name, status, settings, savedAt, isDirty])
   
   return <AutomationBuilderContext.Provider value={value}>{children}</AutomationBuilderContext.Provider>
 }

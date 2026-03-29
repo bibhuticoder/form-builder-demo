@@ -55,7 +55,9 @@ export const NotificationConfig = ({ data, onChange }: { data: any, onChange: (d
           onValueChange={(val: string) => updateField('recipientId', val)}
         >
           <SelectTrigger className="h-9 text-[13px] dark:bg-slate-900/50 hover:border-primary transition-colors w-full rounded-lg">
-            <SelectValue placeholder={`Select ${recipientType === 'user' ? 'User' : 'Team'}...`} />
+            <SelectValue placeholder={`Select ${recipientType === 'user' ? 'User' : 'Team'}...`}>
+              {(recipientType === 'user' ? USERS : TEAMS).find(i => i.id === data.recipientId)?.name}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="w-full">
             {(recipientType === 'user' ? USERS : TEAMS).map(item => (

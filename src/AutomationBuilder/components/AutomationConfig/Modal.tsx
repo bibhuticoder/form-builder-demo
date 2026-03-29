@@ -67,47 +67,46 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
 
   const renderContent = () => {
     if (!node) return null
+    const nodeType = node.data?.nodeType
+
+    if (!nodeType) return null
 
     // --- Triggers ---
-    if (node.type === 'trigger') {
-      if (label === 'Form Submitted') return <FormSubmittedConfig data={formData} onChange={setFormData} />
-      if (label.includes('Tag')) return <TagTriggerConfig data={formData} onChange={setFormData} />
-      if (label.includes('Task')) return <TaskConfig data={formData} onChange={setFormData} />
-      if (label.includes('Contact ') || label === 'Contacts') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Contact" />
-      if (label.includes('Company ') || label === 'Companies') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Company" />
-      if (label.includes('Note ') || label === 'Notes') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Note" />
-      if (label === 'Birthday') return <BirthdayConfig data={formData} onChange={setFormData} />
-      if (label.includes('DND') || label.includes('Do Not Disturb')) return <DNDConfig data={formData} onChange={setFormData} />
-      if (label.includes('DM') || label.includes('Direct Message')) return <SocialMessageConfig data={formData} onChange={setFormData} type="dm" />
-      if (label.includes('Comment')) return <SocialMessageConfig data={formData} onChange={setFormData} type="comment" />
-      if (label === 'Call Status') return <CallStatusConfig data={formData} onChange={setFormData} />
-      if (label === 'Engagement Score') return <EngagementScoreConfig data={formData} onChange={setFormData} />
-    }
+    if (nodeType === 'form_submitted') return <FormSubmittedConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'tags') return <TagTriggerConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'tasks') return <TaskConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'contacts') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Contact" />
+    if (nodeType === 'companies') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Company" />
+    if (nodeType === 'notes') return <EntityTriggerConfig data={formData} onChange={setFormData} entityName="Note" />
+    if (nodeType === 'birthday') return <BirthdayConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'dnd') return <DNDConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'direct_messages') return <SocialMessageConfig data={formData} onChange={setFormData} type="dm" />
+    if (nodeType === 'comments') return <SocialMessageConfig data={formData} onChange={setFormData} type="comment" />
+    if (nodeType === 'call_status') return <CallStatusConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'engagement_score') return <EngagementScoreConfig data={formData} onChange={setFormData} />
 
     // --- Actions ---
-    if (node.type === 'action') {
-      if (label === 'Send Email') return <EmailConfig data={formData} onChange={setFormData} />
-      if (label === 'Send SMS') return <SMSConfig data={formData} onChange={setFormData} />
-      if (label === 'Send Notification') return <NotificationConfig data={formData} onChange={setFormData} />
-      if (label === 'Update Contact') return <UpdateContactConfig data={formData} onChange={setFormData} />
-      if (label === 'Update Company') return <UpdateCompanyConfig data={formData} onChange={setFormData} />
-      if (label === 'Add / Remove Task') return <AddRemoveTaskConfig data={formData} onChange={setFormData} />
-      if (label === 'Add Note') return <NoteConfig data={formData} onChange={setFormData} />
-      if (label === 'Add / Remove Tag') return <TagConfig data={formData} onChange={setFormData} />
-      if (label === 'Add to Review Autopilot') return <ReviewAutopilotConfig data={formData} onChange={setFormData} />
-      if (label === 'Send To Slack') return <SlackConfig data={formData} onChange={setFormData} />
-      if (label === 'Send To Teams') return <TeamsConfig data={formData} onChange={setFormData} />
-      if (label === 'End Automation') return <EndAutomationConfig data={formData} onChange={setFormData} />
-      if (label === 'Send To Automation') return <SendToAutomationConfig data={formData} onChange={setFormData} />
-    }
+    if (nodeType === 'send_email') return <EmailConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'send_sms') return <SMSConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'send_notification') return <NotificationConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'update_contact') return <UpdateContactConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'update_company') return <UpdateCompanyConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'add_task') return <AddRemoveTaskConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'add_note') return <NoteConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'tag') return <TagConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'review_autopilot') return <ReviewAutopilotConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'slack') return <SlackConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'teams') return <TeamsConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'end_automation') return <EndAutomationConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'send_to_automation') return <SendToAutomationConfig data={formData} onChange={setFormData} />
 
     // --- Logic ---
-    if (label === 'Wait' || label === 'Delay') return <WaitConfig data={formData} onChange={setFormData} />
-    if (label === 'If / Else') return <IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} />
-    if (label === 'Split Test (A/B)') return <SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} />
-    if (node.type === 'loopBack') return <LoopBackConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'wait') return <WaitConfig data={formData} onChange={setFormData} />
+    if (nodeType === 'if_else') return <IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} />
+    if (nodeType === 'split_test') return <SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} />
+    if (nodeType === 'loop_back') return <LoopBackConfig data={formData} onChange={setFormData} />
 
-    return <div className="p-4 text-center italic text-slate-500">Generic settings for {label}</div>
+    return null
   }
 
   const footer = (

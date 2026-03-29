@@ -3,115 +3,194 @@
     "id": "a5",
     "name": "Untitled Automation",
     "status": "draft",
+    "settings": {
+      "allowReEntry": false,
+      "stopOnResponse": false,
+      "executionTimezoneEnabled": true,
+      "sendWindowEnabled": true,
+      "timezone": "Asia/Katmandu",
+      "sendWindowStart": "09:00",
+      "sendWindowEnd": "17:00",
+      "activeDays": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ]
+    },
     "version": 1,
     "nodes": [
       {
         "id": "trigger-2-1774711845707",
         "type": "trigger",
         "position": {
-          "x": 60,
+          "x": 178.5,
           "y": 50
         },
         "data": {
           "ui": {
             "label": "Form Submitted",
-            "subtitle": "When this happens...",
+            "subtitle": "Form: Webinar Reg Form",
             "icon": "DocumentTextIcon",
-            "color": "text-blue-500"
+            "color": "text-blue-500",
+            "nodeType": "form_submitted"
           },
-          "config": {}
+          "config": {
+            "nodeType": "form_submitted",
+            "isRoot": true,
+            "isDragging": false,
+            "isMoving": false,
+            "formType": "facebook",
+            "formId": "fb2"
+          }
         }
       },
       {
         "id": "trigger-3-1774711847460",
         "type": "trigger",
         "position": {
-          "x": 376,
+          "x": 494.5,
           "y": 50
         },
         "data": {
           "ui": {
-            "label": "Tags",
-            "subtitle": "When this happens...",
-            "icon": "TagIcon",
-            "color": "text-blue-500"
+            "label": "Tag Added",
+            "subtitle": "Tag: new-lead",
+            "nodeType": "tags"
           },
-          "config": {}
+          "config": {
+            "nodeType": "tags",
+            "isRoot": true,
+            "isDragging": false,
+            "isMoving": false,
+            "tagId": "tag1",
+            "tagName": "new-lead",
+            "tags": [
+              {
+                "id": "tag1",
+                "label": "new-lead"
+              }
+            ]
+          }
         }
       },
       {
         "id": "action-4-1774711850364",
         "type": "action_send_email",
         "position": {
-          "x": 218,
+          "x": 336.5,
           "y": 200
         },
         "data": {
           "ui": {
             "label": "Send Email",
-            "subtitle": "Perform action",
+            "subtitle": "Subject: Hello",
             "icon": "EnvelopeIcon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "send_email"
           },
-          "config": {}
+          "config": {
+            "nodeType": "send_email",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "fromName": "hello",
+            "fromEmail": "hello@company.com",
+            "subject": "Hello",
+            "message": "<ol><li><p style=\"text-align: left;\">sadasd</p></li><li><p style=\"text-align: left;\">asd</p></li><li><p style=\"text-align: left;\">sdasd</p></li></ol><p style=\"text-align: left;\"></p><p style=\"text-align: center;\"><s>asdasd</s></p><p style=\"text-align: center;\"></p><p style=\"text-align: right;\"><span style=\"font-family: Georgia, &quot;Times New Roman&quot;, serif; font-size: 36px;\">sadasdasd</span></p><p style=\"text-align: right;\"></p><p style=\"text-align: left;\"><u>asdasdasd</u></p><p></p>"
+          }
         }
       },
       {
         "id": "condition-5-1774711852691",
         "type": "logic_if_else",
         "position": {
-          "x": 218,
+          "x": 336.5,
           "y": 350
         },
         "data": {
           "ui": {
             "label": "If / Else",
-            "subtitle": "Check if...",
+            "subtitle": "If First Name contains",
             "icon": "FunnelIcon",
-            "color": "text-amber-500"
+            "color": "text-amber-500",
+            "nodeType": "if_else"
           },
-          "config": {}
+          "config": {
+            "nodeType": "if_else",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "trueLabel": "--YES--",
+            "conditions": [
+              {
+                "field": "first_name",
+                "operator": "contains",
+                "value": "John"
+              }
+            ],
+            "logicalOperator": "and",
+            "falseLabel": "--NO--"
+          }
         }
       },
       {
         "id": "action-7-1774711856359",
-        "type": "action",
+        "type": "action_add_note",
         "position": {
-          "x": 257.5,
+          "x": -335,
           "y": 500
         },
         "data": {
           "ui": {
             "label": "Add Note",
-            "subtitle": "Perform action",
+            "subtitle": "Note: asxazczczxc...",
             "icon": "ClipboardDocumentIcon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "add_note"
           },
-          "config": {}
+          "config": {
+            "nodeType": "add_note",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "content": "<p>asxazczczxc</p>"
+          }
         }
       },
       {
         "id": "action-8-1774711858201",
-        "type": "action",
+        "type": "action_update_company",
         "position": {
-          "x": 455,
+          "x": 139,
           "y": 500
         },
         "data": {
           "ui": {
             "label": "Update Company",
-            "subtitle": "Perform action",
+            "subtitle": "Update Website URL",
             "icon": "BuildingOffice2Icon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "update_company"
           },
-          "config": {}
+          "config": {
+            "nodeType": "update_company",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "field": "website",
+            "value": "ghvghvghvh"
+          }
         }
       },
       {
         "id": "condition-9-1774711861560",
         "type": "logic_split_test",
         "position": {
-          "x": 455,
+          "x": 139,
           "y": 650
         },
         "data": {
@@ -119,26 +198,35 @@
             "label": "Split Test (A/B)",
             "subtitle": "Check if...",
             "icon": "ArrowPathIcon",
-            "color": "text-amber-500"
+            "color": "text-amber-500",
+            "nodeType": "split_test"
           },
           "config": {}
         }
       },
       {
         "id": "action-11-1774711865277",
-        "type": "action",
+        "type": "action_slack",
         "position": {
-          "x": 613,
+          "x": -19,
           "y": 800
         },
         "data": {
           "ui": {
             "label": "Send To Slack",
-            "subtitle": "Perform action",
+            "subtitle": "Slack: #notifications",
             "icon": "ChatBubbleLeftRightIcon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "slack"
           },
-          "config": {}
+          "config": {
+            "nodeType": "slack",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "channelId": "notifications",
+            "message": "<p>sadadasd</p>"
+          }
         }
       },
       {
@@ -153,14 +241,15 @@
             "label": "Wait",
             "subtitle": "Wait for...",
             "icon": "ClockIcon",
-            "color": "text-amber-500"
+            "color": "text-amber-500",
+            "nodeType": "wait"
           },
           "config": {}
         }
       },
       {
         "id": "action-13-1774711873193",
-        "type": "action",
+        "type": "action_add_note",
         "position": {
           "x": 297,
           "y": 950
@@ -168,11 +257,18 @@
         "data": {
           "ui": {
             "label": "Add Note",
-            "subtitle": "Perform action",
+            "subtitle": "Note: asdasdasd...",
             "icon": "ClipboardDocumentIcon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "add_note"
           },
-          "config": {}
+          "config": {
+            "nodeType": "add_note",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false,
+            "content": "<p>asdasdasd</p>"
+          }
         }
       },
       {
@@ -187,7 +283,8 @@
             "label": "Loop Back To",
             "subtitle": "Perform action",
             "icon": "ArrowPathIcon",
-            "color": "text-amber-500"
+            "color": "text-amber-500",
+            "nodeType": "loop_back"
           },
           "config": {
             "isRoot": false,
@@ -200,7 +297,7 @@
         "id": "action-14-1774711891975",
         "type": "end",
         "position": {
-          "x": 613,
+          "x": -19,
           "y": 950
         },
         "data": {
@@ -208,7 +305,8 @@
             "label": "End Automation",
             "subtitle": "Perform action",
             "icon": "StopCircleIcon",
-            "color": "text-emerald-500"
+            "color": "text-emerald-500",
+            "nodeType": "end_automation"
           },
           "config": {}
         }
@@ -235,7 +333,7 @@
         "source": "condition-5-1774711852691",
         "target": "action-7-1774711856359",
         "data": {
-          "label": "NO"
+          "label": "--YES--"
         }
       },
       {
@@ -243,7 +341,7 @@
         "source": "condition-5-1774711852691",
         "target": "action-8-1774711858201",
         "data": {
-          "label": "YES"
+          "label": "--NO--"
         }
       },
       {

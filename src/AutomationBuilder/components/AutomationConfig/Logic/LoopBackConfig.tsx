@@ -30,7 +30,12 @@ export const LoopBackConfig = ({ data, onChange }: { data: any, onChange: (d: an
           onValueChange={v => onChange({ ...data, targetId: v })}
         >
           <SelectTrigger className="h-10 dark:bg-slate-900/50">
-            <SelectValue placeholder={nodes.length > 0 ? "Select target step..." : "No targets available"} />
+            <SelectValue placeholder={nodes.length > 0 ? "Select target step..." : "No targets available"}>
+              {(() => {
+                const n = nodes.find(n => n.id === data.targetId);
+                return n ? `${n.data?.label || 'Untitled Step'} (${n.id.split('-')[0]})` : undefined;
+              })()}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {nodes.map(n => (

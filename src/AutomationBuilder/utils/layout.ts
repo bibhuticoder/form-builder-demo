@@ -12,7 +12,7 @@ function getNodeDimensions() {
 export function restoreNodeIcons(nodes: Node[], toolboxGroups: Array<{ items: Array<any> }>) {
     nodes.forEach((node) => {
         if (!node.data) return;
-        
+
         // Strategy 1: Match iconName explicitly
         // Strategy 2: Match by label as fallback
         for (const group of toolboxGroups) {
@@ -21,7 +21,7 @@ export function restoreNodeIcons(nodes: Node[], toolboxGroups: Array<{ items: Ar
                 node.data.icon = byName.icon;
                 return;
             }
-            
+
             const byLabel = group.items.find((i) => i.label === node.data.label);
             if (byLabel) {
                 node.data.icon = byLabel.icon;
@@ -46,9 +46,9 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
         const isIfElse = title === 'If / Else';
         const isSplitTest = title === 'Split Test (A/B)';
         const isBranching = isIfElse || isSplitTest || ['Switch Case', 'Parallel'].includes(title);
-        
+
         const childrenEdges = edges.filter((e) => e.source === node.id && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack);
-        
+
         if (isBranching) {
             if (isIfElse) {
                 // If / Else must have exactly two branches.
@@ -64,47 +64,47 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     const l = String(label).toUpperCase();
                     return l === 'NO' || l === 'FALSE' || l === 'FAIL';
                 });
-                
+
                 if (!hasTrueBranch) {
                     const slotId = `add-step-${node.id}-true-${Date.now()}`;
                     nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
-                    edges.push({ 
-                        id: `e-${node.id}-${slotId}`, 
-                        source: node.id, 
-                        target: slotId, 
-                        type: 'custom', 
-                        markerEnd: { type: MarkerType.ArrowClosed }, 
+                    edges.push({
+                        id: `e-${node.id}-${slotId}`,
+                        source: node.id,
+                        target: slotId,
+                        type: 'custom',
+                        markerEnd: { type: MarkerType.ArrowClosed },
                         label: node.data?.trueLabel || 'YES',
-                        data: { isCondition: true, conditionType: 'true' } 
+                        data: { isCondition: true, conditionType: 'true' }
                     });
                 }
                 if (!hasFalseBranch) {
                     const slotId = `add-step-${node.id}-false-${Date.now()}`;
                     nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
-                    edges.push({ 
-                        id: `e-${node.id}-${slotId}`, 
-                        source: node.id, 
-                        target: slotId, 
-                        type: 'custom', 
-                        markerEnd: { type: MarkerType.ArrowClosed }, 
+                    edges.push({
+                        id: `e-${node.id}-${slotId}`,
+                        source: node.id,
+                        target: slotId,
+                        type: 'custom',
+                        markerEnd: { type: MarkerType.ArrowClosed },
                         label: node.data?.falseLabel || 'NO',
-                        data: { isCondition: true, conditionType: 'false' } 
+                        data: { isCondition: true, conditionType: 'false' }
                     });
                 }
 
                 // Update existing labels if data changed, and also fix missing conditionType in data
                 edges.forEach(e => {
-                   if (e.source === node.id) {
-                      const label = e.label || e.data?.label || '';
-                      const l = String(label).toUpperCase();
-                      if (l === 'YES' || l === 'TRUE') {
-                          e.data = { ...(e.data || {}), isCondition: true, conditionType: 'true' };
-                          e.label = node.data?.trueLabel || 'YES';
-                      } else if (l === 'NO' || l === 'FALSE') {
-                          e.data = { ...(e.data || {}), isCondition: true, conditionType: 'false' };
-                          e.label = node.data?.falseLabel || 'NO';
-                      }
-                   }
+                    if (e.source === node.id) {
+                        const label = e.label || e.data?.label || '';
+                        const l = String(label).toUpperCase();
+                        if (l === 'YES' || l === 'TRUE') {
+                            e.data = { ...(e.data || {}), isCondition: true, conditionType: 'true' };
+                            e.label = node.data?.trueLabel || 'YES';
+                        } else if (l === 'NO' || l === 'FALSE') {
+                            e.data = { ...(e.data || {}), isCondition: true, conditionType: 'false' };
+                            e.label = node.data?.falseLabel || 'NO';
+                        }
+                    }
                 });
             } else if (isSplitTest) {
                 // For Split Test, we need at least 2 branches.
@@ -166,7 +166,7 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
         const structuralChildren = standardChildrenIds
             .map((id) => nodes.find((n) => n.id === id))
             .filter(Boolean) as Node[];
-            
+
         const parent = nodes.find(n => n.id === nodeId);
         const isIfElse = parent?.data?.label === 'If / Else';
 
@@ -263,7 +263,7 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
 
         const structuralChildren = standardChildrenIds.map((id) => nodes.find((n) => n.id === id)).filter(Boolean) as Node[];
         if (structuralChildren.length === 0) return;
-        
+
         const parent = nodes.find(n => n.id === nodeId);
         const isIfElse = parent?.data?.label === 'If / Else';
 
@@ -439,6 +439,6 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
         if (pos) return { ...n, position: pos, data };
         return { ...n, data };
     });
-    
+
     return { nodes: finalNodes, edges };
 }

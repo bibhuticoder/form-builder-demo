@@ -21,6 +21,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
+  const { name, setName, status, setStatus, settings, setSettings, setSavedAt, setIsDirty, saveRef, loadRef } = useAutomationBuilderContext()
+
   const { past, future, takeSnapshot, undo, redo } = useFlowHistory()
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -28,6 +30,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const [showProTips, setShowProTips] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
   const [connectingNodeId, setConnectingNodeId] = useState<string | null>(null)
+  const [movingNodeId, setMovingNodeId] = useState<string | null>(null)
 
   const [selectedNodeForConfig, setSelectedNodeForConfig] = useState<Node | null>(null)
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false)
@@ -75,8 +78,9 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         },
         () => edges,
       )
+      setIsDirty(true)
     },
-    [nodes, edges, takeSnapshot],
+    [nodes, edges, takeSnapshot, setIsDirty],
   )
 
   const handleDuplicateNode = useCallback(
@@ -124,15 +128,16 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const { nodes: lNodes, edges: lEdges } = performAutoLayout(nextNodes, nextEdges)
       setNodes(lNodes)
       setEdges(lEdges)
+      setIsDirty(true)
     },
-    [nodes, edges, takeSnapshot],
+    [nodes, edges, takeSnapshot, setIsDirty],
   )
 
   const nodeActions = useMemo(
     () => ({
       onDuplicate: handleDuplicateNode,
       onDelete: handleDeleteNode,
-      onMove: (_id: string) => {},
+      onMove: (id: string) => setMovingNodeId(id),
     }),
     [handleDuplicateNode, handleDeleteNode],
   )
@@ -222,7 +227,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const nextNodes = nodes.map((n) => {
         if (n.id === nodeId) {
           const { label, subtitle, icon, iconName, color, config, ...formData } = newData;
-          
+
           return {
             ...n,
             data: {
@@ -294,16 +299,16 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const { nodes: lNodes, edges: lEdges } = performAutoLayout(nextNodes, nextEdges)
       setNodes(lNodes)
       setEdges(lEdges)
-      setEdges(nextEdges)
+      setIsConfigModalOpen(false)
+      setIsDirty(true)
     },
-    [takeSnapshot, nodes, edges],
+    [takeSnapshot, nodes, edges, setIsDirty],
   )
 
-  const { name, setName, status, setStatus, settings, setSettings, setSavedAt, saveRef, loadRef } = useAutomationBuilderContext()
 
   const handleSave = useCallback(async () => {
     const timestamp = new Date().toISOString()
-    
+
     // Generate the full payload
     const payload = buildPayloadFromBuilder({
       automationId,
@@ -315,20 +320,21 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       nodes,
       edges
     })
-    
+
     console.log("🚀 [API] Saving automation to backend...", payload)
-    
+
     // Simulate real API latency
     await new Promise(resolve => setTimeout(resolve, 800))
-    
+
     setSavedAt(timestamp)
+    setIsDirty(false)
     console.log("✅ [API] Automation saved successfully!")
-  }, [automationId, nodes, edges, name, status, settings, setSavedAt])
+  }, [automationId, nodes, edges, name, status, settings, setSavedAt, setIsDirty])
 
   const handleLoadAutomation = useCallback((payload: any) => {
     if (!payload?.automation) return;
     const { nodes: pNodes, edges: pEdges, name: pName, status: pStatus, settings: pSettings } = payload.automation;
-    
+
     // 1. Restore metadata
     if (pName) setName(pName);
     if (pStatus) setStatus(pStatus);
@@ -337,13 +343,13 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     // 2. Transform nodes from production format to builder format
     const bNodes = pNodes.map((n: any) => {
       let type = n.type;
-      
+
       // Map production types to builder types
       if (type.startsWith('logic_')) type = 'condition';
       else if (type.startsWith('action_')) type = 'action';
       else if (type === 'loop_back') type = 'loopBack';
       else if (type === 'end') type = 'action';
-      
+
       return {
         id: n.id,
         // Ignore JSON positions to ensure builder's auto-layout takes full control
@@ -351,6 +357,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         type,
         data: {
           ...(n.data?.ui || {}),
+          nodeType: n.data?.ui?.nodeType || (n.type.startsWith('action_') ? n.type.replace('action_', '') : n.type.startsWith('logic_') ? n.type.replace('logic_', '') : n.type === 'end' ? 'end_automation' : n.type === 'loop_back' ? 'loop_back' : undefined),
           ...(n.data?.config || {}), // Flatten for builder state accessibility
           config: n.data?.config || {}, // Keep nested for easy re-extraction
           label: n.data?.ui?.label || n.id,
@@ -387,11 +394,12 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     setNodes(lNodes);
     setEdges(lEdges);
     setEdges(bEdges);
-    
+
     if (payload.automation.updatedAt || payload.automation.savedAt) {
       setSavedAt(payload.automation.updatedAt || payload.automation.savedAt);
     }
-  }, [setNodes, setEdges, setSavedAt, setName, setStatus, setSettings, takeSnapshot]);
+    setIsDirty(false)
+  }, [setNodes, setEdges, setSavedAt, setName, setStatus, setSettings, takeSnapshot, setIsDirty]);
 
   useEffect(() => {
     saveRef.current = handleSave
@@ -406,14 +414,16 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     () =>
       nodes.map((node) => ({
         ...node,
+        draggable: movingNodeId === node.id,
         data: {
           ...node.data,
           isDragging,
+          isMoving: movingNodeId === node.id,
           onStartConnect,
           onClearConnection,
         },
       })),
-    [nodes, isDragging, onStartConnect, onClearConnection],
+    [nodes, isDragging, onStartConnect, onClearConnection, movingNodeId],
   )
 
   const edgesWithData = useMemo(
@@ -430,7 +440,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     (changes: NodeChange[]) => {
       const significant = changes.filter((c) => c.type !== "select" && c.type !== "dimensions")
       if (significant.length > 0) takeSnapshot(nodes, edges)
-      
+
       const updated = applyNodeChanges(changes, nodes)
       if (changes.some((c) => c.type === "remove")) {
         const { nodes: lNodes, edges: lEdges } = performAutoLayout(updated, edges)
@@ -439,25 +449,29 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       } else {
         setNodes(updated)
       }
+      if (significant.length > 0) setIsDirty(true)
     },
-    [takeSnapshot, nodes, edges],
+    [takeSnapshot, nodes, edges, setIsDirty],
   )
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       const significant = changes.filter((c) => c.type !== "select")
-      if (significant.length > 0) takeSnapshot(nodes, edges)
+      if (significant.length > 0) {
+        takeSnapshot(nodes, edges)
+        setIsDirty(true)
+      }
       setEdges((eds) => applyEdgeChanges(changes, eds))
     },
-    [takeSnapshot, nodes, edges],
+    [takeSnapshot, nodes, edges, setIsDirty],
   )
 
   const onConnect = useCallback(
     (connection: any) => {
-      takeSnapshot(nodes, edges)
       setEdges((eds) => addEdge({ ...connection, type: "custom" }, eds))
+      setIsDirty(true)
     },
-    [takeSnapshot, nodes, edges],
+    [takeSnapshot, nodes, edges, setIsDirty],
   )
 
   const onDragEnter = useCallback((event: React.DragEvent) => {
@@ -527,6 +541,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         newNode.data = {
           label: foundItem.label,
           icon: foundItem.icon,
+          nodeType: foundItem.nodeType,
           subtitle: foundItem.label === "Birthday" ? "Triggers on contact's birthday" : foundItem.label === "Notes" ? "Note Added" : type === "trigger" ? "When this happens..." : type === "condition" ? "Check if..." : type === "delay" ? "Wait for..." : "Perform action",
         }
       }
@@ -546,34 +561,34 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
           const addStepB: Node = { id: `add-step-${Date.now()}-B`, type: "addStep", position: { x: startX + 256 + 56, y: branchY }, data: { label: "Add Step", isLastBranchNode: true }, draggable: false, width: 256, height: 92 }
           const isSplitTest = (foundItem?.label || label) === "Split Test (A/B)"
           const isIfElse = (foundItem?.label || label) === "If / Else"
-          
+
           const newEdges: Edge[] = [
-            { 
-              id: `e-${newNode.id}-${addStepA.id}`, 
-              source: newNode.id, 
-              target: addStepA.id, 
-              type: "custom", 
-              markerEnd: { type: MarkerType.ArrowClosed }, 
-              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.trueLabel || 'YES') : undefined, 
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined 
+            {
+              id: `e-${newNode.id}-${addStepA.id}`,
+              source: newNode.id,
+              target: addStepA.id,
+              type: "custom",
+              markerEnd: { type: MarkerType.ArrowClosed },
+              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.trueLabel || 'YES') : undefined,
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined
             },
-            { 
-              id: `e-${newNode.id}-${addStepB.id}`, 
-              source: newNode.id, 
-              target: addStepB.id, 
-              type: "custom", 
-              markerEnd: { type: MarkerType.ArrowClosed }, 
-              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.falseLabel || 'NO') : undefined, 
-              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined 
+            {
+              id: `e-${newNode.id}-${addStepB.id}`,
+              source: newNode.id,
+              target: addStepB.id,
+              type: "custom",
+              markerEnd: { type: MarkerType.ArrowClosed },
+              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.falseLabel || 'NO') : undefined,
+              data: isSplitTest ? { isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined
             },
           ]
-          
+
           const { nodes: lNodes, edges: lEdges } = performAutoLayout([newNode, addStepA, addStepB], newEdges)
           setNodes(lNodes)
           setEdges(lEdges)
           return
         }
-  
+
         if (!isTerminal) {
           const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
           const newEdge: Edge = { id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }
@@ -703,8 +718,9 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const { nodes: lNodes, edges: lEdges } = performAutoLayout(newNodes, updatedEdges)
       setNodes(lNodes)
       setEdges(lEdges)
+      setIsDirty(true)
     },
-    [edges, nodes, project, takeSnapshot],
+    [edges, nodes, project, takeSnapshot, setIsDirty],
   )
 
   const onInit = useCallback((instance: ReactFlowInstance) => {
@@ -722,19 +738,38 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   return (
     <NodeActionsContext.Provider value={nodeActions}>
       <div className="flex h-full w-full bg-slate-50 dark:bg-slate-950 relative">
-      <AutomationConfigModal isOpen={isConfigModalOpen} onClose={() => setIsConfigModalOpen(false)} node={selectedNodeForConfig} onSave={onSaveConfig} edges={edges} />
-      <JsonViewerPanel automationId={automationId} nodes={nodes} edges={edges} />
+        <AutomationConfigModal isOpen={isConfigModalOpen} onClose={() => setIsConfigModalOpen(false)} node={selectedNodeForConfig} onSave={onSaveConfig} edges={edges} />
+        <JsonViewerPanel automationId={automationId} nodes={nodes} edges={edges} />
 
-      <div className="flex-1 h-full relative" onDragEnter={onDragEnter} onDragLeave={onDragLeave}>
-        <ReactFlow nodes={nodesWithData} edges={edgesWithData} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} onNodeClick={onNodeClick} onDragOver={onDragOver} onDrop={onDrop} onInit={onInit} nodeTypes={flowNodeTypes} edgeTypes={flowEdgeTypes} nodesDraggable={false} nodesConnectable={false} elementsSelectable defaultEdgeOptions={{ type: "custom", markerEnd: { type: MarkerType.ArrowClosed } }} proOptions={{ hideAttribution: true }} className="bg-slate-50 dark:bg-slate-950">
-          <Background color={isDarkMode ? "#475569" : "#94a3b8"} gap={20} size={1} />
-          <FlowBuilderControls canUndo={past.length > 0} canRedo={future.length > 0} onUndo={onUndo} onRedo={onRedo} />
-        </ReactFlow>
+        <div className="flex-1 h-full relative" onDragEnter={onDragEnter} onDragLeave={onDragLeave}>
+          <ReactFlow
+            nodes={nodesWithData}
+            edges={edgesWithData}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onNodeClick={onNodeClick}
+            onPaneClick={() => setMovingNodeId(null)}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+            onInit={onInit}
+            nodeTypes={flowNodeTypes}
+            edgeTypes={flowEdgeTypes}
+            nodesDraggable={!!movingNodeId}
+            nodesConnectable={false}
+            elementsSelectable
+            defaultEdgeOptions={{ type: "custom", markerEnd: { type: MarkerType.ArrowClosed } }}
+            proOptions={{ hideAttribution: true }}
+            className="bg-slate-50 dark:bg-slate-950"
+          >
+            <Background color={isDarkMode ? "#475569" : "#94a3b8"} gap={20} size={1} />
+            <FlowBuilderControls canUndo={past.length > 0} canRedo={future.length > 0} onUndo={onUndo} onRedo={onRedo} />
+          </ReactFlow>
 
-        {showProTips && <ProTipBanner tip={PRO_TIPS[currentTipIndex]} currentIndex={currentTipIndex} total={PRO_TIPS.length} onPrev={prevTip} onNext={nextTip} onDismiss={() => setShowProTips(false)} />}
-      </div>
+          {showProTips && <ProTipBanner tip={PRO_TIPS[currentTipIndex]} currentIndex={currentTipIndex} total={PRO_TIPS.length} onPrev={prevTip} onNext={nextTip} onDismiss={() => setShowProTips(false)} />}
+        </div>
 
-      <FlowBuilderSidebar isCollapsed={isSidebarCollapsed} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)} />
+        <FlowBuilderSidebar isCollapsed={isSidebarCollapsed} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)} />
       </div>
     </NodeActionsContext.Provider>
   )

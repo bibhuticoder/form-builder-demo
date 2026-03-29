@@ -26,7 +26,9 @@ export const UpdateCompanyConfig = ({ data, onChange }: { data: any, onChange: (
         <Label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-0.5">Select Field</Label>
         <Select value={data.field} onValueChange={(val) => updateField('field', val)}>
           <SelectTrigger className="h-8 text-[13px] dark:bg-slate-900/50 hover:border-primary transition-colors w-full rounded-lg">
-            <SelectValue placeholder="Choose a field..." />
+            <SelectValue placeholder="Choose a field...">
+              {COMPANY_FIELDS.find(f => f.id === data.field)?.label}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {COMPANY_FIELDS.map(f => (

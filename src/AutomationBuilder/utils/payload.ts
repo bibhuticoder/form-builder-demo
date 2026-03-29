@@ -26,24 +26,27 @@ function isBuilderOnlyEdge(edge: Edge, nodesById: Map<string, Node>) {
 }
 
 function guessNodeType(node: Node): string {
+    const nodeType = (node.data as any)?.nodeType;
+    if (nodeType) {
+        if (node.type === 'trigger') return 'trigger';
+        if (nodeType === 'if_else') return 'logic_if_else';
+        if (nodeType === 'split_test') return 'logic_split_test';
+        if (nodeType === 'wait') return 'delay';
+        if (nodeType === 'loop_back') return 'loop_back';
+        if (nodeType === 'end_automation') return 'end';
+        return `action_${nodeType}`;
+    }
+
     const t = node.type || '';
     if (t === 'trigger') return 'trigger';
     if (t === 'delay') return 'delay';
     if (t === 'end') return 'end';
     if (t === 'loopBack') return 'loop_back';
-    if (t === 'condition') {
-        const label = (node.data as any)?.label;
-        if (label === 'Split Test (A/B)') return 'logic_split_test';
-        return 'logic_if_else';
-    }
-    if (t === 'action') {
-        const label = (node.data as any)?.label;
-        if (label === 'Send Email') return 'action_send_email';
-        if (label === 'Send SMS' || label === 'Send Notification') return 'action_notification';
-        if (label === 'Send To Automation') return 'action_send_to_automation';
-        if (label === 'End Automation') return 'end';
-        return 'action';
-    }
+
+    const label = (node.data as any)?.label;
+    if (label === 'Split Test (A/B)') return 'logic_split_test';
+    if (label === 'If / Else') return 'logic_if_else';
+
     return t || 'action';
 }
 
@@ -92,6 +95,7 @@ export function buildPayloadFromBuilder(params: {
                         subtitle,
                         icon: iconName,
                         color,
+                        nodeType: (n.data as any)?.nodeType,
                     },
                     config,
                 },

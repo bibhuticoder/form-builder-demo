@@ -101,7 +101,9 @@ export const WaitConfig = ({ data, onChange }: { data: any, onChange: (d: any) =
                 onValueChange={(val) => updateData({ durationUnit: val })}
               >
                 <SelectTrigger className="flex-1 h-9 text-[13px] dark:bg-slate-900/50">
-                  <SelectValue />
+                  <SelectValue placeholder="Select unit">
+                    {['minutes', 'hours', 'days', 'weeks', 'months'].find(u => u === (data.durationUnit || 'hours'))}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="minutes">Minutes</SelectItem>
@@ -197,7 +199,9 @@ export const WaitConfig = ({ data, onChange }: { data: any, onChange: (d: any) =
               onValueChange={(val) => updateData({ waitEvent: val })}
             >
               <SelectTrigger className="h-10 dark:bg-slate-900/50">
-                <SelectValue placeholder="Select event..." />
+                <SelectValue placeholder="Select event...">
+                  {WAIT_EVENTS.find(e => e.id === data.waitEvent)?.label}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {WAIT_EVENTS.map(e => (
@@ -236,7 +240,9 @@ export const WaitConfig = ({ data, onChange }: { data: any, onChange: (d: any) =
                 onValueChange={(val) => updateData({ timeoutUnit: val })}
               >
                 <SelectTrigger className="flex-1 h-9 text-[13px] dark:bg-slate-900/50">
-                  <SelectValue />
+                  <SelectValue placeholder="Select unit">
+                    {['minutes', 'hours', 'days'].find(u => u === (data.timeoutUnit || 'days'))}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="minutes">Minutes</SelectItem>

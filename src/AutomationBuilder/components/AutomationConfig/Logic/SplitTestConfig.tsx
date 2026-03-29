@@ -156,7 +156,14 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
             onValueChange={v => onChange({ ...data, winnerCriteria: v })}
           >
             <SelectTrigger className="h-9 shadow-sm">
-              <SelectValue placeholder="Select criteria..." />
+              <SelectValue placeholder="Select criteria...">
+                {{
+                  manual: 'Manually Select Winner',
+                  opens: 'Highest Open Rate',
+                  clicks: 'Highest Click Rate',
+                  conversions: 'Highest Conversion Rate'
+                }[data.winnerCriteria || 'manual']}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="manual">Manually Select Winner</SelectItem>
@@ -206,7 +213,9 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
                 />
                 <Select value={data.durationUnit || 'hours'} onValueChange={v => onChange({ ...data, durationUnit: v })}>
                   <SelectTrigger className="flex-1">
-                    <SelectValue />
+                    <SelectValue placeholder="Select unit">
+                      {['hours', 'days', 'months'].find(u => u === (data.durationUnit || 'hours'))}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="hours">Hours</SelectItem>

@@ -1,4 +1,3 @@
-import { useState } from "react"
 import type { Node } from "reactflow"
 import { Button, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components"
 import { PlusIcon, TrashIcon, ArrowsRightLeftIcon } from "@heroicons/react/24/outline"
@@ -27,14 +26,12 @@ const OPERATORS = [
 ];
 
 export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any) => void, edges: any[], node: Node }) => {
-  const [conditions, setConditions] = useState<any[]>(data.conditions || [{ field: 'tag', operator: 'contains', value: '' }]);
-  const [logicalOperator, setLogicalOperator] = useState<'and' | 'or'>(data.logicalOperator || 'and');
+  // Use data directly to ensure synchronization with parent state
+  const conditions = data.conditions || [{ field: 'tag', operator: 'contains', value: '' }];
+  const logicalOperator = data.logicalOperator || 'and';
 
   const updateConditions = (next: any[], nextOp = logicalOperator) => {
-    setConditions(next);
-    setLogicalOperator(nextOp);
-    
-    // Generate a good subtitle
+    // Generate an intelligent subtitle based on the first condition
     let subtitle = 'Define execution paths';
     if (next.length > 0) {
       const first = next[0];
@@ -55,7 +52,25 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
   };
 
   const addCondition = () => updateConditions([...conditions, { field: 'tag', operator: 'contains', value: '' }]);
-  const removeCondition = (idx: number) => updateConditions(conditions.filter((_, i) => i !== idx));
+  const removeCondition = (idx: number) => updateConditions(conditions.filter((_: any, i: number) => i !== idx));
+
+  const setField = (idx: number, val: string) => {
+    const next = [...conditions];
+    next[idx] = { ...next[idx], field: val };
+    updateConditions(next);
+  };
+
+  const setOperator = (idx: number, val: string) => {
+    const next = [...conditions];
+    next[idx] = { ...next[idx], operator: val };
+    updateConditions(next);
+  };
+
+  const setValue = (idx: number, val: string) => {
+    const next = [...conditions];
+    next[idx] = { ...next[idx], value: val };
+    updateConditions(next);
+  };
 
   return (
     <div className="space-y-6">
@@ -72,6 +87,7 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
       {conditions.length > 1 && (
         <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg w-fit border border-slate-200 dark:border-slate-800">
           <button 
+            type="button"
             onClick={() => updateConditions(conditions, 'and')}
             className={cn(
               "px-3 py-1 rounded-md text-[10px] font-bold transition-all",
@@ -81,6 +97,7 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
             AND
           </button>
           <button 
+            type="button"
             onClick={() => updateConditions(conditions, 'or')}
             className={cn(
               "px-3 py-1 rounded-md text-[10px] font-bold transition-all",
@@ -93,12 +110,13 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
       )}
 
       <div className="space-y-3">
-        {conditions.map((c, i) => (
-          <div key={i} className="p-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl space-y-4 relative group/rule">
+        {conditions.map((c: any, i: number) => (
+          <div key={`${i}-${c.field}`} className="p-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl space-y-4 relative group/rule">
             {conditions.length > 1 && (
               <button 
+                type="button"
                 onClick={() => removeCondition(i)} 
-                className="absolute -top-2 -right-2 h-6 w-6 bg-white dark:bg-slate-800 border mirror- border-slate-200 dark:border-slate-700 text-slate-400 hover:text-red-500 rounded-full flex items-center justify-center transition-all shadow-sm z-10"
+                className="absolute -top-2 -right-2 h-6 w-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-red-500 rounded-full flex items-center justify-center transition-all shadow-sm z-10"
               >
                 <TrashIcon className="w-3 h-3" />
               </button>
@@ -107,8 +125,12 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5 w-full">
                 <Label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-0.5">Field</Label>
-                <Select value={c.field} onValueChange={v => { const next = [...conditions]; next[i].field = v; updateConditions(next); }}>
-                  <SelectTrigger className="h-8 text-xs dark:bg-slate-900/50 w-full"><SelectValue /></SelectTrigger>
+                <Select value={c.field} onValueChange={v => setField(i, v)}>
+                  <SelectTrigger className="h-8 text-xs dark:bg-slate-900/50 w-full">
+                    <SelectValue placeholder="Select field">
+                      {CONDITION_FIELDS.find(f => f.id === c.field)?.label}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent className="text-xs">
                     {CONDITION_FIELDS.map(f => <SelectItem key={f.id} value={f.id}>{f.label}</SelectItem>)}
                   </SelectContent>
@@ -116,8 +138,12 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
               </div>
               <div className="space-y-1.5 w-full">
                 <Label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-0.5">Operator</Label>
-                <Select value={c.operator} onValueChange={v => { const next = [...conditions]; next[i].operator = v; updateConditions(next); }}>
-                  <SelectTrigger className="h-8 text-xs dark:bg-slate-900/50 w-full"><SelectValue /></SelectTrigger>
+                <Select value={c.operator} onValueChange={v => setOperator(i, v)}>
+                  <SelectTrigger className="h-8 text-xs dark:bg-slate-900/50 w-full">
+                    <SelectValue placeholder="Select operator">
+                      {OPERATORS.find(o => o.id === c.operator)?.label}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent className="text-xs">
                     {OPERATORS.map(o => <SelectItem key={o.id} value={o.id}>{o.label}</SelectItem>)}
                   </SelectContent>
@@ -130,8 +156,8 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
                 <Label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-0.5">Value</Label>
                 <Input 
                   className="h-8 text-xs dark:bg-slate-900/50 w-full" 
-                  value={c.value} 
-                  onChange={e => { const next = [...conditions]; next[i].value = e.target.value; updateConditions(next); }} 
+                  value={c.value || ''} 
+                  onChange={e => setValue(i, e.target.value)} 
                   placeholder="Value to compare..." 
                 />
               </div>
