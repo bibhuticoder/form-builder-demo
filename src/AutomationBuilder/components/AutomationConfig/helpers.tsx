@@ -57,7 +57,7 @@ export const TikTokIcon = ({ className }: { className?: string }) => (
 export const USERS = [
   { id: 'u1', name: 'John Doe', email: 'john@example.com' },
   { id: 'u2', name: 'Jane Smith', email: 'jane@example.com' },
-  { id: 'u3', name: 'Support Team', email: 'support@example.com' },
+  { id: 'u3', name: 'Harry Potter', email: 'harry@potter.com' },
 ];
 
 export const TEAMS = [

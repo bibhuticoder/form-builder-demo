@@ -120,6 +120,8 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
+      closeOnBackdropClick={false}
+      isCloseable={false}
       header={
         <div className="flex items-center gap-3">
           <div className={cn(

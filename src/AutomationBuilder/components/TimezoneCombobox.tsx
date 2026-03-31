@@ -72,19 +72,19 @@ export const TimezoneCombobox = ({ value, onValueChange, className }: TimezoneCo
   return (
     <div className={cn("relative w-full", className)}>
       <HeadlessCombobox value={value} onChange={onValueChange}>
-        <div className="relative mt-1">
-          <div className="relative w-full cursor-default overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-left focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-200">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-              <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />
+        <div className="relative">
+          <div className="relative w-full cursor-default overflow-hidden rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-left focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-200 h-8 flex items-center">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400">
+              <MagnifyingGlassIcon className="h-3.5 w-3.5" aria-hidden="true" />
             </div>
             <HeadlessCombobox.Input
-              className="w-full border-none py-2.5 pl-10 pr-10 text-sm leading-5 text-slate-900 dark:text-slate-100 bg-transparent focus:ring-0 outline-none placeholder:text-slate-400"
+              className="w-full border-none py-0 pl-8 pr-8 text-xs leading-none text-slate-900 dark:text-slate-100 bg-transparent focus:ring-0 outline-none placeholder:text-slate-400"
               placeholder="Search city or timezone..."
               displayValue={() => selectedTzInfo?.city || value}
               onChange={(e) => setQuery(e.target.value)}
             />
             <HeadlessCombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400 hover:text-slate-600">
-              <ChevronUpDownIcon className="h-4 w-4" aria-hidden="true" />
+              <ChevronUpDownIcon className="h-3.5 w-3.5" aria-hidden="true" />
             </HeadlessCombobox.Button>
           </div>
 
@@ -95,10 +95,10 @@ export const TimezoneCombobox = ({ value, onValueChange, className }: TimezoneCo
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")}
           >
-            <HeadlessCombobox.Options className="absolute z-[100] mt-2 max-h-80 w-full overflow-auto rounded-xl bg-white dark:bg-slate-900 py-2 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm border border-slate-200 dark:border-slate-800 backdrop-blur-sm">
+            <HeadlessCombobox.Options className="absolute z-[100] mt-1.5 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-slate-900 py-1 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none text-xs border border-slate-200 dark:border-slate-800 backdrop-blur-sm">
               {filteredTimezones.length === 0 && query !== "" ? (
-                <div className="relative cursor-default select-none py-10 px-4 text-slate-500 text-center italic space-y-2">
-                   <p className="text-sm">No timezones found for "{query}"</p>
+                <div className="relative cursor-default select-none py-6 px-4 text-slate-500 text-center italic space-y-1">
+                   <p className="text-xs">No timezones found for "{query}"</p>
                    <p className="text-[10px] text-slate-400">Try searching for a major city or continent.</p>
                 </div>
               ) : (
@@ -107,7 +107,7 @@ export const TimezoneCombobox = ({ value, onValueChange, className }: TimezoneCo
                     key={tz.id}
                     className={({ active }) =>
                       cn(
-                        "relative cursor-default select-none py-3 pl-4 pr-10 border-b border-slate-50 dark:border-slate-800/50 last:border-0 transition-colors",
+                        "relative cursor-default select-none py-1.5 pl-3 pr-9 border-b border-slate-50 dark:border-slate-800/50 last:border-0 transition-colors",
                         active ? "bg-primary/5 dark:bg-primary/10" : "transparent"
                       )
                     }
@@ -117,7 +117,7 @@ export const TimezoneCombobox = ({ value, onValueChange, className }: TimezoneCo
                       <div className="flex items-center justify-between">
                         <div className="flex flex-col min-w-0 pr-4">
                           <div className={cn(
-                            "text-sm font-semibold truncate",
+                            "text-xs font-semibold truncate",
                             selected ? "text-primary" : "text-slate-900 dark:text-slate-100"
                           )}>
                             {tz.city}, <span className="text-slate-400 font-normal">{tz.area}</span>
@@ -133,8 +133,8 @@ export const TimezoneCombobox = ({ value, onValueChange, className }: TimezoneCo
                         </div>
                         {selected && (
                           <div className="flex items-center text-primary">
-                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center">
-                               <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                            <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center">
+                               <CheckIcon className="h-3 w-3" aria-hidden="true" />
                             </div>
                           </div>
                         )}

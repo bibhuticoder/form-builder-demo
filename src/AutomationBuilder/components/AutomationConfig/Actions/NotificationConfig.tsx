@@ -51,6 +51,7 @@ export const NotificationConfig = ({ data, onChange }: { data: any, onChange: (d
         </div>
 
         <Select
+          key={recipientType}
           value={data.recipientId}
           onValueChange={(val: string) => updateField('recipientId', val)}
         >

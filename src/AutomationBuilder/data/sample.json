@@ -25,73 +25,146 @@
     "nodes": [
       {
         "id": "trigger-1",
-        "type": "trigger:form_submitted",
-        "position": { "x": 0, "y": 0 },
+        "type": "trigger",
+        "position": {
+          "x": 218,
+          "y": 50
+        },
         "data": {
-          "formType": "cleave",
-          "formId": "c2"
+          "ui": {
+            "label": "Form Submitted",
+            "icon": "DocumentTextIcon",
+            "color": "text-blue-500",
+            "nodeType": "form_submitted"
+          },
+          "config": {
+            "formType": "cleave",
+            "formId": "c2"
+          }
         }
       },
       {
         "id": "split-test-1",
-        "type": "condition:split_test",
-        "position": { "x": 0, "y": 0 },
+        "type": "logic_split_test",
+        "position": {
+          "x": 218,
+          "y": 200
+        },
         "data": {
-          "weights": [50, 50],
-          "strategy": "even",
-          "winnerCriteria": "clicks",
-          "notifyMe": true
+          "ui": {
+            "label": "Split Test (A/B)",
+            "icon": "ArrowPathIcon",
+            "color": "text-amber-500",
+            "nodeType": "split_test"
+          },
+          "config": {
+            "weights": [
+              50,
+              50
+            ],
+            "strategy": "even",
+            "winnerCriteria": "clicks",
+            "notifyMe": true
+          }
         }
       },
       {
         "id": "action-email-1",
-        "type": "action:send_email",
-        "position": { "x": 0, "y": 0 },
+        "type": "action_send_email",
+        "position": {
+          "x": -19,
+          "y": 350
+        },
         "data": {
-          "fromName": "Support Team",
-          "fromEmail": "support@example.com",
-          "subject": "Welcome to our platform!",
-          "message": "<p>Hello! Thanks for signing up.</p>"
+          "ui": {
+            "label": "Send Email",
+            "icon": "EnvelopeIcon",
+            "color": "text-emerald-500",
+            "nodeType": "send_email"
+          },
+          "config": {
+            "fromName": "Support Team",
+            "fromEmail": "support@example.com",
+            "subject": "Welcome to our platform!",
+            "message": "<p>Hello! Thanks for signing up.</p>"
+          }
         }
       },
       {
         "id": "if-else-1",
-        "type": "condition:if_else",
-        "position": { "x": 0, "y": 0 },
+        "type": "logic_if_else",
+        "position": {
+          "x": 455,
+          "y": 350
+        },
         "data": {
-          "conditions": [
-            {
-              "field": "first_name",
-              "operator": "not_empty"
-            }
-          ],
-          "logicalOperator": "and",
-          "trueLabel": "Has Name",
-          "falseLabel": "No Name"
+          "ui": {
+            "label": "If / Else",
+            "icon": "FunnelIcon",
+            "color": "text-amber-500",
+            "nodeType": "if_else"
+          },
+          "config": {
+            "conditions": [
+              {
+                "field": "first_name",
+                "operator": "not_empty"
+              }
+            ],
+            "logicalOperator": "and",
+            "trueLabel": "Has Name ccc",
+            "falseLabel": "No Name ddd",
+            "nodeType": "if_else",
+            "isRoot": false,
+            "isDragging": false,
+            "isMoving": false
+          }
         }
       },
       {
         "id": "action-notify-1",
-        "type": "action:send_notification",
-        "position": { "x": 0, "y": 0 },
+        "type": "action_send_notification",
+        "position": {
+          "x": 297,
+          "y": 500
+        },
         "data": {
-          "message": "<p>New sign up with no name!</p>",
-          "channels": {
-            "email": true,
-            "inApp": true,
-            "sms": false
+          "ui": {
+            "label": "Send Notification",
+            "icon": "BellIcon",
+            "color": "text-emerald-500",
+            "nodeType": "send_notification"
           },
-          "recipientType": "team",
-          "recipientId": "t2"
+          "config": {
+            "message": "<p>New sign up with no name!</p>",
+            "channels": {
+              "email": true,
+              "inApp": true,
+              "sms": false
+            },
+            "recipientType": "team",
+            "recipientId": "t2"
+          }
         }
       },
       {
         "id": "action-update-1",
-        "type": "action:update_contact",
-        "position": { "x": 0, "y": 0 },
+        "type": "action_update_contact",
+        "position": {
+          "x": 613,
+          "y": 500
+        },
         "data": {
-          "field": "tag",
-          "value": "active_user"
+          "ui": {
+            "label": "Update Contact",
+            "icon": "UserCircleIcon",
+            "color": "text-emerald-500",
+            "nodeType": "update_contact"
+          },
+          "config": {
+            "field": "tag",
+            "value": "active_user"
+          }
         }
       }
     ],
@@ -105,25 +178,35 @@
         "id": "e2",
         "source": "split-test-1",
         "target": "action-email-1",
-        "data": { "label": "50%", "isSplitTest": true }
+        "data": {
+          "label": "50%",
+          "isSplitTest": true
+        }
       },
       {
         "id": "e3",
         "source": "split-test-1",
         "target": "if-else-1",
-        "data": { "label": "50%", "isSplitTest": true }
+        "data": {
+          "label": "50%",
+          "isSplitTest": true
+        }
       },
       {
         "id": "e4",
         "source": "if-else-1",
         "target": "action-notify-1",
-        "data": { "label": "No Name" }
+        "data": {
+          "label": "Has Name ccc"
+        }
       },
       {
         "id": "e5",
         "source": "if-else-1",
         "target": "action-update-1",
-        "data": { "label": "Has Name" }
+        "data": {
+          "label": "No Name ddd"
+        }
       }
     ]
   }

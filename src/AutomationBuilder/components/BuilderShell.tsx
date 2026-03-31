@@ -35,7 +35,7 @@ export function BuilderShell({ children }: { children: ReactNode }) {
 
           <div className="h-6 w-px mr-4 bg-slate-200 dark:bg-slate-700" />
 
-          <button type="button" onClick={toggleStatus} className={`text-[11px] font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-20 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
+          <button type="button" onClick={toggleStatus} className={`text-[11px] font-medium px-2 py-1 rounded-full border flex items-center justify-center gap-1.5 transition-colors w-32 ${status === "active" ? "text-primary bg-primary/10 border-primary/20" : "text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"}`} title="Toggle active status">
             <span className={`h-1.5 w-1.5 rounded-full ${status === "active" ? "bg-primary" : "bg-slate-400"}`} />
             {status === "active" ? "Active" : "Inactive"}
           </button>
