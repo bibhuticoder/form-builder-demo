@@ -93,38 +93,53 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       const nodesOfType = nodes.filter((n) => n.type === node.type)
       const newNodeId = `${node.type}_${node.data.nodeType || node.type}_${nodesOfType.length + 1}`
       
+      const isTrigger = node.type === "trigger"
       const newNode: Node = {
         ...node,
         id: newNodeId,
-        position: { x: node.position.x + 40, y: node.position.y + 100 },
+        position: isTrigger 
+          ? { x: node.position.x + 340, y: node.position.y } 
+          : { x: node.position.x + 40, y: node.position.y + 100 },
         selected: true,
         data: {
           ...node.data,
           label: `${node.data.label} (Copy)`,
-          isRoot: false,
+          isRoot: isTrigger,
         },
       }
 
-      // Check for direct child (linear) to insert after
-      const outgoingEdge = edges.find((e) => e.source === id && !e.data?.isLoopBack && !e.data?.branchId)
       let nextEdges = [...edges]
 
-      if (outgoingEdge) {
-        const { target, sourceHandle } = outgoingEdge
-        nextEdges = edges.filter((e) => e.id !== outgoingEdge.id)
-        nextEdges.push({
-          id: generateEdgeId(id, newNodeId),
-          source: id,
-          target: newNodeId,
-          sourceHandle,
-          markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
+      if (isTrigger) {
+        // Mirrored connection: the new trigger connects to the same target as original
+        const outgoing = edges.filter((e) => e.source === id && !e.data?.isLoopBack)
+        outgoing.forEach((edge) => {
+          nextEdges.push({
+            ...edge,
+            id: generateEdgeId(newNodeId, edge.target),
+            source: newNodeId,
+          })
         })
-        nextEdges.push({
-          id: generateEdgeId(newNodeId, target),
-          source: newNodeId,
-          target: target,
-          markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
-        })
+      } else {
+        // Linear insertion: the new node is inserted after the original one
+        const outgoingEdge = edges.find((e) => e.source === id && !e.data?.isLoopBack && !e.data?.branchId)
+        if (outgoingEdge) {
+          const { target, sourceHandle } = outgoingEdge
+          nextEdges = edges.filter((e) => e.id !== outgoingEdge.id)
+          nextEdges.push({
+            id: generateEdgeId(id, newNodeId),
+            source: id,
+            target: newNodeId,
+            sourceHandle,
+            markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
+          })
+          nextEdges.push({
+            id: generateEdgeId(newNodeId, target),
+            source: newNodeId,
+            target: target,
+            markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
+          })
+        }
       }
 
       const nextNodes = [...nodes, newNode]
