@@ -21,7 +21,7 @@ const AddStepNode = ({ data }: any) => {
 
 const PlaceholderNode = () => (
   <div className="w-[256px] border-b-2 border-l-2 border-r-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-900/60 flex flex-col">
-    <div className="h-1.5 w-full rounded-t-sm bg-slate-300 dark:bg-slate-700" />
+    <div className="h-1.5 w-full rounded-t-md bg-slate-300 dark:bg-slate-700" />
     <div className="flex items-center p-4">
       <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 shadow-sm shrink-0 text-slate-400 dark:text-slate-500 mr-3">
         <Squares2X2Icon className="w-5 h-5" />
@@ -40,7 +40,7 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
   return (
     <div className="relative w-[256px]">
       <div className={`w-full bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20" : selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
-        <div className={`h-1.5 w-full rounded-t-sm ${colorClass}`} />
+        <div className={`h-1.5 w-full rounded-t-md ${colorClass}`} />
         <div className="p-3">
           <div className="flex items-start gap-3">
             <div className={`p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 ${String(colorClass).replace("bg-", "text-")}`}>
@@ -112,7 +112,7 @@ const TriggerNode = ({ id, data, selected }: any) => {
   const isMoving = !!data.isMoving
   return (
     <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20" : selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
-      <div className="h-1.5 w-full rounded-t-sm bg-blue-500" />
+      <div className="h-1.5 w-full rounded-t-md bg-blue-500" />
       <div className="p-3">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-blue-500">{data.icon ? <data.icon className="w-5 h-5" /> : <Squares2X2Icon className="w-5 h-5" />}</div>
@@ -192,7 +192,7 @@ const LoopBackNode = ({ id, data, selected }: any) => {
 
   return (
     <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
-      <div className="h-1.5 w-full rounded-t-sm bg-amber-500" />
+      <div className="h-1.5 w-full rounded-t-md bg-amber-500" />
       <div className="p-3">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-amber-500">

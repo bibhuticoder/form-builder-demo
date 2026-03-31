@@ -16,6 +16,7 @@ import { useAutomationBuilderContext } from "../context/AutomationBuilderContext
 import { buildPayloadFromBuilder } from "../utils/payload"
 import { NodeActionsContext } from "../context/NodeActionsContext"
 import { deleteNodeAndDescendants } from "../utils/nodeActions"
+import { generateEdgeId } from "../utils/hash"
 
 export function FlowBuilder({ automationId }: { automationId: string }) {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
@@ -89,7 +90,9 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
       if (!node) return
       takeSnapshot(nodes, edges)
 
-      const newNodeId = `${node.type}-${Date.now()}`
+      const nodesOfType = nodes.filter((n) => n.type === node.type)
+      const newNodeId = `${node.type}_${node.data.nodeType || node.type}_${nodesOfType.length + 1}`
+      
       const newNode: Node = {
         ...node,
         id: newNodeId,
@@ -110,14 +113,14 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         const { target, sourceHandle } = outgoingEdge
         nextEdges = edges.filter((e) => e.id !== outgoingEdge.id)
         nextEdges.push({
-          id: `e-${id}-${newNodeId}`,
+          id: generateEdgeId(id, newNodeId),
           source: id,
           target: newNodeId,
           sourceHandle,
           markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
         })
         nextEdges.push({
-          id: `e-${newNodeId}-${target}`,
+          id: generateEdgeId(newNodeId, target),
           source: newNodeId,
           target: target,
           markerEnd: { type: MarkerType.ArrowClosed, color: "#94a3b8" },
@@ -187,7 +190,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     (_event: React.MouseEvent, node: Node) => {
       if (connectingNodeId && node.data?.isTargetable) {
         const newEdge: Edge = {
-          id: `e-${connectingNodeId}-${node.id}-loopback`,
+          id: generateEdgeId(connectingNodeId, node.id) + "-loopback",
           source: connectingNodeId,
           target: node.id,
           type: "custom",
@@ -281,7 +284,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         nextEdges = nextEdges.filter(e => !(e.source === nodeId && e.data?.isLoopBack));
         if (newData.targetId) {
           nextEdges.push({
-            id: `e-${nodeId}-${newData.targetId}-loopback`,
+            id: generateEdgeId(nodeId, newData.targetId) + "-loopback",
             source: nodeId,
             sourceHandle: "loop-source",
             target: newData.targetId,
@@ -497,7 +500,8 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
   const onConnect = useCallback(
     (connection: any) => {
-      setEdges((eds) => addEdge({ ...connection, type: "custom" }, eds))
+      const edgeId = generateEdgeId(connection.source, connection.target)
+      setEdges((eds) => addEdge({ ...connection, id: edgeId, type: "custom" }, eds))
       setIsDirty(true)
     },
     [takeSnapshot, nodes, edges, setIsDirty],
@@ -553,21 +557,29 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         position = project({ x: event.clientX - reactFlowBounds.left, y: event.clientY - reactFlowBounds.top })
       }
 
-      const newNode: Node = {
-        id: `${type}-${nodes.length + 1}-${Date.now()}`,
-        type,
-        position,
-        data: { label },
-        width: 256,
-      }
-
       let foundItem: any
       for (const group of TOOLBOX_ITEMS) {
         foundItem = group.items.find((i) => i.label === label)
         if (foundItem) break
       }
+
+      const nodesOfType = nodes.filter((n) => n.type === type)
+      const nodeTypeForId = foundItem?.nodeType || type
+      const newNodeId = `${type}_${nodeTypeForId}_${nodesOfType.length + 1}`
+
+      const newNode: Node = {
+        id: newNodeId,
+        type,
+        position,
+        data: { 
+          label,
+          nodeType: nodeTypeForId
+        },
+        width: 256,
+      }
       if (foundItem) {
         newNode.data = {
+          ...newNode.data,
           label: foundItem.label,
           icon: foundItem.icon,
           nodeType: foundItem.nodeType,
@@ -593,7 +605,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
           const newEdges: Edge[] = [
             {
-              id: `e-${newNode.id}-${addStepA.id}`,
+              id: generateEdgeId(newNode.id, addStepA.id),
               source: newNode.id,
               sourceHandle: isIfElse ? 'true' : undefined,
               target: addStepA.id,
@@ -603,7 +615,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
               data: isSplitTest ? { label: "50%", isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined
             },
             {
-              id: `e-${newNode.id}-${addStepB.id}`,
+              id: generateEdgeId(newNode.id, addStepB.id),
               source: newNode.id,
               sourceHandle: isIfElse ? 'false' : undefined,
               target: addStepB.id,
@@ -622,7 +634,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
         if (!isTerminal) {
           const addStepNode: Node = { id: `add-step-${Date.now()}`, type: "addStep", position: { x: newNode.position.x, y: newNode.position.y + 150 }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
-          const newEdge: Edge = { id: `e-${newNode.id}-${addStepNode.id}`, source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }
+          const newEdge: Edge = { id: generateEdgeId(newNode.id, addStepNode.id), source: newNode.id, target: addStepNode.id, type: "smoothstep", markerEnd: { type: MarkerType.ArrowClosed } }
           const { nodes: lNodes, edges: lEdges } = performAutoLayout([newNode, addStepNode], [newEdge])
           setNodes(lNodes)
           setEdges(lEdges)
@@ -665,7 +677,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         if (templateTargetId) {
           // Connect this trigger into the same flow.
           nextEdges = nextEdges.concat({
-            id: `e-${newNode.id}-${templateTargetId}`,
+            id: generateEdgeId(newNode.id, templateTargetId),
             source: newNode.id,
             target: templateTargetId,
             type: "smoothstep",
@@ -686,7 +698,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
             nextEdges = nextEdges.concat(
               roots.map((r) => ({
-                id: `e-${newNode.id}-${r.id}`,
+                id: generateEdgeId(newNode.id, r.id),
                 source: newNode.id,
                 target: r.id,
                 type: "smoothstep",

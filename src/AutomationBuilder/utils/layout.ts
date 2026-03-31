@@ -1,5 +1,6 @@
 import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
+import { generateEdgeId } from './hash';
 
 const X_GAP = 60;
 const Y_GAP = 150;
@@ -71,7 +72,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     const slotId = `add-step-${node.id}-true-${Date.now()}`;
                     nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
                     edges.push({
-                        id: `e-${node.id}-${slotId}`,
+                        id: generateEdgeId(node.id, slotId),
                         source: node.id,
                         target: slotId,
                         type: 'custom',
@@ -84,7 +85,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     const slotId = `add-step-${node.id}-false-${Date.now()}`;
                     nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
                     edges.push({
-                        id: `e-${node.id}-${slotId}`,
+                        id: generateEdgeId(node.id, slotId),
                         source: node.id,
                         target: slotId,
                         type: 'custom',
@@ -116,7 +117,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     for (let i = 0; i < missingCount; i++) {
                         const slotId = `add-step-${node.id}-split-${Date.now()}-${i}`;
                         nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
-                        edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { label: '50%', isSplitTest: true } });
+                        edges.push({ id: generateEdgeId(node.id, slotId), source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { label: '50%', isSplitTest: true } });
                     }
                 }
             }
@@ -125,7 +126,7 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
             if (childrenEdges.length === 0) {
                 const slotId = `add-step-${node.id}-auto`;
                 nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
-                edges.push({ id: `e-${node.id}-${slotId}`, source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed } });
+                edges.push({ id: generateEdgeId(node.id, slotId), source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed } });
             }
         }
     });

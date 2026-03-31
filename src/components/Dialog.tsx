@@ -56,6 +56,7 @@ interface DialogProps {
 export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, subtitle, body, footer, isOpen, onClose, isCloseable = true, className = "", closeOnBackdropClick = true }) => {
   const [shouldRender, setShouldRender] = useState(isOpen)
   const [isVisible, setIsVisible] = useState(isOpen)
+  const [isShaking, setIsShaking] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
@@ -101,8 +102,13 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
    */
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // Ensure the click is on the backdrop itself, not the dialog content
-    if (e.target === e.currentTarget && closeOnBackdropClick && onClose) {
-      onClose()
+    if (e.target === e.currentTarget) {
+      if (closeOnBackdropClick && onClose) {
+        onClose()
+      } else if (!closeOnBackdropClick) {
+        setIsShaking(true)
+        setTimeout(() => setIsShaking(false), 300)
+      }
     }
   }
 
@@ -130,6 +136,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
             border border-gray-200 dark:border-gray-700
             transition-all duration-200 ease-out flex flex-col
             ${isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"}
+            ${isShaking ? "animate-shake" : ""}
             ${className}
           `}
           onClick={(e) => e.stopPropagation()}
