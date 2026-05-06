@@ -79,7 +79,7 @@ export function FlowBuilderSidebar({ isCollapsed, onCollapse, onExpand }: { isCo
             {TOOLBOX_ITEMS.map((section) => {
               const filtered = section.items.filter((item) => (isCollapsed ? true : item.label.toLowerCase().includes(searchQuery.toLowerCase())))
               const available = filtered.filter((i) => !i.comingSoon)
-              const comingSoon = filtered.filter((i) => i.comingSoon)
+              // const comingSoon = filtered.filter((i) => i.comingSoon)
               return (
                 <TabsContent key={section.value} value={section.value} className="m-0 h-full p-2 space-y-2 mt-0">
                   {available.map((item, idx) => (
@@ -115,7 +115,7 @@ export function FlowBuilderSidebar({ isCollapsed, onCollapse, onExpand }: { isCo
                     </div>
                   ))}
 
-                  {comingSoon.length > 0 && (
+                  {/* {comingSoon.length > 0 && (
                     <>
                       {!isCollapsed && (
                         <div className="flex items-center gap-2 mt-6 mb-2 px-1">
@@ -138,7 +138,7 @@ export function FlowBuilderSidebar({ isCollapsed, onCollapse, onExpand }: { isCo
                         </div>
                       ))}
                     </>
-                  )}
+                  )} */}
                 </TabsContent>
               )
             })}
