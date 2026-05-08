@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Slider, Checkbox, Input } from "@/components"
 import { cn } from "@/lib/utils"
+import { SPLIT_TEST_MAX_BRANCHES, SPLIT_TEST_MIN_BRANCHES } from "../../../constants"
 
 interface SplitTestData {
   id?: string;
@@ -14,12 +15,28 @@ interface SplitTestData {
   strategy?: string;
 }
 
-export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData, onChange: (d: any) => void, node: any, edges: any[] }) => {
-  const siblings = edges.filter(e => e.source === data.id && e.sourceHandle !== 'right-source');
-  const count = Math.max(2, siblings.length);
+const truncateToTwo = (value: number) => Math.trunc(value * 100) / 100;
+
+const normalizeWeights = (weights: number[]) => {
+  if (weights.length === 0) return weights;
+  const normalized = weights.map((w) => truncateToTwo(Number.isFinite(w) ? w : 0));
+  const sum = normalized.reduce((total, value) => total + value, 0);
+  const delta = truncateToTwo(100 - sum);
+  normalized[normalized.length - 1] = truncateToTwo(normalized[normalized.length - 1] + delta);
+  return normalized;
+};
+
+const areWeightsEqual = (a: number[], b: number[]) => a.length === b.length && a.every((value, index) => value === b[index]);
+
+export const SplitTestConfig = ({ data, onChange, edges, node }: { data: SplitTestData, onChange: (d: any) => void, node: any, edges: any[] }) => {
+  const nodeId = node?.id || data.id;
+  const siblings = edges.filter(e => e.source === nodeId && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack);
+  const weightsLength = Array.isArray(data.weights) ? data.weights.length : 0;
+  const count = Math.max(SPLIT_TEST_MIN_BRANCHES, siblings.length, weightsLength);
+  const canAddBranch = count < SPLIT_TEST_MAX_BRANCHES;
 
   // Sync state with parent data
-  const [activeWeights, setActiveWeights] = useState<number[]>(Array.isArray(data.weights) ? data.weights : []);
+  const [activeWeights, setActiveWeights] = useState<number[]>(Array.isArray(data.weights) ? normalizeWeights(data.weights) : []);
   const [testType, setTestType] = useState(data.testType || 'duration');
   const [isLinked, setIsLinked] = useState(data.strategy === 'even');
 
@@ -27,16 +44,28 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
   useEffect(() => {
     if (!Array.isArray(data.weights) || data.weights.length !== count) {
       const evenValue = Math.floor(100 / count);
-      const newWeights = Array(count).fill(evenValue);
-      // Adjust last one to fit 100%
-      newWeights[count - 1] = 100 - (evenValue * (count - 1));
+      const newWeights = normalizeWeights(Array(count).fill(evenValue));
       onChange({ ...data, weights: newWeights, strategy: data.strategy || 'even' });
       setActiveWeights(newWeights);
     } else {
       // Just sync local state if weights change from outside
-      setActiveWeights(data.weights);
+      const normalized = normalizeWeights(data.weights);
+      if (!areWeightsEqual(normalized, data.weights)) {
+        onChange({ ...data, weights: normalized, strategy: data.strategy || 'even' });
+      }
+      setActiveWeights(normalized);
     }
-  }, [count, data.weights]);
+  }, [count, data.weights, data.strategy]);
+
+  const addBranch = () => {
+    if (!canAddBranch) return;
+    const nextCount = count + 1;
+    const evenValue = Math.floor(100 / nextCount);
+    const newWeights = normalizeWeights(Array(nextCount).fill(evenValue));
+    onChange({ ...data, weights: newWeights, strategy: 'even' });
+    setActiveWeights(newWeights);
+    setIsLinked(true);
+  };
 
   const updateWeight = (idx: number, val: number) => {
     // Clamp value between 0 and 100
@@ -72,21 +101,16 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
       });
     }
 
-    // Final safety normalization
-    const finalSum = currentWeights.reduce((a, b) => a + b, 0);
-    if (finalSum !== 100) {
-      currentWeights[currentWeights.length - 1] += (100 - finalSum);
-    }
+    const normalized = normalizeWeights(currentWeights);
 
-    onChange({ ...data, weights: currentWeights, strategy: 'weighted' });
-    setActiveWeights(currentWeights);
+    onChange({ ...data, weights: normalized, strategy: 'weighted' });
+    setActiveWeights(normalized);
     setIsLinked(false);
   };
 
   const resetToEven = () => {
     const evenValue = Math.floor(100 / count);
-    const newWeights = Array(count).fill(evenValue);
-    newWeights[count - 1] = 100 - (evenValue * (count - 1));
+    const newWeights = normalizeWeights(Array(count).fill(evenValue));
     onChange({ ...data, weights: newWeights, strategy: 'even' });
     setActiveWeights(newWeights);
     setIsLinked(true);
@@ -104,6 +128,21 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
         <p className="text-sm text-amber-800">
           Adjust the traffic split for your {count} branches. Total must equal 100%.
         </p>
+      </div>
+
+      <div className="flex items-center justify-between pr-0.5">
+        <div className="text-[11px] font-semibold text-slate-500">
+          Branches: {count} / {SPLIT_TEST_MAX_BRANCHES}
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={addBranch}
+          className="text-sm"
+          disabled={!canAddBranch}
+        >
+          Add Branch
+        </Button>
       </div>
 
       <div className="flex justify-end pr-0.5">
@@ -128,7 +167,7 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
                 <input
                   className="w-10 text-[13px] font-bold text-primary text-center bg-transparent border-none focus:outline-none"
                   value={String(weight)}
-                  onChange={e => updateWeight(i, parseInt(e.target.value) || 0)}
+                  onChange={e => updateWeight(i, parseFloat(e.target.value) || 0)}
                 />
                 <span className="text-[12px] font-bold text-slate-400">%</span>
               </div>
@@ -137,7 +176,7 @@ export const SplitTestConfig = ({ data, onChange, edges }: { data: SplitTestData
             <Slider
               value={weight}
               max={100}
-              step={1}
+              step={0.01}
               onValueChange={(val) => updateWeight(i, val)}
               className="py-1"
             />

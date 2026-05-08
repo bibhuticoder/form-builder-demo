@@ -1,6 +1,7 @@
 import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { generateEdgeId } from './hash';
+import { SPLIT_TEST_MIN_BRANCHES } from '../constants';
 
 const X_GAP = 60;
 const Y_GAP = 150;
@@ -8,6 +9,28 @@ const NODE_WIDTH = 256;
 
 function getNodeDimensions() {
     return { width: 256, height: 92 };
+}
+
+function buildEvenWeights(count: number) {
+    const evenValue = Math.floor(100 / count);
+    const weights = Array(count).fill(evenValue);
+    weights[count - 1] = 100 - evenValue * (count - 1);
+    return weights;
+}
+
+function truncateToTwo(value: number) {
+    return Math.trunc(value * 100) / 100;
+}
+
+function resolveSplitTestWeights(raw: unknown, count: number) {
+    if (Array.isArray(raw) && raw.length === count && raw.every((w) => typeof w === 'number')) {
+        const normalized = (raw as number[]).map((w) => truncateToTwo(w));
+        const sum = normalized.reduce((total, value) => total + value, 0);
+        const delta = truncateToTwo(100 - sum);
+        normalized[normalized.length - 1] = truncateToTwo(normalized[normalized.length - 1] + delta);
+        return normalized;
+    }
+    return buildEvenWeights(count);
 }
 
 export function restoreNodeIcons(nodes: Node[], toolboxGroups: Array<{ items: Array<any> }>) {
@@ -111,15 +134,40 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
                     }
                 });
             } else if (isSplitTest) {
-                // For Split Test, we need at least 2 branches.
-                if (childrenEdges.length < 2) {
-                    const missingCount = 2 - childrenEdges.length;
+                const rawWeights = Array.isArray(node.data?.weights)
+                    ? node.data?.weights
+                    : Array.isArray(node.data?.config?.weights)
+                        ? node.data?.config?.weights
+                        : undefined;
+                const desiredCount = Math.max(SPLIT_TEST_MIN_BRANCHES, childrenEdges.length, Array.isArray(rawWeights) ? rawWeights.length : 0);
+                const appliedWeights = resolveSplitTestWeights(rawWeights, desiredCount);
+
+                if (childrenEdges.length < desiredCount) {
+                    const missingCount = desiredCount - childrenEdges.length;
                     for (let i = 0; i < missingCount; i++) {
                         const slotId = `add-step-${node.id}-split-${Date.now()}-${i}`;
                         nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + 150 }, data: { label: 'Add Step' }, draggable: false, width: 256, height: 92 });
-                        edges.push({ id: generateEdgeId(node.id, slotId), source: node.id, target: slotId, type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed }, label: '50%', data: { label: '50%', isSplitTest: true } });
+                        edges.push({
+                            id: generateEdgeId(node.id, slotId),
+                            source: node.id,
+                            target: slotId,
+                            type: 'smoothstep',
+                            markerEnd: { type: MarkerType.ArrowClosed },
+                            label: `${appliedWeights[childrenEdges.length + i]}%`,
+                            data: { label: `${appliedWeights[childrenEdges.length + i]}%`, isSplitTest: true }
+                        });
                     }
                 }
+
+                const splitEdges = edges
+                    .filter((e) => e.source === node.id && e.sourceHandle !== 'right-source' && !e.data?.isLoopBack)
+                    .sort((a, b) => a.id.localeCompare(b.id));
+                splitEdges.forEach((edge, idx) => {
+                    const weight = appliedWeights[idx] ?? 0;
+                    const label = `${weight}%`;
+                    edge.label = label;
+                    edge.data = { ...(edge.data || {}), label, isSplitTest: true };
+                });
             }
         } else {
             // Standard nodes must have exactly one child edge

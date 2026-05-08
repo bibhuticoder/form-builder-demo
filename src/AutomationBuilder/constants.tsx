@@ -13,6 +13,9 @@ export type ToolboxItem = {
   comingSoon?: boolean
 }
 
+export const SPLIT_TEST_MIN_BRANCHES = 2
+export const SPLIT_TEST_MAX_BRANCHES = 5
+
 export const TOOLBOX_ITEMS: Array<{ category: string; value: string; items: ToolboxItem[] }> = [
   {
     category: "Triggers",
