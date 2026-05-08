@@ -127,12 +127,12 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
       <div className={`fixed inset-0 z-40 bg-black transition-opacity duration-200 ${isVisible ? "bg-opacity-50" : "bg-opacity-0"}`} role="presentation" />
 
       {/* Dialog container - centered on screen */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={handleOutsideClick}>
+      <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto sm:items-center" onClick={handleOutsideClick}>
         {/* Dialog panel - the actual popup */}
         <div
           className={`
             bg-white dark:bg-gray-800 rounded-lg shadow-xl
-            max-w-md w-full my-8 overflow-visible
+            max-w-md w-full my-4 sm:my-8 overflow-hidden max-h-[calc(100vh-2rem)]
             border border-gray-200 dark:border-gray-700
             transition-all duration-200 ease-out flex flex-col
             ${isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"}
@@ -166,7 +166,7 @@ export const Dialog: React.FC<DialogProps & { isOpen: boolean }> = ({ header, su
           </div>
 
           {/* Body section */}
-          <div className="px-4 py-4 text-gray-700 dark:text-gray-300 overflow-visible min-h-[100px]">{body}</div>
+          <div className="px-4 py-4 text-gray-700 dark:text-gray-300 overflow-y-auto min-h-[100px] flex-1">{body}</div>
 
           {/* Footer section */}
           {footer && (

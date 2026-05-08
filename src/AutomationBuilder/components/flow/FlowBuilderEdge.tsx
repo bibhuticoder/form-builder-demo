@@ -4,7 +4,7 @@ import type { EdgeProps } from "reactflow"
 import { cn } from "@/lib/utils"
 
 const CustomEdge = memo(({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {}, markerEnd, data, label }: EdgeProps) => {
-  const [edgePath, , labelY] = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetPosition, targetX, targetY })
+  const [edgePath, labelX, labelY] = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetPosition, targetX, targetY })
   return (
     <>
       <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
@@ -14,7 +14,9 @@ const CustomEdge = memo(({ sourceX, sourceY, targetX, targetY, sourcePosition, t
             className="nodrag nopan"
             style={{
               position: "absolute",
-              transform: `translate(-50%, -50%) translate(${sourceX + (targetX - sourceX) * 0.5}px,${labelY}px)`,
+              left: 0,
+              top: 0,
+              transform: `translate(${labelX}px,${labelY}px) translate(-50%, -50%)`,
               fontSize: 12,
               pointerEvents: "all",
             }}

@@ -18,16 +18,14 @@ function buildEvenWeights(count: number) {
     return weights;
 }
 
-function truncateToTwo(value: number) {
-    return Math.trunc(value * 100) / 100;
-}
-
 function resolveSplitTestWeights(raw: unknown, count: number) {
     if (Array.isArray(raw) && raw.length === count && raw.every((w) => typeof w === 'number')) {
-        const normalized = (raw as number[]).map((w) => truncateToTwo(w));
+        const normalized = (raw as number[]).map((w) => (Number.isFinite(w) ? w : 0));
         const sum = normalized.reduce((total, value) => total + value, 0);
-        const delta = truncateToTwo(100 - sum);
-        normalized[normalized.length - 1] = truncateToTwo(normalized[normalized.length - 1] + delta);
+        const delta = 100 - sum;
+        if (Math.abs(delta) > 1e-6) {
+            normalized[normalized.length - 1] += delta;
+        }
         return normalized;
     }
     return buildEvenWeights(count);

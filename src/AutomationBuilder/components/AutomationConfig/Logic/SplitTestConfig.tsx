@@ -15,14 +15,14 @@ interface SplitTestData {
   strategy?: string;
 }
 
-const truncateToTwo = (value: number) => Math.trunc(value * 100) / 100;
-
 const normalizeWeights = (weights: number[]) => {
   if (weights.length === 0) return weights;
-  const normalized = weights.map((w) => truncateToTwo(Number.isFinite(w) ? w : 0));
+  const normalized = weights.map((w) => (Number.isFinite(w) ? w : 0));
   const sum = normalized.reduce((total, value) => total + value, 0);
-  const delta = truncateToTwo(100 - sum);
-  normalized[normalized.length - 1] = truncateToTwo(normalized[normalized.length - 1] + delta);
+  const delta = 100 - sum;
+  if (Math.abs(delta) > 1e-6) {
+    normalized[normalized.length - 1] += delta;
+  }
   return normalized;
 };
 
