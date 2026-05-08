@@ -8,6 +8,7 @@ import { JsonViewerPanel } from "./JsonViewerPanel/JsonViewerPanel"
 import { PRO_TIPS, TOOLBOX_ITEMS, initialEdges, initialNodes } from "../constants"
 import { useFlowHistory } from "../hooks/useFlowHistory"
 import { performAutoLayout, restoreNodeIcons } from "../utils/layout"
+import { selectAddStepDropTarget } from "../utils/dropTarget"
 import { flowNodeTypes } from "./flow/FlowBuilderNodes"
 import { flowEdgeTypes } from "./flow/FlowBuilderEdge"
 import { FlowBuilderControls } from "./flow/FlowBuilderControls"
@@ -730,38 +731,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         return
       }
 
-      const distance = (ax: number, ay: number, bx: number, by: number) => Math.hypot(ax - bx, ay - by)
-
-      // Identify closest drop target: an AddStep slot.
-      let closestAddStepNode: any = null
-      let closestAddStepDist = Infinity
-      let nearestAddStepNode: any = null
-      let nearestAddStepDist = Infinity
-
-      nodes.forEach((n) => {
-        if (n.type === "addStep") {
-          const cx = n.position.x + 140
-          const cy = n.position.y + 50
-          const d = distance(cx, cy, position.x, position.y)
-
-          if (d < nearestAddStepDist) {
-            nearestAddStepDist = d
-            nearestAddStepNode = n
-          }
-
-          if (d < 80 && d < closestAddStepDist) {
-            closestAddStepDist = d
-            closestAddStepNode = n
-          }
-        }
-      })
-
-      // If user drops near-ish the flow but not directly on the slot, still snap to nearest add-step.
-      if (!closestAddStepNode && nearestAddStepNode && nearestAddStepDist < 220) {
-        closestAddStepNode = nearestAddStepNode
-      }
-
-
+      const closestAddStepNode = selectAddStepDropTarget({ nodes, edges, position })
       if (!closestAddStepNode) return
 
       newNode.position = { x: closestAddStepNode.position.x - 76, y: closestAddStepNode.position.y }
