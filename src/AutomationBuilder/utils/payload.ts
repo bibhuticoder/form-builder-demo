@@ -108,10 +108,16 @@ export function buildPayloadFromBuilder(params: {
             const label = (e as any).label || (e.data as any)?.label;
             const isLoopBack = !!(e.data as any)?.isLoopBack;
             const isSplitTest = !!(e.data as any)?.isSplitTest;
+            const branchId = (e.data as any)?.branchId;
+            const branchIndex = (e.data as any)?.branchIndex;
+            const branchType = (e.data as any)?.branchType;
             const edgeData: AutomationEdge['data'] = {};
             if (label) edgeData.label = label;
             if (isLoopBack) edgeData.isLoopBack = true;
             if (isSplitTest) edgeData.isSplitTest = true;
+            if (branchId) edgeData.branchId = branchId;
+            if (typeof branchIndex === 'number') edgeData.branchIndex = branchIndex;
+            if (branchType) edgeData.branchType = branchType;
             return {
                 id: e.id,
                 source: e.source,

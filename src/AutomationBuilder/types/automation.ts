@@ -85,6 +85,8 @@ export type AutomationEdge = {
     data?: {
         label?: string;
         branchId?: string;
+        branchIndex?: number;
+        branchType?: 'if' | 'else_if' | 'else';
         isLoopBack?: boolean;
         isSplitTest?: boolean;
     };

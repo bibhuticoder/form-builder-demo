@@ -28,6 +28,13 @@ export type ActionKind =
 
 export type LogicKind = 'if_else' | 'split_test' | 'loop_back';
 
+export type IfElseBranchConfig = {
+    id: string;
+    label?: string;
+    logicalOperator?: 'and' | 'or';
+    conditions: Array<{ field: string; operator: string; value: unknown }>;
+};
+
 export type TriggerConfig = {
     triggerKind: TriggerKind;
     filters?: Array<{ field: string; operator: string; value: unknown }>;
@@ -41,7 +48,16 @@ export type ActionConfig = {
 export type LogicConfig =
     | {
         logicKind: 'if_else';
-        conditions: Array<{ field: string; operator: string; value: unknown }>;
+        /**
+         * New multi-branch format.
+         * Each branch acts like an IF / ELSE IF block in evaluation order.
+         */
+        branches?: IfElseBranchConfig[];
+        /** Label for the ELSE path (fallback). */
+        elseLabel?: string;
+        /** Legacy single-branch format (kept for backward compatibility). */
+        conditions?: Array<{ field: string; operator: string; value: unknown }>;
+        logicalOperator?: 'and' | 'or';
     }
     | {
         logicKind: 'split_test';

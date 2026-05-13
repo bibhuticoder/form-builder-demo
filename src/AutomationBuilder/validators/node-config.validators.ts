@@ -141,7 +141,20 @@ export function validateLogicConfig(config: unknown, path: string): AutomationVa
     }
 
     if (logicKind === 'if_else') {
-        if (!Array.isArray(obj.conditions)) {
+        const branches = obj.branches;
+        const conditions = obj.conditions;
+
+        if (Array.isArray(branches)) {
+            if (branches.length === 0) {
+                errors.push({ path: `${path}.branches`, message: 'If / Else must define at least 1 branch.', type: 'invalid_value' });
+            }
+            branches.forEach((branch, idx) => {
+                const branchRecord = asRecord(branch);
+                if (!branchRecord || !Array.isArray(branchRecord.conditions)) {
+                    errors.push({ path: `${path}.branches[${idx}].conditions`, message: 'Each branch must define a conditions array.', type: 'invalid_type' });
+                }
+            });
+        } else if (!Array.isArray(conditions)) {
             errors.push({ path: `${path}.conditions`, message: 'If / Else must define conditions array.', type: 'invalid_type' });
         }
     }

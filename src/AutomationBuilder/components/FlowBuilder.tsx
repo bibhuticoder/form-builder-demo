@@ -284,13 +284,78 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
       // Update edge labels for If / Else
       if (newData.label === "If / Else") {
+        const ifLabel = newData.trueLabel || 'If'
+        const elseLabel = newData.elseLabel || newData.falseLabel || 'Else'
+        const rawBranches = Array.isArray(newData.branches) && newData.branches.length > 0
+          ? newData.branches
+          : [{ id: newData.branchId || `branch-${nodeId}-0`, label: ifLabel }]
+
+        const branches = rawBranches.map((branch: any, idx: number) => ({
+          id: branch?.id || `branch-${nodeId}-${idx}`,
+          label: branch?.label || (idx === 0 ? ifLabel : `Else If ${idx}`),
+          branchType: idx === 0 ? 'if' : 'else_if',
+          index: idx,
+        }))
+
+        const trueLabel = String(ifLabel).toUpperCase()
+        const falseLabel = String(elseLabel).toUpperCase()
+
         const siblings = nextEdges.filter((ed) => ed.source === nodeId && ed.sourceHandle !== "right-source").slice()
-        siblings.sort((a, b) => a.id.localeCompare(b.id))
+        siblings.sort((a, b) => {
+          const labelA = String(a.label || a.data?.label || '').toUpperCase()
+          const labelB = String(b.label || b.data?.label || '').toUpperCase()
+          const rankA = typeof (a.data as any)?.branchIndex === 'number'
+            ? (a.data as any).branchIndex
+            : (a.data?.conditionType === 'true' || a.sourceHandle === 'true' || labelA === 'YES' || labelA === 'TRUE' || labelA === 'SUCCESS' || labelA === trueLabel ? 0
+              : a.data?.conditionType === 'false' || a.sourceHandle === 'false' || labelA === 'NO' || labelA === 'FALSE' || labelA === 'FAIL' || labelA === falseLabel ? 1
+                : Number.MAX_SAFE_INTEGER)
+          const rankB = typeof (b.data as any)?.branchIndex === 'number'
+            ? (b.data as any).branchIndex
+            : (b.data?.conditionType === 'true' || b.sourceHandle === 'true' || labelB === 'YES' || labelB === 'TRUE' || labelB === 'SUCCESS' || labelB === trueLabel ? 0
+              : b.data?.conditionType === 'false' || b.sourceHandle === 'false' || labelB === 'NO' || labelB === 'FALSE' || labelB === 'FAIL' || labelB === falseLabel ? 1
+                : Number.MAX_SAFE_INTEGER)
+          if (rankA !== rankB) return rankA - rankB
+          return a.id.localeCompare(b.id)
+        })
+
         nextEdges = nextEdges.map((e) => {
           if (e.source !== nodeId || e.sourceHandle === "right-source") return e
           const idx = siblings.findIndex((s) => s.id === e.id)
-          if (idx === 0) return { ...e, label: newData.trueLabel || 'YES', sourceHandle: 'true', data: { ...(e.data || {}), isCondition: true, conditionType: 'true' } }
-          if (idx === 1) return { ...e, label: newData.falseLabel || 'NO', sourceHandle: 'false', data: { ...(e.data || {}), isCondition: true, conditionType: 'false' } }
+          if (idx === -1) return e
+
+          if (idx < branches.length) {
+            const branch = branches[idx]
+            return {
+              ...e,
+              label: branch.label,
+              sourceHandle: `branch-${branch.id}`,
+              data: {
+                ...(e.data || {}),
+                isCondition: true,
+                branchId: branch.id,
+                branchIndex: branch.index,
+                branchType: branch.branchType,
+                label: branch.label,
+              },
+            }
+          }
+
+          if (idx === branches.length) {
+            return {
+              ...e,
+              label: elseLabel,
+              sourceHandle: 'else',
+              data: {
+                ...(e.data || {}),
+                isCondition: true,
+                branchId: 'else',
+                branchIndex: branches.length,
+                branchType: 'else',
+                label: elseLabel,
+              },
+            }
+          }
+
           return e
         })
       }
@@ -612,33 +677,96 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
 
         const isBranching = ["If / Else", "Split Test (A/B)", "Switch Case", "Parallel"].includes(foundItem?.label || label)
         if (isBranching) {
+          const isSplitTest = (foundItem?.label || label) === "Split Test (A/B)"
+          const isIfElse = (foundItem?.label || label) === "If / Else"
+
           const branchY = newNode.position.y + 150
+          const branchWidth = 256
+          const branchGap = 56
+
+          if (isIfElse) {
+            const ifBranchId = `branch-${newNode.id}-${Date.now()}`
+            const ifLabel = newNode.data?.trueLabel || 'If'
+            const elseLabel = newNode.data?.elseLabel || newNode.data?.falseLabel || 'Else'
+            const seedCondition = { field: 'tag', operator: 'contains', value: '' }
+
+            newNode.data = {
+              ...newNode.data,
+              branches: [
+                {
+                  id: ifBranchId,
+                  label: ifLabel,
+                  logicalOperator: 'and',
+                  conditions: [seedCondition],
+                },
+              ],
+              elseLabel,
+              trueLabel: ifLabel,
+              falseLabel: elseLabel,
+            }
+
+            const branchSpecs = [
+              { id: ifBranchId, label: ifLabel, branchType: 'if' as const, index: 0 },
+              { id: 'else', label: elseLabel, branchType: 'else' as const, index: 1 },
+            ]
+
+            const stamp = Date.now()
+            const startX = newNode.position.x + 140 - (branchWidth * branchSpecs.length + branchGap * (branchSpecs.length - 1)) / 2
+            const addSteps: Node[] = branchSpecs.map((branch, idx) => ({
+              id: `add-step-${stamp}-${branch.branchType}-${idx}`,
+              type: "addStep",
+              position: { x: startX + idx * (branchWidth + branchGap), y: branchY },
+              data: { label: "Add Step", isLastBranchNode: idx === branchSpecs.length - 1 },
+              draggable: false,
+              width: 256,
+              height: 92,
+            }))
+
+            const newEdges: Edge[] = branchSpecs.map((branch, idx) => ({
+              id: generateEdgeId(newNode.id, addSteps[idx].id),
+              source: newNode.id,
+              sourceHandle: branch.branchType === 'else' ? 'else' : `branch-${branch.id}`,
+              target: addSteps[idx].id,
+              type: "custom",
+              markerEnd: { type: MarkerType.ArrowClosed },
+              label: branch.label,
+              data: {
+                isCondition: true,
+                branchId: branch.id,
+                branchIndex: branch.index,
+                branchType: branch.branchType,
+                label: branch.label,
+              },
+            }))
+
+            const { nodes: lNodes, edges: lEdges } = performAutoLayout([newNode, ...addSteps], newEdges)
+            setNodes(lNodes)
+            setEdges(lEdges)
+            return
+          }
+
           const startX = newNode.position.x + 140 - (280 * 2 + 60) / 2
           const addStepA: Node = { id: `add-step-${Date.now()}-A`, type: "addStep", position: { x: startX, y: branchY }, data: { label: "Add Step" }, draggable: false, width: 256, height: 92 }
           const addStepB: Node = { id: `add-step-${Date.now()}-B`, type: "addStep", position: { x: startX + 256 + 56, y: branchY }, data: { label: "Add Step", isLastBranchNode: true }, draggable: false, width: 256, height: 92 }
-          const isSplitTest = (foundItem?.label || label) === "Split Test (A/B)"
-          const isIfElse = (foundItem?.label || label) === "If / Else"
 
           const newEdges: Edge[] = [
             {
               id: generateEdgeId(newNode.id, addStepA.id),
               source: newNode.id,
-              sourceHandle: isIfElse ? 'true' : undefined,
               target: addStepA.id,
               type: "custom",
               markerEnd: { type: MarkerType.ArrowClosed },
-              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.trueLabel || 'YES') : undefined,
-              data: isSplitTest ? { label: "50%", isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'true' } : undefined
+              label: isSplitTest ? "50%" : undefined,
+              data: isSplitTest ? { label: "50%", isSplitTest: true } : undefined
             },
             {
               id: generateEdgeId(newNode.id, addStepB.id),
               source: newNode.id,
-              sourceHandle: isIfElse ? 'false' : undefined,
               target: addStepB.id,
               type: "custom",
               markerEnd: { type: MarkerType.ArrowClosed },
-              label: isSplitTest ? "50%" : isIfElse ? (newNode.data?.falseLabel || 'NO') : undefined,
-              data: isSplitTest ? { label: "50%", isSplitTest: true } : isIfElse ? { isCondition: true, conditionType: 'false' } : undefined
+              label: isSplitTest ? "50%" : undefined,
+              data: isSplitTest ? { label: "50%", isSplitTest: true } : undefined
             },
           ]
 

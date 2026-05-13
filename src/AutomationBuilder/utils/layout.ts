@@ -31,6 +31,45 @@ function resolveSplitTestWeights(raw: unknown, count: number) {
     return buildEvenWeights(count);
 }
 
+type IfElseBranchSpec = {
+    id: string;
+    label: string;
+    branchType: 'if' | 'else_if' | 'else';
+    index: number;
+};
+
+function getIfElseBranchSpecs(node: Node): IfElseBranchSpec[] {
+    const ifLabel = node.data?.trueLabel || 'If';
+    const elseLabel = node.data?.elseLabel || node.data?.falseLabel || 'Else';
+    const rawBranches = Array.isArray(node.data?.branches) && node.data?.branches.length > 0
+        ? node.data?.branches
+        : [{ id: node.data?.branchId || `branch-${node.id}-0`, label: ifLabel }];
+
+    const conditionBranches = rawBranches.map((branch: any, idx: number) => ({
+        id: branch?.id || `branch-${node.id}-${idx}`,
+        label: branch?.label || (idx === 0 ? ifLabel : `Else If ${idx}`),
+        branchType: idx === 0 ? 'if' : 'else_if',
+        index: idx,
+    }));
+
+    return [
+        ...conditionBranches,
+        { id: 'else', label: elseLabel, branchType: 'else', index: conditionBranches.length },
+    ];
+}
+
+function getIfElseLegacyRank(edge: Edge | undefined, trueLabel: string, falseLabel: string) {
+    if (!edge) return Number.MAX_SAFE_INTEGER;
+    const label = String(edge.label || edge.data?.label || '').toUpperCase();
+    if (edge.data?.conditionType === 'true' || edge.sourceHandle === 'true' || label === 'YES' || label === 'TRUE' || label === 'SUCCESS' || label === trueLabel) {
+        return 0;
+    }
+    if (edge.data?.conditionType === 'false' || edge.sourceHandle === 'false' || label === 'NO' || label === 'FALSE' || label === 'FAIL' || label === falseLabel) {
+        return 1;
+    }
+    return Number.MAX_SAFE_INTEGER;
+}
+
 export function restoreNodeIcons(nodes: Node[], toolboxGroups: Array<{ items: Array<any> }>) {
     nodes.forEach((node) => {
         if (!node.data) return;
@@ -73,63 +112,68 @@ export function ensureStepSlots(nodes: Node[], edges: Edge[]) {
 
         if (isBranching) {
             if (isIfElse) {
-                const trueLabel = (node.data?.trueLabel || 'YES').toUpperCase();
-                const falseLabel = (node.data?.falseLabel || 'NO').toUpperCase();
+                const branchSpecs = getIfElseBranchSpecs(node);
+                const trueLabel = (node.data?.trueLabel || branchSpecs[0]?.label || 'IF').toUpperCase();
+                const falseLabel = (node.data?.falseLabel || node.data?.elseLabel || branchSpecs[branchSpecs.length - 1]?.label || 'ELSE').toUpperCase();
 
-                const hasTrueBranch = childrenEdges.some(e => {
-                    if (e.data?.conditionType === 'true') return true;
-                    if (e.sourceHandle === 'true') return true;
-                    const label = String(e.label || e.data?.label || '').toUpperCase();
-                    return label === 'YES' || label === 'TRUE' || label === 'SUCCESS' || label === trueLabel;
-                });
-                const hasFalseBranch = childrenEdges.some(e => {
-                    if (e.data?.conditionType === 'false') return true;
-                    if (e.sourceHandle === 'false') return true;
-                    const label = String(e.label || e.data?.label || '').toUpperCase();
-                    return label === 'NO' || label === 'FALSE' || label === 'FAIL' || label === falseLabel;
+                const branchIds = new Set(branchSpecs.map((b) => b.id));
+                const edgesByBranchId = new Map<string, Edge>();
+                childrenEdges.forEach((e) => {
+                    const branchId = e.data?.branchId as string | undefined;
+                    if (branchId && branchIds.has(branchId)) edgesByBranchId.set(branchId, e);
                 });
 
-                if (!hasTrueBranch) {
-                    const slotId = `add-step-${node.id}-true-${Date.now()}`;
-                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
-                    edges.push({
-                        id: generateEdgeId(node.id, slotId),
-                        source: node.id,
-                        target: slotId,
-                        type: 'custom',
-                        markerEnd: { type: MarkerType.ArrowClosed },
-                        label: node.data?.trueLabel || 'YES',
-                        data: { isCondition: true, conditionType: 'true' }
+                const unassigned = childrenEdges
+                    .filter((e) => !edgesByBranchId.has(e.data?.branchId as string))
+                    .sort((a, b) => {
+                        const rankA = getIfElseLegacyRank(a, trueLabel, falseLabel);
+                        const rankB = getIfElseLegacyRank(b, trueLabel, falseLabel);
+                        if (rankA !== rankB) return rankA - rankB;
+                        return a.id.localeCompare(b.id);
                     });
-                }
-                if (!hasFalseBranch) {
-                    const slotId = `add-step-${node.id}-false-${Date.now()}`;
-                    nodes.push({ id: slotId, type: 'addStep', position: { x: node.position.x, y: node.position.y + Y_GAP }, data: { label: 'Add Step' }, draggable: false, width: NODE_WIDTH, height: 92 });
-                    edges.push({
-                        id: generateEdgeId(node.id, slotId),
-                        source: node.id,
-                        target: slotId,
-                        type: 'custom',
-                        markerEnd: { type: MarkerType.ArrowClosed },
-                        label: node.data?.falseLabel || 'NO',
-                        data: { isCondition: true, conditionType: 'false' }
-                    });
-                }
 
-                // Update existing labels if data changed, and also fix missing conditionType/sourceHandle
-                edges.forEach(e => {
-                    if (e.source === node.id) {
-                        const label = String(e.label || e.data?.label || '').toUpperCase();
-                        if (e.data?.conditionType === 'true' || e.sourceHandle === 'true' || label === 'YES' || label === 'TRUE' || label === trueLabel) {
-                            e.data = { ...(e.data || {}), isCondition: true, conditionType: 'true' };
-                            e.label = node.data?.trueLabel || 'YES';
-                            e.sourceHandle = 'true';
-                        } else if (e.data?.conditionType === 'false' || e.sourceHandle === 'false' || label === 'NO' || label === 'FALSE' || label === falseLabel) {
-                            e.data = { ...(e.data || {}), isCondition: true, conditionType: 'false' };
-                            e.label = node.data?.falseLabel || 'NO';
-                            e.sourceHandle = 'false';
-                        }
+                branchSpecs.forEach((branch) => {
+                    const existing = edgesByBranchId.get(branch.id) || unassigned.shift();
+                    if (existing) {
+                        existing.label = branch.label;
+                        existing.sourceHandle = branch.branchType === 'else' ? 'else' : `branch-${branch.id}`;
+                        existing.data = {
+                            ...(existing.data || {}),
+                            isCondition: true,
+                            branchId: branch.id,
+                            branchIndex: branch.index,
+                            branchType: branch.branchType,
+                            label: branch.label,
+                        };
+                        return;
                     }
+
+                    const slotId = `add-step-${node.id}-${branch.branchType}-${branch.index}-${Date.now()}`;
+                    nodes.push({
+                        id: slotId,
+                        type: 'addStep',
+                        position: { x: node.position.x, y: node.position.y + Y_GAP },
+                        data: { label: 'Add Step' },
+                        draggable: false,
+                        width: NODE_WIDTH,
+                        height: 92,
+                    });
+                    edges.push({
+                        id: generateEdgeId(node.id, slotId),
+                        source: node.id,
+                        sourceHandle: branch.branchType === 'else' ? 'else' : `branch-${branch.id}`,
+                        target: slotId,
+                        type: 'custom',
+                        markerEnd: { type: MarkerType.ArrowClosed },
+                        label: branch.label,
+                        data: {
+                            isCondition: true,
+                            branchId: branch.id,
+                            branchIndex: branch.index,
+                            branchType: branch.branchType,
+                            label: branch.label,
+                        },
+                    });
                 });
             } else if (isSplitTest) {
                 const rawWeights = Array.isArray(node.data?.weights)
@@ -224,10 +268,15 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             if (isIfElse) {
                 const edgeA = edges.find(e => e.source === nodeId && e.target === a.id);
                 const edgeB = edges.find(e => e.source === nodeId && e.target === b.id);
-                const typeA = edgeA?.data?.conditionType || '';
-                const typeB = edgeB?.data?.conditionType || '';
-                if (typeA === 'true' && typeB === 'false') return -1;
-                if (typeA === 'false' && typeB === 'true') return 1;
+                const trueLabel = (parent?.data?.trueLabel || 'IF').toUpperCase();
+                const falseLabel = (parent?.data?.falseLabel || parent?.data?.elseLabel || 'ELSE').toUpperCase();
+                const orderA = typeof edgeA?.data?.branchIndex === 'number'
+                    ? edgeA.data.branchIndex
+                    : getIfElseLegacyRank(edgeA, trueLabel, falseLabel);
+                const orderB = typeof edgeB?.data?.branchIndex === 'number'
+                    ? edgeB.data.branchIndex
+                    : getIfElseLegacyRank(edgeB, trueLabel, falseLabel);
+                if (orderA !== orderB) return orderA - orderB;
             }
             if (Math.abs(a.position.x - b.position.x) > 10) return a.position.x - b.position.x;
             return a.id.localeCompare(b.id);
@@ -321,11 +370,15 @@ export function performAutoLayout(nodes: Node[], edges: Edge[]) {
             if (isIfElse) {
                 const edgeA = edges.find(e => e.source === nodeId && e.target === a.id);
                 const edgeB = edges.find(e => e.source === nodeId && e.target === b.id);
-                const typeA = edgeA?.data?.conditionType || '';
-                const typeB = edgeB?.data?.conditionType || '';
-                // 'true' first (left), then 'false' (right)
-                if (typeA === 'true' && typeB === 'false') return -1;
-                if (typeA === 'false' && typeB === 'true') return 1;
+                const trueLabel = (parent?.data?.trueLabel || 'IF').toUpperCase();
+                const falseLabel = (parent?.data?.falseLabel || parent?.data?.elseLabel || 'ELSE').toUpperCase();
+                const orderA = typeof edgeA?.data?.branchIndex === 'number'
+                    ? edgeA.data.branchIndex
+                    : getIfElseLegacyRank(edgeA, trueLabel, falseLabel);
+                const orderB = typeof edgeB?.data?.branchIndex === 'number'
+                    ? edgeB.data.branchIndex
+                    : getIfElseLegacyRank(edgeB, trueLabel, falseLabel);
+                if (orderA !== orderB) return orderA - orderB;
             }
             if (Math.abs(a.position.x - b.position.x) > 10) return a.position.x - b.position.x;
             return a.id.localeCompare(b.id);

@@ -107,7 +107,15 @@ describe('automation-definition.validators', () => {
                             ui: { label: 'If / Else', subtitle: '3 conditions' },
                             config: {
                                 evaluationOrder: 'sequential',
-                                conditions: [{ field: 'contact.email', comparison: 'is_null' }],
+                                branches: [
+                                    {
+                                        id: 'branch_if_1',
+                                        label: 'If',
+                                        logicalOperator: 'and',
+                                        conditions: [{ field: 'contact.email', comparison: 'is_null' }],
+                                    },
+                                ],
+                                elseLabel: 'Else',
                             },
                         },
                     },
@@ -203,7 +211,20 @@ describe('automation-definition.validators', () => {
                         id: 'logic_1',
                         type: 'logic_if_else',
                         position: { x: 0, y: 100 },
-                        data: { ui: { label: 'If / Else' }, config: { conditions: [{ field: 'a', comparison: 'is_null' }] } },
+                        data: {
+                            ui: { label: 'If / Else' },
+                            config: {
+                                branches: [
+                                    {
+                                        id: 'branch_if_a',
+                                        label: 'If',
+                                        logicalOperator: 'and',
+                                        conditions: [{ field: 'a', comparison: 'is_null' }],
+                                    },
+                                ],
+                                elseLabel: 'Else',
+                            },
+                        },
                     },
                 ],
                 edges: [
