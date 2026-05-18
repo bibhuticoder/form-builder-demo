@@ -32,7 +32,7 @@ export type IfElseBranchConfig = {
     id: string;
     label?: string;
     logicalOperator?: 'and' | 'or';
-    conditions: Array<{ field: string; operator: string; value: unknown }>;
+    conditions: Array<{ field: string; operator: string; value: unknown; logicalOp?: 'and' | 'or' }>;
 };
 
 export type TriggerConfig = {
@@ -56,7 +56,7 @@ export type LogicConfig =
         /** Label for the ELSE path (fallback). */
         elseLabel?: string;
         /** Legacy single-branch format (kept for backward compatibility). */
-        conditions?: Array<{ field: string; operator: string; value: unknown }>;
+        conditions?: Array<{ field: string; operator: string; value: unknown; logicalOp?: 'and' | 'or' }>;
         logicalOperator?: 'and' | 'or';
     }
     | {
