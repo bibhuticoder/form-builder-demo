@@ -153,7 +153,7 @@ export const IfElseConfig = ({ data, onChange }: { data: any, onChange: (d: any)
         conditions: [{ ...DEFAULT_CONDITION }],
       },
     ];
-    updateBranches(next);
+    updateBranches(next as any);
   };
 
   const removeBranch = (branchIndex: number) => {
