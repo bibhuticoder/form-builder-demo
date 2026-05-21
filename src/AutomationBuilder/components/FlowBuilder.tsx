@@ -92,8 +92,11 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         id,
         (params) => {
           const idsToDelete = new Set(params.nodes.map((n) => n.id))
-          setNodes((nds) => nds.filter((n) => !idsToDelete.has(n.id)))
-          setEdges((eds) => eds.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target)))
+          const remainingNodes = nodes.filter((n) => !idsToDelete.has(n.id))
+          const remainingEdges = edges.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target))
+          const { nodes: nextNodes, edges: nextEdges } = performAutoLayout([...remainingNodes], [...remainingEdges])
+          setNodes(nextNodes)
+          setEdges(nextEdges)
         },
         () => edges,
       )

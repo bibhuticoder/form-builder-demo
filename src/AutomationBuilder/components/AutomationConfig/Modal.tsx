@@ -39,7 +39,7 @@ import {
 import { IfElseConfig } from "./Logic/IfElseConfig"
 import { SplitTestConfig } from "./Logic/SplitTestConfig"
 import { WaitConfig } from "./Logic/WaitConfig"
-import { LoopBackConfig } from "./Logic/LoopBackConfig"
+// import { LoopBackConfig } from "./Logic/LoopBackConfig"
 
 type Props = {
   isOpen: boolean
@@ -104,7 +104,7 @@ export const AutomationConfigModal = ({ isOpen, onClose, node, edges, onSave }: 
     if (nodeType === 'wait') return <WaitConfig data={formData} onChange={setFormData} />
     if (nodeType === 'if_else') return <IfElseConfig data={formData} onChange={setFormData} edges={edges} node={node} />
     if (nodeType === 'split_test') return <SplitTestConfig data={formData} onChange={setFormData} node={node} edges={edges} />
-    if (nodeType === 'loop_back') return <LoopBackConfig data={formData} onChange={setFormData} />
+    // if (nodeType === 'loop_back') return <LoopBackConfig data={formData} onChange={setFormData} />
 
     return null
   }
