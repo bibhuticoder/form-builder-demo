@@ -3,7 +3,7 @@ import { flowEdgeTypes } from "../FlowBuilderEdge"
 
 describe("FlowBuilder extracted modules", () => {
   it("exports all expected node types", () => {
-    expect(Object.keys(flowNodeTypes).sort()).toEqual(["action", "addStep", "condition", "delay", "end", "loopBack", "placeholder", "trigger"].sort())
+    expect(Object.keys(flowNodeTypes).sort()).toEqual(["action", "addStep", "condition", "delay", "end", "placeholder", "trigger"].sort())
   })
 
   it("exports custom edge type", () => {

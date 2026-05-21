@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react"
-import { ArrowPathIcon, DocumentDuplicateIcon, EllipsisVerticalIcon, PlusIcon, Squares2X2Icon, TrashIcon } from "@heroicons/react/24/outline"
-import { Handle, Position, useReactFlow } from "reactflow"
+import { DocumentDuplicateIcon, EllipsisVerticalIcon, PlusIcon, Squares2X2Icon, TrashIcon } from "@heroicons/react/24/outline"
+import { Handle, Position } from "reactflow"
 import { Button } from "@/components/Button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/dropdown-menu"
 import { useNodeActions } from "../../context/NodeActionsContext"
@@ -175,51 +175,52 @@ const EndNode = ({ data, selected }: any) => (
   </div>
 )
 
-const LoopBackNode = ({ id, data, selected }: any) => {
-  const { getEdges, getNodes } = useReactFlow()
-  const edges = getEdges()
-  const nodes = getNodes()
-  const currentEdge = edges.find((e) => e.source === id && e.data?.isLoopBack)
-  const targetNode = currentEdge ? nodes.find((n) => n.id === currentEdge.target) : null
-  const targetLabel = targetNode?.data?.label
-
-  return (
-    <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
-      <div className="h-1.5 w-full rounded-t-md bg-amber-500" />
-      <div className="p-3">
-        <div className="flex items-start gap-3">
-          <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-amber-500">
-            <ArrowPathIcon className={`w-5 h-5 ${data.isConnecting ? "animate-spin" : ""}`} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{data.label}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{currentEdge ? `Loops back to: ${targetLabel || "Unknown Step"}` : "Select a step to loop back to..."}</p>
-          </div>
-          {currentEdge && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6 -mr-2 text-slate-500 dark:text-slate-400 hover:text-red-500"
-              onClick={(e) => {
-                e.stopPropagation()
-                data.onClearConnection?.(id)
-              }}
-            >
-              <TrashIcon className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </div>
-      <Handle type="target" position={Position.Top} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="loop-source"
-        className="!w-3 !h-3 !bg-amber-400 !border-2 !border-white transition-colors hover:!bg-amber-500"
-      />
-    </div>
-  )
-}
+// Temporarily removed loop-back logic node.
+// const LoopBackNode = ({ id, data, selected }: any) => {
+//   const { getEdges, getNodes } = useReactFlow()
+//   const edges = getEdges()
+//   const nodes = getNodes()
+//   const currentEdge = edges.find((e) => e.source === id && e.data?.isLoopBack)
+//   const targetNode = currentEdge ? nodes.find((n) => n.id === currentEdge.target) : null
+//   const targetLabel = targetNode?.data?.label
+//
+//   return (
+//     <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative ${selected ? "border-primary ring-2 ring-primary/20" : data.isConnecting ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+//       <div className="h-1.5 w-full rounded-t-md bg-amber-500" />
+//       <div className="p-3">
+//         <div className="flex items-start gap-3">
+//           <div className="p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0 text-amber-500">
+//             <ArrowPathIcon className={`w-5 h-5 ${data.isConnecting ? "animate-spin" : ""}`} />
+//           </div>
+//           <div className="flex-1 min-w-0">
+//             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{data.label}</h3>
+//             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{currentEdge ? `Loops back to: ${targetLabel || "Unknown Step"}` : "Select a step to loop back to..."}</p>
+//           </div>
+//           {currentEdge && (
+//             <Button
+//               variant="ghost"
+//               size="icon"
+//               className="h-6 w-6 -mr-2 text-slate-500 dark:text-slate-400 hover:text-red-500"
+//               onClick={(e) => {
+//                 e.stopPropagation()
+//                 data.onClearConnection?.(id)
+//               }}
+//             >
+//               <TrashIcon className="h-4 w-4" />
+//             </Button>
+//           )}
+//         </div>
+//       </div>
+//       <Handle type="target" position={Position.Top} className="!w-3 !h-3 !bg-slate-300 !border-2 !border-white transition-colors hover:!bg-primary" />
+//       <Handle
+//         type="source"
+//         position={Position.Right}
+//         id="loop-source"
+//         className="!w-3 !h-3 !bg-amber-400 !border-2 !border-white transition-colors hover:!bg-amber-500"
+//       />
+//     </div>
+//   )
+// }
 
 export const flowNodeTypes = {
   trigger: TriggerNode,
@@ -227,7 +228,6 @@ export const flowNodeTypes = {
   condition: ConditionNode,
   delay: DelayNode,
   end: EndNode,
-  loopBack: LoopBackNode,
   placeholder: PlaceholderNode,
   addStep: AddStepNode,
 }
