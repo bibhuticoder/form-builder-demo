@@ -5,7 +5,6 @@ import { Button } from "@/components/Button"
 import { Input } from "@/components/input"
 import { AutomationSettings } from "./AutomationSettings"
 import { LastSavedIndicator } from "./LastSavedIndicator"
-import SAMPLE_DATA from "../data/sample.json"
 
 export function BuilderShell({ children }: { children: ReactNode }) {
   const { name, setName, status, setStatus, setIsDirty, saveRef, loadRef } = useAutomationBuilderContext()
@@ -44,15 +43,6 @@ export function BuilderShell({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-2">
 
           <LastSavedIndicator />
-
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 px-3 text-xs border-primary/20 hover:bg-primary/5 hover:text-primary transition-colors"
-            onClick={() => loadRef.current?.(SAMPLE_DATA)}
-          >
-            Load sample
-          </Button>
 
           <Button
             size="sm"
