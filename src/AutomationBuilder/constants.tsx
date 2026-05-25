@@ -77,8 +77,7 @@ export const TOOLBOX_ITEMS: Array<{ category: string; value: string; items: Tool
       { type: "condition", nodeType: "if_else", label: "If / Else", icon: FunnelIcon, iconName: "FunnelIcon", color: "text-amber-500" },
       { type: "condition", nodeType: "split_test", label: "Split Test (A/B)", icon: ArrowPathIcon, iconName: "ArrowPathIcon", color: "text-amber-500" },
       { type: "delay", nodeType: "wait", label: "Wait", icon: ClockIcon as any, iconName: "ClockIcon", color: "text-amber-500" },
-      // Temporarily removed loop back from the Logic toolbox.
-      // { type: "loopBack", nodeType: "loop_back", label: "Loop Back To", icon: ArrowPathIcon, iconName: "ArrowPathIcon", color: "text-amber-500" },
+      { type: "loopBack", nodeType: "loop_back", label: "Loop Back To", icon: ArrowPathIcon, iconName: "ArrowPathIcon", color: "text-amber-500" },
     ],
   },
 ]

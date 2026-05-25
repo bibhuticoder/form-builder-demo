@@ -277,9 +277,17 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const onClearConnection = useCallback(
     (nodeId: string) => {
       setEdges((eds) => eds.filter((e) => !(e.source === nodeId && e.data?.isLoopBack)))
-      onStartConnect(nodeId)
+      setConnectingNodeId(null)
+      setNodes((nds) =>
+        nds.map((n) => {
+          if (n.id === nodeId) {
+            return { ...n, data: { ...n.data, isConnecting: false, targetId: undefined } }
+          }
+          return { ...n, data: { ...n.data, isTargetable: false } }
+        }),
+      )
     },
-    [onStartConnect],
+    [],
   )
 
   const onNodeClick = useCallback(
