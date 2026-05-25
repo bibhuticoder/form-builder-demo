@@ -34,12 +34,12 @@ const PlaceholderNode = () => (
   </div>
 )
 
-const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoot, isTargetable, hideSourceHandle, isMoving }: any) => {
+const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoot, isTargetable, hideSourceHandle, isMoving, canMove = true }: any) => {
   const { onDuplicate, onDelete, onMove } = useNodeActions()
 
   return (
     <div className="relative w-[256px]">
-      <div className={`w-full bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20" : selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+      <div className={`w-full bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group relative z-10 ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20 animate-tilt" : selected ? "border-primary ring-2 ring-primary/20" : isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
         <div className={`h-1.5 w-full rounded-t-md ${colorClass}`} />
         <div className="p-3">
           <div className="flex items-start gap-3">
@@ -67,15 +67,17 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
                     <DocumentDuplicateIcon className="mr-2 h-4 w-4" />
                     Duplicate
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onMove(id)
-                    }}
-                  >
-                    <Squares2X2Icon className="mr-2 h-4 w-4" />
-                    Move
-                  </DropdownMenuItem>
+                  {canMove && (
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onMove(id)
+                      }}
+                    >
+                      <Squares2X2Icon className="mr-2 h-4 w-4" />
+                      Move
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     className="text-red-600 focus:text-red-600"
                     onClick={(e) => {
@@ -108,10 +110,10 @@ const NodeCard = ({ id, icon: Icon, title, subtitle, colorClass, selected, isRoo
 }
 
 const TriggerNode = ({ id, data, selected }: any) => {
-  const { onDuplicate, onDelete, onMove } = useNodeActions()
-  const isMoving = !!data.isMoving
+  const { onDuplicate, onDelete } = useNodeActions()
+  const isMoving = !!data.isMoving || !!data.isSwapping
   return (
-    <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20" : selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
+    <div className={`w-[256px] bg-white dark:bg-slate-900 rounded-lg shadow-sm border-2 transition-all duration-200 group ${isMoving ? "border-dashed border-primary ring-2 ring-primary/20 animate-tilt" : selected ? "border-primary ring-2 ring-primary/20" : data.isTargetable ? "border-green-500 ring-2 ring-green-500/20 cursor-crosshair animate-pulse" : "border-slate-200 hover:border-primary/50 dark:border-slate-700"}`}>
       <div className="h-1.5 w-full rounded-t-md bg-blue-500" />
       <div className="p-3">
         <div className="flex items-start gap-3">
@@ -138,15 +140,6 @@ const TriggerNode = ({ id, data, selected }: any) => {
                   Duplicate
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onMove(id)
-                  }}
-                >
-                  <Squares2X2Icon className="mr-2 h-4 w-4" />
-                  Move
-                </DropdownMenuItem>
-                <DropdownMenuItem
                   className="text-red-600 focus:text-red-600"
                   onClick={(e) => {
                     e.stopPropagation()
@@ -166,11 +159,11 @@ const TriggerNode = ({ id, data, selected }: any) => {
   )
 }
 
-const ActionNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Perform action"} colorClass="bg-emerald-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} hideSourceHandle={["End Automation", "Send To Automation"].includes(data.label)} isMoving={data.isMoving} />
+const ActionNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Perform action"} colorClass="bg-emerald-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} hideSourceHandle={["End Automation", "Send To Automation"].includes(data.label)} isMoving={data.isMoving || data.isSwapping} canMove={!( ["End Automation", "Send To Automation"].includes(data.label))} />
 
-const ConditionNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Check if..."} colorClass="bg-amber-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} isMoving={data.isMoving} />
+const ConditionNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Check if..."} colorClass="bg-amber-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} isMoving={data.isMoving || data.isSwapping} canMove={false} />
 
-const DelayNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Wait for..."} colorClass="bg-amber-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} isMoving={data.isMoving} />
+const DelayNode = ({ id, data, selected }: any) => <NodeCard id={id} icon={data.icon || Squares2X2Icon} title={data.label} subtitle={data.subtitle || "Wait for..."} colorClass="bg-amber-500" selected={selected} isLastBranchNode={data.isLastBranchNode} isDragging={data.isDragging} isRoot={data.isRoot} isTargetable={data.isTargetable} isMoving={data.isMoving || data.isSwapping} canMove={false} />
 
 const EndNode = ({ data, selected }: any) => (
   <div className="w-[256px] flex flex-col items-center">

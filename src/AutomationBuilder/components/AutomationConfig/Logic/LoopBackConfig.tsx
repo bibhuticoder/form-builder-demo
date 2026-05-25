@@ -44,7 +44,7 @@ export const LoopBackConfig = ({ data, onChange }: { data: any, onChange: (d: an
           </SelectContent>
         </Select>
         <p className="text-[10px] text-slate-400 mt-1 pl-1">
-          {data.targetId ? "The flow will redirect here." : "Drag the connection handle on the canvas or select a target above."}
+          {data.targetId ? "The flow will redirect here." : "Select a target above to create the loop."}
         </p>
       </div>
 

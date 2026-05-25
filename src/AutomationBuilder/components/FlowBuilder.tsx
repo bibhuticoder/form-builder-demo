@@ -19,6 +19,22 @@ import { NodeActionsContext } from "../context/NodeActionsContext"
 import { deleteNodeAndDescendants } from "../utils/nodeActions"
 import { generateEdgeId } from "../utils/hash"
 
+const ACTION_SWAP_EXCLUDED_LABELS = new Set(["End Automation", "Send To Automation"])
+
+function isSwappableAction(node?: Node) {
+  if (!node) return false
+  if (node.type !== "action") return false
+  const label = String(node.data?.label || "")
+  if (ACTION_SWAP_EXCLUDED_LABELS.has(label)) return false
+  return true
+}
+
+function swapNodeId(value: string, aId: string, bId: string) {
+  if (value === aId) return bId
+  if (value === bId) return aId
+  return value
+}
+
 export function FlowBuilder({ automationId }: { automationId: string }) {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
@@ -33,6 +49,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const [isDragging, setIsDragging] = useState(false)
   const [connectingNodeId, setConnectingNodeId] = useState<string | null>(null)
   const [movingNodeId, setMovingNodeId] = useState<string | null>(null)
+  const [swappingNodeIds, setSwappingNodeIds] = useState<string[] | null>(null)
 
   const [selectedNodeForConfig, setSelectedNodeForConfig] = useState<Node | null>(null)
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false)
@@ -75,8 +92,11 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         id,
         (params) => {
           const idsToDelete = new Set(params.nodes.map((n) => n.id))
-          setNodes((nds) => nds.filter((n) => !idsToDelete.has(n.id)))
-          setEdges((eds) => eds.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target)))
+          const remainingNodes = nodes.filter((n) => !idsToDelete.has(n.id))
+          const remainingEdges = edges.filter((e) => !idsToDelete.has(e.source) && !idsToDelete.has(e.target))
+          const { nodes: nextNodes, edges: nextEdges } = performAutoLayout([...remainingNodes], [...remainingEdges])
+          setNodes(nextNodes)
+          setEdges(nextEdges)
         },
         () => edges,
       )
@@ -152,13 +172,73 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
     [nodes, edges, takeSnapshot, setIsDirty],
   )
 
+  const handleStartMove = useCallback(
+    (id: string) => {
+      const node = nodes.find((n) => n.id === id)
+      if (!isSwappableAction(node)) return
+      setMovingNodeId(id)
+    },
+    [nodes],
+  )
+
+  const handleSwapActions = useCallback(
+    (sourceId: string, targetId: string) => {
+      if (sourceId === targetId) {
+        setMovingNodeId(null)
+        return
+      }
+
+      const sourceNode = nodes.find((n) => n.id === sourceId)
+      const targetNode = nodes.find((n) => n.id === targetId)
+      if (!isSwappableAction(sourceNode) || !isSwappableAction(targetNode)) return
+
+      takeSnapshot(nodes, edges)
+
+      const sourcePos = sourceNode!.position
+      const targetPos = targetNode!.position
+
+      const nextEdges = edges.map((edge) => {
+        const newSource = swapNodeId(edge.source, sourceId, targetId)
+        const newTarget = swapNodeId(edge.target, sourceId, targetId)
+        if (newSource === edge.source && newTarget === edge.target) return edge
+        // Preserve the original edge id to keep IDs stable across swaps.
+        return {
+          ...edge,
+          source: newSource,
+          target: newTarget,
+        }
+      })
+
+      setNodes((prev) =>
+        prev.map((n) => {
+          if (n.id === sourceId) return { ...n, position: targetPos }
+          if (n.id === targetId) return { ...n, position: sourcePos }
+          return n
+        }),
+      )
+
+      // Mark nodes as swapping so they can animate, then clear after animation completes.
+      setSwappingNodeIds([sourceId, targetId])
+
+      setEdges(nextEdges)
+      setMovingNodeId(null)
+      setIsDirty(true)
+
+      // Clear swapping flag after animation duration
+      window.setTimeout(() => {
+        setSwappingNodeIds(null)
+      }, 600)
+    },
+    [edges, nodes, takeSnapshot, setIsDirty],
+  )
+
   const nodeActions = useMemo(
     () => ({
       onDuplicate: handleDuplicateNode,
       onDelete: handleDeleteNode,
-      onMove: (id: string) => setMovingNodeId(id),
+      onMove: handleStartMove,
     }),
-    [handleDuplicateNode, handleDeleteNode],
+    [handleDuplicateNode, handleDeleteNode, handleStartMove],
   )
 
   const onUndo = useCallback(() => {
@@ -197,13 +277,32 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
   const onClearConnection = useCallback(
     (nodeId: string) => {
       setEdges((eds) => eds.filter((e) => !(e.source === nodeId && e.data?.isLoopBack)))
-      onStartConnect(nodeId)
+      setConnectingNodeId(null)
+      setNodes((nds) =>
+        nds.map((n) => {
+          if (n.id === nodeId) {
+            return { ...n, data: { ...n.data, isConnecting: false, targetId: undefined } }
+          }
+          return { ...n, data: { ...n.data, isTargetable: false } }
+        }),
+      )
     },
-    [onStartConnect],
+    [],
   )
 
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
+      if (movingNodeId) {
+        if (node.id === movingNodeId) {
+          setMovingNodeId(null)
+          return
+        }
+        if (isSwappableAction(node)) {
+          handleSwapActions(movingNodeId, node.id)
+        }
+        return
+      }
+
       if (connectingNodeId && node.data?.isTargetable) {
         const newEdge: Edge = {
           id: generateEdgeId(connectingNodeId, node.id) + "-loopback",
@@ -235,7 +334,7 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
         setIsConfigModalOpen(true)
       }
     },
-    [connectingNodeId],
+    [connectingNodeId, movingNodeId, handleSwapActions],
   )
 
   const onSaveConfig = useCallback(
@@ -532,11 +631,13 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
           ...node.data,
           isDragging,
           isMoving: movingNodeId === node.id,
+          isSwapping: !!swappingNodeIds && swappingNodeIds.includes(node.id),
+          isTargetable: node.data?.isTargetable || (!!movingNodeId && isSwappableAction(node) && node.id !== movingNodeId),
           onStartConnect,
           onClearConnection,
         },
       })),
-    [nodes, isDragging, onStartConnect, onClearConnection, movingNodeId],
+    [nodes, isDragging, onStartConnect, onClearConnection, movingNodeId, swappingNodeIds],
   )
 
   const edgesWithData = useMemo(
@@ -905,7 +1006,10 @@ export function FlowBuilder({ automationId }: { automationId: string }) {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onNodeClick={onNodeClick}
-            onPaneClick={() => setMovingNodeId(null)}
+            onPaneClick={() => {
+              setMovingNodeId(null)
+              setSwappingNodeIds(null)
+            }}
             onDragOver={onDragOver}
             onDrop={onDrop}
             onInit={onInit}
